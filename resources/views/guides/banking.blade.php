@@ -2,10 +2,10 @@
 
 @section('content')
     <section id="top" class="guide-hero guide-hero--banking">
-        <div class="container guide-hero__inner">
+        <div class="container guide-hero__inner banking-hero__inner">
             <p class="banking-disclosure">Disclosure: Some links on this page may be affiliate links. We may earn a commission at no extra cost to you.</p>
             <p class="eyebrow">Banking guide</p>
-            <h1>Banking in Australia as an Expat — The Complete Guide</h1>
+            <h1>Banking in Australia as an Expat - The Complete Guide</h1>
             <p class="guide-hero__copy">Open an account before you land, avoid hidden fees, and keep more of your money.</p>
         </div>
     </section>
@@ -94,19 +94,6 @@
                     </div>
                 </section>
             </div>
-
-            <aside class="banking-sidebar">
-                <div class="banking-sidebar__panel">
-                    <p class="guide-sidebar__title">Banking page plan</p>
-                    <ul class="guide-list guide-list--compact">
-                        <li>Pre-arrival account setup</li>
-                        <li>Clean bank comparison table</li>
-                        <li>Transfer tools with affiliate actions</li>
-                        <li>TFN basics for new arrivals</li>
-                        <li>Superannuation explainer</li>
-                    </ul>
-                </div>
-            </aside>
         </div>
     </section>
 @endsection

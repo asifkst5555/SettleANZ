@@ -12,6 +12,15 @@
     const bookingAgentName = document.querySelector('[data-booking-agent-name]');
     const bookingAgentField = document.querySelector('[data-booking-agent-field]');
     const bookingAgentId = document.querySelector('[data-booking-agent-id]');
+    const chatSection = document.querySelector('.site-chat');
+    const chatPanel = document.querySelector('[data-chat-panel]');
+    const chatToggleButtons = document.querySelectorAll('[data-chat-toggle]');
+    const chatCloseButton = document.querySelector('[data-chat-close]');
+    const chatResetButton = document.querySelector('[data-chat-reset]');
+    const chatLog = chatPanel ? chatPanel.querySelector('[data-chat-log]') : null;
+    const chatForm = chatPanel ? chatPanel.querySelector('[data-chat-form]') : null;
+    const chatInput = chatPanel ? chatPanel.querySelector('[data-chat-input]') : null;
+    const chatSendButton = chatForm ? chatForm.querySelector('button[type="submit"]') : null;
     const asyncForms = document.querySelectorAll('[data-async-form]');
     const body = document.body;
     const blogFilterButtons = document.querySelectorAll('[data-blog-filter]');
@@ -22,12 +31,232 @@
     const directoryListings = document.querySelectorAll('[data-directory-listing]');
     const directorySearch = document.querySelector('[data-directory-search]');
     const directoryCity = document.querySelector('[data-directory-city]');
+    const directoryReset = document.querySelector('[data-directory-reset]');
 
     const popupSeenKey = 'settleanzLeadPopupSeen';
     const popupDismissedUntilKey = 'settleanzLeadPopupDismissedUntil';
     const popupSubmittedKey = 'settleanzLeadPopupSubmitted';
+    const chatConversationKey = 'settleanzChatConversationId';
+    const chatVisitorKey = 'settleanzChatVisitorId';
+
+    let chatConversationId = window.localStorage.getItem(chatConversationKey) || '';
+    let chatHasLoaded = false;
+    let chatIsSubmitting = false;
+    let chatThinkingEl = null;
 
     const getVisibleBlogPosts = () => Array.from(blogPosts).filter((post) => !post.classList.contains('is-hidden-filter'));
+
+    const getChatVisitorId = () => {
+        let visitorId = window.localStorage.getItem(chatVisitorKey);
+        if (!visitorId) {
+            visitorId = window.crypto?.randomUUID ? window.crypto.randomUUID() : `visitor-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+            window.localStorage.setItem(chatVisitorKey, visitorId);
+        }
+
+        return visitorId;
+    };
+
+    const scrollChatToBottom = () => {
+        if (chatLog) {
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+    };
+
+    const removeThinkingMessage = () => {
+        if (chatThinkingEl) {
+            chatThinkingEl.remove();
+            chatThinkingEl = null;
+        }
+    };
+
+    const appendChatMessage = (role, content) => {
+        if (!chatLog || !content) return;
+
+        const message = document.createElement('div');
+        message.className = `site-chat-msg ${role === 'user' ? 'user' : role === 'assistant' ? 'bot' : 'system'}`;
+        message.textContent = content;
+        chatLog.appendChild(message);
+        scrollChatToBottom();
+    };
+
+    const appendThinkingMessage = () => {
+        if (!chatLog) return;
+
+        removeThinkingMessage();
+
+        const message = document.createElement('div');
+        message.className = 'site-chat-msg bot thinking';
+        message.innerHTML = `
+            <div class="site-chat-thinking-title">AI is thinking</div>
+            <div class="site-chat-thinking-copy">Planning the best answer for your question.</div>
+            <div class="site-chat-thinking-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        `;
+
+        chatLog.appendChild(message);
+        chatThinkingEl = message;
+        scrollChatToBottom();
+    };
+
+    const renderChatGreeting = () => {
+        if (!chatLog || chatLog.childElementCount > 0) return;
+        appendChatMessage('assistant', chatPanel?.dataset.chatGreeting || 'Hi, I am the SettleANZ AI Assistant. How can I help you today?');
+    };
+
+    const setChatBusy = (isBusy) => {
+        chatIsSubmitting = isBusy;
+        if (chatInput) chatInput.disabled = isBusy;
+        if (chatSendButton) {
+            chatSendButton.disabled = isBusy;
+            chatSendButton.textContent = isBusy ? 'Thinking...' : 'Send';
+        }
+        if (!isBusy && chatInput) {
+            chatInput.focus();
+        }
+    };
+
+    const requestJson = async (url, options = {}) => {
+        const response = await fetch(url, {
+            ...options,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                ...(options.headers || {}),
+            },
+        });
+
+        const text = await response.text();
+        let payload = {};
+        if (text) {
+            try {
+                payload = JSON.parse(text);
+            } catch (error) {
+                payload = { message: 'Unexpected response from server.' };
+            }
+        }
+
+        if (!response.ok) {
+            const errorMessage = payload.message || (payload.errors ? Object.values(payload.errors).flat()[0] : 'Something went wrong. Please try again.');
+            throw new Error(errorMessage || 'Something went wrong. Please try again.');
+        }
+
+        return payload;
+    };
+
+    const createChatSession = async (isReset = false) => {
+        const payload = {
+            channel: 'website_widget',
+            visitor_id: getChatVisitorId(),
+            language: 'en',
+        };
+
+        if (isReset && chatConversationId) {
+            payload.conversation_id = chatConversationId;
+        }
+
+        const endpoint = isReset ? '/api/chat/reset' : '/api/chat/session';
+        const response = await requestJson(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+
+        chatConversationId = response.conversation_id || '';
+        if (chatConversationId) {
+            window.localStorage.setItem(chatConversationKey, chatConversationId);
+        }
+
+        return chatConversationId;
+    };
+
+    const loadChatHistory = async () => {
+        if (!chatLog) return;
+
+        if (!chatConversationId) {
+            renderChatGreeting();
+            chatHasLoaded = true;
+            return;
+        }
+
+        try {
+            const payload = await requestJson(`/api/chat/history/${chatConversationId}`);
+            chatLog.innerHTML = '';
+            removeThinkingMessage();
+
+            (payload.messages || []).forEach((message) => {
+                const role = message.role === 'assistant' ? 'assistant' : message.role === 'user' ? 'user' : 'system';
+                appendChatMessage(role, message.content || '');
+            });
+
+            renderChatGreeting();
+            chatHasLoaded = true;
+        } catch (error) {
+            window.localStorage.removeItem(chatConversationKey);
+            chatConversationId = '';
+            chatLog.innerHTML = '';
+            removeThinkingMessage();
+            renderChatGreeting();
+            chatHasLoaded = true;
+        }
+    };
+
+    const ensureChatReady = async () => {
+        if (chatHasLoaded) return;
+        await loadChatHistory();
+    };
+
+    const handleChatReset = async () => {
+        if (!chatLog) return;
+
+        chatLog.innerHTML = '';
+        removeThinkingMessage();
+
+        try {
+            await createChatSession(true);
+        } catch (error) {
+            window.localStorage.removeItem(chatConversationKey);
+            chatConversationId = '';
+        }
+
+        chatHasLoaded = true;
+        renderChatGreeting();
+    };
+
+    const submitChatMessage = async () => {
+        if (!chatInput || chatIsSubmitting) return;
+
+        const content = chatInput.value.trim();
+        if (!content) return;
+
+        appendChatMessage('user', content);
+        chatInput.value = '';
+        appendThinkingMessage();
+        setChatBusy(true);
+
+        try {
+            if (!chatConversationId) {
+                await createChatSession();
+            }
+
+            const payload = await requestJson(`/api/chat/message/${chatConversationId}`, {
+                method: 'POST',
+                body: JSON.stringify({ content }),
+            });
+
+            removeThinkingMessage();
+            const assistantContent = payload.assistant?.content || 'I am here, but I could not generate a reply just now.';
+            appendChatMessage('assistant', assistantContent);
+        } catch (error) {
+            removeThinkingMessage();
+            appendChatMessage('system', error.message || 'Sorry, the AI assistant is unavailable right now.');
+        } finally {
+            chatHasLoaded = true;
+            setChatBusy(false);
+        }
+    };
 
     const refreshLoadMore = () => {
         if (!loadMoreButton || !blogPosts.length) return;
@@ -67,12 +296,24 @@
         const category = activeCategoryButton ? activeCategoryButton.dataset.directoryFilter : 'all';
         const city = directoryCity ? directoryCity.value : 'all cities';
         const term = directorySearch ? directorySearch.value.trim().toLowerCase() : '';
+        let visibleCount = 0;
+
         directoryListings.forEach((listing) => {
             const categoryMatch = category === 'all' || listing.dataset.category === category;
             const cityMatch = city === 'all cities' || listing.dataset.city === city;
             const termMatch = !term || listing.dataset.name.includes(term) || listing.dataset.category.includes(term) || listing.dataset.city.includes(term);
-            listing.classList.toggle('is-hidden', !(categoryMatch && cityMatch && termMatch));
+            const isMatch = categoryMatch && cityMatch && termMatch;
+
+            listing.classList.toggle('is-hidden', !isMatch);
+
+            if (isMatch) {
+                visibleCount += 1;
+            }
         });
+
+        if (directoryReset) {
+            directoryReset.disabled = category === 'all' && city === 'all cities' && !term;
+        }
     };
 
     const openLeadModal = () => {
@@ -109,6 +350,24 @@
         body.classList.remove('has-modal-open');
     };
 
+    const openChatPanel = async () => {
+        if (!chatPanel) return;
+        chatPanel.hidden = false;
+        chatPanel.classList.add('is-open');
+        if (chatSection) chatSection.classList.add('is-open');
+        chatToggleButtons.forEach((button) => button.setAttribute('aria-expanded', 'true'));
+        await ensureChatReady();
+        if (chatInput) chatInput.focus();
+    };
+
+    const closeChatPanel = () => {
+        if (!chatPanel) return;
+        chatPanel.hidden = true;
+        chatPanel.classList.remove('is-open');
+        if (chatSection) chatSection.classList.remove('is-open');
+        chatToggleButtons.forEach((button) => button.setAttribute('aria-expanded', 'false'));
+    };
+
     const shouldAutoOpenPopup = () => {
         if (!leadModal || body.dataset.leadSubmitted === 'true') {
             localStorage.setItem(popupSubmittedKey, 'true');
@@ -126,214 +385,6 @@
     const syncScrolledHeader = () => {
         if (siteHeader) siteHeader.classList.toggle('is-scrolled', window.scrollY > 12);
         if (backToTop) backToTop.classList.toggle('is-visible', window.scrollY > 600);
-    };
-
-    const initChatWidget = () => {
-        const chatToggle = document.querySelector('[data-chat-toggle]');
-        const chatPanel = document.querySelector('[data-chat-panel]');
-        const chatClose = document.querySelector('[data-chat-close]');
-        const chatReset = document.querySelector('[data-chat-reset]');
-        const chatLog = document.querySelector('[data-chat-log]');
-        const chatForm = document.querySelector('[data-chat-form]');
-        const chatInput = document.querySelector('[data-chat-input]');
-
-        if (!chatToggle || !chatPanel || !chatLog || !chatForm || !chatInput) return;
-
-        const storageKey = 'settleanz_chat_conversation_id';
-        const visitorKey = 'settleanz_chat_visitor_id';
-        let conversationId = null;
-        let loading = false;
-
-        const getVisitorId = () => {
-            const stored = localStorage.getItem(visitorKey);
-            if (stored) return stored;
-            const generated = 'visitor-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
-            localStorage.setItem(visitorKey, generated);
-            return generated;
-        };
-
-        const appendMessage = (type, text) => {
-            const message = document.createElement('div');
-            message.className = 'site-chat-msg ' + type;
-            message.textContent = text;
-            chatLog.appendChild(message);
-            chatLog.scrollTop = chatLog.scrollHeight;
-            return message;
-        };
-
-        const appendThinking = () => {
-            const message = document.createElement('div');
-            message.className = 'site-chat-msg bot thinking';
-            message.innerHTML = '<span class="site-chat-thinking-label">SettleANZ AI is thinking</span><span class="site-chat-thinking-dots" aria-hidden="true"><span></span><span></span><span></span></span>';
-            chatLog.appendChild(message);
-            chatLog.scrollTop = chatLog.scrollHeight;
-            return message;
-        };
-
-        const setLoading = (state) => {
-            loading = state;
-            chatInput.disabled = state;
-            const submit = chatForm.querySelector('button[type="submit"]');
-            if (submit) submit.disabled = state;
-        };
-
-        const appendGreeting = () => {
-            if (chatLog.childElementCount) return;
-            const greeting = chatPanel.dataset.chatGreeting || 'Hi, I am the SettleANZ AI Assistant. Ask me about migration, housing, banking, healthcare, newcomer checklists, or which guide to read next.';
-            appendMessage('bot', greeting);
-        };
-
-        const createSession = async () => {
-            const response = await fetch('/api/chat/session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    channel: 'website_widget',
-                    visitor_id: getVisitorId(),
-                    language: 'en',
-                }),
-            });
-
-            if (!response.ok) throw new Error('Could not start chat session.');
-            const data = await response.json();
-            conversationId = String(data.conversation_id || '');
-            localStorage.setItem(storageKey, conversationId);
-        };
-
-        const ensureSession = async () => {
-            if (conversationId) return;
-
-            const storedId = localStorage.getItem(storageKey);
-            if (!storedId) {
-                await createSession();
-                return;
-            }
-
-            const historyResponse = await fetch('/api/chat/history/' + storedId, {
-                headers: { 'Accept': 'application/json' },
-            });
-
-            if (!historyResponse.ok) {
-                localStorage.removeItem(storageKey);
-                await createSession();
-                return;
-            }
-
-            conversationId = storedId;
-            const history = await historyResponse.json();
-            const messages = Array.isArray(history.messages) ? history.messages : [];
-            if (!messages.length) return;
-
-            chatLog.innerHTML = '';
-            messages.forEach((item) => {
-                appendMessage(item.role === 'user' ? 'user' : 'bot', item.content || '');
-            });
-        };
-
-        const resetSession = async () => {
-            const response = await fetch('/api/chat/reset', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    channel: 'website_widget',
-                    visitor_id: getVisitorId(),
-                    language: 'en',
-                    conversation_id: conversationId || null,
-                }),
-            });
-
-            if (!response.ok) {
-                localStorage.removeItem(storageKey);
-                conversationId = null;
-                await createSession();
-            } else {
-                const data = await response.json();
-                conversationId = String(data.conversation_id || '');
-                localStorage.setItem(storageKey, conversationId);
-            }
-
-            chatLog.innerHTML = '';
-            appendGreeting();
-        };
-
-        const sendMessage = async (text) => {
-            setLoading(true);
-            const thinking = appendThinking();
-
-            try {
-                await ensureSession();
-                const response = await fetch('/api/chat/message/' + conversationId, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({ content: text }),
-                });
-
-                if (!response.ok) {
-                    appendMessage('system', 'Assistant is temporarily unavailable. Please try again.');
-                    return;
-                }
-
-                const data = await response.json();
-                appendMessage('bot', data.assistant?.content || 'Thanks. Our team will get back to you soon.');
-            } catch (error) {
-                appendMessage('system', 'Could not connect to the assistant right now.');
-            } finally {
-                if (thinking && thinking.parentNode) {
-                    thinking.remove();
-                }
-                setLoading(false);
-            }
-        };
-
-        chatToggle.addEventListener('click', async () => {
-            const isOpen = chatPanel.classList.toggle('is-open');
-            chatToggle.setAttribute('aria-expanded', String(isOpen));
-            if (!isOpen) return;
-
-            appendGreeting();
-            try {
-                await ensureSession();
-            } catch (error) {
-                appendMessage('system', 'Could not connect to the assistant right now.');
-            }
-            chatInput.focus();
-        });
-
-        if (chatClose) {
-            chatClose.addEventListener('click', () => {
-                chatPanel.classList.remove('is-open');
-                chatToggle.setAttribute('aria-expanded', 'false');
-            });
-        }
-
-        if (chatReset) {
-            chatReset.addEventListener('click', () => {
-                resetSession().catch(() => {
-                    appendMessage('system', 'Could not reset the chat right now.');
-                });
-            });
-        }
-
-        chatForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            if (loading) return;
-
-            const text = chatInput.value.trim();
-            if (!text) return;
-
-            appendMessage('user', text);
-            chatInput.value = '';
-            await sendMessage(text);
-        });
     };
 
     if (menuToggle && menu) {
@@ -365,11 +416,39 @@
 
     closeLeadModalTriggers.forEach((trigger) => trigger.addEventListener('click', () => closeLeadModal(true)));
     closeBookingModalTriggers.forEach((trigger) => trigger.addEventListener('click', closeBookingModal));
+    chatToggleButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            if (!chatPanel) return;
+            if (chatPanel.hidden) {
+                void openChatPanel();
+            } else {
+                closeChatPanel();
+            }
+        });
+    });
+
+    if (chatCloseButton) {
+        chatCloseButton.addEventListener('click', closeChatPanel);
+    }
+
+    if (chatResetButton) {
+        chatResetButton.addEventListener('click', () => {
+            void handleChatReset();
+        });
+    }
+
+    if (chatForm) {
+        chatForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            void submitChatMessage();
+        });
+    }
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             closeLeadModal(true);
             closeBookingModal();
+            closeChatPanel();
         }
     });
 
@@ -418,6 +497,20 @@
 
     if (directorySearch) directorySearch.addEventListener('input', applyDirectoryFilters);
     if (directoryCity) directoryCity.addEventListener('change', applyDirectoryFilters);
+    if (directoryReset) {
+        directoryReset.addEventListener('click', () => {
+            if (directorySearch) directorySearch.value = '';
+            if (directoryCity) directoryCity.value = 'all cities';
+
+            const allDirectoryButton = Array.from(directoryFilterButtons).find((button) => button.dataset.directoryFilter === 'all');
+            directoryFilterButtons.forEach((item) => item.classList.remove('is-active'));
+            if (allDirectoryButton) {
+                allDirectoryButton.classList.add('is-active');
+            }
+
+            applyDirectoryFilters();
+        });
+    }
     if (directoryListings.length) applyDirectoryFilters();
 
     asyncForms.forEach((form) => {
@@ -452,7 +545,7 @@
 
                 form.reset();
                 if (statusEl) {
-                    statusEl.textContent = payload.message || 'Thanks — we\'ll be in touch within 24 hours.';
+                    statusEl.textContent = payload.message || 'Thanks - we will be in touch within 24 hours.';
                     statusEl.hidden = false;
                 }
                 if (form.closest('[data-booking-modal]')) {
@@ -470,8 +563,6 @@
         });
     });
 
-    initChatWidget();
-
     if (backToTop) {
         backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
@@ -479,5 +570,3 @@
     syncScrolledHeader();
     window.addEventListener('scroll', syncScrolledHeader, { passive: true });
 })();
-
-

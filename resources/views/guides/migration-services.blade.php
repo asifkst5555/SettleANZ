@@ -1,13 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
-    <section id="top" class="guide-hero guide-hero--migration">
-        <div class="container guide-hero__inner guide-hero__inner--split">
-            <div>
-                <p class="eyebrow">Migration services</p>
-                <h1>Australian Visa Help for Expats &amp; Migrants</h1>
-                <p class="guide-hero__copy">Navigating Australian immigration is complex. Connect with a registered migration agent who specialises in expat visa pathways.</p>
-                <div class="guide-hero__actions"><a class="button button--large" href="#migration-directory">Find a Migration Agent</a></div>
+    <section id="top" class="guide-hero guide-hero--migration migration-hero--full">
+        <div class="container guide-hero__inner migration-hero__inner">
+            <div class="migration-hero__content">
+                <div>
+                    <p class="eyebrow">Migration services</p>
+                    <h1>Australian Visa Help for Expats &amp; Migrants</h1>
+                    <p class="guide-hero__copy migration-hero__copy">Navigating Australian immigration is complex. Connect with a registered migration agent who specialises in expat visa pathways.</p>
+                    <div class="guide-hero__actions migration-hero__actions"><a class="button button--large" href="#migration-directory">Find a Migration Agent</a></div>
+                </div>
+
+                <aside class="migration-hero__panel" aria-label="Migration support highlights">
+                    <p class="migration-hero__panel-eyebrow">What you get</p>
+                    <ul class="migration-hero__list">
+                        <li>Registered migration support matched to your visa pathway</li>
+                        <li>Clear next steps for partner, skilled, student, and family visas</li>
+                        <li>Fast consultation booking with trusted expat-focused advisors</li>
+                    </ul>
+                    <div class="migration-hero__stats">
+                        <article>
+                            <strong>1:1</strong>
+                            <span>consultation support</span>
+                        </article>
+                        <article>
+                            <strong>Visa</strong>
+                            <span>pathway guidance</span>
+                        </article>
+                        <article>
+                            <strong>AU</strong>
+                            <span>migration focus</span>
+                        </article>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
@@ -16,8 +41,10 @@
         <div class="container migration-layout migration-layout--full">
             <div class="migration-content">
                 <section class="guide-block guide-block--white">
-                    <h2>Overview of Common Visa Types</h2>
-                    <p>Most people coming to Australia start by narrowing down the visa pathway that best matches their purpose and timing. This page keeps that overview practical and simple so visitors can move quickly toward professional help when they need it.</p>
+                    <div class="guide-block__intro guide-block__intro--centered">
+                        <h2>Overview of Common Visa Types</h2>
+                        <p>Most people coming to Australia start by narrowing down the visa pathway that best matches their purpose and timing. This page keeps that overview practical and simple so visitors can move quickly toward professional help when they need it.</p>
+                    </div>
                     <div class="visa-type-grid">
                         @foreach ($visaTypes as $visaType)
                             <article class="visa-type-card"><h3>{{ $visaType }}</h3><p>Useful as a starting point when comparing eligibility, timing, and the kind of migration advice you may need next.</p></article>
@@ -25,15 +52,19 @@
                     </div>
                 </section>
 
-                <section class="guide-block guide-block--sand">
-                    <h2>Why Use a Registered Migration Agent</h2>
-                    <p>A registered migration agent helps you avoid choosing the wrong pathway, missing documentation, or relying on generic advice that does not fit your case. The value is not only paperwork; it is knowing which steps actually matter for your situation.</p>
-                    <p>This section is meant to build trust, not pressure. For many people, the right next step is simply a short consultation to understand their options clearly.</p>
+                <section class="guide-block guide-block--teal">
+                    <div class="guide-block__intro guide-block__intro--centered">
+                        <h2>Why Use a Registered Migration Agent</h2>
+                        <p>A registered migration agent helps you avoid choosing the wrong pathway, missing documentation, or relying on generic advice that does not fit your case. The value is not only paperwork; it is knowing which steps actually matter for your situation.</p>
+                        <p>This section is meant to build trust, not pressure. For many people, the right next step is simply a short consultation to understand their options clearly.</p>
+                    </div>
                 </section>
 
                 <section id="migration-directory" class="guide-block guide-block--white">
-                    <h2>Featured Migration Agents</h2>
-                    <p>These featured partners are presented in a simple card format so visitors can compare specialisation areas and choose the conversation that fits them best.</p>
+                    <div class="guide-block__intro guide-block__intro--centered">
+                        <h2>Featured Migration Agents</h2>
+                        <p>These featured partners are presented in a simple card format so visitors can compare specialisation areas and choose the conversation that fits them best.</p>
+                    </div>
                     <div class="partner-card-grid">
                         @foreach ($agents as $agent)
                             <article class="partner-card migration-agent-card migration-agent-card--booking">
@@ -43,41 +74,57 @@
                                 <p class="migration-agent-card__rating">{{ $agent->rating }} / 5 rating</p>
                                 <div class="migration-agent-card__actions">
                                     <button class="button button--small" type="button" data-open-booking-modal data-agent-name="{{ $agent->name }}" data-agent-id="{{ $agent->id }}" data-agent-email="{{ $agent->email }}">{{ $settings['migration_cta_label'] }}</button>
-                                    @if ($agent->whatsapp)
-                                        <a class="text-link" href="{{ $agent->whatsapp }}" target="_blank" rel="noreferrer">Chat on WhatsApp</a>
-                                    @endif
                                 </div>
                             </article>
                         @endforeach
                     </div>
                 </section>
 
-                <section class="guide-block guide-block--sand">
-                    <h2>Not sure which visa is right for you?</h2>
-                    <p>Fill in your details and one of our migration partners will be in touch within 24 hours.</p>
-                    <form class="lead-form migration-form migration-form--pro" method="POST" action="{{ route('lead-capture.store') }}">
-                        @csrf
-                        <input type="hidden" name="form_type" value="migration-consultation">
-                        <input type="hidden" name="source_page" value="migration-services-page">
-                        <div class="migration-form__grid migration-form__grid--pro">
-                            <div class="migration-form__row">
-                                <label class="migration-form__field"><span>First Name</span><input type="text" name="first_name" value="{{ old('first_name') }}" required>@error('first_name')<small>{{ $message }}</small>@enderror</label>
-                                <label class="migration-form__field"><span>Last Name</span><input type="text" name="last_name" value="{{ old('last_name') }}" required>@error('last_name')<small>{{ $message }}</small>@enderror</label>
-                            </div>
-                            <div class="migration-form__row">
-                                <label class="migration-form__field"><span>Email</span><input type="email" name="email" value="{{ old('email') }}" required>@error('email')<small>{{ $message }}</small>@enderror</label>
-                                <label class="migration-form__field"><span>Phone (optional)</span><input type="text" name="phone" value="{{ old('phone') }}">@error('phone')<small>{{ $message }}</small>@enderror</label>
-                            </div>
-                            <div class="migration-form__row">
-                                <label class="migration-form__field"><span>Current Visa Status</span><select name="current_visa_status" required><option value="">Select one</option><option value="Student" @selected(old('current_visa_status') === 'Student')>Student</option><option value="Working Holiday" @selected(old('current_visa_status') === 'Working Holiday')>Working Holiday</option><option value="Partner" @selected(old('current_visa_status') === 'Partner')>Partner</option><option value="Skilled" @selected(old('current_visa_status') === 'Skilled')>Skilled</option><option value="Visitor" @selected(old('current_visa_status') === 'Visitor')>Visitor</option><option value="Other" @selected(old('current_visa_status') === 'Other')>Other</option></select>@error('current_visa_status')<small>{{ $message }}</small>@enderror</label>
-                                <label class="migration-form__field"><span>Country of Citizenship</span><input type="text" name="country_of_citizenship" value="{{ old('country_of_citizenship') }}" required>@error('country_of_citizenship')<small>{{ $message }}</small>@enderror</label>
-                            </div>
-                            <label class="migration-form__field migration-form__field--full"><span>What do you need help with?</span><textarea name="help_details" rows="5" placeholder="Share a few details about your situation and what you need help with." required>{{ old('help_details') }}</textarea>@error('help_details')<small>{{ $message }}</small>@enderror</label>
+                <section class="guide-block guide-block--sand migration-form-section">
+                    <div class="migration-form-section__header">
+                        <div>
+                            <p class="migration-form-section__eyebrow">Migration consultation</p>
+                            <h2>Not sure which visa is right for you?</h2>
                         </div>
-                        <input type="hidden" name="goal" value="Migration consultation request">
-                        <button class="button button--large button--full" type="submit">Request Free Consultation</button>
-                        <small class="migration-form__privacy">Your details are only shared with our verified migration partners. We do not sell your data.</small>
-                    </form>
+                    </div>
+
+                    <div class="migration-form-section__panel">
+                        <aside class="migration-form-section__intro" aria-label="What happens next">
+                            <p class="migration-form-section__intro-label">What happens next</p>
+                            <h3>Fast, practical visa guidance without the guesswork</h3>
+                            <p>Tell us a little about your situation and we’ll match the enquiry to the most relevant migration partner.</p>
+                            <ul class="migration-form-section__steps">
+                                <li>Share your basic details and current visa status.</li>
+                                <li>Describe the outcome you want and where you are now.</li>
+                                <li>We send your request to a suitable migration partner.</li>
+                                <li>Fill in your details and one of our migration partners will be in touch within 24 hours.</li>
+                            </ul>
+                        </aside>
+
+                        <form class="lead-form migration-form migration-form--pro" method="POST" action="{{ route('lead-capture.store') }}">
+                            @csrf
+                            <input type="hidden" name="form_type" value="migration-consultation">
+                            <input type="hidden" name="source_page" value="migration-services-page">
+                            <div class="migration-form__grid migration-form__grid--pro">
+                                <div class="migration-form__row">
+                                    <label class="migration-form__field"><span>First Name</span><input type="text" name="first_name" value="{{ old('first_name') }}" required>@error('first_name')<small>{{ $message }}</small>@enderror</label>
+                                    <label class="migration-form__field"><span>Last Name</span><input type="text" name="last_name" value="{{ old('last_name') }}" required>@error('last_name')<small>{{ $message }}</small>@enderror</label>
+                                </div>
+                                <div class="migration-form__row">
+                                    <label class="migration-form__field"><span>Email</span><input type="email" name="email" value="{{ old('email') }}" required>@error('email')<small>{{ $message }}</small>@enderror</label>
+                                    <label class="migration-form__field"><span>Phone (optional)</span><input type="text" name="phone" value="{{ old('phone') }}">@error('phone')<small>{{ $message }}</small>@enderror</label>
+                                </div>
+                                <div class="migration-form__row">
+                                    <label class="migration-form__field"><span>Current Visa Status</span><select name="current_visa_status" required><option value="">Select one</option><option value="Student" @selected(old('current_visa_status') === 'Student')>Student</option><option value="Working Holiday" @selected(old('current_visa_status') === 'Working Holiday')>Working Holiday</option><option value="Partner" @selected(old('current_visa_status') === 'Partner')>Partner</option><option value="Skilled" @selected(old('current_visa_status') === 'Skilled')>Skilled</option><option value="Visitor" @selected(old('current_visa_status') === 'Visitor')>Visitor</option><option value="Other" @selected(old('current_visa_status') === 'Other')>Other</option></select>@error('current_visa_status')<small>{{ $message }}</small>@enderror</label>
+                                    <label class="migration-form__field"><span>Country of Citizenship</span><input type="text" name="country_of_citizenship" value="{{ old('country_of_citizenship') }}" required>@error('country_of_citizenship')<small>{{ $message }}</small>@enderror</label>
+                                </div>
+                                <label class="migration-form__field migration-form__field--full"><span>What do you need help with?</span><textarea name="help_details" rows="5" placeholder="Share a few details about your situation and what you need help with." required>{{ old('help_details') }}</textarea>@error('help_details')<small>{{ $message }}</small>@enderror</label>
+                            </div>
+                            <input type="hidden" name="goal" value="Migration consultation request">
+                            <button class="button button--large button--full" type="submit">Request Free Consultation</button>
+                            <small class="migration-form__privacy">Your details are only shared with our verified migration partners. We do not sell your data.</small>
+                        </form>
+                    </div>
                 </section>
             </div>
         </div>

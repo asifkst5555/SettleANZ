@@ -5,11 +5,220 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $metaTitle ?? 'SettleANZ' }}</title>
     <meta name="description" content="{{ $metaDescription ?? 'Migration, housing, and relocation guidance for new arrivals.' }}">
+    @php
+        $siteCssVersion = file_exists(public_path('site.css')) ? filemtime(public_path('site.css')) : null;
+        $siteJsVersion = file_exists(public_path('site.js')) ? filemtime(public_path('site.js')) : null;
+    @endphp
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('site.css') }}">
-    <script defer src="{{ asset('site.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('site.css') }}{{ $siteCssVersion ? '?v=' . $siteCssVersion : '' }}">
+    <style>
+        .site-chat-panel {
+            width: min(420px, calc(100vw - 1.5rem));
+            display: none;
+            grid-template-rows: auto minmax(260px, 1fr) auto;
+            overflow: hidden;
+            border: 1px solid #b9cfcb;
+            border-radius: 30px;
+            background: #ffffff !important;
+            box-shadow: 0 30px 80px rgba(10, 35, 45, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.85) inset;
+            isolation: isolate;
+        }
+
+        .site-chat-panel.is-open {
+            display: grid;
+        }
+
+        .site-chat-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.15rem 1.15rem 1rem;
+            background: linear-gradient(135deg, #f18a42 0%, #e8773a 45%, #d86424 100%) !important;
+            color: #ffffff;
+        }
+
+        .site-chat-head-main {
+            display: grid;
+            gap: 0.25rem;
+        }
+
+        .site-chat-title {
+            margin: 0;
+            color: #ffffff !important;
+            font-size: 1.15rem;
+            line-height: 1.1;
+        }
+
+        .site-chat-sub {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.88) !important;
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .site-chat-head-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .site-chat-log {
+            display: grid;
+            gap: 0.85rem;
+            min-height: 260px;
+            max-height: min(52vh, 430px);
+            padding: 1rem;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #f8fcfb 0%, #eef6f4 100%) !important;
+        }
+
+        .site-chat-msg {
+            width: fit-content;
+            max-width: 88%;
+            align-self: start;
+            padding: 0.82rem 0.95rem;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            box-shadow: 0 8px 20px rgba(16, 35, 58, 0.06);
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .site-chat-msg.user {
+            justify-self: end;
+            background: linear-gradient(135deg, #f18a42 0%, #e8773a 45%, #d86424 100%) !important;
+            color: #ffffff;
+            border-bottom-right-radius: 6px;
+        }
+
+        .site-chat-msg.bot {
+            justify-self: start;
+            background: #fffaf4 !important;
+            color: #2c3a47;
+            border: 1px solid rgba(232, 119, 58, 0.18);
+            border-bottom-left-radius: 6px;
+        }
+
+        .site-chat-msg.system {
+            justify-self: center;
+            max-width: 100%;
+            background: #fff1e8 !important;
+            color: #8c4d24;
+        }
+
+        .site-chat-msg.thinking {
+            display: grid;
+            gap: 0.5rem;
+            min-width: 208px;
+            background: #fffaf4 !important;
+            border: 1px solid rgba(232, 119, 58, 0.18);
+        }
+
+        .site-chat-thinking-title {
+            font-weight: 700;
+            color: #d86424;
+        }
+
+        .site-chat-thinking-copy {
+            color: #536171;
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        .site-chat-thinking-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .site-chat-thinking-dots span {
+            width: 0.45rem;
+            height: 0.45rem;
+            border-radius: 999px;
+            background: #e8773a;
+            opacity: 0.35;
+            animation: site-chat-thinking 1.15s infinite ease-in-out;
+        }
+
+        .site-chat-thinking-dots span:nth-child(2) {
+            animation-delay: 0.18s;
+        }
+
+        .site-chat-thinking-dots span:nth-child(3) {
+            animation-delay: 0.36s;
+        }
+
+        @keyframes site-chat-thinking {
+            0%, 80%, 100% {
+                opacity: 0.35;
+                transform: translateY(0);
+            }
+
+            40% {
+                opacity: 1;
+                transform: translateY(-2px);
+            }
+        }
+
+        .site-chat-form {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.75rem;
+            padding: 0.9rem 1rem 1rem;
+            border-top: 1px solid rgba(8, 93, 101, 0.12);
+            background: #ffffff;
+        }
+
+        .site-chat-input {
+            min-width: 0;
+            padding: 0.92rem 1rem;
+            border: 1px solid #b8cbc8;
+            border-radius: 14px;
+            background: #fefefe !important;
+            color: #2c3a47;
+        }
+
+        .site-chat-send {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0.75rem 1rem;
+            border: 0;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #e8773a 0%, #d86424 100%) !important;
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+        }
+
+        .site-chat-send--secondary {
+            min-height: 34px;
+            padding: 0.45rem 0.8rem;
+            background: rgba(255, 255, 255, 0.18) !important;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .site-chat-close {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14) !important;
+            color: #ffffff;
+            font-size: 1.6rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+    </style>
+    <script defer src="{{ asset('site.js') }}{{ $siteJsVersion ? '?v=' . $siteJsVersion : '' }}"></script>
 </head>
 <body @class(['has-modal-open' => $errors->any(), 'is-homepage' => request()->routeIs('home')]) data-lead-submitted="{{ session('lead_submitted') ? 'true' : 'false' }}">
     <div class="page-shell">
@@ -129,16 +338,16 @@
             </div>
         </div>
 
-        <section class="site-chat" aria-label="AI chat assistant">
-            <div class="floating-actions" aria-label="Quick actions">
-                <a class="floating-action floating-action--whatsapp" href="{{ $sharedSettings['footer_whatsapp'] }}" target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp">
-                    <img src="{{ asset('media/icons/whatsapp.webp') }}" alt="" class="floating-action__icon">
-                </a>
+        <section class="site-chat" aria-label="AI chat assistant" style="position:fixed;right:1rem;bottom:1rem;z-index:9997;">
+            <div class="floating-actions" aria-label="Quick actions" style="position:fixed;right:1rem;bottom:1rem;z-index:9997;display:flex;flex-direction:column;align-items:center;gap:0.75rem;">
                 @if(($sharedSettings['ai_assistant_enabled'] ?? '1') === '1')
-                    <button class="floating-action floating-action--assistant site-chat-toggle" type="button" data-chat-toggle aria-expanded="false" aria-controls="site-chat-panel" aria-label="Open AI chat assistant">
-                        <img src="{{ asset('media/icons/ai_assistance.webp') }}" alt="" class="floating-action__icon">
+                    <button class="floating-action floating-action--assistant site-chat-toggle" type="button" data-chat-toggle aria-expanded="false" aria-controls="site-chat-panel" aria-label="Open AI chat assistant" style="appearance:none;-webkit-appearance:none;background:transparent;border:0;box-shadow:none;padding:0;margin:0;">
+                        <img src="{{ asset('media/icons/ai_assistance.webp') }}" alt="" class="floating-action__icon" width="56" height="56">
                     </button>
                 @endif
+                <a class="floating-action floating-action--whatsapp" href="{{ $sharedSettings['footer_whatsapp'] }}" target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp">
+                    <img src="{{ asset('media/icons/whatsapp.webp') }}" alt="" class="floating-action__icon" width="56" height="56">
+                </a>
             </div>
             @if(($sharedSettings['ai_assistant_enabled'] ?? '1') === '1')
                 <div
@@ -146,6 +355,8 @@
                     class="site-chat-panel"
                     data-chat-panel
                     data-chat-greeting="{{ $sharedSettings['ai_assistant_greeting'] }}"
+                    hidden
+                    style="position:fixed;right:1rem;bottom:6.5rem;z-index:9998;width:min(420px, calc(100vw - 1.5rem));"
                 >
                     <div class="site-chat-head">
                         <div class="site-chat-head-main">
@@ -169,4 +380,10 @@
     </div>
 </body>
 </html>
+
+
+
+
+
+
 

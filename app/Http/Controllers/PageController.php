@@ -34,9 +34,21 @@ class PageController extends Controller
     {
         $agents = $this->directoryListings()
             ->where('category', 'Immigration Lawyers')
+            ->map(fn ($agent) => (array) $agent->toArray())
+            ->merge(
+                collect(SiteDefaults::directoryListings())
+                    ->where('category', 'Immigration Lawyers')
+                    ->all(),
+            )
+            ->map(function (array $agent): object {
+                $agent['id'] = $agent['id'] ?? $agent['slug'];
+
+                return (object) $agent;
+            })
+            ->unique('slug')
             ->sortByDesc('featured')
             ->values()
-            ->take(3);
+            ->take(5);
 
         return view('guides.migration-services', [
             'metaTitle' => 'Australian Visa Help for Expats and Migrants | SettleANZ',

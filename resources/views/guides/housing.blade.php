@@ -15,10 +15,6 @@
                 <p class="housing-booking-card__eyebrow">Free 15-minute call</p>
                 <h2>{{ $bookingLabel }}</h2>
                 <p>Speak with a relocation consultant about suburb options, short-term accommodation, rental paperwork, and what to book before you arrive.</p>
-                <div class="housing-booking-card__widget">
-                    <strong>Booking widget area</strong>
-                    <p>Calendly or Bookly can be embedded here later. For now, this booking block is designed and positioned exactly for that integration.</p>
-                </div>
                 <button class="button button--large button--full" type="button" data-open-lead-modal>Book a Free Relocation Call</button>
             </aside>
         </div>
@@ -111,19 +107,6 @@
                     </div>
                 </section>
             </div>
-
-            <aside class="housing-sidebar">
-                <div class="housing-sidebar__panel">
-                    <p class="guide-sidebar__title">Housing page plan</p>
-                    <ul class="guide-list guide-list--compact">
-                        <li>Short-term vs long-term options</li>
-                        <li>Rental system and booking guidance</li>
-                        <li>City overview for expats</li>
-                        <li>Common mistakes to avoid</li>
-                        <li>Featured relocation partners</li>
-                    </ul>
-                </div>
-            </aside>
         </div>
     </section>
 @endsection
