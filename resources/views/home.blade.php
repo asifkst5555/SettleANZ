@@ -14,16 +14,263 @@
             </div>
         </div>
     </section>
-
-    <section id="why-settleanz" class="section section--white">
+    <style>
+.empathy-section--inline.empathy-section {
+    position: relative;
+    background: #ffffff;
+}
+.empathy-section--inline::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 14%, rgba(242, 125, 43, 0.09) 0 1px, transparent 1px),
+        radial-gradient(circle at 88% 12%, rgba(242, 125, 43, 0.08) 0 1px, transparent 1px),
+        radial-gradient(circle at 10% 88%, rgba(242, 125, 43, 0.08) 0 1px, transparent 1px);
+    background-size: 14px 14px, 16px 16px, 14px 14px;
+    pointer-events: none;
+    opacity: 0.45;
+}
+.empathy-section--inline > .container {
+    position: relative;
+    z-index: 1;
+}
+.empathy-section--inline .empathy-section__heading {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto 3rem;
+    text-align: center;
+    display: grid;
+    justify-items: center;
+}
+.empathy-section--inline .empathy-section__heading .eyebrow {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+.empathy-section--inline .empathy-section__heading h2 {
+    max-width: min(100%, 24ch);
+    margin-inline: auto;
+}
+.empathy-section--inline .empathy-section__intro {
+    max-width: min(100%, 72ch);
+    margin: 1rem auto 0;
+    color: #5d6670;
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+.empathy-section--inline .empathy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.35rem;
+}
+.empathy-section--inline .empathy-card {
+    display: grid;
+    grid-template-columns: minmax(250px, 44%) minmax(0, 56%);
+    align-items: stretch;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+    overflow: hidden;
+}
+.empathy-section--inline .empathy-card__media {
+    position: relative;
+    min-height: 248px;
+    padding: 0.9rem;
+    display: flex;
+    align-items: stretch;
+    background:
+        linear-gradient(160deg, rgba(15, 139, 141, 0.12), rgba(15, 139, 141, 0.02)),
+        linear-gradient(135deg, #f7fbfb 0%, #edf6f6 100%);
+}
+.empathy-section--inline .empathy-card__media::before {
+    content: '';
+    position: absolute;
+    inset: 0.9rem;
+    border-radius: 14px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0)),
+        linear-gradient(135deg, rgba(15,139,141,0.06), rgba(242,125,43,0.06));
+}
+.empathy-section--inline .empathy-card__image {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 230px;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+}
+.empathy-section--inline .empathy-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem 1.1rem 1.05rem;
+}
+.empathy-section--inline .empathy-card__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    color: #2454a6;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+.empathy-section--inline .empathy-card__kicker::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #2454a6;
+    box-shadow: 0 0 0 4px rgba(36,84,166,0.12);
+}
+.empathy-section--inline .empathy-card__body h3 {
+    margin: 0;
+    color: #0a6b6d;
+    font-size: 1.55rem;
+    line-height: 1.25;
+}
+.empathy-section--inline .empathy-card__points {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0 0 1rem;
+    list-style: none;
+    border-bottom: 1px dashed rgba(148,163,184,0.45);
+}
+.empathy-section--inline .empathy-card__points li {
+    position: relative;
+    padding-left: 1rem;
+    color: #4b5563;
+    font-size: 0.98rem;
+    line-height: 1.6;
+}
+.empathy-section--inline .empathy-card__points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #0f8b8d;
+}
+.empathy-section--inline .empathy-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: auto;
+}
+.empathy-section--inline .empathy-card__cta {
+    min-height: 50px;
+    margin-top: 0;
+    padding-inline: 1.2rem;
+    white-space: nowrap;
+    border-radius: 999px;
+}
+@media (max-width: 1279px) {
+    .empathy-section--inline .empathy-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 767px) {
+    .empathy-section--inline .empathy-card {
+        grid-template-columns: 1fr;
+    }
+    .empathy-section--inline .empathy-card__media {
+        min-height: 220px;
+    }
+    .empathy-section--inline .empathy-card__footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .empathy-section--inline .empathy-card__cta {
+        width: 100%;
+    }
+}
+</style>
+<section id="why-settleanz" class="section section--white empathy-section empathy-section--inline">
         <div class="container">
-            <div class="section-heading section-heading--narrow">
-                <h2>Whether You're Arriving Next Month or Already Here...</h2>
+            <div class="section-heading section-heading--narrow empathy-section__heading">
+                <p class="eyebrow">Who SettleANZ is for</p>
+                <h2>My goal is simple: you should not have to struggle for years the way I did.</h2>
+                <p class="empathy-section__intro">SettleANZ is for you whether you have already landed or arrive in the next few weeks...</p>
             </div>
-            <div class="card-grid card-grid--three">
-                <article class="info-card info-card--audience"><div class="info-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14l8.5-2.5L21 7l-1.5 4-8.5 2.5L7 21l-.5-6.5L3 14z" /></svg></div><h3>New Arrivals</h3><p>Just landed? We'll walk you through every first step.</p></article>
-                <article class="info-card info-card--audience"><div class="info-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4-9-4z" /><path d="M7 11.5v4.5c0 1.2 2.2 3 5 3s5-1.8 5-3v-4.5" /><path d="M21 10v5" /></svg></div><h3>International Students</h3><p>Banking, housing, SIM cards, sorted before semester starts.</p></article>
-                <article class="info-card info-card--audience"><div class="info-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" /></svg></div><h3>Skilled Migrants</h3><p>Visa pathways, tax setup, and finding your footing professionally.</p></article>
+            <div class="empathy-grid">
+                <article class="empathy-card">
+                    <div class="empathy-card__media">
+                        <img class="empathy-card__image" src="{{ asset('media/home/International Students.webp') }}" alt="International students preparing for life in Australia">
+                    </div>
+                    <div class="empathy-card__body">
+                        <p class="empathy-card__kicker">Pre-arrival study setup</p>
+                        <h3>International Students</h3>
+                        <ul class="empathy-card__points">
+                            <li>You are coming to Australia mainly for study (uni, TAFE, language or vocational course).</li>
+                            <li>You are worried about banking, SIM cards, and rentals close to campus before classes start.</li>
+                            <li>You don't fully understand your visa work limits and you can't afford to get it wrong.</li>
+                        </ul>
+                        <div class="empathy-card__footer">
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.new-to-australia') }}">Show me what to do first</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="empathy-card">
+                    <div class="empathy-card__media">
+                        <img class="empathy-card__image" src="{{ asset('media/home/Skilled Workers.webp') }}" alt="Skilled workers planning their move and career">
+                    </div>
+                    <div class="empathy-card__body">
+                        <p class="empathy-card__kicker">Career and landing plan</p>
+                        <h3>Skilled Workers</h3>
+                        <ul class="empathy-card__points">
+                            <li>You hold (or are about to hold) a skilled visa and plan to work in your profession.</li>
+                            <li>You want help choosing suburbs, setting up tax and banking, and reading employment offers.</li>
+                            <li>You're worried about workplace culture and whether your overseas experience will actually count.</li>
+                        </ul>
+                        <div class="empathy-card__footer">
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.banking') }}">Help me hit the ground running</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="empathy-card">
+                    <div class="empathy-card__media">
+                        <img class="empathy-card__image" src="{{ asset('media/home/New Immigrants.webp') }}" alt="New immigrants settling into daily life">
+                    </div>
+                    <div class="empathy-card__body">
+                        <p class="empathy-card__kicker">Family settlement support</p>
+                        <h3>New Immigrants</h3>
+                        <ul class="empathy-card__points">
+                            <li>You have recently arrived as a permanent migrant or on a long-term pathway with family/partner.</li>
+                            <li>You need to sort housing, schools (if you have kids), healthcare and day-to-day routines.</li>
+                            <li>You feel overwhelmed by all the systems and want a step-by-step starting plan.</li>
+                        </ul>
+                        <div class="empathy-card__footer">
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.housing') }}">Start with my family settlement plan</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="empathy-card">
+                    <div class="empathy-card__media">
+                        <img class="empathy-card__image" src="{{ asset('media/home/Applying for Immigration.webp') }}" alt="Preparing documents and plans for immigration">
+                    </div>
+                    <div class="empathy-card__body">
+                        <p class="empathy-card__kicker">Before-you-land planning</p>
+                        <h3>Applying for Immigration</h3>
+                        <ul class="empathy-card__points">
+                            <li>You are still overseas and in the process of applying for a visa or planning your move.</li>
+                            <li>You're drowning in conflicting advice about documents and what to prepare.</li>
+                            <li>You want a realistic picture of costs, first-year priorities and common mistakes to avoid.</li>
+                        </ul>
+                        <div class="empathy-card__footer">
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.migration-services') }}">Prepare before you land</a>
+                        </div>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
@@ -44,7 +291,7 @@
         </div>
     </section>
 
-    <section class="section founder-strip founder-strip--story" style="--founder-copy-max-width: 760px; --founder-heading-max-width: 24ch; --founder-copy-text-max-width: 100%;">
+    <section class="section founder-strip founder-strip--story" style="--founder-copy-max-width: 100%; --founder-heading-max-width: 24ch; --founder-copy-text-max-width: 100%;">
         <div class="container founder-strip__story-grid">
             <div class="founder-photo-wrap">
                 <div class="founder-photo-ring"><img class="founder-photo-image" src="{{ asset('media/founder/founder.webp') }}" alt="Founder of SettleANZ"></div>
@@ -120,6 +367,27 @@
         </div>
     </section>
 @endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

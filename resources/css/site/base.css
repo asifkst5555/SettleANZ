@@ -192,6 +192,16 @@ h3 {
     gap: 1.2rem;
 }
 
+.site-header__cta {
+    display: inline-flex;
+    justify-self: end;
+}
+
+.site-nav__cta {
+    display: none;
+}
+
+
 .site-nav a {
     font-size: 15px;
     font-weight: 500;
@@ -761,6 +771,14 @@ main {
     .site-nav .button {
         width: auto;
         margin-top: auto;
+    }
+
+    .site-header__cta {
+        display: none;
+    }
+
+    .site-nav__cta {
+        display: inline-flex;
     }
 
     h1 {
@@ -3247,9 +3265,13 @@ main {
         width: auto;
     }
 
-    .site-nav .button {
+    .site-header__cta {
+        display: inline-flex;
         justify-self: end;
-        margin-left: 1.5rem;
+    }
+
+    .site-nav__cta {
+        display: none;
     }
 
     .site-header--home .site-nav {
@@ -5379,3 +5401,24 @@ main {
 
 
 
+
+
+/* Header CTA alignment refinement */
+@media (min-width: 1025px) {
+    .site-header__inner {
+        grid-template-columns: max-content minmax(0, 1fr) max-content;
+        width: 100%;
+    }
+
+    .site-nav {
+        width: 100%;
+        max-width: 760px;
+        margin-inline: auto;
+        justify-content: center;
+    }
+
+    .site-header__cta {
+        justify-self: end;
+        margin-left: 1.5rem;
+    }
+}

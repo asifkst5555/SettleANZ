@@ -241,8 +241,10 @@
                     @foreach ($navItems as $item)
                         <a href="{{ $item['href'] }}">{{ $item['label'] }}</a>
                     @endforeach
-                    <a class="button button--small" href="/#lead-strip" data-open-lead-modal>Get Free Help</a>
+                    <a class="button button--small site-nav__cta" href="/#lead-strip" data-open-lead-modal>Get Free Help</a>
                 </nav>
+
+                <a class="button button--small site-header__cta" href="/#lead-strip" data-open-lead-modal>Get Free Help</a>
             </div>
         </header>
 
@@ -380,6 +382,7 @@
     </div>
 </body>
 </html>
+
 
 
 
