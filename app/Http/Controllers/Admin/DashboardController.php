@@ -22,11 +22,13 @@ class DashboardController extends Controller
             'contactLeadCount' => Lead::where('form_type', 'contact-page')->count(),
             'migrationLeadCount' => Lead::where('form_type', 'migration-consultation')->count(),
             'consultationBookingCount' => Lead::where('form_type', 'consultation-booking')->count(),
+            'packageBookingCount' => Lead::where('form_type', 'package_booking')->count(),
             'blogPostCount' => BlogPost::count(),
             'directoryListingCount' => DirectoryListing::count(),
             'recentLeads' => Lead::query()->latest()->limit(6)->get(),
             'recentContactLeads' => Lead::query()->where('form_type', 'contact-page')->latest()->limit(5)->get(),
             'recentConsultationBookings' => Lead::query()->where('form_type', 'consultation-booking')->latest()->limit(5)->get(),
+            'recentPackageBookings' => Lead::query()->where('form_type', 'package_booking')->latest()->limit(5)->get(),
             'recentPosts' => BlogPost::query()->latest('published_at')->limit(5)->get(),
             'featuredListings' => DirectoryListing::query()->where('featured', true)->latest()->limit(5)->get(),
         ]);

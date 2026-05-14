@@ -24,7 +24,22 @@ For cPanel deployment:
 
 Use Node `22` locally. This repo includes `.nvmrc` for that.
 
-## 3. Local Build Before Upload
+## 3. One-Command Package (Recommended)
+
+Use this script to create a cPanel-ready package:
+
+```bash
+cd /home/asifk/projects/SettleANZ
+bash scripts/cpanel-package.sh
+```
+
+It creates:
+
+- `deploy/cpanel/settleanz-app` (full Laravel app for outside `public_html`)
+- `deploy/cpanel/public_html` (fallback public web root files)
+- `deploy/cpanel/UPLOAD-STEPS.txt` (quick reminder)
+
+## 4. Local Build Before Upload (Manual)
 
 Run these commands in WSL on your machine:
 
@@ -41,7 +56,7 @@ php artisan view:clear
 
 After `npm run build`, the compiled assets will be inside `public/build` and are ready to upload.
 
-## 4. Production `.env` Values
+## 5. Production `.env` Values
 
 Use MySQL in cPanel production. Example:
 
@@ -71,7 +86,7 @@ Notes:
 - use the real domain in `APP_URL`
 - `file` drivers are usually simpler on shared hosting than Redis
 
-## 5. Best Deployment Structure
+## 6. Best Deployment Structure
 
 Best option:
 
@@ -93,26 +108,26 @@ Then set the document root to:
 
 This is the cleanest and safest Laravel setup on cPanel.
 
-## 6. If cPanel Does Not Let You Point To `public/`
+## 7. If cPanel Does Not Let You Point To `public/`
 
-Fallback option:
+Fallback option (already prepared by `scripts/cpanel-package.sh`):
 
-- upload the Laravel app outside `public_html`, for example `/home/USERNAME/settleanz-app`
-- copy the contents of `public/` into `/home/USERNAME/public_html`
-- edit `public_html/index.php` so the paths point to the real app folder
+- upload `deploy/cpanel/settleanz-app` outside `public_html`, for example `/home/USERNAME/settleanz-app`
+- upload contents of `deploy/cpanel/public_html` into `/home/USERNAME/public_html`
+- edit `/home/USERNAME/public_html/index.php` and replace `__APP_PATH__` with your real app path
 
-Example path changes inside `public_html/index.php`:
+Example:
 
 ```php
-require __DIR__.'/../settleanz-app/vendor/autoload.php';
-$app = require_once __DIR__.'/../settleanz-app/bootstrap/app.php';
+require '/home/USERNAME/settleanz-app/vendor/autoload.php';
+$app = require_once '/home/USERNAME/settleanz-app/bootstrap/app.php';
 ```
 
-The exact folder name must match your hosting path.
+Use your real cPanel username and folder names.
 
-## 7. File Upload Checklist
+## 8. File Upload Checklist
 
-Upload these project parts:
+Upload these project parts (or just upload `deploy/cpanel/settleanz-app`):
 
 - `app`
 - `bootstrap`
@@ -134,7 +149,7 @@ Do not upload:
 - local cache junk
 - development-only files you do not need
 
-## 8. First Commands On The Server
+## 9. First Commands On The Server
 
 If SSH or Terminal is available in cPanel, run:
 
@@ -149,7 +164,7 @@ php artisan view:cache
 
 If the app key is already set in `.env`, you do not need to generate it again.
 
-## 9. Permissions
+## 10. Permissions
 
 Typical safe permissions:
 
@@ -159,7 +174,7 @@ Typical safe permissions:
 
 If Laravel shows permission errors, fix those two areas first.
 
-## 10. Practical Recommendation For This Project
+## 11. Practical Recommendation For This Project
 
 For SettleANZ, use this workflow:
 

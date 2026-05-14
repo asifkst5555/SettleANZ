@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lead;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class LeadCaptureController extends Controller
 {
@@ -17,7 +19,7 @@ class LeadCaptureController extends Controller
             'name' => ['nullable', 'string', 'max:150'],
             'email' => ['required', 'email', 'max:150'],
             'phone' => ['nullable', 'string', 'max:50'],
-            'subject' => ['nullable', 'string', 'max:100'],
+            'subject' => ['nullable', 'string', 'max:2000'],
             'message' => ['nullable', 'string', 'max:3000'],
             'goal' => ['nullable', 'string', 'max:255'],
             'current_visa_status' => ['nullable', 'string', 'max:100'],
@@ -45,11 +47,16 @@ class LeadCaptureController extends Controller
             $firstName = str($fullName)->trim()->explode(' ')->filter()->first();
         }
 
-        Lead::create([
+        $goalCandidate = $validated['goal'] ?? $validated['subject'] ?? null;
+        $goal = ($goalCandidate !== null && $goalCandidate !== '')
+            ? Str::limit($goalCandidate, 255, '…')
+            : null;
+
+        $lead = Lead::create([
             'first_name' => $firstName,
             'full_name' => $fullName,
             'email' => $validated['email'],
-            'goal' => $validated['goal'] ?? $validated['subject'] ?? null,
+            'goal' => $goal,
             'form_type' => $validated['form_type'] ?? 'general',
             'source_page' => $validated['source_page'] ?? 'homepage',
             'status' => 'new',
@@ -74,7 +81,16 @@ class LeadCaptureController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        $successMessage = 'Thanks - your consultation request has been received.';
+        // Create notification for new lead
+        NotificationService::createLeadNotification($lead);
+
+        $formType = $validated['form_type'] ?? 'general';
+        $successMessage = match ($formType) {
+            'package_booking' => 'Thank you for your booking request. We will contact you within 24 hours to confirm your session.',
+            'consultation-booking' => 'Thanks - your consultation request has been received.',
+            'contact-page', 'migration-consultation' => 'Thanks - we have received your message and will get back to you within 24 hours.',
+            default => 'Thanks - we have received your message and will be in touch soon.',
+        };
 
         if ($request->expectsJson()) {
             return response()->json([

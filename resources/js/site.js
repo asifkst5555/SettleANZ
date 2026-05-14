@@ -12,6 +12,16 @@
     const bookingAgentName = document.querySelector('[data-booking-agent-name]');
     const bookingAgentField = document.querySelector('[data-booking-agent-field]');
     const bookingAgentId = document.querySelector('[data-booking-agent-id]');
+    const packageModal = document.querySelector('[data-package-modal]');
+    const openPackageModalTriggers = document.querySelectorAll('[data-open-package-modal]');
+    const closePackageModalTriggers = document.querySelectorAll('[data-close-package-modal]');
+    const packageFormModalOverlay = document.getElementById('packageFormModalOverlay');
+    const packageFormModalLoading = document.getElementById('packageFormModalLoading');
+    const packageFormModalSuccess = document.getElementById('packageFormModalSuccess');
+    const packageFormModalError = document.getElementById('packageFormModalError');
+    const packageFormModalErrorText = document.getElementById('packageFormModalErrorText');
+    const packageFormModalSuccessMessage = document.getElementById('packageFormModalSuccessMessage');
+    const closePackageFormModalTriggers = document.querySelectorAll('[data-close-package-form-modal]');
     const chatSection = document.querySelector('.site-chat');
     const chatPanel = document.querySelector('[data-chat-panel]');
     const chatToggleButtons = document.querySelectorAll('[data-chat-toggle]');
@@ -350,6 +360,63 @@
         body.classList.remove('has-modal-open');
     };
 
+    const openPackageModal = (trigger) => {
+        if (!packageModal) return;
+        packageModal.hidden = false;
+        body.classList.add('has-modal-open');
+        const packageNumber = trigger?.dataset.packageNumber || '';
+        const packageStage = trigger?.dataset.packageStage || '';
+        const packageHeadline = trigger?.dataset.packageHeadline || '';
+        const packagePrice = trigger?.dataset.packagePrice || '';
+        const subjectField = packageModal.querySelector('#package-subject');
+        const subtitle = packageModal.querySelector('#package-modal-subtitle');
+        if (subjectField) {
+            subjectField.value = `Package ${packageNumber} - ${packageStage}: ${packageHeadline} (${packagePrice})`;
+        }
+        if (subtitle) {
+            subtitle.textContent = `You're booking: ${packageStage} - ${packageHeadline}`;
+        }
+    };
+
+    const closePackageModal = () => {
+        if (!packageModal) return;
+        packageModal.hidden = true;
+        body.classList.remove('has-modal-open');
+    };
+
+    const showPackageFormModal = (type, message = '') => {
+        if (!packageFormModalOverlay) return;
+
+        if (packageFormModalLoading) packageFormModalLoading.hidden = true;
+        if (packageFormModalSuccess) packageFormModalSuccess.hidden = true;
+        if (packageFormModalError) packageFormModalError.hidden = true;
+
+        if (type === 'loading' && packageFormModalLoading) {
+            packageFormModalLoading.hidden = false;
+        } else if (type === 'success' && packageFormModalSuccess) {
+            packageFormModalSuccess.hidden = false;
+        } else if (type === 'error' && packageFormModalError) {
+            packageFormModalError.hidden = false;
+            if (packageFormModalErrorText && message) {
+                packageFormModalErrorText.textContent = message;
+            }
+        }
+
+        packageFormModalOverlay.hidden = false;
+        window.setTimeout(() => {
+            packageFormModalOverlay.classList.add('is-visible');
+        }, 10);
+    };
+
+    const closePackageFormModal = () => {
+        if (!packageFormModalOverlay) return;
+
+        packageFormModalOverlay.classList.remove('is-visible');
+        window.setTimeout(() => {
+            packageFormModalOverlay.hidden = true;
+        }, 300);
+    };
+
     const openChatPanel = async () => {
         if (!chatPanel) return;
         chatPanel.hidden = false;
@@ -387,16 +454,103 @@
         if (backToTop) backToTop.classList.toggle('is-visible', window.scrollY > 600);
     };
 
-    if (menuToggle && menu) {
-        menuToggle.addEventListener('click', () => {
-            const isOpen = menu.classList.toggle('is-open');
-            menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    const initScrollRevealAnimations = () => {
+        const selectors = [];
+
+        if (document.body.classList.contains('is-homepage')) {
+            selectors.push(
+                '.hero-reference__content',
+                '.empathy-section__heading',
+                '.empathy-card',
+                '#guides .section-heading',
+                '.guide-feature-card',
+                '.owner-photo-wrap',
+                '.owner-content',
+                '.value-stack__heading',
+                '.value-stack__card',
+                '.testimonial-band__heading',
+                '.testimonial-band__card',
+                '.lead-strip__copy',
+                '.lead-strip__form',
+                '.country-acknowledgement__inner',
+            );
+        }
+
+        if (document.querySelector('.settlement-page')) {
+            selectors.push(
+                '.settlement-hero__content',
+                '.settlement-hero__visual',
+                '.settlement-overview__card',
+                '.settlement-packages__intro',
+                '.settlement-package',
+                '.settlement-eligibility__panel',
+                '.settlement-faqs__intro',
+                '.settlement-faq',
+            );
+        }
+
+        const revealTargets = Array.from(document.querySelectorAll(selectors.join(', ')));
+
+        if (!revealTargets.length) return;
+
+        revealTargets.forEach((el, index) => {
+            el.classList.add('reveal-on-scroll');
+            el.style.setProperty('--reveal-delay', `${Math.min((index % 6) * 80, 400)}ms`);
         });
-        menu.querySelectorAll('a').forEach((link) => {
-            link.addEventListener('click', () => {
-                menu.classList.remove('is-open');
-                menuToggle.setAttribute('aria-expanded', 'false');
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion || !('IntersectionObserver' in window)) {
+            revealTargets.forEach((el) => el.classList.add('is-revealed'));
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-revealed');
+                obs.unobserve(entry.target);
             });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -18% 0px',
+        });
+
+        revealTargets.forEach((el) => observer.observe(el));
+    };
+
+    if (menuToggle && menu) {
+        const syncMenuState = (isOpen) => {
+            menu.classList.toggle('is-open', isOpen);
+            menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            body.classList.toggle('has-mobile-menu-open', isOpen);
+
+            if (window.innerWidth <= 767) {
+                menu.style.display = isOpen ? 'flex' : 'none';
+                menu.style.visibility = isOpen ? 'visible' : 'hidden';
+                menu.style.opacity = isOpen ? '1' : '0';
+                menu.style.pointerEvents = isOpen ? 'auto' : 'none';
+            } else {
+                menu.style.removeProperty('display');
+                menu.style.removeProperty('visibility');
+                menu.style.removeProperty('opacity');
+                menu.style.removeProperty('pointer-events');
+            }
+        };
+
+        syncMenuState(false);
+
+        menuToggle.addEventListener('click', () => {
+            syncMenuState(!menu.classList.contains('is-open'));
+        });
+
+        menu.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => syncMenuState(false));
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 767) {
+                syncMenuState(false);
+            }
         });
     }
 
@@ -416,6 +570,14 @@
 
     closeLeadModalTriggers.forEach((trigger) => trigger.addEventListener('click', () => closeLeadModal(true)));
     closeBookingModalTriggers.forEach((trigger) => trigger.addEventListener('click', closeBookingModal));
+    closePackageModalTriggers.forEach((trigger) => trigger.addEventListener('click', closePackageModal));
+    openPackageModalTriggers.forEach((trigger) => {
+        console.log('Binding click to:', trigger);
+        trigger.addEventListener('click', () => {
+            console.log('Package button clicked!');
+            openPackageModal(trigger);
+        });
+    });
     chatToggleButtons.forEach((button) => {
         button.addEventListener('click', () => {
             if (!chatPanel) return;
@@ -446,8 +608,13 @@
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
+            if (packageFormModalOverlay && !packageFormModalOverlay.hidden) {
+                closePackageFormModal();
+                return;
+            }
             closeLeadModal(true);
             closeBookingModal();
+            closePackageModal();
             closeChatPanel();
         }
     });
@@ -513,9 +680,51 @@
     }
     if (directoryListings.length) applyDirectoryFilters();
 
+    const directoryBookmarkButtons = document.querySelectorAll('[data-directory-bookmark]');
+    const directoryBookmarksKey = 'settleanzDirectoryBookmarks';
+
+    const readDirectoryBookmarks = () => {
+        try {
+            const raw = window.localStorage.getItem(directoryBookmarksKey);
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    };
+
+    let directoryBookmarks = readDirectoryBookmarks();
+
+    const persistDirectoryBookmarks = () => {
+        window.localStorage.setItem(directoryBookmarksKey, JSON.stringify(directoryBookmarks));
+    };
+
+    directoryBookmarkButtons.forEach((button) => {
+        const slug = button.dataset.directorySlug;
+        if (slug && directoryBookmarks.includes(slug)) {
+            button.classList.add('is-saved');
+            button.setAttribute('aria-pressed', 'true');
+        }
+
+        button.addEventListener('click', () => {
+            if (!slug) return;
+            if (directoryBookmarks.includes(slug)) {
+                directoryBookmarks = directoryBookmarks.filter((item) => item !== slug);
+                button.classList.remove('is-saved');
+                button.setAttribute('aria-pressed', 'false');
+            } else {
+                directoryBookmarks = [...directoryBookmarks, slug];
+                button.classList.add('is-saved');
+                button.setAttribute('aria-pressed', 'true');
+            }
+            persistDirectoryBookmarks();
+        });
+    });
+
     asyncForms.forEach((form) => {
         const statusId = form.dataset.successTarget;
         const statusEl = statusId ? document.getElementById(statusId) : null;
+        const isPackageForm = Boolean(form.closest('[data-package-modal]'));
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -527,6 +736,10 @@
             const submitButton = form.querySelector('button[type="submit"]');
             if (submitButton) submitButton.disabled = true;
 
+            if (isPackageForm) {
+                showPackageFormModal('loading');
+            }
+
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
@@ -537,14 +750,26 @@
                     body: new FormData(form),
                 });
 
-                const payload = await response.json();
+                let payload = {};
+                try {
+                    payload = await response.json();
+                } catch {
+                    throw new Error('Something went wrong. Please try again.');
+                }
                 if (!response.ok) {
-                    const firstError = payload.errors ? Object.values(payload.errors).flat()[0] : 'Something went wrong. Please try again.';
+                    const firstError = payload.errors ? Object.values(payload.errors).flat()[0] : (payload.message || 'Something went wrong. Please try again.');
                     throw new Error(firstError || 'Something went wrong. Please try again.');
                 }
 
                 form.reset();
-                if (statusEl) {
+                if (isPackageForm) {
+                    closePackageModal();
+                    const defaultBookingThanks = 'Thank you. We have received your package request and will contact you within 24 hours.';
+                    if (packageFormModalSuccessMessage) {
+                        packageFormModalSuccessMessage.textContent = payload.message || defaultBookingThanks;
+                    }
+                    showPackageFormModal('success');
+                } else if (statusEl) {
                     statusEl.textContent = payload.message || 'Thanks - we will be in touch within 24 hours.';
                     statusEl.hidden = false;
                 }
@@ -552,7 +777,10 @@
                     window.setTimeout(() => closeBookingModal(), 1200);
                 }
             } catch (error) {
-                if (statusEl) {
+                if (isPackageForm) {
+                    closePackageModal();
+                    showPackageFormModal('error', error.message || 'Something went wrong. Please try again.');
+                } else if (statusEl) {
                     statusEl.textContent = error.message || 'Something went wrong. Please try again.';
                     statusEl.hidden = false;
                     statusEl.classList.add('is-error');
@@ -563,10 +791,76 @@
         });
     });
 
+    closePackageFormModalTriggers.forEach((trigger) => {
+        trigger.addEventListener('click', closePackageFormModal);
+    });
+
     if (backToTop) {
         backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 
     syncScrolledHeader();
     window.addEventListener('scroll', syncScrolledHeader, { passive: true });
+    initScrollRevealAnimations();
+
+    // Custom Pro Dropdown
+    const initCustomDropdowns = () => {
+        const selectElements = document.querySelectorAll('select.pro-select');
+        selectElements.forEach(select => {
+            if (select.dataset.proSelectInitialized) return;
+            select.dataset.proSelectInitialized = 'true';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'pro-select-wrapper';
+            select.parentNode.insertBefore(wrapper, select);
+            wrapper.appendChild(select);
+            select.classList.add('pro-select-native');
+
+            const display = document.createElement('div');
+            display.className = 'pro-select-display';
+            const selectedOption = select.options[select.selectedIndex];
+            display.textContent = selectedOption && selectedOption.value ? selectedOption.text : 'Select option';
+            wrapper.appendChild(display);
+
+            const dropdown = document.createElement('div');
+            dropdown.className = 'pro-select-dropdown';
+            wrapper.appendChild(dropdown);
+
+            Array.from(select.options).forEach(option => {
+                const opt = document.createElement('div');
+                opt.className = 'pro-select-option';
+                opt.textContent = option.text;
+                opt.dataset.value = option.value;
+                if (option.selected) opt.classList.add('is-selected');
+                dropdown.appendChild(opt);
+
+                opt.addEventListener('click', function() {
+                    select.value = this.dataset.value;
+                    display.textContent = this.text;
+                    dropdown.querySelectorAll('.pro-select-option').forEach(o => o.classList.remove('is-selected'));
+                    this.classList.add('is-selected');
+                    wrapper.classList.remove('is-open');
+                    select.dispatchEvent(new Event('change'));
+                });
+            });
+
+            display.addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.querySelectorAll('.pro-select-wrapper.is-open').forEach(w => w.classList.remove('is-open'));
+                wrapper.classList.toggle('is-open');
+            });
+        });
+    };
+
+    const closeAllDropdowns = () => {
+        document.querySelectorAll('.pro-select-wrapper.is-open').forEach(w => w.classList.remove('is-open'));
+    };
+
+    document.addEventListener('click', closeAllDropdowns);
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCustomDropdowns);
+    } else {
+        initCustomDropdowns();
+    }
 })();

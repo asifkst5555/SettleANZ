@@ -290,6 +290,7 @@ class WebsiteAssistantService
 
         $attempt = $this->performStandardProviderRequest(
             conversation: $conversation,
+            userContent: $content,
             lead: $lead,
             apiKey: $apiKey,
             baseUrl: $baseUrl,
@@ -297,6 +298,7 @@ class WebsiteAssistantService
             knowledgeContext: $knowledgeContext,
             webSearchEnabled: $webSearchEnabled,
             isOpenRouter: $isOpenRouter,
+            simplifiedRetry: false,
         );
 
         if (($attempt['result']['content'] ?? '') !== '') {
@@ -306,6 +308,7 @@ class WebsiteAssistantService
         if ($webSearchEnabled && $attempt['tool_error'] === true) {
             $retry = $this->performStandardProviderRequest(
                 conversation: $conversation,
+                userContent: $content,
                 lead: $lead,
                 apiKey: $apiKey,
                 baseUrl: $baseUrl,
@@ -313,6 +316,7 @@ class WebsiteAssistantService
                 knowledgeContext: $knowledgeContext,
                 webSearchEnabled: false,
                 isOpenRouter: $isOpenRouter,
+                simplifiedRetry: false,
             );
 
             if (($retry['result']['content'] ?? '') !== '') {
@@ -322,17 +326,44 @@ class WebsiteAssistantService
             }
         }
 
+        $simplifiedRetry = $this->performStandardProviderRequest(
+            conversation: $conversation,
+            userContent: $content,
+            lead: $lead,
+            apiKey: $apiKey,
+            baseUrl: $baseUrl,
+            model: $model,
+            knowledgeContext: $this->trimKnowledgeContext($knowledgeContext),
+            webSearchEnabled: false,
+            isOpenRouter: $isOpenRouter,
+            simplifiedRetry: true,
+        );
+
+        if (($simplifiedRetry['result']['content'] ?? '') !== '') {
+            $simplifiedRetry['result']['metadata']['web_search_used'] = false;
+            $simplifiedRetry['result']['metadata']['simplified_retry_fallback'] = true;
+            return $simplifiedRetry['result'];
+        }
+
         return null;
     }
 
-    private function performStandardProviderRequest(Conversation $conversation, ?Lead $lead, string $apiKey, string $baseUrl, string $model, string $knowledgeContext, bool $webSearchEnabled, bool $isOpenRouter): array
+    private function performStandardProviderRequest(Conversation $conversation, string $userContent, ?Lead $lead, string $apiKey, string $baseUrl, string $model, string $knowledgeContext, bool $webSearchEnabled, bool $isOpenRouter, bool $simplifiedRetry): array
     {
+        $shouldPreferWebSearch = $webSearchEnabled && $this->knowledgeService->shouldPreferWebSearch($userContent);
+        $instructionTail = $shouldPreferWebSearch
+            ? "\n\nFor this specific user request, run web search before answering. Use sources and avoid unsupported claims."
+            : '';
+        $retryInstruction = $simplifiedRetry
+            ? "\n\nRetry mode: answer directly with short practical guidance. Avoid long formatting."
+            : '';
+
         $payload = [
             'model' => $model,
-            'instructions' => $this->systemPrompt($lead, $webSearchEnabled) . "\n\n" . $knowledgeContext,
+            'instructions' => $this->systemPrompt($lead, $webSearchEnabled) . "\n\n" . $knowledgeContext . $instructionTail . $retryInstruction,
             'input' => $this->buildResponsesInput($conversation),
             'max_output_tokens' => 900,
-            'temperature' => 0.45,
+            'temperature' => $simplifiedRetry ? 0.2 : 0.45,
         ];
 
         if ($webSearchEnabled) {
@@ -384,7 +415,9 @@ class WebsiteAssistantService
                     'metadata' => [
                         'provider' => $isOpenRouter ? 'openrouter' : 'openai',
                         'model' => $model,
+                        'web_search_recommended' => $shouldPreferWebSearch,
                         'web_search_used' => $sources->isNotEmpty() || $this->responseUsedWebSearch($json),
+                        'simplified_retry' => $simplifiedRetry,
                         'web_sources' => $sources->values()->all(),
                         'response_id' => data_get($json, 'id'),
                     ],
@@ -401,6 +434,16 @@ class WebsiteAssistantService
 
             return ['result' => null, 'tool_error' => false];
         }
+    }
+
+    private function trimKnowledgeContext(string $knowledgeContext, int $maxChars = 1600): string
+    {
+        $trimmed = trim($knowledgeContext);
+        if ($trimmed === '') {
+            return $trimmed;
+        }
+
+        return Str::limit($trimmed, $maxChars, '...');
     }
 
     private function buildChatMessages(Conversation $conversation, string $systemPrompt): array
@@ -575,6 +618,8 @@ class WebsiteAssistantService
 
     private function appendSourceSummary(string $content, Collection $sources): string
     {
+        $content = $this->sanitizeAssistantText($content);
+
         if ($sources->isEmpty()) {
             return $content;
         }
@@ -586,9 +631,20 @@ class WebsiteAssistantService
         return rtrim($content) . "\n\nSources: " . $summary;
     }
 
+    private function sanitizeAssistantText(string $content): string
+    {
+        $clean = preg_replace('/\?\d+\+L\d+(?:-L\d+)?\?/', '', $content) ?? $content;
+        $clean = preg_replace('/([A-Za-z0-9\/])\?([A-Za-z0-9])/', '$1 $2', $clean) ?? $clean;
+        $clean = preg_replace('/[ \t]{2,}/', ' ', $clean) ?? $clean;
+        $clean = preg_replace("/\n{3,}/", "\n\n", $clean) ?? $clean;
+
+        return trim($clean);
+    }
+
     private function systemPrompt(?Lead $lead, bool $webSearchEnabled): string
     {
         $name = trim((string) ($lead?->first_name ?? ''));
+        $customInstruction = trim((string) SiteSetting::getValue('ai_assistant_system_prompt', ''));
 
         return implode("\n", array_filter([
             'You are SettleANZ AI Assistant for website visitors.',
@@ -602,13 +658,18 @@ class WebsiteAssistantService
             'For basic conversational prompts like greetings, your name, what you do, or casual questions, respond like a real assistant and do not turn the answer into a page recommendation.',
             'Answer clearly about migration, housing, banking, healthcare, relocation checklists, directory partners, contact pathways, blog guides, and general guidance questions.',
             'Keep replies concise, practical, warm, and trustworthy.',
+            'Preferred response style: short direct answer first, then practical next steps.',
+            'Use plain English. Avoid jargon unless needed.',
+            'Never output internal tool traces, citation placeholders, or raw debug tokens.',
             'When describing a process, use cautious wording such as "you can", "the page lets you", or "the site suggests" unless a step is explicitly confirmed.',
             'If a detail is unclear, say that briefly instead of guessing.',
             'If the visitor asks for regulated visa advice, remind them SettleANZ can connect them with migration professionals and avoid pretending to be a lawyer or migration agent.',
             'When helpful, suggest the most relevant SettleANZ page path such as /new-to-australia, /housing, /banking, /migration-services, /blog, /directory, or /contact.',
             'If website knowledge is incomplete and web search is unavailable, say so briefly and then still try to be helpful.',
+            'If web search is used, include up to 3 high-quality source links at the end.',
             'If the visitor shares an email, thank them and say the team can follow up.',
             $name !== '' ? 'Known visitor first name: ' . $name : null,
+            $customInstruction !== '' ? 'Custom site instruction: ' . $customInstruction : null,
             'Do not use markdown tables.',
         ]));
     }

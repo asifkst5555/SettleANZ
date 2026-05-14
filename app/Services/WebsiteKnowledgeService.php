@@ -12,6 +12,31 @@ use Illuminate\Support\Str;
 
 class WebsiteKnowledgeService
 {
+    public function shouldPreferWebSearch(string $query, int $minKnowledgeScore = 6): bool
+    {
+        $normalized = Str::lower(trim($query));
+        if ($normalized === '') {
+            return false;
+        }
+
+        if ($this->containsRecencyIntent($normalized)) {
+            return true;
+        }
+
+        if (!$this->looksLikeSiteOrRelocationIntent($normalized)) {
+            return true;
+        }
+
+        return !$this->hasStrongKnowledgeMatch($normalized, $minKnowledgeScore);
+    }
+
+    public function hasStrongKnowledgeMatch(string $query, int $minScore = 6): bool
+    {
+        $top = $this->search($query, 1)->first();
+
+        return (int) ($top['score'] ?? 0) >= $minScore;
+    }
+
     public function buildAssistantContext(string $query, int $limit = 10): string
     {
         $matches = $this->search($query, $limit);
@@ -122,6 +147,15 @@ class WebsiteKnowledgeService
             'school', 'work', 'job', 'tfn', 'super', 'partner', 'whatsapp', 'consultation', 'listing',
             'services', 'support', 'healthcare', 'student visa', 'working holiday', 'partner visa',
             'email', 'apply', 'business', 'agent', 'lawyer', 'directory', 'article', 'post', 'category',
+        ]);
+    }
+
+    private function containsRecencyIntent(string $query): bool
+    {
+        return Str::contains($query, [
+            'latest', 'today', 'now', 'current', 'currently', 'new update', 'updated',
+            'news', 'change', 'changes', 'policy', 'recent', 'this year', '2026', '2027',
+            'visa update', 'immigration update', 'new law', 'new rules',
         ]);
     }
 

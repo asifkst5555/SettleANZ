@@ -80,6 +80,16 @@ class DirectoryListingController extends Controller
         return redirect()->route('admin.directory-listings.index')->with('status', 'Directory listing deleted successfully.');
     }
 
+    public function toggleFeatured(Request $request, DirectoryListing $directoryListing): RedirectResponse
+    {
+        abort_unless($request->user()?->is_admin, 403);
+
+        $directoryListing->update(['featured' => !$directoryListing->featured]);
+
+        $status = $directoryListing->featured ? 'Listing added to featured.' : 'Listing removed from featured.';
+        return redirect()->route('admin.directory-listings.index')->with('status', $status);
+    }
+
     protected function validateListing(Request $request, ?int $listingId = null): array
     {
         return $request->validate([

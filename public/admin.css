@@ -125,6 +125,7 @@ body.admin-shell-body .lead-modal {
     margin-left: 280px;
     width: calc(100% - 280px);
     padding: 1.5rem;
+    box-sizing: border-box;
 }
 
 .admin-main__inner {
@@ -132,6 +133,7 @@ body.admin-shell-body .lead-modal {
     gap: 1.5rem;
     width: 100%;
     max-width: none;
+    min-width: 0;
 }
 
 .admin-topbar,
@@ -141,11 +143,13 @@ body.admin-shell-body .lead-modal {
     border: 1px solid var(--admin-border);
     border-radius: 22px;
     box-shadow: var(--admin-shadow);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .admin-topbar,
 .admin-panel-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
 }
 
 .admin-topbar {
@@ -382,29 +386,38 @@ body.admin-shell-body .lead-modal {
 }
 
 .admin-table-card {
-    overflow: hidden;
+    overflow-x: auto;
     padding: 0;
+    border-radius: 22px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .admin-table {
     width: 100%;
+    min-width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
 }
 
 .admin-table th,
 .admin-table td {
-    padding: 1rem 1.25rem;
+    padding: 0.65rem 0.75rem;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
     border-bottom: 1px solid rgba(11, 122, 117, 0.08);
+    border-right: none;
+    word-wrap: break-word;
 }
 
 .admin-table thead th {
     background: #f7fbfd;
     color: #12384f;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
+    white-space: nowrap;
 }
 
 .admin-table td strong,
@@ -437,6 +450,93 @@ body.admin-shell-body .lead-modal {
     font-weight: 700;
     cursor: pointer;
     padding: 0;
+}
+
+.admin-table td:last-child {
+    white-space: normal;
+    width: auto;
+    min-width: 120px;
+}
+
+/* Reviews table Actions column - ensure buttons display properly */
+.reviews-table td:last-child,
+.reviews-table td[data-label="Actions"] {
+    white-space: normal !important;
+    width: auto !important;
+    min-width: 280px !important;
+    padding: 0.75rem !important;
+}
+
+/* Reviews action buttons container */
+.reviews-actions-cell {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.375rem;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.reviews-actions-cell form {
+    display: inline-flex;
+    margin: 0;
+}
+
+/* Reviews action buttons */
+.reviews-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.reviews-action-icon {
+    flex-shrink: 0;
+}
+
+.reviews-approve-btn {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.reviews-approve-btn:hover {
+    background: #a7f3d0;
+}
+
+.reviews-reject-btn {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.reviews-reject-btn:hover {
+    background: #fecaca;
+}
+
+.reviews-view-btn {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reviews-view-btn:hover {
+    background: #bfdbfe;
+}
+
+.reviews-delete-btn {
+    background: #fee2e2;
+    color: #7f1d1d;
+}
+
+.reviews-delete-btn:hover {
+    background: #fca5a5;
 }
 
 .admin-pagination {
@@ -529,23 +629,2317 @@ body.admin-shell-body .lead-modal {
     }
 }
 
+/* ===== Professional Modal System ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(3px);
+}
+
+.modal-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--admin-surface);
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(11, 122, 117, 0.08);
+    padding: 2.5rem 2rem;
+    max-width: 500px;
+    width: 90%;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-overlay.is-open .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.modal-title {
+    margin: 0 0 1rem;
+    color: #12384f;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.modal-divider {
+    height: 1px;
+    background: rgba(11, 122, 117, 0.12);
+    margin: 0 0 1.5rem;
+}
+
+.modal-message {
+    margin: 0 0 2rem;
+    color: var(--admin-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 0.85rem 2rem;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 140px;
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.modal-btn:active {
+    transform: translateY(0);
+}
+
+.modal-btn-primary {
+    background: linear-gradient(135deg, #0b7a75 0%, #0a5f5c 100%);
+    color: #fff;
+}
+
+.modal-btn-primary:hover {
+    background: linear-gradient(135deg, #0a5f5c 0%, #084642 100%);
+}
+
+.modal-btn-secondary {
+    background: #e8eef0;
+    color: #12384f;
+    border: none;
+}
+
+.modal-btn-secondary:hover {
+    background: #d8e5eb;
+}
+
+.modal-btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+}
+
+.modal-btn-danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
 @media (max-width: 720px) {
+    .modal-content {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+    }
+
+    .modal-title {
+        font-size: 1.25rem;
+    }
+
+    .modal-message {
+        font-size: 0.95rem;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .modal-btn {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+/* Rating display in tables */
+.rating-display {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-display .star {
+    color: #d1d5db;
+    font-size: 1rem;
+}
+
+.rating-display .star.filled {
+    color: #f59e0b;
+}
+
+/* Comment preview */
+.comment-preview {
+    display: block;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--admin-muted);
+    font-size: 0.9rem;
+}
+
+/* Status badge colors */
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #e8f5f4;
+    color: #0b7a75;
+}
+
+.admin-badge:has(+ .pending) {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Row pending highlight */
+.row--pending {
+    background: rgba(251, 191, 36, 0.05);
+}
+
+/* Text links in admin tables */
+.text-link {
+    color: #0b7a75;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.text-link:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   SaaS-style Top Bar with Notifications & Profile
+   ============================================ */
+
+.admin-topbar-saas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.admin-topbar-saas__left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-topbar-saas__menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #475569;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.admin-topbar-saas__menu-toggle:hover {
+    background: #f1f5f9;
+}
+
+.admin-topbar-saas__breadcrumb {
+    display: flex;
+    align-items: center;
+}
+
+.admin-topbar-saas__page-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.admin-topbar-saas__right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Notifications */
+.admin-notifications {
+    position: relative;
+}
+
+.admin-notifications__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.admin-notifications__toggle:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.admin-notifications__badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+}
+
+.admin-notifications__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 360px;
+    max-width: calc(100vw - 2rem);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+    z-index: 100;
+}
+
+.admin-notifications.is-open .admin-notifications__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.admin-notifications__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-notifications__header h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.admin-notifications__mark-all {
+    font-size: 0.8rem;
+    color: #0b7a75;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.admin-notifications__mark-all:hover {
+    background: #f0fdfa;
+}
+
+.admin-notifications__list {
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+.admin-notifications__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.admin-notifications__item:hover {
+    background: #f8fafc;
+}
+
+.admin-notifications__item--unread {
+    background: #f0fdfa;
+}
+
+.admin-notifications__item--unread:hover {
+    background: #e0f2fe;
+}
+
+.admin-notifications__icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-notifications__icon--lead {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.admin-notifications__icon--review {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.admin-notifications__icon--system {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.admin-notifications__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-notifications__title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #0f172a;
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+}
+
+.admin-notifications__message {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0 0 0.25rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.admin-notifications__time {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.admin-notifications__empty {
+    padding: 2rem;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.admin-notifications__footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.admin-notifications__footer a {
+    font-size: 0.85rem;
+    color: #0b7a75;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.admin-notifications__footer a:hover {
+    text-decoration: underline;
+}
+
+/* Profile Dropdown */
+.admin-profile {
+    position: relative;
+}
+
+.admin-profile__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.admin-profile__toggle:hover {
+    background: #f1f5f9;
+}
+
+.admin-profile__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0b7a75 0%, #14a394 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.admin-profile__avatar--large {
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+}
+
+.admin-profile__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.admin-profile__name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.admin-profile__email {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.admin-profile__chevron {
+    color: #94a3b8;
+    transition: transform 0.2s ease;
+}
+
+.admin-profile.is-open .admin-profile__chevron {
+    transform: rotate(180deg);
+}
+
+.admin-profile__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 280px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.admin-profile.is-open .admin-profile__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.admin-profile__header {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-profile__header .admin-profile__name {
+    font-size: 1rem;
+}
+
+.admin-profile__menu {
+    padding: 0.5rem;
+}
+
+.admin-profile__menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    color: #475569;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+}
+
+.admin-profile__menu-item:hover {
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+.admin-profile__logout {
+    color: #ef4444;
+}
+
+.admin-profile__logout:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.admin-profile__logout-form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .admin-topbar-saas {
+        padding: 0.5rem 1rem;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        z-index: 100 !important;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+    }
+    
+    /* Push main content down to account for fixed topbar height */
     .admin-main {
+        padding-top: 60px !important;
+    }
+
+    .admin-topbar-saas__menu-toggle {
+        display: flex;
+    }
+
+    .admin-topbar-saas__page-title {
+        font-size: 1rem;
+    }
+
+    .admin-profile__info {
+        display: none;
+    }
+
+    .admin-profile__chevron {
+        display: none;
+    }
+
+    .admin-notifications__dropdown {
+        right: -80px;
+        width: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-notifications__dropdown {
+        right: -120px;
+        width: calc(100vw - 2rem);
+        max-width: 320px;
+    }
+
+    .admin-profile__dropdown {
+        right: -50px;
+        width: calc(100vw - 2rem);
+        max-width: 280px;
+    }
+}
+
+/* Mobile Sidebar Toggle */
+@media (max-width: 768px) {
+    .admin-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 260px;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .admin-sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    /* Removed redundant ::before overlay - we use .admin-sidebar__overlay instead */
+
+    .admin-main {
+        padding: 0;
+    }
+
+    .admin-main__inner {
         padding: 1rem;
     }
+}
 
-    .admin-topbar,
+/* ================================
+   MOBILE RESPONSIVE - Admin Panel
+   ================================ */
+
+/* Mobile Sidebar Toggle */
+.admin-sidebar__toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    width: 44px;
+    height: 44px;
+    background: var(--admin-sidebar-start);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.admin-sidebar__toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Mobile Overlay */
+.admin-sidebar__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 98;
+    backdrop-filter: blur(4px);
+}
+
+.admin-sidebar__overlay.is-open {
+    display: block;
+}
+
+/* Responsive Tables */
+.admin-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    box-shadow: var(--admin-shadow);
+    background: var(--admin-surface);
+}
+
+.admin-table-responsive table {
+    min-width: 600px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table-responsive th,
+.admin-table-responsive td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--admin-border);
+    font-size: 0.9rem;
+}
+
+.admin-table-responsive th {
+    background: var(--admin-surface-soft);
+    font-weight: 600;
+    color: var(--admin-text);
+    white-space: nowrap;
+}
+
+.admin-table-responsive tr:hover {
+    background: var(--admin-surface-soft);
+}
+
+/* Mobile Card View for Tables */
+@media (max-width: 768px) {
+    .admin-table-card-view thead {
+        display: none;
+    }
+    
+    .admin-table-card-view tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        background: var(--admin-surface);
+        border-radius: 12px;
+        box-shadow: var(--admin-shadow);
+        padding: 1rem;
+    }
+    
+    .admin-table-card-view td {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--admin-border);
+        align-items: center;
+    }
+    
+    .admin-table-card-view td:last-child {
+        border-bottom: none;
+    }
+    
+    .admin-table-card-view td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--admin-muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+}
+
+/* Desktop base styles for leads info cell */
+.leads-info-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.leads-info-name {
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.3;
+}
+
+.leads-info-email,
+.leads-info-phone {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.leads-info-email span,
+.leads-info-phone span {
+    color: #374151;
+}
+
+.leads-info-icon {
+    flex-shrink: 0;
+    color: #6b7280;
+}
+
+.leads-info-status {
+    margin-top: 0.125rem;
+}
+
+.leads-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.leads-status-badge.status-new {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.leads-status-badge.status-contacted {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.leads-status-badge.status-qualified {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.leads-status-badge.status-converted {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.leads-status-badge.status-closed {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+/* Mobile Layout Adjustments */
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100vh !important;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 200 !important;
+        width: 280px;
+        overflow-y: auto !important;
+    }
+    
+    .admin-sidebar.is-open {
+        transform: translateX(0);
+    }
+    
+    .admin-sidebar__overlay {
+        z-index: 150 !important;
+    }
+    
+    .admin-sidebar__toggle {
+        display: flex;
+    }
+    
+    .admin-main {
+        margin-left: 0 !important;
+    }
+    
+    .admin-main__inner {
+        padding: 1rem;
+    }
+    
+    .admin-topbar-saas {
+        left: 0 !important;
+        padding: 0.75rem 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .admin-form-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .admin-form-col {
+        width: 100% !important;
+    }
+    
+    .admin-card {
+        padding: 1rem;
+    }
+    
+    .admin-table-responsive {
+        border-radius: 8px;
+    }
+    
+    .admin-btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .admin-btn-group .button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .admin-section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .admin-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-topbar-saas {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .admin-topbar-saas__right {
+        gap: 0.5rem;
+    }
+    
+    .admin-profile__info {
+        display: none;
+    }
+}
+
+/* ================================
+   MOBILE TABLE RESPONSIVE
+   ================================ */
+
+/* All admin tables - horizontal scroll on mobile */
+@media (max-width: 1024px) {
+    /* Force all table wrappers to scroll */
+    [class*="table-wrap"],
+    .admin-table-wrap,
+    .leads-table-wrap,
+    .data-table-wrap {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        max-width: 100vw;
+    }
+    
+    /* All tables inside wrappers */
+    [class*="table-wrap"] table,
+    .admin-table-wrap table,
+    .leads-table-wrap table,
+    .data-table-wrap table,
+    .admin-table-responsive table {
+        min-width: 800px !important;
+        width: 100%;
+        table-layout: auto !important;
+    }
+    
+    /* Remove fixed widths on cells */
+    [class*="table-wrap"] th,
+    [class*="table-wrap"] td,
+    .leads-table th,
+    .leads-table td {
+        white-space: normal;
+    }
+    
+    /* Action buttons stay compact - REMOVED, see unified rule */
+    .leads-actions-cell--removed,
+    [class*="actions-cell--removed"] {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+    }
+    
+    /* Filter forms stack vertically */
+    .admin-filter-form,
+    .admin-quick-filters {
+        flex-direction: column !important;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .admin-quick-filters {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .admin-quick-filters a,
+    .admin-quick-filter {
+        width: 100% !important;
+        text-align: center;
+        padding: 0.6rem 0.75rem;
+        font-size: 0.85rem;
+        box-sizing: border-box;
+    }
+    
+    /* Fix panel card overflow */
+    .admin-panel-card--filters {
+        padding: 1rem !important;
+        overflow-x: hidden;
+    }
+    
+    .admin-panel-card--filters h3 {
+        font-size: 1.1rem;
+    }
+    
+    .admin-panel-card--filters p {
+        font-size: 0.9rem;
+    }
+    
+    /* Fix filter form on mobile */
+    .admin-filter-form {
+        width: 100%;
+    }
+    
+    .admin-filter-form label {
+        width: 100%;
+        display: block;
+        margin-bottom: 0.75rem;
+    }
+    
+    .admin-filter-form label span {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.85rem;
+    }
+    
+    .admin-filter-form .pro-select,
+    .admin-filter-form select {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .admin-filter-form button {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    /* Pagination adjusts */
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+    
+    .pagination li {
+        margin: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Smaller padding on mobile */
+    .admin-panel-card {
+        padding: 1rem !important;
+        margin: 0 !important;
+        border-radius: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .admin-panel-card--filters {
+        padding: 1rem !important;
+    }
+    
+    /* Table cells more compact */
+    .leads-table th,
+    .leads-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Action buttons smaller - REMOVED, see unified rule */
+    .leads-action-btn--removed {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Empty state centered */
+    .admin-empty-state,
+    [style*="text-align: center"][style*="padding: 3rem"] {
+        padding: 2rem 1rem !important;
+    }
+    
+    /* Status badges smaller */
+    .leads-type-badge,
+    .status-badge,
+    [class*="badge"] {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Very small screens - allow full width for all columns in card view */
+    .leads-table.admin-table-mobile-cards th:nth-child(3),
+    .leads-table.admin-table-mobile-cards td:nth-child(3) {
+        max-width: 100% !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        white-space: normal !important;
+    }
+    
+    /* Single column action buttons - REMOVED, see unified rule */
+    .leads-actions-cell--removed-single {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    /* Compact topbar text */
+    .admin-topbar h2 {
+        font-size: 1.25rem;
+    }
+    
+    .admin-topbar p {
+        font-size: 0.875rem;
+    }
+}
+
+/* FIXED: Action buttons in mobile card view - ensure they're fully visible */
+@media (max-width: 768px) {
+    /* Action cell - block layout with label on top */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr td[data-label="Actions"],
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr td[data-label="Action"] {
+        display: block !important;
+        width: 100% !important;
+        padding: 0.75rem 1.125rem 1rem !important;
+        background: #fafbfc !important;
+        border-top: 1px solid #e2e8f0 !important;
+        border-bottom: none !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Action container - REMOVED: see unified rule at end of file */
+    html body .admin-shell-body .leads-actions-cell--removed-flex {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        justify-content: stretch !important;
+        align-items: stretch !important;
+    }
+
+    /* Buttons inside action cells - DISABLED: handled by unified rules later */
+    html body .admin-shell-body .leads-action-btn.disabled-old-fixed-width,
+    html body .admin-shell-body .blog-action-btn.disabled-old-fixed-width {
+        flex: 1 1 calc(50% - 0.25rem) !important;
+        max-width: calc(50% - 0.25rem) !important;
+    }
+
+    /* Forms in action cells - DISABLED: handled by unified rules later */
+    html body .admin-shell-body .leads-actions-cell form.disabled-old-fixed,
+    html body .admin-shell-body .blog-actions-cell form.disabled-old-fixed {
+        flex: 1 1 calc(50% - 0.25rem) !important;
+        max-width: calc(50% - 0.25rem) !important;
+    }
+
+    /* Delete buttons specifically */
+    html body .admin-shell-body .leads-action-btn.leads-delete-btn,
+    html body .admin-shell-body .blog-action-btn.blog-delete-btn,
+    html body .admin-shell-body .directory-action-btn.directory-delete-btn,
+    html body .admin-shell-body .reviews-action-btn.reviews-delete-btn {
+        background: #fee2e2 !important;
+        color: #7f1d1d !important;
+    }
+
+    /* SEO table mobile card fix - buttons directly in cell */
+    html body .admin-shell-body .seo-table.admin-table-mobile-cards tbody tr td[data-label="Action"],
+    html body .admin-shell-body .seo-table.admin-table-mobile-cards tbody tr td[data-label="Actions"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+    }
+
+    html body .admin-shell-body .seo-table.admin-table-mobile-cards .seo-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+    }
+
+    html body .admin-shell-body .seo-table.admin-table-mobile-cards .seo-actions .seo-ai-btn,
+    html body .admin-shell-body .seo-table.admin-table-mobile-cards .seo-actions .seo-edit-btn {
+        flex: 1 1 calc(50% - 0.25rem) !important;
+        max-width: calc(50% - 0.25rem) !important;
+        min-width: 0 !important;
+        display: inline-flex !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* Card-based mobile table view (alternative to scroll) */
+@media (max-width: 768px) {
+    .admin-table-mobile-cards,
+    .admin-table-card-view {
+        display: block;
+    }
+    
+    .admin-table-mobile-cards thead,
+    .admin-table-card-view thead {
+        display: none;
+    }
+    
+    .admin-table-mobile-cards tbody,
+    .admin-table-card-view tbody {
+        display: block;
+    }
+    
+    .admin-table-mobile-cards tr,
+    .admin-table-card-view tr {
+        display: block;
+        margin-bottom: 1rem;
+        background: var(--admin-surface);
+        border-radius: 12px;
+        box-shadow: var(--admin-shadow);
+        padding: 1rem;
+        border: 1px solid var(--admin-border);
+    }
+    
+    .admin-table-mobile-cards td,
+    .admin-table-card-view td {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        gap: 0.5rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--admin-border);
+        align-items: flex-start;
+    }
+    
+    .admin-table-mobile-cards td:last-child,
+    .admin-table-card-view td:last-child {
+        border-bottom: none;
+    }
+    
+    .admin-table-mobile-cards td::before,
+    .admin-table-card-view td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--admin-muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding-top: 0.25rem;
+    }
+    
+    /* Leads table specific card styles */
+    .leads-table.admin-table-mobile-cards td[data-label="Lead"] {
+        background: var(--admin-surface-soft);
+        margin: -1rem -1rem 0.5rem -1rem;
+        padding: 1rem;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 2px solid var(--admin-border);
+    }
+    
+    .leads-table.admin-table-mobile-cards td[data-label="Lead"]::before {
+        display: none;
+    }
+    
+    /* Redesigned leads info cell - vertical layout with icons */
+    .leads-info-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+    
+    .leads-info-name {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #1f2937;
+        line-height: 1.3;
+        width: 100%;
+        word-break: break-word;
+    }
+    
+    .leads-info-email,
+    .leads-info-phone {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.375rem;
+        font-size: 0.8125rem;
+        color: #4b5563;
+        width: 100%;
+        word-break: break-word;
+    }
+    
+    .leads-info-email span,
+    .leads-info-phone span {
+        color: #374151;
+        font-weight: 500;
+        flex: 1;
+        min-width: 0;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .leads-info-icon {
+        flex-shrink: 0;
+        color: #6b7280;
+        margin-top: 0.125rem;
+    }
+    
+    .leads-info-status {
+        margin-top: 0.25rem;
+    }
+    
+    .leads-status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.625rem;
+        border-radius: 9999px;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+    
+    .leads-status-badge.status-new {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+    
+    .leads-status-badge.status-contacted {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .leads-status-badge.status-qualified {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .leads-status-badge.status-converted {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .leads-status-badge.status-closed {
+        background: #f3f4f6;
+        color: #4b5563;
+    }
+    
+    .leads-table.admin-table-mobile-cards td[data-label="Actions"] {
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+    }
+    
+    /* REMOVED - see unified action button rules at end of file */
+    
+    /* Blog posts table mobile card styles */
+    .blog-table-enhanced.admin-table-mobile-cards td[data-label="Post Title"] {
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        margin: -1rem -1rem 0.5rem -1rem;
+        padding: 1rem;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 2px solid var(--admin-border);
+    }
+    
+    .blog-table-enhanced.admin-table-mobile-cards td[data-label="Post Title"]::before {
+        display: none;
+    }
+    
+    .blog-table-enhanced.admin-table-mobile-cards td[data-label="Actions"] {
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+    }
+    
+    .blog-table-enhanced.admin-table-mobile-cards .blog-actions-cell--removed {
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+    
+    /* Directory listings table mobile card styles */
+    .directory-table.admin-table-mobile-cards td[data-label="Name"] {
+        background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+        margin: -1rem -1rem 0.5rem -1rem;
+        padding: 1rem;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 2px solid var(--admin-border);
+    }
+    
+    .directory-table.admin-table-mobile-cards td[data-label="Name"]::before {
+        display: none;
+    }
+    
+    .directory-table.admin-table-mobile-cards td[data-label="Actions"] {
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+    }
+    
+    .directory-table.admin-table-mobile-cards .directory-actions-cell--removed {
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+    
+    /* Reviews table mobile card styles */
+    .reviews-table.admin-table-mobile-cards td[data-label="Reviewer"] {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        margin: -1rem -1rem 0.5rem -1rem;
+        padding: 1rem;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 2px solid var(--admin-border);
+    }
+    
+    .reviews-table.admin-table-mobile-cards td[data-label="Reviewer"]::before {
+        display: none;
+    }
+    
+    .reviews-table.admin-table-mobile-cards td[data-label="Actions"] {
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+    }
+    
+    .reviews-table.admin-table-mobile-cards .reviews-actions-cell--removed {
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    /* SEO table mobile card styles */
+    .seo-table.admin-table-mobile-cards td[data-label="Page"] {
+        background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+        margin: -1rem -1rem 0.5rem -1rem;
+        padding: 1rem;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 2px solid var(--admin-border);
+    }
+    
+    .seo-table.admin-table-mobile-cards td[data-label="Page"]::before {
+        display: none;
+    }
+    
+    .seo-table.admin-table-mobile-cards td[data-label="Action"] {
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+    }
+    
+    .seo-table.admin-table-mobile-cards .seo-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Fix for fixed table layouts breaking mobile */
+@media (max-width: 1024px) {
+    table[style*="table-layout: fixed"],
+    .leads-table,
+    [class*="admin-table"] {
+        table-layout: auto !important;
+    }
+    
+    th[style*="width:"],
+    td[style*="width:"] {
+        width: auto !important;
+        min-width: fit-content;
+    }
+}
+
+/* Ensure proper viewport handling */
+.admin-main__inner {
+    max-width: 100vw;
+    overflow-x: hidden;
+    padding: 1rem;
+}
+
+/* Mobile content padding fix */
+@media (max-width: 768px) {
+    .admin-main__inner {
+        padding: 0.75rem !important;
+        margin: 0;
+    }
+    
+    .admin-shell-body {
+        overflow-x: hidden;
+    }
+    
     .admin-panel-card,
-    .admin-stat-card {
-        border-radius: 18px;
+    .admin-card,
+    .admin-section {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
     }
-
-    .admin-table-card {
-        overflow-x: auto;
+    
+    /* Ensure all content has equal padding */
+    .admin-content,
+    .admin-panel,
+    section {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
     }
+}
 
-    .admin-table {
-        min-width: 760px;
+/* Fix for inline styles that break mobile */
+@media (max-width: 768px) {
+    [style*="min-width: 850px"],
+    [style*="min-width:850px"] {
+        min-width: auto !important;
+    }
+    
+    [style*="width: 26%"],
+    [style*="width:26%"],
+    [style*="width: 18%"],
+    [style*="width:18%"] {
+        width: auto !important;
+    }
+}
+
+/* CRITICAL: Force all admin tables to card view on mobile - no horizontal scroll */
+@media (max-width: 768px) {
+    .leads-table,
+    .blog-table-enhanced,
+    .directory-table,
+    .reviews-table,
+    .seo-table,
+    .admin-table-mobile-cards {
+        min-width: auto !important;
+        width: 100% !important;
+        table-layout: auto !important;
+        display: block !important;
+    }
+    
+    .leads-table-wrap,
+    .blog-table-wrap,
+    .directory-table-wrap,
+    .reviews-table-wrap,
+    .seo-table-wrap {
+        overflow-x: hidden !important;
+        border: none !important;
+        background: transparent !important;
+    }
+    
+    .admin-table-mobile-cards thead {
+        display: none !important;
+    }
+    
+    .admin-table-mobile-cards tbody {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .admin-table-mobile-cards tbody tr {
+        display: block !important;
+        width: 100% !important;
+        margin-bottom: 1rem;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+        box-sizing: border-box;
+    }
+    
+    .admin-table-mobile-cards tbody td {
+        display: grid !important;
+        grid-template-columns: 100px 1fr;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e5e7eb;
+        align-items: flex-start;
+        width: 100% !important;
+        min-width: auto !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        word-break: break-word;
+        box-sizing: border-box;
+    }
+    
+    /* DISABLED: Override old grid for all cells - replaced by unified corporate design */
+    .admin-table-mobile-cards tbody td:first-child,
+    .admin-table-mobile-cards tbody td[data-label="Lead"],
+    .admin-table-mobile-cards tbody td[data-label="Type"],
+    .admin-table-mobile-cards tbody td[data-label="Details"],
+    .admin-table-mobile-cards tbody td[data-label="Created"],
+    .admin-table-mobile-cards tbody td[data-label="Actions"],
+    .admin-table-mobile-cards tbody td[data-label="Action"],
+    .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"],
+    .blog-table-enhanced.admin-table-mobile-cards tbody td[data-label="Post Title"],
+    .directory-table.admin-table-mobile-cards tbody td[data-label="Name"],
+    .reviews-table.admin-table-mobile-cards tbody td[data-label="Reviewer"],
+    .seo-table.admin-table-mobile-cards tbody td[data-label="Page"] {
+        display: block !important;
+        grid-template-columns: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Header cells (first cell) special styling */
+    .admin-table-mobile-cards tbody td:first-child,
+    .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"],
+    .blog-table-enhanced.admin-table-mobile-cards tbody td[data-label="Post Title"],
+    .directory-table.admin-table-mobile-cards tbody td[data-label="Name"],
+    .reviews-table.admin-table-mobile-cards tbody td[data-label="Reviewer"],
+    .seo-table.admin-table-mobile-cards tbody td[data-label="Page"] {
+        padding: 1rem !important;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+    }
+    
+    /* Data cells styling */
+    .admin-table-mobile-cards tbody td[data-label="Type"],
+    .admin-table-mobile-cards tbody td[data-label="Details"],
+    .admin-table-mobile-cards tbody td[data-label="Created"] {
+        padding: 0.75rem 1rem !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+    
+    .admin-table-mobile-cards tbody td:first-child::before,
+    .admin-table-mobile-cards tbody td[data-label="Lead"]::before,
+    .admin-table-mobile-cards tbody td[data-label="Type"]::before,
+    .admin-table-mobile-cards tbody td[data-label="Details"]::before,
+    .admin-table-mobile-cards tbody td[data-label="Created"]::before,
+    .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"]::before,
+    .blog-table-enhanced.admin-table-mobile-cards tbody td[data-label="Post Title"]::before,
+    .directory-table.admin-table-mobile-cards tbody td[data-label="Name"]::before,
+    .reviews-table.admin-table-mobile-cards tbody td[data-label="Reviewer"]::before,
+    .seo-table.admin-table-mobile-cards tbody td[data-label="Page"]::before {
+        display: none !important;
+    }
+    
+    /* Details cell content full width */
+    .admin-table-mobile-cards tbody td[data-label="Details"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow: visible !important;
+    }
+    
+    .admin-table-mobile-cards tbody td[data-label="Details"] strong,
+    .admin-table-mobile-cards tbody td[data-label="Details"] small {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+        overflow: visible !important;
+    }
+    
+    .admin-table-mobile-cards tbody td[data-label="Details"] small {
+        color: #64748b !important;
+        font-size: 0.8125rem !important;
+        margin-top: 0.375rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    .admin-table-mobile-cards tbody td:last-child {
+        border-bottom: none;
+    }
+    
+    .admin-table-mobile-cards tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6b7280;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding-top: 0.25rem;
+    }
+    
+    .admin-table-mobile-cards tbody td:not([data-label])::before {
+        display: none;
+    }
+    
+    /* Force all nested content to wrap and stay in bounds */
+    .admin-table-mobile-cards tbody td * {
+        max-width: 100% !important;
+        white-space: normal !important;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* Override inline min-width on cells */
+    .admin-table-mobile-cards tbody td[style*="min-width"] {
+        min-width: 0 !important;
+    }
+    
+    /* Action cells - special layout: label on top, buttons in row */
+    .admin-table-mobile-cards tbody td[data-label="Actions"],
+    .admin-table-mobile-cards tbody td[data-label="Action"] {
+        display: block !important;
+        grid-template-columns: none !important;
+        padding-top: 0.75rem !important;
+    }
+    
+    .admin-table-mobile-cards tbody td[data-label="Actions"]::before,
+    .admin-table-mobile-cards tbody td[data-label="Action"]::before {
+        display: block !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* REMOVED - see unified rules at end of file */
+    .leads-actions-cell--removed-2,
+    .blog-actions-cell--removed-2 {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        white-space: normal !important;
+        gap: 0.5rem;
+        width: 100%;
+        justify-content: stretch;
+    }
+    
+    /* REMOVED Buttons inside action cells */
+    .leads-action-btn--removed-3,
+    .blog-action-btn--removed-3 {
+        flex: 1 1 calc(50% - 0.25rem) !important;
+        min-width: 0 !important;
+        white-space: nowrap;
+        text-align: center;
+        max-width: 100%;
+        box-sizing: border-box;
+        display: block !important;
+    }
+    
+    /* REMOVED Forms inline in action cells - see unified rules at end */
+    
+    /* Containing card panels */
+    .admin-panel-card {
+        overflow: hidden !important;
+        box-sizing: border-box;
+    }
+}
+
+/* =================================================================
+   FINAL OVERRIDE - Mobile action buttons using GRID (deterministic)
+   Forces all action buttons to show in equal columns
+   ================================================================= */
+@media (max-width: 768px) {
+    /* Action cell - block with label on top */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr td[data-label="Actions"],
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr td[data-label="Action"] {
+        display: block !important;
+        width: 100% !important;
+        padding: 0.75rem 0 0 0 !important;
+        margin: 0 !important;
+        grid-template-columns: none !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Action container - DISABLED: replaced by unified flex rules later */
+    html body .admin-shell-body .leads-actions-cell.disabled-old-grid {
+        display: grid !important;
+    }
+    
+    /* Direct children grid cell - DISABLED */
+    html body .admin-shell-body .leads-actions-cell.disabled-old-grid > * {
+        width: 100% !important;
+    }
+    
+    /* Buttons and anchors - DISABLED: handled by unified action button rules below */
+    html body .admin-shell-body .leads-actions-cell a.disabled-old-rule,
+    html body .admin-shell-body .leads-actions-cell button.disabled-old-rule {
+        width: 100% !important;
+        display: block !important;
+        text-align: center !important;
+        padding: 0.5rem 0.25rem !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+}
+
+/* ============================================================
+   PROFESSIONAL CORPORATE MOBILE CARD DESIGN (Unified System)
+   Applied to all admin table-mobile-cards on viewports <= 768px
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Container resets */
+    html body .admin-shell-body .leads-table-wrap,
+    html body .admin-shell-body .blog-table-wrap,
+    html body .admin-shell-body .directory-table-wrap,
+    html body .admin-shell-body .reviews-table-wrap,
+    html body .admin-shell-body .seo-table-wrap {
+        border: none !important;
+        background: transparent !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Table reset - becomes a block container */
+    html body .admin-shell-body table.admin-table-mobile-cards {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        background: transparent !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards thead {
+        display: none !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    /* Card row - allow overflow for buttons */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 0 0.875rem 0 !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        transition: box-shadow 0.2s ease !important;
+        box-sizing: border-box !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr:hover {
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.06) !important;
+    }
+    
+    /* Generic cell styling */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+        padding: 0.625rem 0.875rem !important;
+        margin: 0 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        border: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        box-sizing: border-box !important;
+        background: transparent !important;
+        text-align: right !important;
+        word-break: break-word !important;
+        font-size: 0.875rem !important;
+        color: #1e293b !important;
+        line-height: 1.5 !important;
+        grid-template-columns: none !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td:last-child {
+        border-bottom: none !important;
+    }
+    
+    /* Cell labels (left side) */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td::before {
+        content: attr(data-label) !important;
+        flex: 0 0 auto !important;
+        font-size: 0.7rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        color: #64748b !important;
+        white-space: nowrap !important;
+        text-align: left !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Hide ::before when no data-label */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td:not([data-label])::before {
+        display: none !important;
+        content: none !important;
+    }
+    
+    /* HEADER CELL - first cell of each card (key identifier) */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td:first-child,
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"],
+    html body .admin-shell-body .blog-table-enhanced.admin-table-mobile-cards tbody td[data-label="Post Title"],
+    html body .admin-shell-body .directory-table.admin-table-mobile-cards tbody td[data-label="Name"],
+    html body .admin-shell-body .reviews-table.admin-table-mobile-cards tbody td[data-label="Reviewer"],
+    html body .admin-shell-body .seo-table.admin-table-mobile-cards tbody td[data-label="Page"] {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+        padding: 0.875rem !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+        grid-template-columns: none !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td:first-child::before,
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"]::before,
+    html body .admin-shell-body .blog-table-enhanced.admin-table-mobile-cards tbody td[data-label="Post Title"]::before,
+    html body .admin-shell-body .directory-table.admin-table-mobile-cards tbody td[data-label="Name"]::before,
+    html body .admin-shell-body .reviews-table.admin-table-mobile-cards tbody td[data-label="Reviewer"]::before,
+    html body .admin-shell-body .seo-table.admin-table-mobile-cards tbody td[data-label="Page"]::before {
+        display: none !important;
+        content: none !important;
+    }
+    
+    /* Strong text in header cell - title */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td:first-child strong {
+        display: block !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        color: #0f172a !important;
+        margin-bottom: 0.25rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    /* Small text in header cell - subtitle */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td:first-child small {
+        display: block !important;
+        font-size: 0.8125rem !important;
+        color: #64748b !important;
+        margin-top: 0.125rem !important;
+        font-weight: 400 !important;
+    }
+    
+    /* Leads info cell - ensure full width content */
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"] .leads-info-cell,
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"] .leads-info-name,
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"] .leads-info-email,
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"] .leads-info-phone {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"] .leads-info-email span,
+    html body .admin-shell-body .leads-table.admin-table-mobile-cards tbody td[data-label="Lead"] .leads-info-phone span {
+        width: auto !important;
+        max-width: 100% !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+    
+    /* Details, Type, Created cells - override flex to use full width */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Details"],
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Type"],
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Created"] {
+        display: block !important;
+        text-align: left !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Details"]::before,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Type"]::before,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Created"]::before {
+        display: block !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Details"] strong,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Details"] small,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Created"] strong,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Created"] small {
+        display: block !important;
+        width: 100% !important;
+        text-align: left !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Details"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow: visible !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Details"] small,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Created"] small {
+        color: #64748b !important;
+        font-size: 0.8125rem !important;
+        margin-top: 0.25rem !important;
+        white-space: normal !important;
+        line-height: 1.6 !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        display: block !important;
+        overflow: visible !important;
+        word-break: break-word !important;
+    }
+    
+    /* ACTIONS CELL - bottom of card */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Actions"],
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Action"] {
+        display: block !important;
+        padding: 0.625rem 0.875rem 0.875rem !important;
+        background: #fafbfc !important;
+        border-top: 1px solid #e2e8f0 !important;
+        border-bottom: none !important;
+        text-align: left !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Actions"]::before,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td[data-label="Action"]::before {
+        content: attr(data-label) !important;
+        display: block !important;
+        font-size: 0.7rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        color: #64748b !important;
+        margin-bottom: 0.375rem !important;
+    }
+    
+    /* ===== Unified Mobile Action Buttons (auto-width with icons) ===== */
+    html body .admin-shell-body .leads-actions-cell,
+    html body .admin-shell-body .blog-actions-cell,
+    html body .admin-shell-body .directory-actions-cell,
+    html body .admin-shell-body .reviews-actions-cell,
+    html body .admin-shell-body .seo-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 0.625rem !important;
+        width: 100% !important;
+        white-space: normal !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    html body .admin-shell-body .leads-actions-cell > a,
+    html body .admin-shell-body .leads-actions-cell > form,
+    html body .admin-shell-body .blog-actions-cell > a,
+    html body .admin-shell-body .blog-actions-cell > form,
+    html body .admin-shell-body .directory-actions-cell > a,
+    html body .admin-shell-body .directory-actions-cell > form,
+    html body .admin-shell-body .reviews-actions-cell > a,
+    html body .admin-shell-body .reviews-actions-cell > form,
+    html body .admin-shell-body .seo-actions > a,
+    html body .admin-shell-body .seo-actions > form {
+        width: auto !important;
+        flex: 0 0 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: inline-block !important;
+    }
+    
+    html body .admin-shell-body .leads-action-btn,
+    html body .admin-shell-body .blog-action-btn,
+    html body .admin-shell-body .directory-action-btn,
+    html body .admin-shell-body .reviews-action-btn,
+    html body .admin-shell-body .seo-edit-btn,
+    html body .admin-shell-body .seo-ai-btn {
+        width: auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.375rem !important;
+        padding: 0.5rem 0.875rem !important;
+        font-size: 0.8125rem !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        box-sizing: border-box !important;
+        white-space: nowrap !important;
+        border-radius: 8px !important;
+        border: 1px solid transparent !important;
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+        line-height: 1 !important;
+        min-height: 36px !important;
+        font-family: inherit !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
+    
+    /* Action button icons - center aligned with text */
+    html body .admin-shell-body .action-icon,
+    html body .admin-shell-body .leads-action-icon,
+    html body .admin-shell-body .blog-action-icon,
+    html body .admin-shell-body .directory-action-icon,
+    html body .admin-shell-body .reviews-action-icon,
+    html body .admin-shell-body .seo-action-icon {
+        flex-shrink: 0 !important;
+        width: 14px !important;
+        height: 14px !important;
+        display: block !important;
+    }
+    
+    /* Action button text span - center aligned with icon */
+    html body .admin-shell-body .leads-action-btn span,
+    html body .admin-shell-body .blog-action-btn span,
+    html body .admin-shell-body .directory-action-btn span,
+    html body .admin-shell-body .reviews-action-btn span,
+    html body .admin-shell-body .seo-edit-btn span,
+    html body .admin-shell-body .seo-ai-btn span {
+        display: inline-block !important;
+        line-height: 1 !important;
+        vertical-align: middle !important;
+    }
+    
+    /* Edit button variant - blue */
+    html body .admin-shell-body .leads-edit-btn,
+    html body .admin-shell-body .blog-edit-btn,
+    html body .admin-shell-body .directory-edit-btn,
+    html body .admin-shell-body .seo-edit-btn {
+        background: #eff6ff !important;
+        color: #1d4ed8 !important;
+        border-color: #bfdbfe !important;
+    }
+    
+    html body .admin-shell-body .leads-edit-btn:hover,
+    html body .admin-shell-body .blog-edit-btn:hover,
+    html body .admin-shell-body .directory-edit-btn:hover,
+    html body .admin-shell-body .seo-edit-btn:hover {
+        background: #dbeafe !important;
+        border-color: #93c5fd !important;
+    }
+    
+    /* Delete button variant - red */
+    html body .admin-shell-body .leads-delete-btn,
+    html body .admin-shell-body .blog-delete-btn,
+    html body .admin-shell-body .directory-delete-btn,
+    html body .admin-shell-body .reviews-delete-btn {
+        background: #fef2f2 !important;
+        color: #b91c1c !important;
+        border-color: #fecaca !important;
+    }
+    
+    html body .admin-shell-body .leads-delete-btn:hover,
+    html body .admin-shell-body .blog-delete-btn:hover,
+    html body .admin-shell-body .directory-delete-btn:hover,
+    html body .admin-shell-body .reviews-delete-btn:hover {
+        background: #fee2e2 !important;
+        border-color: #fca5a5 !important;
+    }
+    
+    /* Approve button - green */
+    html body .admin-shell-body .reviews-approve-btn {
+        background: #f0fdf4 !important;
+        color: #166534 !important;
+        border-color: #bbf7d0 !important;
+    }
+    
+    html body .admin-shell-body .reviews-approve-btn:hover {
+        background: #dcfce7 !important;
+        border-color: #86efac !important;
+    }
+    
+    /* Reject button - amber */
+    html body .admin-shell-body .reviews-reject-btn {
+        background: #fffbeb !important;
+        color: #b45309 !important;
+        border-color: #fde68a !important;
+    }
+    
+    html body .admin-shell-body .reviews-reject-btn:hover {
+        background: #fef3c7 !important;
+        border-color: #fcd34d !important;
+    }
+    
+    /* View button - blue */
+    html body .admin-shell-body .reviews-view-btn {
+        background: #eff6ff !important;
+        color: #1e40af !important;
+        border-color: #bfdbfe !important;
+    }
+    
+    html body .admin-shell-body .reviews-view-btn:hover {
+        background: #dbeafe !important;
+        border-color: #93c5fd !important;
+    }
+    
+    /* AI button - purple */
+    html body .admin-shell-body .seo-ai-btn {
+        background: #faf5ff !important;
+        color: #7e22ce !important;
+        border-color: #e9d5ff !important;
+    }
+    
+    html body .admin-shell-body .seo-ai-btn:hover {
+        background: #f3e8ff !important;
+        border-color: #d8b4fe !important;
+    }
+    
+    /* Inline forms inside actions */
+    html body .admin-shell-body .leads-actions-cell form,
+    html body .admin-shell-body .blog-actions-cell form,
+    html body .admin-shell-body .directory-actions-cell form,
+    html body .admin-shell-body .reviews-actions-cell form,
+    html body .admin-shell-body .seo-actions form {
+        display: inline-block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+    }
+    
+    /* Type/status badges should not stretch on small screens */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .leads-type-badge,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .blog-category-pill,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .blog-status-badge,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .directory-category-pill,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .reviews-status-badge,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .seo-badge {
+        display: inline-flex !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+    }
+    
+    /* Toggle switches stay compact */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .blog-toggle,
+    html body .admin-shell-body table.admin-table-mobile-cards tbody td .directory-toggle {
+        margin: 0 !important;
+    }
+    
+    /* Empty state row */
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr td[colspan] {
+        text-align: center !important;
+        padding: 2rem 1rem !important;
+        display: block !important;
+        background: #ffffff !important;
+    }
+    
+    html body .admin-shell-body table.admin-table-mobile-cards tbody tr td[colspan]::before {
+        display: none !important;
     }
 }
 

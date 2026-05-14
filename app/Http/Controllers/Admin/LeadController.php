@@ -32,6 +32,16 @@ class LeadController extends Controller
         ]);
     }
 
+    public function show(Request $request, Lead $lead): View
+    {
+        abort_unless($request->user()?->is_admin, 403);
+
+        return view('admin.leads.show', [
+            'metaTitle' => 'View Lead | SettleANZ Admin',
+            'lead' => $lead,
+        ]);
+    }
+
     public function edit(Request $request, Lead $lead): View
     {
         abort_unless($request->user()?->is_admin, 403);

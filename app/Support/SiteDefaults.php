@@ -7,15 +7,25 @@ class SiteDefaults
     public static function navItems(): array
     {
         return [
-            ['label' => 'Home', 'href' => '/#top'],
-            ['label' => 'New to Australia', 'href' => '/new-to-australia'],
-            ['label' => 'Housing', 'href' => '/housing'],
-            ['label' => 'Banking', 'href' => '/banking'],
-            ['label' => 'Migration', 'href' => '/migration-services'],
-            ['label' => 'Blog', 'href' => '/blog'],
-            ['label' => 'Directory', 'href' => '/directory'],
-            ['label' => 'Contact', 'href' => '/contact'],
+            ['label' => 'Home', 'href' => '/#top', 'visible' => true],
+            ['label' => 'New to Australia', 'href' => '/new-to-australia', 'visible' => true],
+            ['label' => 'Settlement Services', 'href' => '/settlement-services', 'visible' => true],
+            ['label' => 'Housing', 'href' => '/housing', 'visible' => false],
+            ['label' => 'Banking', 'href' => '/banking', 'visible' => false],
+            ['label' => 'Migration', 'href' => '/migration-services', 'visible' => false],
+            ['label' => 'Blog', 'href' => '/blog', 'visible' => true],
+            ['label' => 'Directory', 'href' => '/directory', 'visible' => true],
+            ['label' => 'About', 'href' => '/about', 'visible' => true],
+            ['label' => 'Contact', 'href' => '/contact', 'visible' => true],
         ];
+    }
+
+    public static function visibleNavItems(): array
+    {
+        return array_values(array_filter(
+            self::navItems(),
+            static fn (array $item): bool => $item['visible'] ?? true
+        ));
     }
 
     public static function featuredGuides(): array
@@ -332,7 +342,7 @@ class SiteDefaults
             'contact_email' => 'hello@settleanz.com',
             'contact_whatsapp' => 'https://wa.me/61000000000?text=Hi%20SettleANZ%2C%20I%20have%20a%20question.',
             'contact_response_time' => 'We usually respond within 24 hours.',
-            'footer_whatsapp' => 'https://wa.me/61000000000?text=Hi%20SettleANZ%2C%20I%20would%20like%20help%20with%20my%20move.',
+            'footer_whatsapp' => 'https://wa.me/61416874058?text=Hi%20SettleANZ%2C%20I%20would%20like%20help%20with%20my%20move.',
             'social_facebook' => '#',
             'social_instagram' => '#',
             'social_linkedin' => '#',
@@ -344,6 +354,7 @@ class SiteDefaults
             'ai_assistant_title' => 'SettleANZ AI Assistant',
             'ai_assistant_subtitle' => 'Ask about migration, housing, banking, healthcare, guides, and next steps.',
             'ai_assistant_greeting' => 'Hi, I am the SettleANZ AI Assistant. Ask me about migration, housing, banking, healthcare, newcomer checklists, or which guide to read next.',
+            'ai_assistant_system_prompt' => 'When website info is not enough, use web search and provide practical, clear answers with trustworthy sources.',
             'ai_openai_api_key' => '',
             'ai_openai_base_url' => 'https://api.openai.com/v1',
             'ai_openai_model' => 'gpt-4o-mini',
@@ -351,4 +362,3 @@ class SiteDefaults
         ];
     }
 }
-

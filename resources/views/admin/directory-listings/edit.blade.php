@@ -10,7 +10,7 @@
             </div>
             <div class="admin-topbar__actions">
                 <a class="button button--small button--ghost" href="{{ route('admin.directory-listings.index') }}">Back</a>
-                <form method="POST" action="{{ route('admin.directory-listings.destroy', $listing) }}" onsubmit="return confirm('Delete this directory listing permanently?');">
+                <form method="POST" action="{{ route('admin.directory-listings.destroy', $listing) }}" onsubmit="return confirmDelete(this, 'listing');">
                     @csrf
                     @method('DELETE')
                     <button class="button button--small button--danger" type="submit">Delete listing</button>

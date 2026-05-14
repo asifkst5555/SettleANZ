@@ -2,6 +2,9 @@
 
 Laravel 13 starter project for the SettleANZ website.
 
+For a quick Linux/WSL server run guide, see `RUN_SERVER_WSL.md`.
+For one-command server startup, run `bash scripts/run-server.sh` from the project root.
+
 This repository has been scaffolded in WSL and is ready for the first build phase. The uploaded brief describes a content-heavy migration and relocation website with guides, directory listings, lead capture, affiliate content, SEO requirements, and partner integrations.
 
 ## Recommended Stack
@@ -27,6 +30,15 @@ Key rules:
 - expose only the `public` directory to the web
 
 See [docs/cpanel-deployment.md](/home/asifk/projects/SettleANZ/docs/cpanel-deployment.md) for the deployment guide.
+
+Quick packaging command:
+
+```bash
+cd /home/asifk/projects/SettleANZ
+bash scripts/cpanel-package.sh
+```
+
+That generates a deployment bundle in `deploy/cpanel`.
 
 ## Local Setup
 

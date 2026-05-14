@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
             $settings = Schema::hasTable('site_settings') ? SiteSetting::keyValueMap() : SiteDefaults::siteSettings();
 
             $view->with([
-                'navItems' => SiteDefaults::navItems(),
+                'navItems' => SiteDefaults::visibleNavItems(),
                 'guides' => SiteDefaults::featuredGuides(),
                 'sharedSettings' => $settings,
             ]);

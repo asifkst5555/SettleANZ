@@ -20,6 +20,31 @@
 /storage/pail
 /vendor
 _ide_helper.php
+
+# Local SQLite DB (do not push)
+/database/database.sqlite
+/database/*.sqlite-journal
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Zaemit AI tool config (auto-generated)
+.mcp.json
+
+# Local AI / editor (machine-specific; do not publish)
+.claude/
+.codex
+
+# Windows "Mark of the Web" sidecar files
+*Zone.Identifier
+
+# Scratch, backups, one-off exports (not used at runtime)
+document_text.txt
+temp_render_home.php
+*.bak
+*.legacy
+
+# ---------------------------------------------------------------------------
+# cPanel / production: keep public/media and other runtime assets in Git.
+# Do not add patterns that ignore public/media/** or legal PDFs at repo root.
+# ---------------------------------------------------------------------------

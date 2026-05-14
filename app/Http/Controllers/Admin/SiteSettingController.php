@@ -15,9 +15,12 @@ class SiteSettingController extends Controller
     {
         abort_unless($request->user()?->is_admin, 403);
 
+        $settings = SiteSetting::keyValueMap();
+
         return view('admin.settings.edit', [
             'metaTitle' => 'API Integration Settings | SettleANZ Admin',
-            'settings' => SiteSetting::keyValueMap(),
+            'settings' => $settings,
+            'hasAiApiKey' => filled($settings['ai_openai_api_key'] ?? ''),
         ]);
     }
 
@@ -41,6 +44,7 @@ class SiteSettingController extends Controller
             'ai_assistant_title' => ['required', 'string', 'max:120'],
             'ai_assistant_subtitle' => ['required', 'string', 'max:255'],
             'ai_assistant_greeting' => ['required', 'string', 'max:500'],
+            'ai_assistant_system_prompt' => ['nullable', 'string', 'max:2000'],
             'ai_openai_api_key' => ['nullable', 'string', 'max:255'],
             'ai_openai_base_url' => ['required', 'string', 'max:255'],
             'ai_openai_model' => ['required', 'string', 'max:120'],
@@ -49,6 +53,18 @@ class SiteSettingController extends Controller
 
         $validated['ai_assistant_enabled'] = $request->boolean('ai_assistant_enabled') ? '1' : '0';
         $validated['ai_web_search_enabled'] = $request->boolean('ai_web_search_enabled') ? '1' : '0';
+
+        $existingApiKey = SiteSetting::getValue('ai_openai_api_key', '');
+        $submittedApiKey = trim((string) ($validated['ai_openai_api_key'] ?? ''));
+        $clearApiKey = $request->boolean('ai_openai_api_key_clear');
+
+        if ($clearApiKey) {
+            $validated['ai_openai_api_key'] = '';
+        } elseif ($submittedApiKey === '' && filled($existingApiKey)) {
+            $validated['ai_openai_api_key'] = $existingApiKey;
+        } else {
+            $validated['ai_openai_api_key'] = $submittedApiKey;
+        }
 
         foreach (array_keys(SiteDefaults::siteSettings()) as $key) {
             SiteSetting::query()->updateOrCreate(

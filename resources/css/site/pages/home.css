@@ -91,7 +91,7 @@ body.is-homepage .hero-section--reference h1 {
     max-width: 16ch;
     margin: 0 auto 1.35rem;
     color: #fff;
-    font-size: clamp(3rem, 5.8vw, 4.9rem);
+    font-size: clamp(2.7rem, 5.2vw, 4.4rem);
     line-height: 0.95;
     letter-spacing: -0.055em;
     text-shadow: 0 8px 34px rgba(5, 24, 35, 0.28);
@@ -141,49 +141,9 @@ body.is-homepage .button--ghost-light:hover {
     background: rgba(16, 161, 153, 0.96);
     border-color: rgba(16, 161, 153, 0.96);
     color: #fff;
-}body.is-homepage .founder-strip--story {
-            background: #fff;
-        }
+}
 
-        body.is-homepage .founder-strip--story > .container,
-        body.is-homepage .founder-strip--story .container {
-            width: min(calc(100% - 2rem), 1320px);
-            max-width: 1320px;
-        }
-
-        body.is-homepage .founder-strip__story-grid {
-            display: grid;
-            grid-template-columns: 280px minmax(0, 1fr);
-            align-items: center;
-            gap: 4rem;
-            width: 100%;
-            max-width: none;
-            justify-content: stretch;
-        }
-
-        body.is-homepage .founder-story-copy {
-            width: 100%;
-            max-width: none;
-            text-align: left;
-            align-items: flex-start;
-        }
-
-        body.is-homepage .founder-story-copy h2 {
-            max-width: 16ch;
-            text-align: left;
-        }
-
-        body.is-homepage .founder-story-copy p {
-            max-width: 100%;
-            text-align: left;
-        }
-
-        body.is-homepage .founder-story-link {
-            text-align: left;
-            align-self: flex-start;
-        }
-
-        @media (max-width: 1279px) {
+@media (max-width: 1279px) {
             body.is-homepage .hero-section--reference {
                 min-height: calc(92vh - 78px);
                 padding-top: 64px;
@@ -197,51 +157,63 @@ body.is-homepage .button--ghost-light:hover {
         }
 
         @media (max-width: 767px) {
-            body.is-homepage .site-header--home .site-nav {
-                background: #123247;
-            }
-
-            body.is-homepage .site-header--home .site-nav a:not(.button) {
-                color: #ffffff;
-            }
-
-            body.is-homepage .site-header--home .site-nav a:not(.button):hover,
-            body.is-homepage .site-header--home .site-nav a:not(.button):focus-visible {
-                color: var(--cta-accent);
-            }
-
-            body.is-homepage .hero-section--reference h1 {
-                max-width: none;
-                font-size: clamp(2.24rem, 10.4vw, 3.2rem);
-            }
-
-            body.is-homepage .hero-reference__copy {
-                font-size: 0.8rem;
-            }
-
-            body.is-homepage .hero-reference__actions {
-                width: 100%;
-                flex-direction: column !important;
-                align-items: stretch;
-            }
-
-            body.is-homepage .hero-reference__actions .button {
-                width: 100%;
-                max-width: none;
-                height: 56px !important;
-                flex: 0 0 auto !important;
-            }
-
-            body.is-homepage .founder-strip--story > .container,
-            body.is-homepage .founder-strip--story .container {
-                width: min(calc(100% - 2rem), var(--max-width));
-            }
-
-            body.is-homepage .founder-strip__story-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
+    body.is-homepage .site-header--home .site-nav {
+        background: #123247;
+    }
+    body.is-homepage .site-header--home .site-nav a:not(.button) {
+        color: #ffffff;
+    }
+    body.is-homepage .site-header--home .site-nav a:not(.button):hover,
+    body.is-homepage .site-header--home .site-nav a:not(.button):focus-visible {
+        color: var(--cta-accent);
+    }
+    body.is-homepage .hero-section--reference {
+        min-height: calc(100vh - 72px);
+        padding-top: 72px;
+        padding-bottom: 40px;
+        background:
+            linear-gradient(180deg, rgba(6, 33, 53, 0.92) 0%, rgba(7, 72, 102, 0.62) 48%, rgba(58, 155, 159, 0.44) 100%),
+            url('/media/hero/hero.webp');
+        background-position: 60% center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    body.is-homepage .hero-section--reference::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 88%, rgba(146, 238, 227, 0.34) 0%, rgba(146, 238, 227, 0) 34%);
+        pointer-events: none;
+    }
+    body.is-homepage .hero-section--reference h1 {
+        max-width: none;
+        font-size: clamp(2.24rem, 10.4vw, 3.2rem);
+    }
+    body.is-homepage .hero-reference__copy {
+        font-size: 0.8rem;
+    }
+    body.is-homepage .hero-reference__actions {
+        width: 100%;
+        flex-direction: column !important;
+        align-items: stretch;
+    }
+    body.is-homepage .hero-reference__actions .button {
+        width: 100%;
+        max-width: none;
+        height: 56px !important;
+        flex: 0 0 auto !important;
+    }
+    body.is-homepage .hero-reference__actions .button--ghost-light {
+        background: rgba(20, 185, 176, 0.88) !important;
+        border-color: rgba(20, 185, 176, 0.88) !important;
+        color: #ffffff !important;
+    }
+    body.is-homepage .hero-reference__actions .button--ghost-light:hover,
+    body.is-homepage .hero-reference__actions .button--ghost-light:focus-visible {
+        background: rgba(16, 161, 153, 0.96) !important;
+        border-color: rgba(16, 161, 153, 0.96) !important;
+    }
+}
 
 
 
@@ -526,6 +498,7 @@ body.is-homepage .button--ghost-light:hover {
         width: 100%;
     }
 }
+
 
 
 

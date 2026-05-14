@@ -23,14 +23,14 @@
                     <div class="admin-form-grid">
                         <label>
                             <span>Enable AI assistant</span>
-                            <select name="ai_assistant_enabled">
+                            <select class="pro-select" name="ai_assistant_enabled">
                                 <option value="1" @selected(old('ai_assistant_enabled', $settings['ai_assistant_enabled']) === '1')>Enabled</option>
                                 <option value="0" @selected(old('ai_assistant_enabled', $settings['ai_assistant_enabled']) === '0')>Disabled</option>
                             </select>
                         </label>
                         <label>
                             <span>Enable web search</span>
-                            <select name="ai_web_search_enabled">
+                            <select class="pro-select" name="ai_web_search_enabled">
                                 <option value="1" @selected(old('ai_web_search_enabled', $settings['ai_web_search_enabled'] ?? '1') === '1')>Enabled</option>
                                 <option value="0" @selected(old('ai_web_search_enabled', $settings['ai_web_search_enabled'] ?? '1') === '0')>Disabled</option>
                             </select>
@@ -38,9 +38,35 @@
                         <label><span>Assistant title</span><input type="text" name="ai_assistant_title" value="{{ old('ai_assistant_title', $settings['ai_assistant_title']) }}" required></label>
                         <label><span>Assistant subtitle</span><input type="text" name="ai_assistant_subtitle" value="{{ old('ai_assistant_subtitle', $settings['ai_assistant_subtitle']) }}" required></label>
                         <label class="admin-form-grid__full"><span>Assistant greeting</span><textarea name="ai_assistant_greeting" rows="4" required>{{ old('ai_assistant_greeting', $settings['ai_assistant_greeting']) }}</textarea></label>
-                        <label><span>OpenAI API key</span><input type="text" name="ai_openai_api_key" value="{{ old('ai_openai_api_key', $settings['ai_openai_api_key']) }}" placeholder="sk-..."></label>
+                        <label class="admin-form-grid__full">
+                            <span>Assistant custom instruction (training)</span>
+                            <textarea name="ai_assistant_system_prompt" rows="5" placeholder="Optional: add tone, domain constraints, or answer format rules.">{{ old('ai_assistant_system_prompt', $settings['ai_assistant_system_prompt'] ?? '') }}</textarea>
+                        </label>
+                        <label>
+                            <span>OpenAI API key</span>
+                            <input type="password" name="ai_openai_api_key" value="" placeholder="{{ $hasAiApiKey ? 'Stored key is kept unless you replace it' : 'sk-...' }}" autocomplete="new-password">
+                            @if ($hasAiApiKey)
+                                <small style="display:block;margin-top:6px;color:#667788;">A key is already stored. Leave this blank to keep it, or paste a new one to replace it.</small>
+                            @else
+                                <small style="display:block;margin-top:6px;color:#667788;">No API key is stored yet.</small>
+                            @endif
+                        </label>
+                        <label>
+                            <span>Clear stored API key</span>
+                            <select class="pro-select" name="ai_openai_api_key_clear">
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes, remove it</option>
+                            </select>
+                        </label>
                         <label><span>OpenAI base URL</span><input type="text" name="ai_openai_base_url" value="{{ old('ai_openai_base_url', $settings['ai_openai_base_url']) }}" required></label>
-                        <label><span>OpenAI model</span><input type="text" name="ai_openai_model" value="{{ old('ai_openai_model', $settings['ai_openai_model']) }}" required></label>
+                        <label>
+                            <span>OpenAI model</span>
+                            <input type="text" name="ai_openai_model" value="{{ old('ai_openai_model', $settings['ai_openai_model']) }}" required>
+                            <small style="display:block;margin-top:6px;color:#667788;">
+                                Recommended for Groq blog drafts: <strong>`qwen/qwen3-32b`</strong> or <strong>`llama-3.3-70b-versatile`</strong>.
+                                Avoid <strong>`openai/gpt-oss-20b`</strong> here if drafts keep failing with JSON or rate-limit errors.
+                            </small>
+                        </label>
                     </div>
                 </div>
 

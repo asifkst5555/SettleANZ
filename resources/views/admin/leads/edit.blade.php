@@ -6,11 +6,12 @@
             <div>
                 <p class="eyebrow">Lead details</p>
                 <h2>{{ $lead->full_name ?: $lead->first_name ?: 'Lead record' }}</h2>
-                <p>{{ $lead->email }} · {{ $lead->form_type }} · {{ $lead->created_at?->format('d M Y h:i A') }}</p>
+                <p>{{ $lead->email }} Â· {{ $lead->form_type }} Â· {{ $lead->created_at?->format('d M Y h:i A') }}</p>
             </div>
             <div class="admin-topbar__actions">
                 <a class="button button--small button--ghost" href="{{ route('admin.leads.index') }}">Back to inbox</a>
-                <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirm('Delete this lead permanently?');">
+                <a class="button button--small" href="{{ route('admin.leads.show', $lead) }}">View full details</a>
+                <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirmDelete(this, 'lead');">
                     @csrf
                     @method('DELETE')
                     <button class="button button--small button--danger" type="submit">Delete lead</button>
@@ -47,7 +48,7 @@
                 <form class="admin-edit-form" method="POST" action="{{ route('admin.leads.update', $lead) }}">
                     @csrf
                     @method('PUT')
-                    <label><span>Status</span><select name="status">@foreach ($statuses as $status)<option value="{{ $status }}" @selected($lead->status === $status)>{{ ucfirst($status) }}</option>@endforeach</select></label>
+                    <label><span>Status</span><select class="pro-select" name="status">@foreach ($statuses as $status)<option value="{{ $status }}" @selected($lead->status === $status)>{{ ucfirst($status) }}</option>@endforeach</select></label>
                     <label><span>Internal notes</span><textarea name="notes" rows="8">{{ old('notes', $lead->notes) }}</textarea></label>
                     <button class="button button--large" type="submit">Save changes</button>
                 </form>
