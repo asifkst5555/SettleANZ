@@ -10,9 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('site.css') }}?v={{ filemtime(public_path('site.css')) }}">
-    <link rel="stylesheet" href="{{ asset('admin.css') }}?v={{ filemtime(public_path('admin.css')) }}">
-    <link rel="stylesheet" href="{{ asset('admin-notifications.css') }}?v={{ filemtime(public_path('admin-notifications.css')) }}">
+    <link rel="stylesheet" href="{{ asset('site.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin-notifications.css') }}">
 </head>
 <body class="admin-shell-body">
     <!-- Toast Notification Container -->

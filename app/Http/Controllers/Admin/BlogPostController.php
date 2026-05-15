@@ -469,20 +469,25 @@ class BlogPostController extends Controller
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $base = Str::slug($originalName) ?: 'image';
 
-        $directory = public_path('media/blog');
-        if (!is_dir($directory)) {
-            @mkdir($directory, 0755, true);
+        $blogDir = public_path('media/blog');
+
+        // Create directories if they don't exist
+        if (!is_dir($blogDir)) {
+            if (!is_dir(public_path('media'))) {
+                @mkdir(public_path('media'), 0755, true);
+            }
+            @mkdir($blogDir, 0755, true);
         }
 
         // Ensure unique filename
         $filename = $base . '.' . $extension;
         $i = 1;
-        while (file_exists($directory . DIRECTORY_SEPARATOR . $filename)) {
+        while (file_exists($blogDir . DIRECTORY_SEPARATOR . $filename)) {
             $filename = $base . '-' . $i . '.' . $extension;
             $i++;
         }
 
-        $file->move($directory, $filename);
+        $file->move($blogDir, $filename);
 
         return response()->json([
             'filename' => $filename,
