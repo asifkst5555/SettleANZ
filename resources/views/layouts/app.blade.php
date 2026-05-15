@@ -986,10 +986,6 @@
                         <label for="package-lead-phone">Phone Number (optional)</label>
                         <input type="tel" id="package-lead-phone" name="phone" placeholder="Your phone number">
                     </div>
-                    <div class="lead-form__field">
-                        <label for="package-notes">Any questions or notes?</label>
-                        <textarea id="package-notes" name="booking_notes" rows="3" placeholder="Tell us about your situation or any questions..."></textarea>
-                    </div>
                     <button class="button button--large button--full lead-form__submit" type="submit">Submit Booking Request</button>
                     <p class="lead-form__hint">We'll contact you within 24 hours to confirm your session.</p>
                     <p id="package-form-message" class="package-form-message async-form-status" hidden></p>
