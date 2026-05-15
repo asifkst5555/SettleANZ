@@ -474,9 +474,9 @@ class BlogPostController extends Controller
         // Create directories if they don't exist
         if (!is_dir($blogDir)) {
             if (!is_dir(public_path('media'))) {
-                @mkdir(public_path('media'), 0755, true);
+                mkdir(public_path('media'), 0755, true);
             }
-            @mkdir($blogDir, 0755, true);
+            mkdir($blogDir, 0755, true);
         }
 
         // Ensure unique filename
@@ -487,7 +487,21 @@ class BlogPostController extends Controller
             $i++;
         }
 
-        $file->move($blogDir, $filename);
+        $destination = $blogDir . DIRECTORY_SEPARATOR . $filename;
+
+        // Try to move the file and verify it was successful
+        if (!$file->move($blogDir, $filename)) {
+            return response()->json([
+                'message' => 'Failed to save file. Please check folder permissions.',
+            ], 500);
+        }
+
+        // Verify file actually exists after move
+        if (!file_exists($destination)) {
+            return response()->json([
+                'message' => 'File upload failed. Please check media/blog folder permissions.',
+            ], 500);
+        }
 
         return response()->json([
             'filename' => $filename,
