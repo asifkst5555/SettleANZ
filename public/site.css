@@ -9664,3 +9664,61 @@ pre, code {
     }
 }
 
+/* Mobile Responsive Lead Modal */
+@media (max-width: 640px) {
+    .lead-modal {
+        z-index: 10010;
+        padding: 0.5rem;
+        align-items: flex-start;
+        overflow-y: auto;
+    }
+
+    .lead-modal__backdrop {
+        z-index: 10009;
+    }
+
+    .lead-modal__dialog {
+        position: relative;
+        z-index: 10011;
+        width: 100%;
+        max-width: 100%;
+        padding: 1.5rem 1.25rem;
+        margin: 1rem 0;
+        border-radius: 12px;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+
+    .lead-modal__header h2 {
+        font-size: 1.35rem;
+        line-height: 1.3;
+    }
+
+    .lead-modal__subtitle {
+        font-size: 0.95rem;
+    }
+
+    .lead-form--modal .lead-form__field {
+        margin-bottom: 0.85rem;
+    }
+
+    .lead-form--modal .lead-form__field label {
+        font-size: 0.9rem;
+    }
+
+    .lead-form--modal input,
+    .lead-form--modal textarea {
+        padding: 0.75rem 0.9rem;
+        font-size: 0.95rem;
+    }
+
+    .lead-form--modal .button--large {
+        padding: 0.95rem 1rem;
+        font-size: 1rem;
+    }
+
+    .lead-form__hint {
+        font-size: 0.8rem;
+    }
+}
+
