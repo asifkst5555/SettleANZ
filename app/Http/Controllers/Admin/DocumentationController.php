@@ -35,4 +35,26 @@ class DocumentationController extends Controller
         // Return the PDF as a downloadable file
         return $pdf->download('SettleANZ-SEO-System-Documentation.pdf');
     }
+
+    /**
+     * Generate and download the full client & user guide PDF.
+     */
+    public function clientGuidePdf(): Response
+    {
+        abort_unless(auth()->user()?->is_admin, 403);
+
+        $pdf = Pdf::loadView('client-guide-documentation');
+        $pdf->setOption([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => false,
+            'defaultFont' => 'DejaVu Sans',
+            'margin_top' => 12,
+            'margin_bottom' => 12,
+            'margin_left' => 14,
+            'margin_right' => 14,
+            'dpi' => 150,
+        ]);
+
+        return $pdf->download('SettleANZ-Client-Guide.pdf');
+    }
 }

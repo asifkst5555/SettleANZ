@@ -1302,19 +1302,30 @@
     <section id="guides" class="section section--white">
         <div class="container">
             <div class="section-heading"><h2 style="color: #0b7a75; max-width: 50ch;">Start Here, Our Most-Read Guides</h2></div>
-            <div class="guide-feature-grid">
+            <div class="blog-grid blog-grid--v2">
                 @foreach ($latestPosts as $post)
-                    <article class="guide-feature-card">
-                        @if (!empty($post->image))
-                            <img class="guide-feature-card__image guide-feature-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}">
-                        @else
-                            <div class="guide-feature-card__image {{ $post->image_class }}" aria-hidden="true"></div>
-                        @endif
-                        <div class="guide-feature-card__body">
-                            <p class="guide-feature-card__tag">{{ $post->category }}</p>
-                            <h3>{{ $post->title }}</h3>
-                            <p>{{ $post->excerpt }}</p>
-                            <a class="text-link" href="{{ route('blog.show', $post->slug) }}">Read more</a>
+                    <article class="blog-card blog-card--v2">
+                        <a class="blog-card__media-link" href="{{ route('blog.show', $post->slug) }}">
+                            @if (!empty($post->image))
+                                <img class="blog-card__image blog-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}">
+                            @else
+                                <div class="blog-card__image {{ $post->image_class }}" aria-hidden="true"></div>
+                            @endif
+                        </a>
+                        <div class="blog-card__body blog-card__body--v2">
+                            <p class="blog-card__tag">{{ $post->category }}</p>
+                            <h3><a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a></h3>
+                            <p class="blog-card__excerpt">{{ $post->excerpt }}</p>
+                            <div class="blog-card__footer">
+                                <div class="blog-card__meta">
+                                    <span>{{ $post->author_name }}</span>
+                                    @if (!empty($post->reading_time))
+                                        <span>{{ $post->reading_time }}</span>
+                                    @endif
+                                    <span>{{ optional($post->published_at)->format('F j, Y') }}</span>
+                                </div>
+                                <a class="text-link blog-card__read" href="{{ route('blog.show', $post->slug) }}">Read article</a>
+                            </div>
                         </div>
                     </article>
                 @endforeach

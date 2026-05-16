@@ -2530,6 +2530,12 @@ main {
     min-height: 0;
     object-fit: cover;
     display: block;
+    transition: transform 0.35s ease;
+}
+
+.blog-card--v2:hover .blog-card__media-link .blog-card__image,
+.blog-card--v2:hover .blog-card__media-link .blog-card__image--file {
+    transform: scale(1.05);
 }
 
 .blog-card--v2 .blog-card__body h3 {
@@ -2564,10 +2570,28 @@ main {
 
 .blog-card--v2 .blog-card__meta {
     margin-top: 0;
-    row-gap: 0.35rem;
-    column-gap: 0.65rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    row-gap: 0.5rem;
     font-size: 0.8125rem;
     color: #6b7c86;
+    line-height: 1.4;
+}
+
+.blog-card--v2 .blog-card__meta span {
+    display: inline-flex;
+    align-items: center;
+}
+
+.blog-card--v2 .blog-card__meta span + span::before {
+    content: "•";
+    margin: 0 0.7rem;
+    color: rgba(107, 124, 134, 0.55);
+    font-size: 0.7em;
+    line-height: 1;
+    pointer-events: none;
 }
 
 .blog-card__read {
@@ -6692,8 +6716,7 @@ select {
 .service-icon-card,
 .guide-feature-card,
 .lead-form,
-.contact-panel,
-.blog-card {
+.contact-panel {
     background: #ffffff;
     border: 1px solid rgba(15, 23, 42, 0.08);
     border-radius: 16px;

@@ -122,6 +122,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     
     // Documentation
     Route::get('/documentation/seo-system', [AdminDocumentationController::class, 'seoSystemPdf'])->name('admin.documentation.seo-system');
+    Route::get('/documentation/client-guide', [AdminDocumentationController::class, 'clientGuidePdf'])->name('admin.documentation.client-guide');
     
     Route::get('/leads', [AdminLeadController::class, 'index'])->name('admin.leads.index');
     Route::get('/leads/{lead}', [AdminLeadController::class, 'show'])->name('admin.leads.show');

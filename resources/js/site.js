@@ -463,7 +463,7 @@
                 '.empathy-section__heading',
                 '.empathy-card',
                 '#guides .section-heading',
-                '.guide-feature-card',
+                '#guides .blog-card',
                 '.owner-photo-wrap',
                 '.owner-content',
                 '.value-stack__heading',

@@ -289,6 +289,7 @@
 
         .arrival-section--dark h2,
         .arrival-section--dark h3,
+        .arrival-section--dark h4,
         .arrival-section--dark p,
         .arrival-section--dark li,
         .arrival-section--dark strong,
@@ -539,63 +540,159 @@
             min-height: 580px;
         }
 
-        .arrival-grid-2--advice {
-            margin-top: 1.4rem;
+        .arrival-guidance {
+            margin-top: 2rem;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 28px 64px rgba(0, 0, 0, 0.18);
         }
 
-        .arrival-advice {
-            padding: 1.45rem;
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(10px);
+        .arrival-guidance__panel {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .arrival-advice__title {
+        .arrival-guidance__column {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .arrival-guidance__column--do {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .arrival-guidance__head {
+            display: grid;
+            gap: 0.45rem;
+            padding: 1.5rem 1.65rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .arrival-guidance__column--do .arrival-guidance__head {
+            background: linear-gradient(180deg, rgba(72, 196, 181, 0.14) 0%, rgba(72, 196, 181, 0.04) 100%);
+        }
+
+        .arrival-guidance__column--dont .arrival-guidance__head {
+            background: linear-gradient(180deg, rgba(242, 125, 45, 0.14) 0%, rgba(242, 125, 45, 0.04) 100%);
+        }
+
+        .arrival-guidance__label-row {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
+            gap: 0.7rem;
         }
 
-        .arrival-advice__title h3 {
-            margin: 0;
-            font-size: 1.6rem;
-            letter-spacing: -0.03em;
+        .arrival-guidance__mark {
+            display: inline-grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            flex: 0 0 auto;
+            border-radius: 10px;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1;
         }
 
-        .arrival-advice__title .arrival-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.14);
-            box-shadow: none;
+        .arrival-guidance__column--do .arrival-guidance__mark {
+            background: rgba(72, 196, 181, 0.22);
+            color: #9ef0e4;
+            box-shadow: inset 0 0 0 1px rgba(158, 240, 228, 0.35);
         }
 
-        .arrival-advice__title .arrival-icon--check svg {
+        .arrival-guidance__column--dont .arrival-guidance__mark {
+            background: rgba(242, 125, 45, 0.22);
+            color: #ffd5b4;
+            box-shadow: inset 0 0 0 1px rgba(255, 213, 180, 0.35);
+        }
+
+        .arrival-guidance__mark svg {
+            width: 18px;
+            height: 18px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 3.25;
+            stroke-width: 2.75;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
 
-        .arrival-advice__list {
+        .arrival-guidance__column--dont .arrival-guidance__mark svg {
+            fill: currentColor;
+            stroke: none;
+        }
+
+        .arrival-guidance__head h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .arrival-guidance__tagline {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .arrival-guidance__items {
             display: grid;
-            gap: 0.9rem;
+            grid-template-columns: 1fr;
+            margin: 0;
+            padding: 0;
+            list-style: none;
         }
 
-        .arrival-advice__item {
-            padding: 1rem 2rem;
-            border-radius: 22px;
-            background: rgba(255, 255, 255, 0.08);
+        .arrival-guidance__row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            padding: 1.35rem 1.65rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .arrival-advice__item strong {
+        .arrival-guidance__row:last-child {
+            border-bottom: 0;
+        }
+
+        .arrival-guidance__column--do .arrival-guidance__row {
+            border-left: 3px solid rgba(72, 196, 181, 0.55);
+        }
+
+        .arrival-guidance__column--dont .arrival-guidance__row {
+            border-left: 3px solid rgba(242, 125, 45, 0.65);
+        }
+
+        .arrival-guidance__index {
             display: block;
-            margin-bottom: 0.35rem;
+            color: rgba(255, 255, 255, 0.42);
             font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1.3rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .arrival-guidance__content h4 {
+            margin: 0 0 0.4rem;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.35;
+            letter-spacing: -0.02em;
+        }
+
+        .arrival-guidance__content p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 0.94rem;
+            line-height: 1.65;
+            text-align: left;
         }
 
         .arrival-timeline {
@@ -909,13 +1006,24 @@
             }
         }
 
-        @media (max-width: 860px) {
+        @media (max-width: 720px) {
             .arrival-grid-2,
             .arrival-grid-3,
             .arrival-grid-cta,
             .arrival-day-grid,
-            .arrival-grid-2--advice {
+            .arrival-guidance__panel {
                 grid-template-columns: 1fr;
+            }
+
+            .arrival-guidance__column--do {
+                border-right: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .arrival-guidance__head,
+            .arrival-guidance__row {
+                padding-left: 1.15rem;
+                padding-right: 1.15rem;
             }
         }
 
@@ -1142,58 +1250,80 @@
                         <h2>Australia Immigration Dos and Don'ts</h2>
                         <p class="arrival-section__lede">Things That Most New Arrivals Get Wrong</p>
 
-                        <div class="arrival-grid-2 arrival-grid-2--advice">
-                            <article class="arrival-advice">
-                                <div class="arrival-advice__title">
-                                    <span class="arrival-icon arrival-icon--check" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg>
-                                    </span>
-                                    <h3>DOs</h3>
-                                </div>
+                        <div class="arrival-guidance">
+                            <div class="arrival-guidance__panel">
+                                <article class="arrival-guidance__column arrival-guidance__column--do">
+                                    <header class="arrival-guidance__head">
+                                        <div class="arrival-guidance__label-row">
+                                            <span class="arrival-guidance__mark" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg>
+                                            </span>
+                                            <h3>DOs</h3>
+                                        </div>
+                                        <p class="arrival-guidance__tagline">Practices that help you settle faster</p>
+                                    </header>
 
-                                <div class="arrival-advice__list">
-                                    <div class="arrival-advice__item">
-                                        <strong>Use your employer as a rental reference.</strong>
-                                        <p>You have no Australian rental history that's the reality for every new arrival. An employment contract plus a letter from your manager replaces rental references with most private landlords. Target private landlords over large real estate agencies. They have more flexibility and fewer box-ticking requirements.</p>
-                                    </div>
+                                    <ol class="arrival-guidance__items">
+                                        <li class="arrival-guidance__row">
+                                            <span class="arrival-guidance__index" aria-hidden="true">01</span>
+                                            <div class="arrival-guidance__content">
+                                                <h4>Use your employer as a rental reference</h4>
+                                                <p>You have no Australian rental history that's the reality for every new arrival. An employment contract plus a letter from your manager replaces rental references with most private landlords. Target private landlords over large real estate agencies. They have more flexibility and fewer box-ticking requirements.</p>
+                                            </div>
+                                        </li>
+                                        <li class="arrival-guidance__row">
+                                            <span class="arrival-guidance__index" aria-hidden="true">02</span>
+                                            <div class="arrival-guidance__content">
+                                                <h4>Track your superannuation from week one</h4>
+                                                <p>Every Australian employer is legally required to contribute 11% of your salary into a superannuation fund on top of your salary, not from it. Most migrants only find out years later that a previous employer didn't pay it. The ATO has a free tool to check. Use it from the start.</p>
+                                            </div>
+                                        </li>
+                                        <li class="arrival-guidance__row">
+                                            <span class="arrival-guidance__index" aria-hidden="true">03</span>
+                                            <div class="arrival-guidance__content">
+                                                <h4>Build your Australian credit score deliberately from month one</h4>
+                                                <p>Your overseas credit history means nothing here. You start at zero and that affects post-paid phone plans, car financing, and eventually a mortgage. A secured credit card linked to your bank account, used for small purchases and paid off in full every month, is the fastest way to build it.</p>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </article>
 
-                                    <div class="arrival-advice__item">
-                                        <strong>Track your superannuation from week one.</strong>
-                                        <p>Every Australian employer is legally required to contribute 11% of your salary into a superannuation fund on top of your salary, not from it. Most migrants only find out years later that a previous employer didn't pay it. The ATO has a free tool to check. Use it from the start.</p>
-                                    </div>
+                                <article class="arrival-guidance__column arrival-guidance__column--dont">
+                                    <header class="arrival-guidance__head">
+                                        <div class="arrival-guidance__label-row">
+                                            <span class="arrival-guidance__mark" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 14h-2v-2h2Zm0-4h-2V7h2Z"/></svg>
+                                            </span>
+                                            <h3>DON'Ts</h3>
+                                        </div>
+                                        <p class="arrival-guidance__tagline">Mistakes most new arrivals regret</p>
+                                    </header>
 
-                                    <div class="arrival-advice__item">
-                                        <strong>Build your Australian credit score deliberately from month one.</strong>
-                                        <p>Your overseas credit history means nothing here. You start at zero and that affects post-paid phone plans, car financing, and eventually a mortgage. A secured credit card linked to your bank account, used for small purchases and paid off in full every month, is the fastest way to build it.</p>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="arrival-advice">
-                                <div class="arrival-advice__title">
-                                    <span class="arrival-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 14h-2v-2h2Zm0-4h-2V7h2Z"/></svg>
-                                    </span>
-                                    <h3>DON'Ts</h3>
-                                </div>
-
-                                <div class="arrival-advice__list">
-                                    <div class="arrival-advice__item">
-                                        <strong>Don't sign a 24-month phone plan before you know your suburb.</strong>
-                                        <p>Go prepaid first. Coverage and pricing vary significantly depending on where you end up living. Lock yourself into a plan on day one and you may be paying for coverage you don't get where you actually live.</p>
-                                    </div>
-
-                                    <div class="arrival-advice__item">
-                                        <strong>Don't ignore your superannuation even if you plan to leave.</strong>
-                                        <p>If you leave Australia permanently, you are legally entitled to claim your super back. It's called the Departing Australia Superannuation Payment (DASP). Most migrants walk away, leaving thousands behind simply because they didn't know this existed. It does. Claim it.</p>
-                                    </div>
-
-                                    <div class="arrival-advice__item">
-                                        <strong>Don’t spend a long time without medical insurance:</strong>
-                                        <p>If your visa doesn't qualify you for Medicare immediately, you need private cover before you land. One unplanned emergency visit costs $800–$2,000 out of pocket without it. Don't arrive uncovered.</p>
-                                    </div>
-                                </div>
-                            </article>
+                                    <ol class="arrival-guidance__items">
+                                        <li class="arrival-guidance__row">
+                                            <span class="arrival-guidance__index" aria-hidden="true">01</span>
+                                            <div class="arrival-guidance__content">
+                                                <h4>Don't sign a 24-month phone plan before you know your suburb</h4>
+                                                <p>Go prepaid first. Coverage and pricing vary significantly depending on where you end up living. Lock yourself into a plan on day one and you may be paying for coverage you don't get where you actually live.</p>
+                                            </div>
+                                        </li>
+                                        <li class="arrival-guidance__row">
+                                            <span class="arrival-guidance__index" aria-hidden="true">02</span>
+                                            <div class="arrival-guidance__content">
+                                                <h4>Don't ignore your superannuation even if you plan to leave</h4>
+                                                <p>If you leave Australia permanently, you are legally entitled to claim your super back. It's called the Departing Australia Superannuation Payment (DASP). Most migrants walk away, leaving thousands behind simply because they didn't know this existed. It does. Claim it.</p>
+                                            </div>
+                                        </li>
+                                        <li class="arrival-guidance__row">
+                                            <span class="arrival-guidance__index" aria-hidden="true">03</span>
+                                            <div class="arrival-guidance__content">
+                                                <h4>Don't arrive without medical insurance when Medicare isn't active yet</h4>
+                                                <p>If your visa doesn't qualify you for Medicare immediately, you need private cover before you land. One unplanned emergency visit costs $800–$2,000 out of pocket without it. Don't arrive uncovered.</p>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </article>
+                            </div>
                         </div>
                     </section>
 
