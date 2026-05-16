@@ -469,12 +469,15 @@ class BlogPostController extends Controller
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $base = Str::slug($originalName) ?: 'image';
 
-        $blogDir = public_path('media/blog');
+        // Use storage/app/public for maximum compatibility with Hostinger cPanel
+        // The storage link (php artisan storage:link) maps storage/app/public to public/storage
+        $blogDir = storage_path('app/public/blog');
 
-        // Create directories if they don't exist
+        // Create directories with proper permissions
         if (!is_dir($blogDir)) {
-            if (!is_dir(public_path('media'))) {
-                mkdir(public_path('media'), 0777, true);
+            $storageBase = storage_path('app/public');
+            if (!is_dir($storageBase)) {
+                mkdir($storageBase, 0777, true);
             }
             mkdir($blogDir, 0777, true);
         }
@@ -504,13 +507,15 @@ class BlogPostController extends Controller
             $error = error_get_last() ? error_get_last()['message'] : 'File not found after move';
             \Log::error('Blog image upload verification failed: ' . $error);
             return response()->json([
-                'message' => 'File upload failed. Please check media/blog folder permissions.',
+                'message' => 'File upload failed. Please check storage/app/public/blog folder permissions.',
             ], 500);
         }
 
+        // Return URL using storage path - this works with php artisan storage:link
+        // The link maps storage/app/public to public/storage, so /storage/blog/... works
         return response()->json([
             'filename' => $filename,
-            'url'      => asset('media/blog/' . $filename),
+            'url'      => asset('storage/blog/' . $filename),
         ]);
     }
 
