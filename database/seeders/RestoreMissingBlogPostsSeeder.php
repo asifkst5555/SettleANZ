@@ -17,7 +17,7 @@ class RestoreMissingBlogPostsSeeder extends Seeder
                 'excerpt'            => 'Renting in Australia with no local credit history, no rental references, and no idea what a tenancy ledger is — here is exactly how to make it work as a brand-new arrival.',
                 'author_name'        => 'SettleANZ Team',
                 'reading_time'       => '8 min read',
-                'image'              => 'media/blog/rent-australia-immigrant.webp',
+                'image'              => 'rent-australia-immigrant.webp',
                 'image_class'        => 'object-cover',
                 'intro_content'      => 'Finding a rental in Australia as a new immigrant is one of the hardest parts of settling in. Landlords and agents want local rental history, Australian references, and proof of stable income — none of which you have yet. But thousands of immigrants do it every year, and there are proven ways to make your application stand out even without the usual paperwork.',
                 'checks_content'     => implode("\n", [
@@ -85,7 +85,7 @@ class RestoreMissingBlogPostsSeeder extends Seeder
                 'excerpt'            => 'Australian rental listings are full of abbreviations and local jargon that confuse new arrivals. Here is a plain-English guide to decoding every part of a listing before you apply.',
                 'author_name'        => 'SettleANZ Team',
                 'reading_time'       => '6 min read',
-                'image'              => 'media/blog/rental-listing-australia.webp',
+                'image'              => 'rental-listing-australia.webp',
                 'image_class'        => 'object-cover',
                 'intro_content'      => 'When you first look at Australian rental listings on realestate.com.au or domain.com.au, they can feel like they are written in a different language. "2BR/1BA + OSP", "strata title", "EBR", "pets on approval" — if you did not grow up here, none of this is obvious. This guide explains every common term and abbreviation so you can read a listing confidently and know what questions to ask before you inspect.',
                 'checks_content'     => implode("\n", [

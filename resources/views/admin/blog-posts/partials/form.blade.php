@@ -1639,7 +1639,7 @@
                 <div class="img-dropzone" id="imageDropzone" tabindex="0" role="button" aria-label="Upload featured image">
                     <div class="img-dropzone__preview" id="imagePreviewWrap" @style(['display: none' => empty($post->image)])>
                         <img id="imagePreviewImg"
-                             src="{{ !empty($post->image) ? asset('media/blog/' . $post->image) : '' }}"
+                             src="{{ !empty($post->image) ? asset('storage/blog/' . $post->image) : '' }}"
                              alt="Featured image preview">
                     </div>
                     <div class="img-dropzone__placeholder" id="imagePlaceholder" @style(['display: none' => !empty($post->image)])>
@@ -2089,7 +2089,7 @@
         ogPreviewDesc.textContent = truncate(socialDescription, 160);
 
         const fallbackImage = featuredImageInput?.value
-            ? window.location.origin + '/media/blog/' + featuredImageInput.value.replace(/^\/+/, '')
+            ? window.location.origin + '/storage/blog/' + featuredImageInput.value.replace(/^\/+/, '')
             : '';
         const socialImage = absoluteUrl(ogImageInput?.value || '') || fallbackImage;
 
