@@ -620,35 +620,24 @@ class BlogPostController extends Controller
      * Get the actual public web root that maps to the browser-accessible public folder.
      * This handles both deployment modes:
      * - Best mode: document root points to app/public
-     * - Fallback mode: app is outside public_html, files go to public_html
+     * - Fallback mode: app is outside public_html, files go to public_html (directly, not public_html/public)
      */
     protected function getPublicWebRoot(): string
     {
         $publicPath = public_path();
 
-        // If public_path already ends with 'public' (standard Laravel), use it directly
-        // This works for the "best" deployment mode
-        if (str_ends_with($publicPath, '/public') || str_ends_with($publicPath, '\\public')) {
-            return $publicPath;
-        }
-
-        // Fallback mode: Laravel thinks public is at app/public but files should go to public_html
-        // Detect by checking if we're in a structure like: .../somepath/public_html/public
-        // We need to find public_html and use that instead
+        // Check if we're in a cPanel fallback deployment (public_html in path)
+        // We want to save to public_html/storage/, not public_html/public/storage/
         $pathParts = explode(DIRECTORY_SEPARATOR, $publicPath);
-        $publicIndex = array_search('public', $pathParts, true);
+        $publicHtmlIndex = array_search('public_html', $pathParts, true);
 
-        if ($publicIndex !== false) {
-            // Look for public_html in the path (cPanel fallback deployment)
-            $publicHtmlIndex = array_search('public_html', $pathParts, true);
-            if ($publicHtmlIndex !== false && $publicHtmlIndex < $publicIndex) {
-                // We're in fallback mode - use public_html as the root
-                $publicHtmlPath = implode(DIRECTORY_SEPARATOR, array_slice($pathParts, 0, $publicHtmlIndex + 1));
-                return $publicHtmlPath;
-            }
+        if ($publicHtmlIndex !== false) {
+            // We're in fallback mode - use public_html as the root (not public_html/public)
+            return implode(DIRECTORY_SEPARATOR, array_slice($pathParts, 0, $publicHtmlIndex + 1));
         }
 
-        // Default: use Laravel's public_path
+        // Best mode: document root points to app/public
+        // Use public_path directly - will save to app/public/storage/
         return $publicPath;
     }
 }
