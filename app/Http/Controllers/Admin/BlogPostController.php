@@ -469,13 +469,15 @@ class BlogPostController extends Controller
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $base = Str::slug($originalName) ?: 'image';
 
-        // For Hostinger cPanel: save directly to public/storage (public_html/storage)
-        // This avoids the issue where storage link creates public/public/storage
-        $blogDir = public_path('storage/blog');
+        // Determine the correct public web root for both deployment modes:
+        // - Best mode: document root points to app/public -> use public_path() directly
+        // - Fallback mode: app is outside public_html, files go to public_html
+        $publicRoot = $this->getPublicWebRoot();
+        $blogDir = $publicRoot . '/storage/blog';
 
-        // Create directories directly in public folder (maps to public_html/storage/blog on Hostinger)
+        // Create directories with proper permissions
         if (!is_dir($blogDir)) {
-            $storageBase = public_path('storage');
+            $storageBase = $publicRoot . '/storage';
             if (!is_dir($storageBase)) {
                 mkdir($storageBase, 0777, true);
             }
@@ -485,12 +487,12 @@ class BlogPostController extends Controller
         // Ensure unique filename
         $filename = $base . '.' . $extension;
         $i = 1;
-        while (file_exists($blogDir . DIRECTORY_SEPARATOR . $filename)) {
+        while (file_exists($blogDir . '/' . $filename)) {
             $filename = $base . '-' . $i . '.' . $extension;
             $i++;
         }
 
-        $destination = $blogDir . DIRECTORY_SEPARATOR . $filename;
+        $destination = $blogDir . '/' . $filename;
 
         // Try to move the file and verify it was successful
         $moved = $file->move($blogDir, $filename);
@@ -507,11 +509,11 @@ class BlogPostController extends Controller
             $error = error_get_last() ? error_get_last()['message'] : 'File not found after move';
             \Log::error('Blog image upload verification failed: ' . $error);
             return response()->json([
-                'message' => 'File upload failed. Please check public/storage/blog folder permissions.',
+                'message' => 'File upload failed. Please check storage/blog folder permissions.',
             ], 500);
         }
 
-        // Return URL - /storage/blog/ maps to public_html/storage/blog on Hostinger
+        // Return URL - /storage/blog/ works in both deployment modes
         return response()->json([
             'filename' => $filename,
             'url'      => asset('storage/blog/' . $filename),
@@ -612,5 +614,41 @@ class BlogPostController extends Controller
         }
 
         return $validated;
+    }
+
+    /**
+     * Get the actual public web root that maps to the browser-accessible public folder.
+     * This handles both deployment modes:
+     * - Best mode: document root points to app/public
+     * - Fallback mode: app is outside public_html, files go to public_html
+     */
+    protected function getPublicWebRoot(): string
+    {
+        $publicPath = public_path();
+
+        // If public_path already ends with 'public' (standard Laravel), use it directly
+        // This works for the "best" deployment mode
+        if (str_ends_with($publicPath, '/public') || str_ends_with($publicPath, '\\public')) {
+            return $publicPath;
+        }
+
+        // Fallback mode: Laravel thinks public is at app/public but files should go to public_html
+        // Detect by checking if we're in a structure like: .../somepath/public_html/public
+        // We need to find public_html and use that instead
+        $pathParts = explode(DIRECTORY_SEPARATOR, $publicPath);
+        $publicIndex = array_search('public', $pathParts, true);
+
+        if ($publicIndex !== false) {
+            // Look for public_html in the path (cPanel fallback deployment)
+            $publicHtmlIndex = array_search('public_html', $pathParts, true);
+            if ($publicHtmlIndex !== false && $publicHtmlIndex < $publicIndex) {
+                // We're in fallback mode - use public_html as the root
+                $publicHtmlPath = implode(DIRECTORY_SEPARATOR, array_slice($pathParts, 0, $publicHtmlIndex + 1));
+                return $publicHtmlPath;
+            }
+        }
+
+        // Default: use Laravel's public_path
+        return $publicPath;
     }
 }
