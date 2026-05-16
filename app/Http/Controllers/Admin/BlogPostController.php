@@ -474,9 +474,9 @@ class BlogPostController extends Controller
         // Create directories if they don't exist
         if (!is_dir($blogDir)) {
             if (!is_dir(public_path('media'))) {
-                mkdir(public_path('media'), 0755, true);
+                mkdir(public_path('media'), 0777, true);
             }
-            mkdir($blogDir, 0755, true);
+            mkdir($blogDir, 0777, true);
         }
 
         // Ensure unique filename
@@ -490,14 +490,19 @@ class BlogPostController extends Controller
         $destination = $blogDir . DIRECTORY_SEPARATOR . $filename;
 
         // Try to move the file and verify it was successful
-        if (!$file->move($blogDir, $filename)) {
+        $moved = $file->move($blogDir, $filename);
+        if (!$moved) {
+            $error = error_get_last() ? error_get_last()['message'] : 'Unknown error';
+            \Log::error('Blog image upload failed: ' . $error . ' | Path: ' . $blogDir);
             return response()->json([
-                'message' => 'Failed to save file. Please check folder permissions.',
+                'message' => 'Failed to save file: ' . $error,
             ], 500);
         }
 
         // Verify file actually exists after move
         if (!file_exists($destination)) {
+            $error = error_get_last() ? error_get_last()['message'] : 'File not found after move';
+            \Log::error('Blog image upload verification failed: ' . $error);
             return response()->json([
                 'message' => 'File upload failed. Please check media/blog folder permissions.',
             ], 500);
