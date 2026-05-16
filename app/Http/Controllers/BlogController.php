@@ -108,7 +108,7 @@ class BlogController extends Controller
         }
 
         if (filled($post->image ?? null)) {
-            return asset('storage/blog/' . ltrim((string) $post->image, '/'));
+            return \App\Support\BlogMedia::url((string) $post->image);
         }
 
         return null;

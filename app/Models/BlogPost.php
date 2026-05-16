@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\BlogMedia;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,4 +48,14 @@ class BlogPost extends Model
         'no_index' => 'boolean',
         'faq_items' => 'array',
     ];
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::get(fn (): ?string => BlogMedia::url($this->image));
+    }
+
+    protected function hasImageFile(): Attribute
+    {
+        return Attribute::get(fn (): bool => BlogMedia::exists($this->image));
+    }
 }

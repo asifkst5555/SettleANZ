@@ -1304,10 +1304,9 @@
             <div class="section-heading"><h2 style="color: #0b7a75; max-width: 50ch;">Start Here, Our Most-Read Guides</h2></div>
             <div class="guide-feature-grid">
                 @foreach ($latestPosts as $post)
-                    @php($homeBlogImagePath = !empty($post->image) ? public_path('storage/blog/' . $post->image) : null)
                     <article class="guide-feature-card">
-                        @if (!empty($post->image) && file_exists($homeBlogImagePath))
-                            <img class="guide-feature-card__image guide-feature-card__image--file" src="{{ asset('storage/blog/' . $post->image) }}" alt="{{ $post->title }}">
+                        @if (!empty($post->image))
+                            <img class="guide-feature-card__image guide-feature-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}">
                         @else
                             <div class="guide-feature-card__image {{ $post->image_class }}" aria-hidden="true"></div>
                         @endif

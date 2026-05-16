@@ -472,7 +472,7 @@ class BlogPostController extends Controller
         // Determine the correct public web root for both deployment modes:
         // - Best mode: document root points to app/public -> use public_path() directly
         // - Fallback mode: app is outside public_html, files go to public_html
-        $publicRoot = $this->getPublicWebRoot();
+        $publicRoot = \App\Support\BlogMedia::publicWebRoot();
         $blogDir = $publicRoot . '/storage/blog';
 
         // Create directories with proper permissions
@@ -616,28 +616,4 @@ class BlogPostController extends Controller
         return $validated;
     }
 
-    /**
-     * Get the actual public web root that maps to the browser-accessible public folder.
-     * This handles both deployment modes:
-     * - Best mode: document root points to app/public
-     * - Fallback mode: app is outside public_html, files go to public_html (directly, not public_html/public)
-     */
-    protected function getPublicWebRoot(): string
-    {
-        $publicPath = public_path();
-
-        // Check if we're in a cPanel fallback deployment (public_html in path)
-        // We want to save to public_html/storage/, not public_html/public/storage/
-        $pathParts = explode(DIRECTORY_SEPARATOR, $publicPath);
-        $publicHtmlIndex = array_search('public_html', $pathParts, true);
-
-        if ($publicHtmlIndex !== false) {
-            // We're in fallback mode - use public_html as the root (not public_html/public)
-            return implode(DIRECTORY_SEPARATOR, array_slice($pathParts, 0, $publicHtmlIndex + 1));
-        }
-
-        // Best mode: document root points to app/public
-        // Use public_path directly - will save to app/public/storage/
-        return $publicPath;
-    }
 }

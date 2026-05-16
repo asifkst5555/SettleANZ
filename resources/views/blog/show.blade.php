@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $heroImagePath = !empty($post->image) ? public_path('storage/blog/' . $post->image) : null;
-    $hasHeroImage = !empty($post->image) && file_exists($heroImagePath);
+    $hasHeroImage = !empty($post->image);
     $authorInitials = collect(explode(' ', trim($post->author_name ?? 'SettleANZ')))
         ->filter()
         ->take(2)
@@ -957,7 +956,7 @@
         <div class="container article-hero-v2__cover">
             <div class="article-hero-v2__cover-inner">
                 @if ($hasHeroImage)
-                    <img src="{{ asset('storage/blog/' . $post->image) }}" alt="{{ $post->title }}">
+                    <img src="{{ $post->image_url }}" alt="{{ $post->title }}">
                 @else
                     <div class="{{ $post->image_class }}" style="width:100%;height:100%;" aria-hidden="true"></div>
                 @endif
@@ -1047,11 +1046,10 @@
                         </div>
 
                         @php($featuredRecent = $recentPosts->first())
-                        @php($featuredImagePath = !empty($featuredRecent->image) ? public_path('storage/blog/' . $featuredRecent->image) : null)
                         <a class="article-feature-card" href="{{ route('blog.show', $featuredRecent->slug) }}">
                             <div class="article-feature-card__media">
-                                @if (!empty($featuredRecent->image) && file_exists($featuredImagePath))
-                                    <img src="{{ asset('storage/blog/' . $featuredRecent->image) }}" alt="{{ $featuredRecent->title }}" loading="lazy">
+                                @if (!empty($featuredRecent->image))
+                                    <img src="{{ $featuredRecent->image_url }}" alt="{{ $featuredRecent->title }}" loading="lazy">
                                 @else
                                     <div class="{{ $featuredRecent->image_class }}" style="width:100%;height:100%;" aria-hidden="true"></div>
                                 @endif
@@ -1068,11 +1066,10 @@
                         @if ($recentPosts->count() > 1)
                             <div class="article-related-list">
                                 @foreach ($recentPosts->slice(1) as $recentPost)
-                                    @php($recentImagePath = !empty($recentPost->image) ? public_path('storage/blog/' . $recentPost->image) : null)
                                     <a class="article-related-card" href="{{ route('blog.show', $recentPost->slug) }}">
                                         <div class="article-related-card__media">
-                                            @if (!empty($recentPost->image) && file_exists($recentImagePath))
-                                                <img src="{{ asset('storage/blog/' . $recentPost->image) }}" alt="{{ $recentPost->title }}" loading="lazy">
+                                            @if (!empty($recentPost->image))
+                                                <img src="{{ $recentPost->image_url }}" alt="{{ $recentPost->title }}" loading="lazy">
                                             @else
                                                 <div class="{{ $recentPost->image_class }}" style="width:100%;height:100%;" aria-hidden="true"></div>
                                             @endif
