@@ -3,14 +3,35 @@
 @section('content')
     <section id="top" class="guide-hero directory-hero">
         <div class="container guide-hero__inner directory-hero__inner">
-            <p class="eyebrow directory-hero__eyebrow">Curated directory</p>
-            <h1 class="directory-hero__title">Find trusted expat services in Australia &amp; New Zealand</h1>
-            <p class="guide-hero__copy directory-hero__copy">Compare schools, migration experts, relocation partners, banking, and arrival support—curated for newcomers—in one directory.</p>
+            <div class="directory-hero__content">
+                <div class="directory-hero__copy-block">
+                    <h1 class="directory-hero__title">Find trusted expat services in Australia</h1>
+                    <p class="guide-hero__copy directory-hero__copy">Compare schools, migration experts, relocation partners, banking, and arrival support curated for newcomers in one directory.</p>
+                </div>
+
+                <div class="directory-hero__stats" aria-label="Directory overview">
+                    <div class="directory-hero__stat">
+                        <strong>{{ $listings->count() }}+</strong>
+                        <span>trusted providers</span>
+                    </div>
+                    <div class="directory-hero__stat">
+                        <strong>{{ max(count($cities) - 1, 0) }}</strong>
+                        <span>cities covered</span>
+                    </div>
+                    <div class="directory-hero__stat">
+                        <strong>{{ max(count($categories) - 1, 0) }}</strong>
+                        <span>service categories</span>
+                    </div>
+                </div>
+            </div>
 
             <div class="directory-filter-panel">
                 <header class="directory-filter-panel__header">
-                    <h2 class="directory-filter-panel__title">Search &amp; filter</h2>
-                    <p class="directory-filter-panel__lede">Enter a name or keyword, optionally choose a city, then pick a category to narrow results.</p>
+                    <div>
+                        <h2 class="directory-filter-panel__title">Search &amp; filter</h2>
+                        <p class="directory-filter-panel__lede">Enter a provider, service, or city, then choose a category to narrow results.</p>
+                    </div>
+                    <span class="directory-filter-panel__badge">Fast shortlist</span>
                 </header>
 
                 <div class="directory-filter-panel__toolbar">

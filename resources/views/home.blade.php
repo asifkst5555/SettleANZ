@@ -1302,9 +1302,9 @@
     <section id="guides" class="section section--white">
         <div class="container">
             <div class="section-heading"><h2 style="color: #0b7a75; max-width: 50ch;">Start Here, Our Most-Read Guides</h2></div>
-            <div class="blog-grid blog-grid--v2">
+            <div class="blog-grid blog-grid--v2" data-reveal-stagger="home-guides">
                 @foreach ($latestPosts as $post)
-                    <article class="blog-card blog-card--v2">
+                    <article class="blog-card blog-card--v2 home-guides-card" data-reveal-stagger-item data-reveal-stagger-index="{{ $loop->index }}">
                         <a class="blog-card__media-link" href="{{ route('blog.show', $post->slug) }}">
                             @if (!empty($post->image))
                                 <img class="blog-card__image blog-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}">
@@ -1426,8 +1426,6 @@
         </div>
     </section>
 @endsection
-
-
 
 
 

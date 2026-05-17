@@ -463,7 +463,7 @@
                 '.empathy-section__heading',
                 '.empathy-card',
                 '#guides .section-heading',
-                '#guides .blog-card',
+                '#guides [data-reveal-stagger-item]',
                 '.owner-photo-wrap',
                 '.owner-content',
                 '.value-stack__heading',
@@ -495,7 +495,12 @@
 
         revealTargets.forEach((el, index) => {
             el.classList.add('reveal-on-scroll');
-            el.style.setProperty('--reveal-delay', `${Math.min((index % 6) * 80, 400)}ms`);
+            const staggerGroup = el.closest('[data-reveal-stagger]');
+            const staggerItems = Array.from(staggerGroup?.querySelectorAll('[data-reveal-stagger-item]') || []);
+            const staggerIndex = Number.parseInt(el.dataset.revealStaggerIndex || `${staggerItems.indexOf(el)}`, 10);
+            const hasStagger = Number.isFinite(staggerIndex) && staggerIndex >= 0;
+            const delay = hasStagger ? 220 + (staggerIndex * 360) : Math.min((index % 6) * 80, 400);
+            el.style.setProperty('--reveal-delay', `${delay}ms`);
         });
 
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -508,6 +513,10 @@
             entries.forEach((entry) => {
                 if (!entry.isIntersecting) return;
                 entry.target.classList.add('is-revealed');
+                const delay = Number.parseInt(entry.target.style.getPropertyValue('--reveal-delay') || '0', 10);
+                window.setTimeout(() => {
+                    entry.target.style.setProperty('--reveal-delay', '0ms');
+                }, (Number.isFinite(delay) ? delay : 0) + 1200);
                 obs.unobserve(entry.target);
             });
         }, {

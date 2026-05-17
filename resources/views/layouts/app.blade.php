@@ -16,6 +16,8 @@
         $seoSchemaType  = $metaSchemaType  ?? 'WebPage';
         $schemaPayload  = $schemaData      ?? null;
         $siteUrl        = rtrim(config('app.url'), '/');
+        $siteCssVersion = file_exists(public_path('site.css')) ? filemtime(public_path('site.css')) : time();
+        $siteJsVersion  = file_exists(public_path('site.js')) ? filemtime(public_path('site.js')) : time();
     @endphp
 
     <title>{{ $seoTitle }}</title>
@@ -70,7 +72,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('site.css') }}">
+    <link rel="stylesheet" href="{{ asset('site.css') }}?v={{ $siteCssVersion }}">
     @stack('styles')
     @yield('page_styles')
     <style>
@@ -762,7 +764,7 @@
             font-weight: 700;
         }
     </style>
-    <script defer src="{{ asset('site.js') }}"></script>
+    <script defer src="{{ asset('site.js') }}?v={{ $siteJsVersion }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.querySelector('[data-mobile-menu-toggle]');
@@ -1171,7 +1173,6 @@
 @stack('scripts')
 </body>
 </html>
-
 
 
 
