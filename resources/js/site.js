@@ -489,6 +489,8 @@
             );
         }
 
+        if (!selectors.length) return;
+
         const revealTargets = Array.from(document.querySelectorAll(selectors.join(', ')));
 
         if (!revealTargets.length) return;
