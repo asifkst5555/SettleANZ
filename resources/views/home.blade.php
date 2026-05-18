@@ -1083,7 +1083,7 @@
                             <li>You don't fully understand your visa work limits and you can't afford to get it wrong.</li>
                         </ul>
                         <div class="empathy-card__footer">
-                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.new-to-australia') }}">Show me What to Do First</a>
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Show me What to Do First</a>
                         </div>
                     </div>
                 </article>
@@ -1104,7 +1104,7 @@
                             <li>You're worried about workplace culture and whether your overseas experience will actually count.</li>
                         </ul>
                         <div class="empathy-card__footer">
-                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.banking') }}">Help Me Hit the Ground Running</a>
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Help Me Hit the Ground Running</a>
                         </div>
                     </div>
                 </article>
@@ -1125,7 +1125,7 @@
                             <li>You feel overwhelmed by all the systems and want a step-by-step starting plan.</li>
                         </ul>
                         <div class="empathy-card__footer">
-                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.housing') }}">Start My Family Settlement Plan</a>
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Start My Family Settlement Plan</a>
                         </div>
                     </div>
                 </article>
@@ -1146,7 +1146,7 @@
                             <li>You want a realistic picture of costs, first-year priorities and common mistakes to avoid.</li>
                         </ul>
                         <div class="empathy-card__footer">
-                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.migration-services') }}">Prepare before You Land</a>
+                            <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Prepare before You Land</a>
                         </div>
                     </div>
                 </article>

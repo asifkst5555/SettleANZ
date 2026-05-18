@@ -268,16 +268,19 @@
         }
 
         .site-chat-close {
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            border: 0;
+            min-height: 34px;
+            min-width: 36px;
+            padding: 0 0.5rem;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.14) !important;
+            background: rgba(255, 255, 255, 0.18) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16);
             color: #ffffff;
             font-size: 1.6rem;
             line-height: 1;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         @@media (max-width: 767px) {
@@ -606,11 +609,66 @@
             }
 
             .site-chat-panel {
-                width: 100% !important;
+                width: calc(100% - 1rem) !important;
+                max-width: 100% !important;
+                border-radius: 20px !important;
+                inset: auto 0.5rem 0.5rem 0.5rem !important;
+                position: fixed !important;
+            }
+
+            .site-chat-head {
+                padding: 0.85rem 0.85rem 0.75rem !important;
+                gap: 0.6rem !important;
+            }
+
+            .site-chat-title {
+                font-size: 1rem !important;
+            }
+
+            .site-chat-sub {
+                font-size: 0.82rem !important;
             }
 
             .site-chat-log {
-                max-height: 40vh !important;
+                max-height: 50vh !important;
+                min-height: 200px !important;
+                padding: 0.75rem !important;
+                gap: 0.65rem !important;
+            }
+
+            .site-chat-msg {
+                padding: 0.7rem 0.8rem !important;
+                font-size: 0.88rem !important;
+                max-width: 92% !important;
+            }
+
+            .site-chat-form {
+                padding: 0.7rem 0.75rem 0.8rem !important;
+                gap: 0.5rem !important;
+            }
+
+            .site-chat-input {
+                padding: 0.75rem 0.85rem !important;
+                font-size: 0.9rem !important;
+            }
+
+            .site-chat-send {
+                min-height: 42px !important;
+                padding: 0.6rem 0.85rem !important;
+                font-size: 0.88rem !important;
+            }
+
+            .site-chat-send--secondary {
+                min-height: 30px !important;
+                padding: 0.35rem 0.65rem !important;
+                font-size: 0.82rem !important;
+            }
+
+            .site-chat-close {
+                min-height: 30px !important;
+                min-width: 30px !important;
+                padding: 0 0.4rem !important;
+                font-size: 1.3rem !important;
             }
         }
 
@@ -947,8 +1005,8 @@
                     <input type="hidden" name="form_type" value="popup">
                     <input type="hidden" name="source_page" value="homepage-popup">
                     <div class="lead-form__field">
-                        <label for="lead-first-name">First Name</label>
-                        <input type="text" id="lead-first-name" name="first_name" value="{{ old('first_name') }}" placeholder="Enter your first name" required>
+                        <label for="lead-first-name">Your Name</label>
+                        <input type="text" id="lead-first-name" name="first_name" value="{{ old('first_name') }}" placeholder="Enter your name" required>
                         @error('first_name')<small class="lead-form__error">{{ $message }}</small>@enderror
                     </div>
                     <div class="lead-form__field">

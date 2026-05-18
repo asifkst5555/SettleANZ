@@ -109,7 +109,7 @@
                 <div class="admin-action-grid">
                     <a class="admin-action-card" href="{{ route('admin.blog-posts.create') }}"><strong>New blog post</strong><span>Create a new article and publish it to the blog.</span></a>
                     <a class="admin-action-card" href="{{ route('admin.directory-listings.create') }}"><strong>New directory listing</strong><span>Add a new service provider, partner, or featured business.</span></a>
-                    <a class="admin-action-card" href="{{ route('admin.settings.edit') }}"><strong>Update site settings</strong><span>Edit contact details, footer links, and CTA destinations.</span></a>
+                    <a class="admin-action-card" href="{{ route('admin.settings.edit') }}"><strong>AI & Site Settings</strong><span>Manage AI assistant, API keys, knowledge base, and contact settings.</span></a>
                 </div>
             </section>
         </section>

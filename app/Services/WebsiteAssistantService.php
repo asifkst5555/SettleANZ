@@ -185,15 +185,34 @@ class WebsiteAssistantService
             return 'SettleANZ helps with migration guidance, housing help, banking guidance, healthcare guidance, relocation checklists, blog guides, trusted directory listings, and direct contact support for people settling in Australia and New Zealand.';
         }
 
+        if (Str::contains($text, ['settlement service', 'settlement plan', 'what to do first', 'before you land', 'hit the ground running'])) {
+            return 'The Settlement Services page at /settlement-services is your central hub. It covers what to do first, pre-arrival preparation, family settlement planning, and step-by-step guidance for banking, housing, healthcare, and more. It is the best starting point for new arrivals.';
+        }
+
+        if (Str::contains($text, ['about settleanz', 'who are you', 'what is settleanz', 'tell me about this site'])) {
+            return 'SettleANZ is a practical relocation and migration support platform for people settling in Australia and New Zealand. Visit /about to learn our mission and story, or explore /settlement-services for step-by-step settlement guidance.';
+        }
+
+        if (Str::contains($text, ['privacy', 'data protection', 'how you use my data'])) {
+            return 'You can read our Privacy Policy at /privacy-policy. It explains how SettleANZ collects, uses, stores, and protects your personal data including contact forms, chat conversations, and directory listings.';
+        }
+
+        if (Str::contains($text, ['terms', 'terms of service', 'legal', 'disclaimer'])) {
+            return 'Our Terms of Service are available at /terms-of-service. They outline the legal terms, disclaimers, and conditions for using SettleANZ website, guides, directory, and AI assistant.';
+        }
+
+        if (Str::contains($text, ['before arriving', 'before i land', 'pre-arrival', 'prepare before'])) {
+            return 'Before arriving in Australia, you should research suburbs, understand visa conditions, prepare documents, arrange initial accommodation, research banking options, and understand healthcare coverage. The Settlement Services page at /settlement-services and New to Australia guide at /new-to-australia have detailed pre-arrival checklists.';
+        }
+
         return null;
     }
 
     private function askGroq(Conversation $conversation, string $content, ?Lead $lead, string $apiKey, string $baseUrl): ?array
     {
         $model = (string) SiteSetting::getValue('ai_openai_model', config('assistant.openai.model', 'openai/gpt-oss-20b'));
-        $webSearchEnabled = $this->webSearchEnabled();
         $knowledgeContext = $this->knowledgeService->buildAssistantContext($content);
-        $messages = $this->buildChatMessages($conversation, $this->systemPrompt($lead, $webSearchEnabled) . "\n\n" . $knowledgeContext);
+        $messages = $this->buildChatMessages($conversation, $this->systemPrompt($lead, false) . "\n\n" . $knowledgeContext);
 
         $payload = [
             'model' => $model,
@@ -201,19 +220,6 @@ class WebsiteAssistantService
             'temperature' => 0.45,
             'max_completion_tokens' => 900,
         ];
-
-        if ($webSearchEnabled) {
-            if (Str::startsWith($model, 'groq/compound')) {
-                $payload['search_settings'] = [
-                    'exclude_domains' => ['wikipedia.org'],
-                ];
-            } else {
-                $payload['tools'] = [
-                    ['type' => 'browser_search'],
-                ];
-                $payload['tool_choice'] = 'auto';
-            }
-        }
 
         try {
             $response = Http::timeout((int) config('assistant.openai.timeout', 20))
@@ -227,7 +233,6 @@ class WebsiteAssistantService
                     'status' => $response->status(),
                     'body' => $response->body(),
                     'model' => $model,
-                    'web_search_enabled' => $webSearchEnabled,
                 ]);
 
                 return null;
@@ -240,32 +245,12 @@ class WebsiteAssistantService
                 return null;
             }
 
-            $sources = collect(data_get($json, 'choices.0.message.executed_tools', []))
-                ->flatMap(fn ($tool) => data_get($tool, 'search_results', []))
-                ->map(function ($source) {
-                    $url = trim((string) data_get($source, 'url', ''));
-                    $title = trim((string) data_get($source, 'title', ''));
-                    if ($url === '') {
-                        return null;
-                    }
-
-                    return [
-                        'title' => $title !== '' ? $title : (parse_url($url, PHP_URL_HOST) ?: $url),
-                        'url' => $url,
-                    ];
-                })
-                ->filter()
-                ->unique('url')
-                ->take(5)
-                ->values();
-
             return [
-                'content' => $this->appendSourceSummary($contentText, $sources),
+                'content' => $this->sanitizeAssistantText($contentText),
                 'metadata' => [
                     'provider' => 'groq',
                     'model' => $model,
-                    'web_search_used' => $sources->isNotEmpty() || !empty(data_get($json, 'choices.0.message.executed_tools', [])),
-                    'web_sources' => $sources->all(),
+                    'web_search_used' => false,
                     'response_id' => data_get($json, 'id'),
                 ],
             ];
@@ -274,7 +259,6 @@ class WebsiteAssistantService
                 'provider' => 'groq',
                 'message' => $e->getMessage(),
                 'model' => $model,
-                'web_search_enabled' => $webSearchEnabled,
             ]);
 
             return null;
@@ -633,7 +617,8 @@ class WebsiteAssistantService
 
     private function sanitizeAssistantText(string $content): string
     {
-        $clean = preg_replace('/\?\d+\+L\d+(?:-L\d+)?\?/', '', $content) ?? $content;
+        $clean = preg_replace('/<think>.*?<\/think>/s', '', $content) ?? $content;
+        $clean = preg_replace('/\?\d+\+L\d+(?:-L\d+)?\?/', '', $clean) ?? $clean;
         $clean = preg_replace('/([A-Za-z0-9\/])\?([A-Za-z0-9])/', '$1 $2', $clean) ?? $clean;
         $clean = preg_replace('/[ \t]{2,}/', ' ', $clean) ?? $clean;
         $clean = preg_replace("/\n{3,}/", "\n\n", $clean) ?? $clean;
@@ -656,7 +641,7 @@ class WebsiteAssistantService
                 : 'If a user asks a general non-site question, answer it naturally from model knowledge. For site-specific questions, stay grounded in the supplied SettleANZ website knowledge.',
             'Do not redirect to Contact unless the user clearly needs human help, regulated professional support, or asks for direct contact.',
             'For basic conversational prompts like greetings, your name, what you do, or casual questions, respond like a real assistant and do not turn the answer into a page recommendation.',
-            'Answer clearly about migration, housing, banking, healthcare, relocation checklists, directory partners, contact pathways, blog guides, and general guidance questions.',
+            'Answer clearly about migration, housing, banking, healthcare, relocation checklists, directory partners, contact pathways, blog guides, settlement services, and general guidance questions.',
             'Keep replies concise, practical, warm, and trustworthy.',
             'Preferred response style: short direct answer first, then practical next steps.',
             'Use plain English. Avoid jargon unless needed.',
@@ -664,7 +649,7 @@ class WebsiteAssistantService
             'When describing a process, use cautious wording such as "you can", "the page lets you", or "the site suggests" unless a step is explicitly confirmed.',
             'If a detail is unclear, say that briefly instead of guessing.',
             'If the visitor asks for regulated visa advice, remind them SettleANZ can connect them with migration professionals and avoid pretending to be a lawyer or migration agent.',
-            'When helpful, suggest the most relevant SettleANZ page path such as /new-to-australia, /housing, /banking, /migration-services, /blog, /directory, or /contact.',
+            'When helpful, suggest the most relevant SettleANZ page path such as /, /new-to-australia, /settlement-services, /housing, /banking, /migration-services, /about, /blog, /directory, /contact, /privacy-policy, or /terms-of-service.',
             'If website knowledge is incomplete and web search is unavailable, say so briefly and then still try to be helpful.',
             'If web search is used, include up to 3 high-quality source links at the end.',
             'If the visitor shares an email, thank them and say the team can follow up.',

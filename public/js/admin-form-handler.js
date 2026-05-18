@@ -50,6 +50,11 @@ class AdminFormHandler {
             return;
         }
 
+        // Sync TinyMCE content to textarea before submitting
+        if (window.tinymce && tinymce.get('editor-tinymce')) {
+            tinymce.get('editor-tinymce').save();
+        }
+
         this.isSubmitting = true;
         const submitButtons = form.querySelectorAll('button[type="submit"]');
         const originalTexts = Array.from(submitButtons).map(btn => btn.textContent);

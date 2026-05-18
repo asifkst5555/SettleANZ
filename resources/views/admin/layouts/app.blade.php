@@ -44,7 +44,7 @@
                 <a @class(['is-active' => request()->routeIs('admin.blog-posts.*')]) href="{{ route('admin.blog-posts.index') }}">Blog Posts</a>
                 <a @class(['is-active' => request()->routeIs('admin.directory-listings.*')]) href="{{ route('admin.directory-listings.index') }}">Directory Listings</a>
                 <a @class(['is-active' => request()->routeIs('admin.reviews.*')]) href="{{ route('admin.reviews.index') }}">Reviews</a>
-                <a @class(['is-active' => request()->routeIs('admin.settings.*')]) href="{{ route('admin.settings.edit') }}">API Integration Settings</a>
+                <a @class(['is-active' => request()->routeIs('admin.settings.*')]) href="{{ route('admin.settings.edit') }}">AI & Settings</a>
                 <a @class(['is-active' => request()->routeIs('admin.seo.*')]) href="{{ route('admin.seo.index') }}">SEO Manager</a>
                 <a href="/" target="_blank" rel="noreferrer">View Website</a>
             </nav>

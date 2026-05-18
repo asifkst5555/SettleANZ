@@ -526,14 +526,14 @@ class BlogPostController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:blog_posts,slug,' . $postId],
             'category' => ['required', 'string', 'max:80'],
-            'excerpt' => ['required', 'string', 'max:400'],
+            'excerpt' => ['required', 'string', 'max:500'],
             'meta_title' => ['nullable', 'string', 'max:60'],
             'meta_description' => ['nullable', 'string', 'max:160'],
             'og_title' => ['nullable', 'string', 'max:120'],
             'og_description' => ['nullable', 'string', 'max:200'],
             'og_image' => ['nullable', 'string', 'max:255'],
             'canonical_url' => ['nullable', 'url', 'max:255'],
-            'no_index' => ['nullable', 'boolean'],
+            'no_index' => ['nullable'],
             'schema_type' => ['nullable', 'string', 'max:60'],
             'focus_keyword' => ['nullable', 'string', 'max:120'],
             'secondary_keywords' => ['nullable', 'string', 'max:1000'],
@@ -548,8 +548,8 @@ class BlogPostController extends Controller
             'next_steps_content' => ['nullable', 'string'],
             'body_html' => ['nullable', 'string'],
             'published_at' => ['nullable', 'date'],
-            'is_published' => ['nullable', 'boolean'],
-            'is_featured_home' => ['nullable', 'boolean'],
+            'is_published' => ['nullable'],
+            'is_featured_home' => ['nullable'],
         ]);
     }
 
@@ -602,9 +602,9 @@ class BlogPostController extends Controller
             $validated['is_published'] = true;
         }
 
-        $validated['is_published'] = (bool) ($validated['is_published'] ?? false);
+        $validated['is_published'] = filter_var($validated['is_published'] ?? false, FILTER_VALIDATE_BOOLEAN);
         $validated['is_featured_home'] = $validated['is_published']
-            ? (bool) ($validated['is_featured_home'] ?? false)
+            ? filter_var($validated['is_featured_home'] ?? false, FILTER_VALIDATE_BOOLEAN)
             : false;
 
         if ($validated['is_published']) {

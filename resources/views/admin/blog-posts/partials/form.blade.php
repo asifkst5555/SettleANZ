@@ -1267,6 +1267,23 @@
         @method($method)
     @endif
 
+    @if ($errors->any())
+        <div style="background:#fff0ec;border:1px solid #f1c8bf;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;">
+            <strong style="color:#b6402a;display:block;margin-bottom:0.5rem;">Please fix the following errors:</strong>
+            <ul style="margin:0;padding-left:1.25rem;color:#b6402a;font-size:0.9rem;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('status'))
+        <div style="background:#e8f5e9;border:1px solid #66bb6a;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;color:#2e7d32;font-weight:600;">
+            {{ session('status') }}
+        </div>
+    @endif
+
     <div class="post-editor">
         {{-- MAIN COLUMN --}}
         <div class="post-main">
@@ -1678,7 +1695,7 @@
                 <div class="field-row">
                     <textarea name="excerpt" rows="4" required
                               placeholder="Short summary shown on listings...">{{ old('excerpt', $post->excerpt) }}</textarea>
-                    <small><span id="excerptCount">{{ strlen(old('excerpt', $post->excerpt ?? '')) }}</span> / 400 chars</small>
+                    <small><span id="excerptCount">{{ strlen(old('excerpt', $post->excerpt ?? '')) }}</span> / 500 chars</small>
                 </div>
             </div>
 
@@ -2542,6 +2559,16 @@
         importZone.addEventListener('drop', (e) => {
             const file = e.dataTransfer?.files?.[0];
             if (file) importDocument(file);
+        });
+    }
+
+    // Ensure TinyMCE content is synced to textarea before form submit
+    const blogForm = document.getElementById('blogForm');
+    if (blogForm) {
+        blogForm.addEventListener('submit', function() {
+            if (window.tinymce && tinymce.get('editor-tinymce')) {
+                tinymce.get('editor-tinymce').save();
+            }
         });
     }
 })();

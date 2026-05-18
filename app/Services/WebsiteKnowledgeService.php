@@ -147,6 +147,7 @@ class WebsiteKnowledgeService
             'school', 'work', 'job', 'tfn', 'super', 'partner', 'whatsapp', 'consultation', 'listing',
             'services', 'support', 'healthcare', 'student visa', 'working holiday', 'partner visa',
             'email', 'apply', 'business', 'agent', 'lawyer', 'directory', 'article', 'post', 'category',
+            'settlement', 'before arriving', 'pre-arrival', 'about', 'privacy', 'terms',
         ]);
     }
 
@@ -211,6 +212,34 @@ class WebsiteKnowledgeService
                 'route' => '/migration-services',
                 'summary' => 'Migration page connects visitors with immigration lawyers and visa support, including common pathways like skilled migrant, student, partner, and working holiday visas.',
                 'search' => 'migration services visa migration pr residency skilled partner student working holiday immigration lawyer registered agent visa eligibility consultation',
+            ],
+            [
+                'kind' => 'primary_page',
+                'title' => 'Settlement Services',
+                'route' => '/settlement-services',
+                'summary' => 'Settlement Services page is the main hub for new arrivals to get practical help with what to do first, banking, housing, healthcare, and family settlement planning. Covers pre-arrival preparation, first-week tasks, and step-by-step settlement guidance for Australia and New Zealand.',
+                'search' => 'settlement services what to do first family settlement plan prepare before you land hit the ground running new arrival settlement planning step by step guide pre-arrival first week tasks australia new zealand',
+            ],
+            [
+                'kind' => 'primary_page',
+                'title' => 'About SettleANZ',
+                'route' => '/about',
+                'summary' => 'About page explains the SettleANZ mission, story, and why the platform was created to help newcomers settle in Australia and New Zealand with practical guidance and trusted services.',
+                'search' => 'about settleanz mission story why platform created help newcomers settle practical guidance trusted services team founder',
+            ],
+            [
+                'kind' => 'primary_page',
+                'title' => 'Privacy Policy',
+                'route' => '/privacy-policy',
+                'summary' => 'Privacy policy explains how SettleANZ collects, uses, stores, and protects visitor personal data including contact forms, chat conversations, and directory listings.',
+                'search' => 'privacy policy data protection personal information collection storage cookies gdpr data rights',
+            ],
+            [
+                'kind' => 'primary_page',
+                'title' => 'Terms of Service',
+                'route' => '/terms-of-service',
+                'summary' => 'Terms of service outlines the legal terms, disclaimers, and conditions for using SettleANZ website, guides, directory, and AI assistant. Includes limitation of liability and content accuracy disclaimers.',
+                'search' => 'terms of service legal terms conditions disclaimer liability content accuracy website usage rules',
             ],
             [
                 'kind' => 'primary_page',
@@ -319,6 +348,55 @@ class WebsiteKnowledgeService
                 'route' => '/migration-services',
                 'summary' => 'Visitors can use the migration services page to review visa types, choose a featured migration agent, request a consultation, or submit their situation through the migration form.',
                 'search' => 'book migration help consultation visa support featured migration agent request consultation migration form',
+            ],
+            [
+                'kind' => 'faq',
+                'title' => 'FAQ: What is the Settlement Services page?',
+                'route' => '/settlement-services',
+                'summary' => 'The Settlement Services page is the central hub for new arrivals. It helps with what to do first, hitting the ground running, family settlement planning, and pre-arrival preparation. It covers banking, housing, healthcare, TFN, superannuation, and step-by-step settlement guidance.',
+                'search' => 'settlement services page what is it central hub new arrivals what to do first family settlement pre-arrival preparation step by step guidance',
+            ],
+            [
+                'kind' => 'faq',
+                'title' => 'FAQ: What is SettleANZ?',
+                'route' => '/about',
+                'summary' => 'SettleANZ is a practical relocation and migration support platform for people settling in Australia and New Zealand. It combines guides, blog content, directory listings, AI assistant, and human contact support to help newcomers navigate settlement tasks confidently.',
+                'search' => 'what is settleanz platform mission purpose help newcomers australia new zealand relocation migration support',
+            ],
+            [
+                'kind' => 'faq',
+                'title' => 'FAQ: Is the AI assistant accurate?',
+                'route' => '/',
+                'summary' => 'The AI assistant is trained on SettleANZ website content and can use web search for current information. It provides practical guidance but should not replace professional migration or legal advice. For regulated advice, consult a registered migration agent or lawyer.',
+                'search' => 'ai assistant accurate reliable trained web search professional advice migration agent lawyer disclaimer',
+            ],
+            [
+                'kind' => 'faq',
+                'title' => 'FAQ: What should I do before arriving in Australia?',
+                'route' => '/settlement-services',
+                'summary' => 'Before arriving, research suburbs, understand visa conditions, prepare documents, arrange initial accommodation, research banking options, understand healthcare coverage, and plan your first-week tasks. The Settlement Services page and New to Australia guide have detailed checklists.',
+                'search' => 'before arriving pre-arrival preparation checklist documents visa conditions initial accommodation banking healthcare first week tasks',
+            ],
+            [
+                'kind' => 'faq',
+                'title' => 'FAQ: How do I find housing in Australia?',
+                'route' => '/housing',
+                'summary' => 'Use the Housing Guide for practical help with rentals, suburbs, leases, and common mistakes. The Directory page lists relocation companies and real estate agents. Key steps include researching suburbs, understanding rental applications, and avoiding common pitfalls.',
+                'search' => 'find housing rent apartment lease suburb relocation real estate agent rental application common mistakes housing guide',
+            ],
+            [
+                'kind' => 'faq',
+                'title' => 'FAQ: How do I open a bank account in Australia?',
+                'route' => '/banking',
+                'summary' => 'The Banking Guide covers account setup, newcomer-friendly banks, money transfers, TFN, and superannuation. Popular options include CommBank, Westpac, and transfer tools like Wise, OFX, and WorldRemit. Some banks allow pre-arrival account setup.',
+                'search' => 'open bank account commbank westpac tfn superannuation money transfer wise ofx worldremit pre-arrival account setup banking guide',
+            ],
+            [
+                'kind' => 'faq',
+                'title' => 'FAQ: What visa options are available?',
+                'route' => '/migration-services',
+                'summary' => 'Common visa pathways include skilled migration, student visas, partner visas, and working holiday visas. The Migration Services page explains visa types, the importance of registered migration agents, and how to request a consultation.',
+                'search' => 'visa options skilled migration student partner working holiday registered migration agent consultation visa types',
             ],
         ]);
 
