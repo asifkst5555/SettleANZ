@@ -1,3 +1,8 @@
+@php
+    $customKnowledgeCount = \Illuminate\Support\Facades\Schema::hasTable('ai_knowledge_entries') 
+        ? \App\Models\AiKnowledgeEntry::query()->where('is_active', true)->count() 
+        : 0;
+@endphp
 @extends('admin.layouts.app')
 
 @section('content')
@@ -94,10 +99,129 @@
                         <label><span>Assistant title</span><input type="text" name="ai_assistant_title" value="{{ old('ai_assistant_title', $settings['ai_assistant_title']) }}" required></label>
                         <label><span>Assistant subtitle</span><input type="text" name="ai_assistant_subtitle" value="{{ old('ai_assistant_subtitle', $settings['ai_assistant_subtitle']) }}" required></label>
                         <label class="admin-form-grid__full"><span>Assistant greeting message</span><textarea name="ai_assistant_greeting" rows="3" required>{{ old('ai_assistant_greeting', $settings['ai_assistant_greeting']) }}</textarea></label>
+                    </div>
+                </div>
+            </section>
+
+            {{-- AI Response Behavior Controls --}}
+            <section class="admin-panel-card">
+                <div class="admin-settings-section">
+                    <div class="admin-settings-section__head">
+                        <h3>AI Response Behavior Controls</h3>
+                        <p>Fine-tune how the AI assistant answers questions. These settings control answer length, format, and style.</p>
+                    </div>
+                    <div class="admin-form-grid">
+                        <label>
+                            <span>Max Bullet Points per Response</span>
+                            <input type="number" name="ai_max_bullets" value="{{ old('ai_max_bullets', $settings['ai_max_bullets'] ?? 5) }}" min="1" max="10">
+                            <small style="display:block;margin-top:6px;color:#667788;">Maximum number of bullet points in each AI response. Default: 5.</small>
+                        </label>
+                        <label>
+                            <span>Max Answer Length (characters)</span>
+                            <input type="number" name="ai_max_length" value="{{ old('ai_max_length', $settings['ai_max_length'] ?? 900) }}" min="200" max="2000">
+                            <small style="display:block;margin-top:6px;color:#667788;">Maximum characters per AI response. Shorter = faster reading. Default: 900.</small>
+                        </label>
+                        <label>
+                            <span>Response Tone</span>
+                            <select class="pro-select" name="ai_response_tone">
+                                <option value="professional" @selected(old('ai_response_tone', $settings['ai_response_tone'] ?? 'professional') === 'professional')>Professional — Experienced, calm, trustworthy</option>
+                                <option value="friendly" @selected(old('ai_response_tone', $settings['ai_response_tone'] ?? 'professional') === 'friendly')>Friendly — Warm, approachable, conversational</option>
+                                <option value="concise" @selected(old('ai_response_tone', $settings['ai_response_tone'] ?? 'professional') === 'concise')>Concise — Direct, minimal, straight to the point</option>
+                                <option value="detailed" @selected(old('ai_response_tone', $settings['ai_response_tone'] ?? 'professional') === 'detailed')>Detailed — Thorough explanations with examples</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">Sets the overall personality and speaking style of the AI assistant.</small>
+                        </label>
+                        <label>
+                            <span>Include Page Links in Responses</span>
+                            <select class="pro-select" name="ai_include_page_links">
+                                <option value="1" @selected(old('ai_include_page_links', $settings['ai_include_page_links'] ?? '1') === '1')>Yes — Suggest relevant SettleANZ pages</option>
+                                <option value="0" @selected(old('ai_include_page_links', $settings['ai_include_page_links'] ?? '1') === '0')>No — Answer without page suggestions</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">When enabled, AI suggests relevant pages like /contact, /banking, /housing etc.</small>
+                        </label>
+                        <label>
+                            <span>Show Web Search Sources</span>
+                            <select class="pro-select" name="ai_show_sources">
+                                <option value="1" @selected(old('ai_show_sources', $settings['ai_show_sources'] ?? '1') === '1')>Yes — Show source links at end of response</option>
+                                <option value="0" @selected(old('ai_show_sources', $settings['ai_show_sources'] ?? '1') === '0')>No — Hide source links</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">When web search is used, show or hide the source URLs in responses.</small>
+                        </label>
+                        <label>
+                            <span>Response Language</span>
+                            <select class="pro-select" name="ai_response_language">
+                                <option value="en" @selected(old('ai_response_language', $settings['ai_response_language'] ?? 'en') === 'en')>English</option>
+                                <option value="hi" @selected(old('ai_response_language', $settings['ai_response_language'] ?? 'en') === 'hi')>Hindi</option>
+                                <option value="es" @selected(old('ai_response_language', $settings['ai_response_language'] ?? 'en') === 'es')>Spanish</option>
+                                <option value="ar" @selected(old('ai_response_language', $settings['ai_response_language'] ?? 'en') === 'ar')>Arabic</option>
+                                <option value="zh" @selected(old('ai_response_language', $settings['ai_response_language'] ?? 'en') === 'zh')>Chinese</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">Language the AI uses to respond. Note: AI knowledge base is primarily in English.</small>
+                        </label>
+                        <label>
+                            <span>Response Format</span>
+                            <select class="pro-select" name="ai_response_format">
+                                <option value="bullets" @selected(old('ai_response_format', $settings['ai_response_format'] ?? 'bullets') === 'bullets')>Bullet Points Only</option>
+                                <option value="mixed" @selected(old('ai_response_format', $settings['ai_response_format'] ?? 'bullets') === 'mixed')>Mixed (Bullets + Paragraphs)</option>
+                                <option value="paragraphs" @selected(old('ai_response_format', $settings['ai_response_format'] ?? 'bullets') === 'paragraphs')>Paragraphs Only</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">How the AI structures its answers. Bullets are easiest to read in chat.</small>
+                        </label>
+                        <label>
+                            <span>Stay Focused on Question</span>
+                            <select class="pro-select" name="ai_stay_focused">
+                                <option value="1" @selected(old('ai_stay_focused', $settings['ai_stay_focused'] ?? '1') === '1')>Strict — Only answer exactly what's asked</option>
+                                <option value="0" @selected(old('ai_stay_focused', $settings['ai_stay_focused'] ?? '1') === '0')>Flexible — Can provide broader context</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">When strict, AI won't expand into unrelated advice or add random suggestions.</small>
+                        </label>
+                        <label>
+                            <span>Avoid AI-Style Phrases</span>
+                            <select class="pro-select" name="ai_avoid_ai_phrases">
+                                <option value="1" @selected(old('ai_avoid_ai_phrases', $settings['ai_avoid_ai_phrases'] ?? '1') === '1')>Yes — Block "Absolutely", "Great question", etc.</option>
+                                <option value="0" @selected(old('ai_avoid_ai_phrases', $settings['ai_avoid_ai_phrases'] ?? '1') === '0')>No — Allow natural conversational phrases</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">Blocks robotic phrases like "Absolutely", "Great question", "I understand your concern", "I'd be happy to help".</small>
+                        </label>
+                        <label>
+                            <span>Use Real-World Examples</span>
+                            <select class="pro-select" name="ai_use_real_examples">
+                                <option value="1" @selected(old('ai_use_real_examples', $settings['ai_use_real_examples'] ?? '1') === '1')>Yes — Include actual migrant experiences</option>
+                                <option value="0" @selected(old('ai_use_real_examples', $settings['ai_use_real_examples'] ?? '1') === '0')>No — Stick to factual information only</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">When enabled, AI uses contextual language like "Many newcomers attend multiple inspections..." instead of generic statements.</small>
+                        </label>
+                        <label>
+                            <span>Professional Disclaimer for Legal/Visa</span>
+                            <select class="pro-select" name="ai_professional_disclaimer">
+                                <option value="1" @selected(old('ai_professional_disclaimer', $settings['ai_professional_disclaimer'] ?? '1') === '1')>Yes — Recommend licensed professionals for legal/visa/tax</option>
+                                <option value="0" @selected(old('ai_professional_disclaimer', $settings['ai_professional_disclaimer'] ?? '1') === '0')>No — Answer directly without disclaimer</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">When uncertain about visa, legal, or tax matters, AI recommends consulting a licensed professional.</small>
+                        </label>
+                        <label>
+                            <span>Uncertainty Handling</span>
+                            <select class="pro-select" name="ai_uncertainty_handling">
+                                <option value="say_uncertain" @selected(old('ai_uncertainty_handling', $settings['ai_uncertainty_handling'] ?? 'say_uncertain') === 'say_uncertain')>Say "I'm not certain" and skip</option>
+                                <option value="recommend" @selected(old('ai_uncertainty_handling', $settings['ai_uncertainty_handling'] ?? 'say_uncertain') === 'recommend')>Recommend checking with professional</option>
+                                <option value="best_guess" @selected(old('ai_uncertainty_handling', $settings['ai_uncertainty_handling'] ?? 'say_uncertain') === 'best_guess')>Provide best available information</option>
+                            </select>
+                            <small style="display:block;margin-top:6px;color:#667788;">How AI handles questions when it doesn't have confident information.</small>
+                        </label>
                         <label class="admin-form-grid__full">
-                            <span>Custom training instructions</span>
-                            <textarea name="ai_assistant_system_prompt" rows="5" placeholder="Add tone, domain constraints, answer format rules, or any extra instructions for the AI.">{{ old('ai_assistant_system_prompt', $settings['ai_assistant_system_prompt'] ?? '') }}</textarea>
-                            <small style="display:block;margin-top:6px;color:#667788;">These instructions are appended to the AI system prompt. Use this to set tone, add disclaimers, or constrain answer style.</small>
+                            <span>Custom Follow-up Phrase</span>
+                            <input type="text" name="ai_follow_up_phrase" value="{{ old('ai_follow_up_phrase', $settings['ai_follow_up_phrase'] ?? 'Let me know if you want more detailed information on this.') }}" placeholder="Let me know if you want more detailed information on this.">
+                            <small style="display:block;margin-top:6px;color:#667788;">Phrase added at end of responses when more detail might be needed. Leave blank to disable.</small>
+                        </label>
+                        <label class="admin-form-grid__full">
+                            <span>Custom Closing Phrase</span>
+                            <input type="text" name="ai_closing_phrase" value="{{ old('ai_closing_phrase', $settings['ai_closing_phrase'] ?? '') }}" placeholder="e.g., Hope this helps with your move!">
+                            <small style="display:block;margin-top:6px;color:#667788;">Optional closing phrase added to every response. Leave blank for no closing.</small>
+                        </label>
+                        <label class="admin-form-grid__full">
+                            <span>Custom System Prompt (Full Control)</span>
+                            <textarea name="ai_assistant_system_prompt" rows="8" placeholder="Write complete instructions for the AI. This replaces the default behavior rules. Example: 'You are a friendly migration advisor. Always answer in 3 bullet points. Never suggest contacting humans unless asked.'">{{ old('ai_assistant_system_prompt', $settings['ai_assistant_system_prompt'] ?? '') }}</textarea>
+                            <small style="display:block;margin-top:6px;color:#e8773a;font-weight:600;">⚠️ If filled, this REPLACES ALL settings above. Use only if you want complete custom control.</small>
                         </label>
                     </div>
                 </div>
@@ -111,6 +235,13 @@
                         <p>The AI is pre-trained on all SettleANZ website content. This knowledge is always active — even without an API key.</p>
                     </div>
                     <div style="display:grid;gap:1rem;">
+                        <div style="background:#f0f7f6;border:1px solid #b9cfcb;border-radius:12px;padding:1.25rem;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                                <h4 style="margin:0;color:#0b7a75;font-size:1rem;">Custom AI Knowledge Entries</h4>
+                                <a href="{{ route('admin.ai-knowledge.index') }}" class="button" style="padding:0.4rem 0.8rem;font-size:0.85rem;">Manage Entries ({{ $customKnowledgeCount }} active)</a>
+                            </div>
+                            <p style="font-size:0.9rem;color:#2c3a47;margin:0;">You have <strong>{{ $customKnowledgeCount }}</strong> active custom knowledge entries. These are used alongside built-in website content to train the AI assistant.</p>
+                        </div>
                         <div style="background:#f0f7f6;border:1px solid #b9cfcb;border-radius:12px;padding:1.25rem;">
                             <h4 style="margin:0 0 0.75rem;color:#0b7a75;font-size:1rem;">Pages the AI Knows About</h4>
                             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.5rem;font-size:0.9rem;color:#2c3a47;">

@@ -5333,6 +5333,7 @@ main {
     .migration-form-section__header h2 {
         max-width: none;
         padding: 1.2rem;
+    }
 
     .migration-form-section__panel {
         grid-template-columns: 1fr;
@@ -6283,6 +6284,24 @@ main {
 .site-chat-input:disabled {
     opacity: 0.65;
     cursor: not-allowed;
+}
+
+.chat-link {
+    color: #0b7a75;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.chat-link:hover {
+    color: #065e5b;
+}
+
+.site-chat-msg.bot .chat-link {
+    color: #e8773a;
+}
+
+.site-chat-msg.bot .chat-link:hover {
+    color: #d86424;
 }
 
 @media (max-width: 767px) {

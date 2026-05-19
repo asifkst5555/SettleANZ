@@ -301,29 +301,37 @@
     line-height: 1.25;
 }
 .empathy-section--inline .empathy-card__points {
-    display: grid;
-    gap: 0.65rem;
-    margin: 0;
-    padding: 0 0 1rem;
+    margin: 0 0 1.25rem 0;
+    padding: 0;
     list-style: none;
-    border-bottom: 1px dashed rgba(148,163,184,0.45);
+    border-bottom: none !important;
 }
 .empathy-section--inline .empathy-card__points li {
-    position: relative;
-    padding-left: 1rem;
-    color: #4b5563;
-    font-size: 0.98rem;
+    color: #374151;
+    font-size: 0.95rem;
     line-height: 1.6;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
 }
-.empathy-section--inline .empathy-card__points li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.72rem;
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background: #0f8b8d;
+.empathy-section--inline .empathy-card__points li:last-child {
+    margin-bottom: 0;
+}
+.empathy-section--inline .check-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0b7a75 0%, #14a394 100%);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(11, 122, 117, 0.35);
+    margin-top: 2px;
 }
 .empathy-section--inline .empathy-card__footer {
     display: flex;
@@ -379,6 +387,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 .value-stack__card {
     position: relative;
@@ -794,6 +803,7 @@
     .empathy-section--inline .empathy-card__points li {
         font-size: 0.93rem;
         line-height: 1.55;
+        text-align: left;
     }
 
     .empathy-section--inline .empathy-card__footer,
@@ -1078,9 +1088,9 @@
                         <p class="empathy-card__kicker">Pre-arrival study setup</p>
                         <h3>International Students</h3>
                         <ul class="empathy-card__points">
-                            <li>You are coming to Australia mainly for study (uni, TAFE, language or vocational course).</li>
-                            <li>You are worried about banking, SIM cards, and rentals close to campus before classes start.</li>
-                            <li>You don't fully understand your visa work limits and you can't afford to get it wrong.</li>
+                            <li><span class="check-icon">✓</span> You are coming to Australia mainly for study (uni, TAFE, language or vocational course).</li>
+                            <li><span class="check-icon">✓</span> You are worried about banking, SIM cards, and rentals close to campus before classes start.</li>
+                            <li><span class="check-icon">✓</span> You don't fully understand your visa work limits and you can't afford to get it wrong.</li>
                         </ul>
                         <div class="empathy-card__footer">
                             <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Show me What to Do First</a>
@@ -1099,9 +1109,9 @@
                         <p class="empathy-card__kicker">Career and landing plan</p>
                         <h3>Skilled Workers</h3>
                         <ul class="empathy-card__points">
-                            <li>You hold (or are about to hold) a skilled visa and plan to work in your profession.</li>
-                            <li>You want help choosing suburbs, setting up tax and banking, and reading employment offers.</li>
-                            <li>You're worried about workplace culture and whether your overseas experience will actually count.</li>
+                            <li><span class="check-icon">✓</span> You hold (or are about to hold) a skilled visa and plan to work in your profession.</li>
+                            <li><span class="check-icon">✓</span> You want help choosing suburbs, setting up tax and banking, and reading employment offers.</li>
+                            <li><span class="check-icon">✓</span> You're worried about workplace culture and whether your overseas experience will actually count.</li>
                         </ul>
                         <div class="empathy-card__footer">
                             <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Help Me Hit the Ground Running</a>
@@ -1120,9 +1130,9 @@
                         <p class="empathy-card__kicker">Family settlement support</p>
                         <h3>New Immigrants</h3>
                         <ul class="empathy-card__points">
-                            <li>You have recently arrived as a permanent migrant or on a long-term pathway with family/partner.</li>
-                            <li>You need to sort housing, schools (if you have kids), healthcare and day-to-day routines.</li>
-                            <li>You feel overwhelmed by all the systems and want a step-by-step starting plan.</li>
+                            <li><span class="check-icon">✓</span> You have recently arrived as a permanent migrant or on a long-term pathway with family/partner.</li>
+                            <li><span class="check-icon">✓</span> You need to sort housing, schools (if you have kids), healthcare and day-to-day routines.</li>
+                            <li><span class="check-icon">✓</span> You feel overwhelmed by all the systems and want a step-by-step starting plan.</li>
                         </ul>
                         <div class="empathy-card__footer">
                             <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Start My Family Settlement Plan</a>
@@ -1141,9 +1151,9 @@
                         <p class="empathy-card__kicker">Before-you-land planning</p>
                         <h3>Applying for Immigration</h3>
                         <ul class="empathy-card__points">
-                            <li>You are still overseas and in the process of applying for a visa or planning your move.</li>
-                            <li>You're drowning in conflicting advice about documents and what to prepare.</li>
-                            <li>You want a realistic picture of costs, first-year priorities and common mistakes to avoid.</li>
+                            <li><span class="check-icon">✓</span> You are still overseas and in the process of applying for a visa or planning your move.</li>
+                            <li><span class="check-icon">✓</span> You're drowning in conflicting advice about documents and what to prepare.</li>
+                            <li><span class="check-icon">✓</span> You want a realistic picture of costs, first-year priorities and common mistakes to avoid.</li>
                         </ul>
                         <div class="empathy-card__footer">
                             <a class="button button--outline-accent empathy-card__cta" href="{{ route('guides.settlement-services') }}">Prepare before You Land</a>
@@ -1208,7 +1218,7 @@
                 </article>
             </div>
 
-            <div class="value-stack__cta">
+            <div class="value-stack__cta reveal-on-scroll">
                 <div class="value-stack__cta-copy">
                     <p>Not sure what you need yet?</p>
                     <h3>Schedule a free 20-minute clarity call.</h3>

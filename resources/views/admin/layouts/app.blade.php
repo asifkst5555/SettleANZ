@@ -44,7 +44,24 @@
                 <a @class(['is-active' => request()->routeIs('admin.blog-posts.*')]) href="{{ route('admin.blog-posts.index') }}">Blog Posts</a>
                 <a @class(['is-active' => request()->routeIs('admin.directory-listings.*')]) href="{{ route('admin.directory-listings.index') }}">Directory Listings</a>
                 <a @class(['is-active' => request()->routeIs('admin.reviews.*')]) href="{{ route('admin.reviews.index') }}">Reviews</a>
-                <a @class(['is-active' => request()->routeIs('admin.settings.*')]) href="{{ route('admin.settings.edit') }}">AI & Settings</a>
+
+                {{-- AI Settings Dropdown --}}
+                <div class="admin-sidebar__dropdown">
+                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+                        <span>AI Settings</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="admin-sidebar__dropdown-menu">
+                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.api-connection')]) href="{{ route('admin.ai-settings.api-connection') }}">API Connection</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.chat-appearance')]) href="{{ route('admin.ai-settings.chat-appearance') }}">Chat Appearance</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.response-behavior')]) href="{{ route('admin.ai-settings.response-behavior') }}">Response Behavior</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.content-rules')]) href="{{ route('admin.ai-settings.content-rules') }}">Content Rules</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.custom-prompts')]) href="{{ route('admin.ai-settings.custom-prompts') }}">Custom Prompts</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.knowledge-base')]) href="{{ route('admin.ai-settings.knowledge-base') }}">Knowledge Base</a>
+                    </div>
+                </div>
+
+                <a @class(['is-active' => request()->routeIs('admin.ai-knowledge.*')]) href="{{ route('admin.ai-knowledge.index') }}">AI Knowledge Entries</a>
                 <a @class(['is-active' => request()->routeIs('admin.seo.*')]) href="{{ route('admin.seo.index') }}">SEO Manager</a>
                 <a href="/" target="_blank" rel="noreferrer">View Website</a>
             </nav>
@@ -382,6 +399,44 @@
     .pro-select-option:last-child { border-radius: 0 0 11px 11px; }
     .pro-select-option:hover, .pro-select-option.is-selected { background: #14a394; color: #fff; font-weight: 500; }
     .pro-select-option.is-selected { font-weight: 600; background: #0b7a75; }
+
+    /* AI Settings Sidebar Dropdown */
+    .admin-sidebar__dropdown { position: relative; }
+    .admin-sidebar__dropdown-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.95rem 1rem;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 14px;
+        transition: all 0.2s;
+    }
+    .admin-sidebar__dropdown-toggle:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .admin-sidebar__dropdown-toggle svg { transition: transform 0.2s; }
+    .admin-sidebar__dropdown.is-open .admin-sidebar__dropdown-toggle svg { transform: rotate(180deg); }
+    .admin-sidebar__dropdown-menu {
+        display: none;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.25rem 0 0.25rem 1rem;
+    }
+    .admin-sidebar__dropdown.is-open .admin-sidebar__dropdown-menu { display: flex; }
+    .admin-sidebar__dropdown-menu a {
+        padding: 0.5rem 0.75rem;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+    .admin-sidebar__dropdown-menu a:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .admin-sidebar__dropdown-menu a.is-active { background: rgba(255, 255, 255, 0.18); color: #fff; font-weight: 600; }
     </style>
     <script>
     (function() {

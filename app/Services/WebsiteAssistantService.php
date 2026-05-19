@@ -150,11 +150,11 @@ class WebsiteAssistantService
         $applyLink = $settings['directory_apply_link'] ?? '/contact';
 
         if (Str::contains($text, ['business listing', 'directory listing', 'list my business', 'add my business'])) {
-            return 'To start a business listing enquiry, go to ' . $applyLink . '. If you prefer direct help, you can also contact SettleANZ through /contact by email at ' . $contactEmail . ' or via WhatsApp. ' . $responseTime;
+            return 'To start a business listing enquiry, visit /business-directory. You can also contact SettleANZ directly through /contact or email at ' . $contactEmail . '. ' . $responseTime;
         }
 
         if (Str::contains($text, ['contact your team', 'contact the team', 'contact you directly', 'speak to your team', 'human support'])) {
-            return 'You can contact the SettleANZ team directly through /contact. That page is the right place for general enquiries, business listings, partnerships, media enquiries, or any request that needs human follow-up. You can reach the team by email at ' . $contactEmail . ' or via WhatsApp. ' . $responseTime;
+            return 'Visit /contact to reach the SettleANZ team directly. This is the best place for general enquiries, business listings, partnerships, media enquiries, or any request needing human follow-up. Email: ' . $contactEmail . ' or use WhatsApp. ' . $responseTime;
         }
 
         if (Str::contains($text, ['response time', 'how fast', 'how quickly', 'when will you reply'])) {
@@ -162,11 +162,11 @@ class WebsiteAssistantService
         }
 
         if (Str::contains($text, ['migration consultation', 'book migration help', 'book a consultation', 'migration agent'])) {
-            return 'For migration help, use /migration-services. That page explains common visa types, why registered migration agents matter, and how to request a consultation with a featured migration partner.';
+            return 'For migration help, visit /migration-services. This page explains common visa types, why registered migration agents matter, and how to request a consultation with a featured migration partner.';
         }
 
         if (Str::contains($text, ['whatsapp', 'chat on whatsapp', 'whatsapp help'])) {
-            return 'You can reach SettleANZ on WhatsApp from the Contact page at /contact. The site also uses WhatsApp links on key support sections for quick contact.';
+            return 'Visit /contact to reach SettleANZ on WhatsApp. The site also provides WhatsApp links on key support sections for quick contact.';
         }
 
         if (Str::contains($text, ['email address', 'contact email', 'your email', 'email you'])) {
@@ -174,11 +174,11 @@ class WebsiteAssistantService
         }
 
         if (Str::contains($text, ['directory categories', 'categories in your directory', 'what categories are in your directory'])) {
-            return 'The main directory categories are Immigration Lawyers, Relocation Companies, Financial Advisors, Healthcare, International Schools, and Real Estate Agents. You can explore them on /directory.';
+            return 'The main directory categories are Immigration Lawyers, Relocation Companies, Financial Advisors, Healthcare, International Schools, and Real Estate Agents. Visit /directory to explore them all.';
         }
 
         if (Str::contains($text, ['blog topics', 'what is in the blog', 'what does the blog cover'])) {
-            return 'The blog covers practical expat topics including banking, housing, moving, healthcare, working, and lifestyle. You can browse everything on /blog.';
+            return 'The blog covers practical expat topics including banking, housing, moving, healthcare, working, and lifestyle. Visit /blog to browse all guides.';
         }
 
         if (Str::contains($text, ['what can this website help me with', 'what does this website do', 'what services do you offer overall', 'what can settleanz help with overall'])) {
@@ -186,7 +186,7 @@ class WebsiteAssistantService
         }
 
         if (Str::contains($text, ['settlement service', 'settlement plan', 'what to do first', 'before you land', 'hit the ground running'])) {
-            return 'The Settlement Services page at /settlement-services is your central hub. It covers what to do first, pre-arrival preparation, family settlement planning, and step-by-step guidance for banking, housing, healthcare, and more. It is the best starting point for new arrivals.';
+            return 'Visit /settlement-services for your central hub. It covers what to do first, pre-arrival preparation, family settlement planning, and step-by-step guidance for banking, housing, healthcare, and more. This is the best starting point for new arrivals.';
         }
 
         if (Str::contains($text, ['about settleanz', 'who are you', 'what is settleanz', 'tell me about this site'])) {
@@ -194,15 +194,15 @@ class WebsiteAssistantService
         }
 
         if (Str::contains($text, ['privacy', 'data protection', 'how you use my data'])) {
-            return 'You can read our Privacy Policy at /privacy-policy. It explains how SettleANZ collects, uses, stores, and protects your personal data including contact forms, chat conversations, and directory listings.';
+            return 'Visit /privacy-policy to read our full policy. It explains how SettleANZ collects, uses, stores, and protects your personal data including contact forms, chat conversations, and directory listings.';
         }
 
         if (Str::contains($text, ['terms', 'terms of service', 'legal', 'disclaimer'])) {
-            return 'Our Terms of Service are available at /terms-of-service. They outline the legal terms, disclaimers, and conditions for using SettleANZ website, guides, directory, and AI assistant.';
+            return 'Visit /terms-of-service to read our full terms. They outline the legal terms, disclaimers, and conditions for using SettleANZ website, guides, directory, and AI assistant.';
         }
 
         if (Str::contains($text, ['before arriving', 'before i land', 'pre-arrival', 'prepare before'])) {
-            return 'Before arriving in Australia, you should research suburbs, understand visa conditions, prepare documents, arrange initial accommodation, research banking options, and understand healthcare coverage. The Settlement Services page at /settlement-services and New to Australia guide at /new-to-australia have detailed pre-arrival checklists.';
+            return 'Before arriving in Australia, you should research suburbs, understand visa conditions, prepare documents, arrange initial accommodation, research banking options, and understand healthcare coverage. Visit /settlement-services and /new-to-australia for detailed pre-arrival checklists.';
         }
 
         return null;
@@ -631,31 +631,196 @@ class WebsiteAssistantService
         $name = trim((string) ($lead?->first_name ?? ''));
         $customInstruction = trim((string) SiteSetting::getValue('ai_assistant_system_prompt', ''));
 
-        return implode("\n", array_filter([
-            'You are SettleANZ AI Assistant for website visitors.',
-            'You help new arrivals settling in Australia and New Zealand, but you can also answer normal general questions in a natural, helpful way.',
+        if ($customInstruction !== '') {
+            return implode("\n", array_filter([
+                $customInstruction,
+                $webSearchEnabled ? 'Web search is enabled. Use it for current facts when needed.' : null,
+                'Known visitor first name: ' . $name ?: null,
+                'Never output internal tool traces, citation placeholders, or raw debug tokens.',
+            ]));
+        }
+
+        $maxBullets = (int) SiteSetting::getValue('ai_max_bullets', 5);
+        $maxLength = (int) SiteSetting::getValue('ai_max_length', 900);
+        $tone = SiteSetting::getValue('ai_response_tone', 'professional');
+        $includeLinks = SiteSetting::getValue('ai_include_page_links', '1') === '1';
+        $showSources = SiteSetting::getValue('ai_show_sources', '1') === '1';
+        $language = SiteSetting::getValue('ai_response_language', 'en');
+        $responseFormat = SiteSetting::getValue('ai_response_format', 'bullets');
+        $stayFocused = SiteSetting::getValue('ai_stay_focused', '1') === '1';
+        $avoidAiPhrases = SiteSetting::getValue('ai_avoid_ai_phrases', '1') === '1';
+        $useRealExamples = SiteSetting::getValue('ai_use_real_examples', '1') === '1';
+        $professionalDisclaimer = SiteSetting::getValue('ai_professional_disclaimer', '1') === '1';
+        $uncertaintyHandling = SiteSetting::getValue('ai_uncertainty_handling', 'say_uncertain');
+        $followUpPhrase = trim((string) SiteSetting::getValue('ai_follow_up_phrase', 'Let me know if you want more detailed information on this.'));
+        $closingPhrase = trim((string) SiteSetting::getValue('ai_closing_phrase', ''));
+
+        $toneRules = match ($tone) {
+            'friendly' => implode("\n", [
+                'TONE: Warm, approachable, and conversational while remaining professional.',
+                'Use friendly greetings and a helpful attitude. Sound like a knowledgeable friend who has been through the migration process.',
+                'DO: be warm, encouraging, use simple language, sound supportive.',
+                'DO NOT: be overly casual, use slang, sound unprofessional.',
+            ]),
+            'concise' => implode("\n", [
+                'TONE: Direct, minimal, straight to the point.',
+                'Give the shortest possible answer that fully addresses the question. No fluff, no filler.',
+                'DO: be brief, direct, efficient. Get to the answer immediately.',
+                'DO NOT: add unnecessary context, repeat information, use filler phrases.',
+            ]),
+            'detailed' => implode("\n", [
+                'TONE: Thorough, explanatory, with examples and context.',
+                'Provide comprehensive answers with practical examples, common scenarios, and step-by-step guidance.',
+                'DO: explain thoroughly, give examples, cover edge cases, be comprehensive.',
+                'DO NOT: skip important details, be vague, assume prior knowledge.',
+            ]),
+            default => implode("\n", [
+                'TONE: Experienced, practical, direct. Sound like a real settlement advisor.',
+                'DO: sound experienced, practical, direct. Use simple language.',
+                'DO NOT: overexplain, sound corporate, sound emotional, use motivational language, use emojis, use ellipses.',
+                'Avoid phrases like: Absolutely, Great question, I understand your concern, I would be happy to help.',
+            ]),
+        };
+
+        $formatRules = match ($responseFormat) {
+            'bullets' => implode("\n", [
+                'RESPONSE FORMAT: Use bullet points for all answers.',
+                'Each bullet should be 1-2 sentences maximum.',
+                'Do not use paragraphs, essays, or long blocks of text.',
+            ]),
+            'mixed' => implode("\n", [
+                'RESPONSE FORMAT: Use a mix of short paragraphs and bullet points.',
+                'Start with a brief intro sentence, then use bullets for key points.',
+                'Keep paragraphs to 2-3 sentences maximum.',
+            ]),
+            'paragraphs' => implode("\n", [
+                'RESPONSE FORMAT: Use short paragraphs only. No bullet points.',
+                'Each paragraph should be 2-3 sentences maximum.',
+                'Do not use lists, bullets, or checklists.',
+            ]),
+        };
+
+        $focusRule = $stayFocused
+            ? implode("\n", [
+                'FOCUS RULE: ONLY ANSWER WHAT THE USER ASKED.',
+                'Stay focused on the user\'s exact question.',
+                'Do not expand into unrelated advice.',
+                'Do not provide broad migration lectures.',
+                'Do not add random suggestions.',
+                'If the user asks about rentals, answer rentals. If they ask about jobs, answer jobs.',
+            ])
+            : 'You can provide broader context and related advice when helpful, but stay relevant to the user\'s question.';
+
+        $aiPhrasesRule = $avoidAiPhrases
+            ? implode("\n", [
+                'AVOID AI-STYLE PHRASES:',
+                'Never use: "Absolutely", "Great question", "I understand your concern", "I\'d be happy to help", "It depends" (unless immediately clarified).',
+                'Never repeat the user\'s question back to them.',
+                'Never use emojis or ellipses (...).',
+                'Never use motivational language or corporate tone.',
+            ])
+            : 'Use natural conversational phrases. Avoid being robotic but conversational phrases are acceptable.';
+
+        $examplesRule = $useRealExamples
+            ? implode("\n", [
+                'USE REAL-WORLD, CONTEXTUAL LANGUAGE:',
+                'Responses should feel grounded in actual migrant experiences.',
+                'Instead of "The rental market is competitive", say "Many newcomers attend multiple inspections before getting approved for a rental."',
+                'Instead of "Networking is important", say "Many migrants get their first interview through referrals, recruiters, or community connections."',
+                'Instead of "Adjusting can be stressful", say "The first few months often feel isolating because most newcomers are rebuilding their routine, social circle, and confidence at the same time."',
+            ])
+            : 'Stick to factual, straightforward information. Real-world examples are optional.';
+
+        $disclaimerRule = $professionalDisclaimer
+            ? implode("\n", [
+                'PROFESSIONAL DISCLAIMER:',
+                'When information depends on visa type, state laws, legal matters, taxes, or migration law, briefly say what affects the answer.',
+                'Then recommend checking with the appropriate licensed professional (migration agent, lawyer, accountant).',
+                'Do not pretend to be a lawyer or migration agent.',
+            ])
+            : 'Answer questions directly. Professional disclaimers are optional.';
+
+        $uncertaintyRule = match ($uncertaintyHandling) {
+            'recommend' => 'When uncertain, say "I\'m not certain about this specific detail" and recommend checking with a licensed professional or official source.',
+            'best_guess' => 'When uncertain, provide the best available information but note that details may vary.',
+            default => 'When uncertain, say "I\'m not certain about this" and skip providing potentially incorrect information.',
+        };
+
+        $followUpLine = $followUpPhrase !== '' ? 'If more explanation is genuinely needed, end with: "' . $followUpPhrase . '"' : null;
+        $closingLine = $closingPhrase !== '' ? 'Always end responses with: "' . $closingPhrase . '"' : null;
+
+        $languageLine = $language !== 'en' ? "RESPONSE LANGUAGE: Answer in " . strtoupper($language) . "." : null;
+
+        $pageLinksRule = $includeLinks
+            ? 'When helpful, suggest the most relevant SettleANZ page path such as /, /new-to-australia, /settlement-services, /housing, /banking, /migration-services, /about, /blog, /directory, /contact, /privacy-policy, or /terms-of-service.'
+            : 'Do NOT suggest SettleANZ pages unless the user explicitly asks for them. Answer questions directly without page recommendations.';
+
+        $sourcesRule = $showSources
+            ? 'If web search is used, include up to 3 high-quality source links at the end of your response.'
+            : 'If web search is used, do NOT show source links. Just provide the answer.';
+
+        $corePrompt = implode("\n", [
+            'You are the AI assistant for SettleANZ, a concierge and settlement support service helping immigrants settle in Australia and New Zealand.',
+            'Your role is to answer questions clearly, practically, and professionally using real-world migrant settlement knowledge.',
+            '',
+            $focusRule,
+            '',
+            '2. MAXIMUM ' . $maxBullets . ' BULLETS PER RESPONSE',
+            'Every response should usually fit within 3 to ' . $maxBullets . ' bullets.',
+            'Each bullet must contain high-value practical information.',
+            'Keep responses easy to read in a chat box.',
+            'Avoid walls of text.',
+            '',
+            '3. MAXIMUM RESPONSE LENGTH: ' . $maxLength . ' CHARACTERS',
+            'Keep responses concise and within the character limit.',
+            $followUpLine,
+            '',
+            '4. EVERY BULLET MUST REDUCE UNCERTAINTY',
+            'Give practical expectations, common realities, operational details, and important things users usually discover too late.',
+            'Avoid filler, vague motivation, and generic statements.',
+            '',
+            $examplesRule,
+            '',
+            $toneRules,
+            '',
+            $aiPhrasesRule,
+            '',
+            $formatRules,
+            '',
+            'WHEN INFORMATION IS UNCERTAIN',
+            $uncertaintyRule,
+            '',
+            $disclaimerRule,
+            '',
+            'PRIMARY GOAL',
+            'The user should leave the conversation clearer, calmer, better informed, less overwhelmed, and aware of the next practical step.',
+            'The response should feel like guidance from someone who has genuinely helped many migrants settle successfully.',
+            '',
+            'SETTLEANZ SPECIFIC RULES',
             'Use the supplied SettleANZ website knowledge as your primary source of truth for site-specific guidance, page paths, blog content, and directory recommendations.',
             'Be strictly faithful to the supplied website knowledge. Do not invent features, steps, policies, timelines, or promises that are not clearly supported by that knowledge.',
-            $webSearchEnabled
-                ? 'When the user needs current external facts, recent policy changes, or broader public-web context, you may use web search. Prefer SettleANZ knowledge first, then supplement with web search.'
-                : 'If a user asks a general non-site question, answer it naturally from model knowledge. For site-specific questions, stay grounded in the supplied SettleANZ website knowledge.',
             'Do not redirect to Contact unless the user clearly needs human help, regulated professional support, or asks for direct contact.',
             'For basic conversational prompts like greetings, your name, what you do, or casual questions, respond like a real assistant and do not turn the answer into a page recommendation.',
-            'Answer clearly about migration, housing, banking, healthcare, relocation checklists, directory partners, contact pathways, blog guides, settlement services, and general guidance questions.',
-            'Keep replies concise, practical, warm, and trustworthy.',
-            'Preferred response style: short direct answer first, then practical next steps.',
-            'Use plain English. Avoid jargon unless needed.',
-            'Never output internal tool traces, citation placeholders, or raw debug tokens.',
-            'When describing a process, use cautious wording such as "you can", "the page lets you", or "the site suggests" unless a step is explicitly confirmed.',
-            'If a detail is unclear, say that briefly instead of guessing.',
+            'When describing a process, use cautious wording such as you can, the page lets you, or the site suggests unless a step is explicitly confirmed.',
             'If the visitor asks for regulated visa advice, remind them SettleANZ can connect them with migration professionals and avoid pretending to be a lawyer or migration agent.',
-            'When helpful, suggest the most relevant SettleANZ page path such as /, /new-to-australia, /settlement-services, /housing, /banking, /migration-services, /about, /blog, /directory, /contact, /privacy-policy, or /terms-of-service.',
+            $pageLinksRule,
             'If website knowledge is incomplete and web search is unavailable, say so briefly and then still try to be helpful.',
-            'If web search is used, include up to 3 high-quality source links at the end.',
             'If the visitor shares an email, thank them and say the team can follow up.',
-            $name !== '' ? 'Known visitor first name: ' . $name : null,
-            $customInstruction !== '' ? 'Custom site instruction: ' . $customInstruction : null,
-            'Do not use markdown tables.',
+            $languageLine,
+            $closingLine,
+        ]);
+
+        $webSearchLine = $webSearchEnabled
+            ? 'When the user needs current external facts, recent policy changes, or broader public-web context, you may use web search. Prefer SettleANZ knowledge first, then supplement with web search. ' . $sourcesRule
+            : 'If a user asks a general non-site question, answer it naturally from model knowledge. For site-specific questions, stay grounded in the supplied SettleANZ website knowledge.';
+
+        $nameLine = $name !== '' ? 'Known visitor first name: ' . $name : null;
+
+        return implode("\n", array_filter([
+            $corePrompt,
+            $webSearchLine,
+            'Never output internal tool traces, citation placeholders, or raw debug tokens.',
+            $nameLine,
         ]));
     }
 
@@ -666,15 +831,15 @@ class WebsiteAssistantService
         $greeting = $firstName !== '' ? $firstName . ', ' : '';
 
         if ($this->isGreetingIntent($text)) {
-            return $greeting . 'Hi, I am the SettleANZ AI Assistant. I can help with migration, housing, banking, healthcare, settling-in checklists, directory services, and general questions too. What would you like help with?';
+            return $greeting . 'Hi, I am the SettleANZ Assistant. I can help with migration, housing, banking, healthcare, settling-in checklists, directory services, and everyday questions. What would you like help with?';
         }
 
         if ($this->isIdentityIntent($text)) {
-            return $greeting . 'I am the SettleANZ AI Assistant. I help visitors with settling in Australia and New Zealand, and I can also answer general questions where useful.';
+            return $greeting . 'I am the SettleANZ Assistant. I help visitors with settling in Australia and New Zealand, and I can also answer general questions where useful.';
         }
 
         if ($this->isCapabilityIntent($text)) {
-            return $greeting . 'I can help with migration guidance, housing, banking, healthcare, newcomer checklists, blog guides, directory listings, and general questions. If you want, ask me something specific and I will answer directly.';
+            return $greeting . 'I can help with migration guidance, housing, banking, healthcare, newcomer checklists, blog guides, directory listings, and general questions. Ask me something specific and I will answer directly.';
         }
 
         $grounded = $this->knowledgeService->groundedFallbackReply($content);
@@ -683,10 +848,10 @@ class WebsiteAssistantService
         }
 
         if ($lead && filled($lead->email)) {
-            return $greeting . 'Thanks, I have your email noted. I can keep guiding you here, and if you need direct support the SettleANZ team can also follow up through the Contact page.';
+            return $greeting . 'Thanks, I have your email noted. The SettleANZ team can follow up if you need direct support.';
         }
 
-        return $greeting . 'I can help with settling-in questions and general guidance. Ask me something specific about migration, housing, banking, healthcare, work, everyday life, or the SettleANZ guides, and I will answer as clearly as I can.';
+        return $greeting . 'Ask me something specific about migration, housing, banking, healthcare, work, everyday life, or the SettleANZ guides, and I will answer as clearly as I can.';
     }
 
     private function isGreetingIntent(string $text): bool

@@ -283,6 +283,24 @@
             justify-content: center;
         }
 
+        .chat-link {
+            color: #0b7a75;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .chat-link:hover {
+            color: #065e5b;
+        }
+
+        .site-chat-msg.bot .chat-link {
+            color: #e8773a;
+        }
+
+        .site-chat-msg.bot .chat-link:hover {
+            color: #d86424;
+        }
+
         @@media (max-width: 767px) {
             html {
                 overflow-x: hidden;
@@ -565,17 +583,30 @@
                 border-radius: 999px !important;
             }
 
-            .hero-reference__actions .button:not(.button--ghost-light) {
+            .hero-reference__actions .button:not(.button--ghost-light):not(.button--contact) {
                 background: linear-gradient(135deg, #f18a42 0%, #e8773a 45%, #d86424 100%) !important;
                 border-color: #e8773a !important;
                 color: #ffffff !important;
                 box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16) !important;
             }
 
-            .hero-reference__actions .button:not(.button--ghost-light):hover,
-            .hero-reference__actions .button:not(.button--ghost-light):focus-visible {
+            .hero-reference__actions .button:not(.button--ghost-light):not(.button--contact):hover,
+            .hero-reference__actions .button:not(.button--ghost-light):not(.button--contact):focus-visible {
                 background: linear-gradient(135deg, #f18a42 0%, #d86424 100%) !important;
                 border-color: #d86424 !important;
+            }
+
+            .hero-reference__actions .button--contact {
+                background: linear-gradient(135deg, #1AA3A3 0%, #14a394 100%) !important;
+                border-color: #1AA3A3 !important;
+                color: #ffffff !important;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16) !important;
+            }
+
+            .hero-reference__actions .button--contact:hover,
+            .hero-reference__actions .button--contact:focus-visible {
+                background: linear-gradient(135deg, #0E8789 0%, #0b7a75 100%) !important;
+                border-color: #0E8789 !important;
             }
 
             .hero-reference__actions .button--ghost-light {
@@ -1128,106 +1159,6 @@
     </div>
     @yield('page_scripts')
 
-<style>
-.pro-select-wrapper { position: relative; width: 100%; }
-.pro-select-native { position: absolute; opacity: 0; pointer-events: none; width: 100%; height: 100%; top: 0; left: 0; }
-.pro-select-display {
-    width: 100%; padding: 0.7rem 2.5rem 0.7rem 1rem;
-    border: 1px solid rgba(16, 88, 98, 0.16); border-radius: 6px;
-    background: #fff; color: #2c3a47; font-size: 0.9rem;
-    cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
-    position: relative; box-sizing: border-box; min-height: 38px; display: flex; align-items: center;
-}
-.pro-select-display::after {
-    content: ''; position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%);
-    width: 16px; height: 16px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23065e5b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: center; background-size: contain; transition: transform 0.2s;
-}
-.pro-select-wrapper.is-open .pro-select-display { border-color: #0b7a75; box-shadow: 0 0 0 3px rgba(11, 122, 117, 0.1); }
-.pro-select-wrapper.is-open .pro-select-display::after { transform: translateY(-50%) rotate(180deg); }
-.pro-select-dropdown {
-    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-    background: #fff; border: 1px solid rgba(16, 88, 98, 0.12);
-    border-radius: 12px; box-shadow: 0 8px 24px rgba(6, 54, 52, 0.12);
-    z-index: 100; opacity: 0; visibility: hidden; transform: translateY(-8px);
-    transition: all 0.2s ease; max-height: 280px; overflow-y: auto;
-}
-.pro-select-wrapper.is-open .pro-select-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-.pro-select-option { padding: 0.85rem 1.1rem; color: #2c3a47; cursor: pointer; transition: all 0.15s; }
-.pro-select-option:first-child { border-radius: 11px 11px 0 0; }
-.pro-select-option:last-child { border-radius: 0 0 11px 11px; }
-.pro-select-option:hover, .pro-select-option.is-selected { background: #14a394; color: #fff; font-weight: 500; }
-.pro-select-option.is-selected { font-weight: 600; background: #0b7a75; }
-</style>
-<script>
-(function() {
-    function initProDropdowns() {
-        document.querySelectorAll('select.pro-select').forEach(function(select) {
-            if (select.dataset.proSelectInitialized) return;
-            select.dataset.proSelectInitialized = 'true';
-
-            var wrapper = document.createElement('div');
-            wrapper.className = 'pro-select-wrapper';
-            select.parentNode.insertBefore(wrapper, select);
-            wrapper.appendChild(select);
-            select.classList.add('pro-select-native');
-
-            var display = document.createElement('div');
-            display.className = 'pro-select-display';
-            display.style.color = '#2c3a47';
-            var selectedOption = select.options[select.selectedIndex];
-            display.textContent = (selectedOption && selectedOption.value) ? selectedOption.text : 'Select option';
-            if (selectedOption && !selectedOption.value) {
-                display.style.color = '#999';
-            }
-            wrapper.appendChild(display);
-
-            var dropdown = document.createElement('div');
-            dropdown.className = 'pro-select-dropdown';
-            wrapper.appendChild(dropdown);
-
-            Array.from(select.options).forEach(function(option) {
-                var opt = document.createElement('div');
-                opt.className = 'pro-select-option';
-                opt.textContent = option.text;
-                opt.dataset.value = option.value;
-                if (option.selected) opt.classList.add('is-selected');
-                dropdown.appendChild(opt);
-
-                opt.addEventListener('click', function() {
-                    select.value = this.dataset.value;
-                    var selectedOpt = select.options[select.selectedIndex];
-                    display.textContent = selectedOpt ? selectedOpt.text : this.textContent;
-                    display.style.color = '#2c3a47';
-                    dropdown.querySelectorAll('.pro-select-option').forEach(function(o) { o.classList.remove('is-selected'); });
-                    this.classList.add('is-selected');
-                    wrapper.classList.remove('is-open');
-                    select.dispatchEvent(new Event('change'));
-                });
-            });
-
-            display.addEventListener('click', function(e) {
-                e.stopPropagation();
-                document.querySelectorAll('.pro-select-wrapper.is-open').forEach(function(w) { w.classList.remove('is-open'); });
-                wrapper.classList.toggle('is-open');
-            });
-        });
-    }
-
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.pro-select-wrapper')) {
-            document.querySelectorAll('.pro-select-wrapper.is-open').forEach(function(w) { w.classList.remove('is-open'); });
-        }
-    });
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initProDropdowns);
-    } else {
-        initProDropdowns();
-    }
-})();
-</script>
 @stack('scripts')
 </body>
 </html>

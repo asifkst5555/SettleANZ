@@ -100,14 +100,14 @@
         }
 
         .about-page .section-heading.section-heading--narrow p {
-            max-width: 850px;
+            max-width: 650px;
             margin-left: auto;
             margin-right: auto;
             text-align: center;
         }
 
         .about-story__intro {
-            max-width: 850px;
+            max-width: 1180px;
             margin: 0 auto 1.2rem;
             text-align: center;
         }
@@ -115,6 +115,9 @@
         .about-story__intro p {
             margin-top: 0.8rem;
             color: #556678;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .about-story__intro h2 {
@@ -124,70 +127,42 @@
             text-align: center;
         }
 
-        .about-story__timeline {
-            position: relative;
-            max-width: 920px;
+        .about-story__narrative {
+            max-width: 1180px;
             margin: 0 auto;
-            padding-left: 2rem;
-            display: grid;
-            gap: 1rem;
+            padding: 2rem 0;
         }
 
-        .about-story__timeline::before {
-            content: '';
-            position: absolute;
-            left: 0.48rem;
-            top: 0.4rem;
-            bottom: 0.4rem;
-            width: 2px;
-            background: linear-gradient(180deg, rgba(15, 89, 103, 0.22) 0%, rgba(15, 89, 103, 0.05) 100%);
+        .about-story__narrative p {
+            margin: 0 0 1.1rem;
+            color: #374151;
+            font-size: 1.05rem;
+            line-height: 1.75;
         }
 
-        .about-step {
-            position: relative;
-            padding: 1.15rem 1.2rem;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 18px;
-            background: #ffffff;
-            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+        .about-story__lead {
+            font-size: 1.25rem !important;
+            font-weight: 600;
+            color: #1f2937 !important;
+            margin-bottom: 1.5rem !important;
         }
 
-        .about-step::before {
-            content: '';
-            position: absolute;
-            left: -1.98rem;
-            top: 1.2rem;
-            width: 12px;
-            height: 12px;
-            border-radius: 999px;
-            background: #0f7f81;
-            box-shadow: 0 0 0 6px rgba(15, 127, 129, 0.14);
+        .about-story__closing {
+            font-size: 1.15rem !important;
+            font-weight: 600;
+            color: #0b7a75 !important;
+            margin-top: 2rem !important;
+            margin-bottom: 0.5rem !important;
         }
 
-        .about-step h3 {
-            margin: 0 0 0.5rem;
-            color: var(--primary-dark);
+        .about-story__signature {
+            font-size: 1rem !important;
+            font-weight: 700;
+            color: #0b7a75 !important;
+            margin-bottom: 0 !important;
+        }
             font-size: 1.1rem;
             line-height: 1.3;
-        }
-
-        .about-step p {
-            margin: 0;
-            color: #556678;
-            line-height: 1.72;
-            font-size: 0.96rem;
-        }
-
-        .about-quote-band {
-            margin-top: 0.5rem;
-            padding: 1.2rem 1.25rem;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #fff7ef 0%, #ffffff 100%);
-            border: 1px solid rgba(242, 125, 43, 0.22);
-            color: #213a4f;
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1.05rem;
-            line-height: 1.58;
         }
 
         .about-values {
@@ -229,13 +204,13 @@
         }
 
         .about-cta {
-            padding-bottom: 4rem;
+            padding: 2rem 0 4rem;
         }
 
         .about-cta__panel {
             position: relative;
             overflow: hidden;
-            padding: clamp(2.2rem, 4vw, 3.6rem) clamp(1.2rem, 3.2vw, 2rem);
+            padding: clamp(3.5rem, 6vw, 5rem) clamp(1.2rem, 3.2vw, 2rem) clamp(2.2rem, 4vw, 3.6rem);
             border-radius: 30px;
             text-align: center;
             background: linear-gradient(135deg, #15324a 0%, #0f5967 100%);
@@ -322,6 +297,10 @@
                 padding-top: 2.2rem;
             }
 
+            .about-hero h1 {
+                max-width: 80%;
+            }
+
             .about-hero__content {
                 padding: 1.2rem;
                 border-radius: 20px;
@@ -332,12 +311,12 @@
                 border-radius: 20px;
             }
 
-            .about-story__timeline {
-                padding-left: 1.5rem;
+            .about-story__narrative {
+                padding: 1.5rem 0;
             }
 
-            .about-step::before {
-                left: -1.48rem;
+            .about-story__narrative p {
+                text-align: center;
             }
 
             .about-cta__panel {
@@ -382,28 +361,22 @@
                     <p>This is the exact experience that shaped SettleANZ, from early confusion to the turning point that changed everything.</p>
                 </div>
 
-                <div class="about-story__timeline">
-                    <article class="about-step">
-                        <h3>1) Arriving alone and unprepared</h3>
-                        <p>I moved to Australia in 2001 without knowing a single person. No family, no contacts, and no one to explain what to do first.</p>
-                    </article>
-                    <article class="about-step">
-                        <h3>2) The system catch-22</h3>
-                        <p>I could not open a bank account without an address. I could not get an address without rental history. I could not get rental history without already living somewhere.</p>
-                    </article>
-                    <article class="about-step">
-                        <h3>3) Expensive mistakes and lonely nights</h3>
-                        <p>I worked below my level, signed contracts I did not fully understand, and lost money to avoidable fees. Every day felt like trying to decode a hidden system.</p>
-                    </article>
-                    <article class="about-step">
-                        <h3>4) Small guidance that changed everything</h3>
-                        <p>The biggest breakthroughs came from small moments: someone taking ten minutes to explain the real process in the right order.</p>
-                    </article>
-                    <article class="about-step">
-                        <h3>5) Turning experience into support</h3>
-                        <p>By 2004 I had permanent residency and later citizenship. I built SettleANZ so new arrivals do not have to learn those same lessons the hard way.</p>
-                    </article>
-                    <div class="about-quote-band">"SettleANZ exists to give you the roadmap I wish someone gave me when I arrived."</div>
+                <div class="about-story__narrative">
+                    <p class="about-story__lead">I moved to Australia in 2001 without knowing a single person.</p>
+                    <p>No family. No contacts. No one who had done it before me to call when things went wrong.</p>
+                    <p>Nobody told me about the hidden bank fees. Nobody warned me about the suburb traps. Nobody explained how Medicare actually worked or in what order to do any of it.</p>
+                    <p>I arrived with one suitcase and a head full of dreams. Then reality hit.</p>
+                    <p>I couldn't open a bank account without an address. I couldn't get an address without a rental history. And I couldn't have a rental history without having already lived somewhere.</p>
+                    <p>The system wasn't built for people like me. It was built for people who were already inside it.</p>
+                    <p>I worked jobs I was overqualified for. I signed contracts I didn't fully understand just to have a roof over my head. I sent money home through transfer services that swallowed hundreds in fees.</p>
+                    <p>Every night, alone in a shared house, I used to question my decision. Life in front of me looked nothing like what I had been promised when I decided to leave home.</p>
+                    <p>Nobody tells you about that part.</p>
+                    <p>What got me through wasn't luck. It was the occasional stranger who took ten minutes to explain how something actually worked. A landlord who gave me a chance. A colleague who referred me to his friend. Small moments of guidance that changed everything and made me realise how much difference the right information at the right time can make.</p>
+                    <p>By 2004 I had permanent residency. By the end of that year, I was an Australian citizen.</p>
+                    <p>But I never forgot how those first years felt. The confusion. The loneliness. The expensive mistakes made simply because nobody told me the right order to do things.</p>
+                    <p>That's why I built SettleANZ. Not to repeat what government websites already say. But to be the person I desperately needed when I arrived — someone who had already walked the same road, made the same mistakes, and could hand you a guide map instead of leaving you to find your own way in the dark.</p>
+                    <p class="about-story__closing">You worked too hard to get here to spend your first year lost. I'm here to make sure you don't.</p>
+                    <p class="about-story__signature">— Entel</p>
                 </div>
             </div>
         </section>

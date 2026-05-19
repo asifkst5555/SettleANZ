@@ -84,7 +84,15 @@
 
         const message = document.createElement('div');
         message.className = `site-chat-msg ${role === 'user' ? 'user' : role === 'assistant' ? 'bot' : 'system'}`;
-        message.textContent = content;
+
+        const formattedContent = content.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" class="chat-link">$1</a>')
+            .replace(/(?:^|\s)(\/[a-zA-Z0-9\-\/]+)/g, (match, path) => {
+                const cleanPath = path.replace(/[,.)]$/, '');
+                const trailing = path !== cleanPath ? path.slice(-1) : '';
+                return ` <a href="${cleanPath}" class="chat-link">${cleanPath}</a>${trailing}`;
+            });
+
+        message.innerHTML = formattedContent;
         chatLog.appendChild(message);
         scrollChatToBottom();
     };
@@ -468,6 +476,7 @@
                 '.owner-content',
                 '.value-stack__heading',
                 '.value-stack__card',
+                '.value-stack__cta',
                 '.testimonial-band__heading',
                 '.testimonial-band__card',
                 '.lead-strip__copy',
@@ -630,14 +639,15 @@
         }
     });
 
-    if (shouldAutoOpenPopup()) {
-        window.setTimeout(() => {
-            if (shouldAutoOpenPopup()) openLeadModal();
-        }, 15000);
-        document.addEventListener('mouseout', (event) => {
-            if (event.clientY <= 0 && shouldAutoOpenPopup()) openLeadModal();
-        }, { once: true });
-    }
+    // Auto popup disabled by user request
+    // if (shouldAutoOpenPopup()) {
+    //     window.setTimeout(() => {
+    //         if (shouldAutoOpenPopup()) openLeadModal();
+    //     }, 15000);
+    //     document.addEventListener('mouseout', (event) => {
+    //         if (event.clientY <= 0 && shouldAutoOpenPopup()) openLeadModal();
+    //     }, { once: true });
+    // }
 
     if (blogFilterButtons.length) {
         blogFilterButtons.forEach((button) => {
@@ -815,9 +825,8 @@
     initScrollRevealAnimations();
 
     // Custom Pro Dropdown
-    const initCustomDropdowns = () => {
-        const selectElements = document.querySelectorAll('select.pro-select');
-        selectElements.forEach(select => {
+    const initProDropdowns = () => {
+        document.querySelectorAll('select.pro-select').forEach(select => {
             if (select.dataset.proSelectInitialized) return;
             select.dataset.proSelectInitialized = 'true';
 
@@ -830,7 +839,12 @@
             const display = document.createElement('div');
             display.className = 'pro-select-display';
             const selectedOption = select.options[select.selectedIndex];
-            display.textContent = selectedOption && selectedOption.value ? selectedOption.text : 'Select option';
+            display.textContent = selectedOption ? selectedOption.text : 'Select option';
+            if (selectedOption && !selectedOption.value) {
+                display.style.color = '#999';
+            } else {
+                display.style.color = '#2c3a47';
+            }
             wrapper.appendChild(display);
 
             const dropdown = document.createElement('div');
@@ -845,15 +859,22 @@
                 if (option.selected) opt.classList.add('is-selected');
                 dropdown.appendChild(opt);
 
-                opt.addEventListener('click', function() {
+                opt.addEventListener('mousedown', event => event.preventDefault());
+
+                opt.addEventListener('click', function(event) {
+                    event.stopPropagation();
                     select.value = this.dataset.value;
-                    display.textContent = this.text;
+                    const selectedOpt = select.options[select.selectedIndex];
+                    display.textContent = selectedOpt ? selectedOpt.text : this.textContent;
+                    display.style.color = '#2c3a47';
                     dropdown.querySelectorAll('.pro-select-option').forEach(o => o.classList.remove('is-selected'));
                     this.classList.add('is-selected');
                     wrapper.classList.remove('is-open');
-                    select.dispatchEvent(new Event('change'));
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
                 });
             });
+
+            dropdown.addEventListener('click', event => event.stopPropagation());
 
             display.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -863,15 +884,15 @@
         });
     };
 
-    const closeAllDropdowns = () => {
-        document.querySelectorAll('.pro-select-wrapper.is-open').forEach(w => w.classList.remove('is-open'));
-    };
-
-    document.addEventListener('click', closeAllDropdowns);
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.pro-select-wrapper')) {
+            document.querySelectorAll('.pro-select-wrapper.is-open').forEach(w => w.classList.remove('is-open'));
+        }
+    });
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCustomDropdowns);
+        document.addEventListener('DOMContentLoaded', initProDropdowns);
     } else {
-        initCustomDropdowns();
+        initProDropdowns();
     }
 })();

@@ -166,6 +166,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            overflow: visible !important;
         }
 
         .contact-page-final__form-card h2 {
@@ -197,7 +198,7 @@
         }
 
         .contact-page-final__form input,
-        .contact-page-final__form select,
+        .contact-page-final__form select:not(.pro-select-native),
         .contact-page-final__form textarea {
             width: 100%;
             padding: 0.62rem 0.66rem;
@@ -205,6 +206,15 @@
             border-radius: 6px;
             background: #fff;
             font-size: 0.86rem;
+        }
+
+        .contact-page-final__form .pro-select-display {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-page-final__form .pro-select-dropdown {
+            z-index: 1000;
         }
 
         .contact-page-final__form textarea {
@@ -370,7 +380,7 @@
                         <label>
                             <span>Subject</span>
                             <select class="pro-select" name="subject" required>
-                                <option value="">Select subject</option>
+                                <option value="" disabled selected hidden>Select subject</option>
                                 @foreach ($contactSubjects as $subject)
                                     <option value="{{ $subject }}">{{ $subject }}</option>
                                 @endforeach

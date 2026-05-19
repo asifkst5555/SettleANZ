@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\LeadController as AdminLeadController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\SiteSettingController as AdminSiteSettingController;
 use App\Http\Controllers\Admin\PageSeoController as AdminPageSeoController;
+use App\Http\Controllers\Admin\AiKnowledgeController as AdminAiKnowledgeController;
+use App\Http\Controllers\Admin\AdminAiSettingsController;
 use App\Http\Controllers\Admin\AiContentController as AdminAiContentController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\BlogController;
@@ -157,6 +159,31 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     Route::get('/settings', [AdminSiteSettingController::class, 'edit'])->name('admin.settings.edit');
     Route::put('/settings', [AdminSiteSettingController::class, 'update'])->name('admin.settings.update');
+
+    // AI Settings with sidebar navigation
+    Route::prefix('ai-settings')->name('admin.ai-settings.')->group(function () {
+        Route::get('/api-connection', [AdminAiSettingsController::class, 'apiConnection'])->name('api-connection');
+        Route::put('/api-connection', [AdminAiSettingsController::class, 'updateApiConnection'])->name('update-api-connection');
+        Route::get('/chat-appearance', [AdminAiSettingsController::class, 'chatAppearance'])->name('chat-appearance');
+        Route::put('/chat-appearance', [AdminAiSettingsController::class, 'updateChatAppearance'])->name('update-chat-appearance');
+        Route::get('/response-behavior', [AdminAiSettingsController::class, 'responseBehavior'])->name('response-behavior');
+        Route::put('/response-behavior', [AdminAiSettingsController::class, 'updateResponseBehavior'])->name('update-response-behavior');
+        Route::get('/content-rules', [AdminAiSettingsController::class, 'contentRules'])->name('content-rules');
+        Route::put('/content-rules', [AdminAiSettingsController::class, 'updateContentRules'])->name('update-content-rules');
+        Route::get('/custom-prompts', [AdminAiSettingsController::class, 'customPrompts'])->name('custom-prompts');
+        Route::put('/custom-prompts', [AdminAiSettingsController::class, 'updateCustomPrompts'])->name('update-custom-prompts');
+        Route::get('/knowledge-base', [AdminAiSettingsController::class, 'knowledgeBase'])->name('knowledge-base');
+    });
+
+    Route::get('/ai-knowledge', [AdminAiKnowledgeController::class, 'index'])->name('admin.ai-knowledge.index');
+    Route::get('/ai-knowledge/create', [AdminAiKnowledgeController::class, 'create'])->name('admin.ai-knowledge.create');
+    Route::get('/ai-knowledge/generate', [AdminAiKnowledgeController::class, 'generateForm'])->name('admin.ai-knowledge.generate-form');
+    Route::post('/ai-knowledge/generate', [AdminAiKnowledgeController::class, 'generate'])->name('admin.ai-knowledge.generate');
+    Route::post('/ai-knowledge', [AdminAiKnowledgeController::class, 'store'])->name('admin.ai-knowledge.store');
+    Route::get('/ai-knowledge/{aiKnowledge}/edit', [AdminAiKnowledgeController::class, 'edit'])->name('admin.ai-knowledge.edit');
+    Route::put('/ai-knowledge/{aiKnowledge}', [AdminAiKnowledgeController::class, 'update'])->name('admin.ai-knowledge.update');
+    Route::delete('/ai-knowledge/{aiKnowledge}', [AdminAiKnowledgeController::class, 'destroy'])->name('admin.ai-knowledge.destroy');
+    Route::put('/ai-knowledge/{aiKnowledge}/toggle-active', [AdminAiKnowledgeController::class, 'toggleActive'])->name('admin.ai-knowledge.toggle-active');
 
     Route::get('/seo', [AdminPageSeoController::class, 'index'])->name('admin.seo.index');
     Route::get('/seo/{pageKey}/edit', [AdminPageSeoController::class, 'edit'])->name('admin.seo.edit');
