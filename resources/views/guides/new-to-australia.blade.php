@@ -1168,7 +1168,7 @@
                 </div>
 
                 <div class="arrival-hero__visual">
-                    <img class="arrival-hero__image" src="{{ str_replace(' ', '%20', asset('media/new to australlia/New to Australia hero.webp')) }}" alt="New arrivals settling into life in Australia">
+                    <img class="arrival-hero__image" src="{{ str_replace(' ', '%20', asset('media/new to australlia/New to Australia hero.webp')) }}" alt="New arrivals settling into life in Australia" width="800" height="655">
                 </div>
             </div>
         </section>
@@ -1195,7 +1195,7 @@
                         <div class="arrival-grid-2" style="margin-top: 1.5rem;">
                                 <article class="arrival-card arrival-card--cool">
                                     <div class="arrival-card__media">
-                                        <img src="{{ asset('media/services/Pre-arrival.webp') }}" alt="Pre-arrival planning for moving to Australia">
+                                        <img src="{{ asset('media/services/Pre-arrival.webp') }}" alt="Pre-arrival planning for moving to Australia" loading="lazy" width="700" height="528">
                                     </div>
 
                                     <div class="arrival-card__head">
@@ -1219,7 +1219,7 @@
 
                                 <article class="arrival-card arrival-card--warm">
                                     <div class="arrival-card__media">
-                                        <img src="{{ asset('storage/blog/Moving Checklist What to Sort Before You Fly.webp') }}" alt="Checklist and booking steps before arriving in Australia">
+                                        <img src="{{ asset('storage/blog/Moving Checklist What to Sort Before You Fly.webp') }}" alt="Checklist and booking steps before arriving in Australia" loading="lazy" width="1500" height="1000">
                                     </div>
 
                                     <div class="arrival-card__head">
@@ -1241,7 +1241,7 @@
                         </div>
 
                         <div class="arrival-pro-tip">
-                            <p><strong>Pro tip:</strong> Need short-term accommodation while you find your feet? I always recommend booking at least 3–4 weeks before committing to a suburb. Search by distance to your workplace first not by price or city centre.</p>
+                            <p><strong>Pro tip:</strong> Need short-term accommodation while you find your feet? I always recommend booking at least 3–4 weeks before committing to a suburb. Search by distance to your workplace first not by price or city centre. For a full walkthrough of renting in Australia, read the <a class="text-link" href="/housing">Housing Guide</a>.</p>
                         </div>
                     </section>
 
@@ -1371,7 +1371,7 @@
                                 </div>
                                 <div class="arrival-step__body">
                                     <strong>Why the order matters</strong>
-                                    <p>Most banks require your TFN, or at least proof you've applied</p>
+                                    <p>Most banks require your TFN, or at least proof you've applied. Compare your options in the <a class="text-link" href="/banking">Banking Guide</a>.</p>
                                 </div>
                             </article>
 
@@ -1517,7 +1517,7 @@
 
                                 <details class="arrival-faq">
                                     <summary>How long does it take to get permanent residency in Australia?</summary>
-                                    <p>It depends on your visa pathway. Employer-sponsored (482 → 186): typically 2–4 years. Skilled independent (189 points-tested): 6 months to 2 years from invitation. Family/partner visa: 1–3 years. State nomination can speed up a skilled application significantly.</p>
+                                    <p>It depends on your visa pathway. Employer-sponsored (482 → 186): typically 2–4 years. Skilled independent (189 points-tested): 6 months to 2 years from invitation. Family/partner visa: 1–3 years. State nomination can speed up a skilled application significantly. For personalised guidance, visit our <a class="text-link" href="/migration-services">Migration Services</a> page.</p>
                                 </details>
 
                                 <details class="arrival-faq">
@@ -1533,7 +1533,7 @@
 
                             <div class="arrival-grid-3" style="grid-template-columns: 1fr; margin-top: 0;">
                                 <div class="arrival-photo-card">
-                                    <img src="{{ str_replace(' ', '%20', asset('media/new to australlia/New to Australia FAQ.webp')) }}" alt="Frequently asked questions for new arrivals in Australia">
+                                    <img src="{{ str_replace(' ', '%20', asset('media/new to australlia/New to Australia FAQ.webp')) }}" alt="Frequently asked questions for new arrivals in Australia" loading="lazy" width="600" height="650">
                                 </div>
                             </div>
                         </div>

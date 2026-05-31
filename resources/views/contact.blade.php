@@ -310,7 +310,7 @@
                         <p>Whether you need help settling in, want to list your business, or have a question, we'd love to hear from you.</p>
                     </div>
                     <div class="contact-page-final__hero-art" aria-hidden="true">
-                        <img src="{{ asset('media/contact/contact.png') }}" alt="">
+                        <img src="{{ asset('media/contact/contact.png') }}" alt="" width="500" height="316">
                     </div>
                 </div>
             </div>

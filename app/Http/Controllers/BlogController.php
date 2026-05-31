@@ -16,16 +16,25 @@ class BlogController extends Controller
     public function index(): View
     {
         $posts = $this->posts();
+        $page = max(1, (int) request()->input('page', 1));
 
         $seo = Schema::hasTable('page_seo') ? PageSeo::forPage('blog') : null;
 
+        $metaTitle = $seo?->meta_title ?: 'The SettleANZ Blog | Practical Guides for Expats';
+        $metaDescription = $seo?->meta_description ?: 'Practical guides, honest advice, and real insights for expats in Australia and New Zealand.';
+
+        if ($page > 1) {
+            $metaTitle .= ' - Page ' . $page;
+            $metaDescription = rtrim(rtrim($metaDescription, '.'), '.') . '. Page ' . $page . '.';
+        }
+
         return view('blog.index', [
-            'metaTitle'      => $seo?->meta_title       ?: 'The SettleANZ Blog | Practical Guides for Expats',
-            'metaDescription'=> $seo?->meta_description ?: 'Practical guides, honest advice, and real insights for expats in Australia and New Zealand.',
+            'metaTitle'      => $metaTitle,
+            'metaDescription'=> $metaDescription,
             'metaOgTitle'    => $seo?->og_title         ?: null,
             'metaOgDesc'     => $seo?->og_description   ?: null,
             'metaOgImage'    => $seo?->og_image         ?: null,
-            'metaCanonical'  => $seo?->canonical_url    ?: null,
+            'metaCanonical'  => $page > 1 ? request()->url() . '?page=' . $page : ($seo?->canonical_url ?: null),
             'metaNoIndex'    => $seo?->no_index         ?? false,
             'metaSchemaType' => $seo?->schema_type      ?: null,
             'posts'          => $posts,

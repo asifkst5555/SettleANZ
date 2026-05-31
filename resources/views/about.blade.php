@@ -348,7 +348,7 @@
                 </div>
 
                 <div class="about-hero__media">
-                    <img src="{{ asset('media/about/about.webp') }}" alt="Entel and the SettleANZ journey in Australia">
+                    <img src="{{ asset('media/about/about.webp') }}" alt="Entel and the SettleANZ journey in Australia" width="666" height="1000">
                 </div>
             </div>
         </section>

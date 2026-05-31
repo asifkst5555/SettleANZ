@@ -1081,7 +1081,7 @@
                     <div class="empathy-card__media">
                         <picture>
                             <source media="(max-width: 767px)" srcset="{{ str_replace(' ', '%20', asset('media/home/mobile_version/International Students_mobile_version.webp')) }}">
-                            <img class="empathy-card__image" src="{{ asset('media/home/International Students.webp') }}" alt="International students preparing for life in Australia">
+                            <img class="empathy-card__image" src="{{ asset('media/home/International Students.webp') }}" alt="International students preparing for life in Australia" loading="lazy" width="400" height="774">
                         </picture>
                     </div>
                     <div class="empathy-card__body">
@@ -1102,7 +1102,7 @@
                     <div class="empathy-card__media">
                         <picture>
                             <source media="(max-width: 767px)" srcset="{{ str_replace(' ', '%20', asset('media/home/mobile_version/Skilled Workers_mobile_version.webp')) }}">
-                            <img class="empathy-card__image" src="{{ asset('media/home/Skilled Workers.webp') }}" alt="Skilled workers planning their move and career">
+                            <img class="empathy-card__image" src="{{ asset('media/home/Skilled Workers.webp') }}" alt="Skilled workers planning their move and career" loading="lazy" width="400" height="774">
                         </picture>
                     </div>
                     <div class="empathy-card__body">
@@ -1123,7 +1123,7 @@
                     <div class="empathy-card__media">
                         <picture>
                             <source media="(max-width: 767px)" srcset="{{ str_replace(' ', '%20', asset('media/home/mobile_version/New Immigrants_mobile_version.webp')) }}">
-                            <img class="empathy-card__image" src="{{ asset('media/home/New Immigrants.webp') }}" alt="New immigrants settling into daily life">
+                            <img class="empathy-card__image" src="{{ asset('media/home/New Immigrants.webp') }}" alt="New immigrants settling into daily life" loading="lazy" width="400" height="774">
                         </picture>
                     </div>
                     <div class="empathy-card__body">
@@ -1144,7 +1144,7 @@
                     <div class="empathy-card__media">
                         <picture>
                             <source media="(max-width: 767px)" srcset="{{ str_replace(' ', '%20', asset('media/home/mobile_version/Applying for Immigration_mobile_version.webp')) }}">
-                            <img class="empathy-card__image" src="{{ asset('media/home/Applying for Immigration.webp') }}" alt="Preparing documents and plans for immigration">
+                            <img class="empathy-card__image" src="{{ asset('media/home/Applying for Immigration.webp') }}" alt="Preparing documents and plans for immigration" loading="lazy" width="400" height="774">
                         </picture>
                     </div>
                     <div class="empathy-card__body">
@@ -1167,7 +1167,7 @@
     <section class="owner-info">
         <div class="container owner-info__container">
             <div class="owner-photo-wrap reveal-on-scroll reveal-from-left">
-                <img class="owner-photo" src="{{ asset('media/founder/founder.webp') }}" alt="Owner of SettleANZ">
+                <img class="owner-photo" src="{{ asset('media/founder/founder.webp') }}" alt="Owner of SettleANZ" loading="lazy" width="500" height="500">
             </div>
             <div class="owner-content reveal-on-scroll reveal-from-right">
                 <h2>My First Year in Australia was Lonely, Expensive, and Nothing Like I was Promised.</h2>
@@ -1251,7 +1251,7 @@
 
                     <div class="testimonial-band__footer">
                         <div class="testimonial-band__media">
-                            <img src="{{ asset('media/testimonials/T1.webp') }}" alt="Portrait of Aisha Rahman">
+                            <img src="{{ asset('media/testimonials/T1.webp') }}" alt="Portrait of Aisha Rahman" loading="lazy" width="300" height="300">
                         </div>
                         <div class="testimonial-band__meta">
                             <span class="testimonial-band__name">Aisha Rahman</span>
@@ -1266,7 +1266,7 @@
 
                     <div class="testimonial-band__footer">
                         <div class="testimonial-band__media">
-                            <img src="{{ asset('media/testimonials/T2.webp') }}" alt="Portrait of Daniel Kim">
+                            <img src="{{ asset('media/testimonials/T2.webp') }}" alt="Portrait of Daniel Kim" loading="lazy" width="300" height="300">
                         </div>
                         <div class="testimonial-band__meta">
                             <span class="testimonial-band__name">Daniel Kim</span>
@@ -1281,7 +1281,7 @@
 
                     <div class="testimonial-band__footer">
                         <div class="testimonial-band__media">
-                            <img src="{{ asset('media/testimonials/T3.webp') }}" alt="Portrait of Priya Menon">
+                            <img src="{{ asset('media/testimonials/T3.webp') }}" alt="Portrait of Priya Menon" loading="lazy" width="300" height="300">
                         </div>
                         <div class="testimonial-band__meta">
                             <span class="testimonial-band__name">Priya Menon</span>
@@ -1296,7 +1296,7 @@
 
                     <div class="testimonial-band__footer">
                         <div class="testimonial-band__media">
-                            <img src="{{ asset('media/testimonials/T4.webp') }}" alt="Portrait of Mateo Silva">
+                            <img src="{{ asset('media/testimonials/T4.webp') }}" alt="Portrait of Mateo Silva" loading="lazy" width="300" height="300">
                         </div>
                         <div class="testimonial-band__meta">
                             <span class="testimonial-band__name">Mateo Silva</span>
@@ -1317,7 +1317,7 @@
                     <article class="blog-card blog-card--v2 home-guides-card" data-reveal-stagger-item data-reveal-stagger-index="{{ $loop->index }}">
                         <a class="blog-card__media-link" href="{{ route('blog.show', $post->slug) }}">
                             @if (!empty($post->image))
-                                <img class="blog-card__image blog-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}">
+                                <img class="blog-card__image blog-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}" loading="lazy">
                             @else
                                 <div class="blog-card__image {{ $post->image_class }}" aria-hidden="true"></div>
                             @endif
@@ -1344,23 +1344,36 @@
         </div>
     </section>
 
+    <section class="section section--white">
+        <div class="container">
+            <div class="section-heading"><h2 style="color: #0b7a75;">Topic Guides</h2></div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;">
+                <a class="button button--outline-accent" href="/new-to-australia">New to Australia</a>
+                <a class="button button--outline-accent" href="/settlement-services">Settlement Services</a>
+                <a class="button button--outline-accent" href="/housing">Housing Guide</a>
+                <a class="button button--outline-accent" href="/banking">Banking Guide</a>
+                <a class="button button--outline-accent" href="/migration-services">Migration Services</a>
+            </div>
+        </div>
+    </section>
+
     <section id="partners" class="partner-strip">
         <div class="container">
             <div class="partner-strip__viewport">
                 <div class="partner-strip__logos" aria-label="Trusted partner logos">
                     <div class="partner-strip__group">
-                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/wise.png') }}" alt="Wise"></div>
-                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/safetywing.png') }}" alt="SafetyWing"></div>
-                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/Booking.com.png') }}" alt="Booking.com"></div>
-                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/cigna.png') }}" alt="Cigna"></div>
-                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/OFX.png') }}" alt="OFX"></div>
+                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/wise.png') }}" alt="Wise" loading="lazy" width="250" height="62"></div>
+                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/safetywing.png') }}" alt="SafetyWing" loading="lazy" width="700" height="239"></div>
+                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/Booking.com.png') }}" alt="Booking.com" loading="lazy" width="330" height="56"></div>
+                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/cigna.png') }}" alt="Cigna" loading="lazy" width="424" height="223"></div>
+                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/OFX.png') }}" alt="OFX" loading="lazy" width="330" height="121"></div>
                     </div>
                     <div class="partner-strip__group" aria-hidden="true">
-                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/wise.png') }}" alt=""></div>
-                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/safetywing.png') }}" alt=""></div>
-                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/Booking.com.png') }}" alt=""></div>
-                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/cigna.png') }}" alt=""></div>
-                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/OFX.png') }}" alt=""></div>
+                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/wise.png') }}" alt="" loading="lazy" width="250" height="62"></div>
+                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/safetywing.png') }}" alt="" loading="lazy" width="700" height="239"></div>
+                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/Booking.com.png') }}" alt="" loading="lazy" width="330" height="56"></div>
+                        <div class="partner-strip__logo partner-strip__logo--large"><img src="{{ asset('media/partners/logos/cigna.png') }}" alt="" loading="lazy" width="424" height="223"></div>
+                        <div class="partner-strip__logo"><img src="{{ asset('media/partners/logos/OFX.png') }}" alt="" loading="lazy" width="330" height="121"></div>
                     </div>
                 </div>
             </div>

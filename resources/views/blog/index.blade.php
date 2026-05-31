@@ -241,7 +241,7 @@
             </div>
         </div>
         <div class="blog-hero-v2__visual" aria-hidden="true">
-            <img src="{{ asset('storage/blog/blog_hero.webp') }}" alt="" class="blog-hero-v2__image">
+            <img src="{{ asset('storage/blog/blog_hero.webp') }}" alt="" class="blog-hero-v2__image" width="1000" height="530">
         </div>
     </section>
 
@@ -273,7 +273,7 @@
                     <article class="blog-card blog-card--v2{{ $loop->index > 5 ? ' is-hidden' : '' }}" data-blog-post data-category="{{ strtolower($post->category) }}" data-search="{{ strtolower(trim($post->title . ' ' . $post->category . ' ' . $post->excerpt . ' ' . ($post->author_name ?? ''))) }}">
                         <a class="blog-card__media-link" href="{{ route('blog.show', $post->slug) }}">
                             @if (!empty($post->image))
-                                <img class="blog-card__image blog-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}">
+                                <img class="blog-card__image blog-card__image--file" src="{{ $post->image_url }}" alt="{{ $post->title }}" loading="lazy">
                             @else
                                 <div class="blog-card__image {{ $post->image_class }}" aria-hidden="true"></div>
                             @endif

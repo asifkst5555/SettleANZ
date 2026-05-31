@@ -17,10 +17,20 @@ class DirectoryController extends Controller
     public function index(): View
     {
         $listings = $this->listings();
+        $page = max(1, (int) request()->input('page', 1));
+
+        $metaTitle = 'Find Trusted Expat Services in Australia and New Zealand | SettleANZ';
+        $metaDescription = 'Curated expat-friendly businesses across migration, relocation, schools, finance, real estate, healthcare, banking, and insurance.';
+
+        if ($page > 1) {
+            $metaTitle .= ' - Page ' . $page;
+            $metaDescription = rtrim(rtrim($metaDescription, '.'), '.') . '. Page ' . $page . '.';
+        }
 
         return view('directory.index', [
-            'metaTitle' => 'Find Trusted Expat Services in Australia and New Zealand | SettleANZ',
-            'metaDescription' => 'Curated expat-friendly businesses across migration, relocation, schools, finance, real estate, healthcare, banking, and insurance.',
+            'metaTitle' => $metaTitle,
+            'metaDescription' => $metaDescription,
+            'metaCanonical' => $page > 1 ? request()->url() . '?page=' . $page : null,
             'listings' => $listings,
             'categories' => array_values(array_unique(array_merge(['All'], $listings->pluck('category')->all()))),
             'cities' => array_values(array_unique(array_merge(['All Cities'], $listings->pluck('city')->all()))),

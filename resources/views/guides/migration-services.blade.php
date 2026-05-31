@@ -130,6 +130,13 @@
         </div>
     </section>
 
+    <section class="guide-block guide-block--white" style="margin-top:0;padding:2rem 0;">
+        <div class="container">
+            <h2>Next Steps</h2>
+            <p>Once your visa pathway is clear, plan your accommodation with the <a class="text-link" href="/housing">Housing Guide</a> and set up your finances with the <a class="text-link" href="/banking">Banking Guide</a>.</p>
+        </div>
+    </section>
+
     <div class="booking-modal" data-booking-modal hidden>
         <div class="booking-modal__backdrop" data-close-booking-modal></div>
         <div class="booking-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">

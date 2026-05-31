@@ -988,6 +988,9 @@
                     <ul>
                         <li><a href="/new-to-australia">New to Australia</a></li>
                         <li><a href="/settlement-services">Settlement Services</a></li>
+                        <li><a href="/housing">Housing Guide</a></li>
+                        <li><a href="/banking">Banking Guide</a></li>
+                        <li><a href="/migration-services">Migration Services</a></li>
                         <li><a href="/about">About</a></li>
                         <li><a href="/contact">Contact</a></li>
                     </ul>
@@ -1121,11 +1124,11 @@
             <div class="floating-actions" aria-label="Quick actions" style="position:fixed;right:1rem;bottom:1rem;z-index:9997;display:flex;flex-direction:column;align-items:center;gap:0.75rem;">
                 @if(($sharedSettings['ai_assistant_enabled'] ?? '1') === '1')
                     <button class="floating-action floating-action--assistant site-chat-toggle" type="button" data-chat-toggle aria-expanded="false" aria-controls="site-chat-panel" aria-label="Open AI chat assistant" style="appearance:none;-webkit-appearance:none;background:transparent;border:0;box-shadow:none;padding:0;margin:0;">
-                        <img src="{{ asset('media/icons/ai_assistance.webp') }}" alt="" class="floating-action__icon" width="56" height="56">
+                        <img src="{{ asset('media/icons/ai_assistance.webp') }}" alt="" class="floating-action__icon" width="56" height="56" loading="lazy">
                     </button>
                 @endif
                 <a class="floating-action floating-action--whatsapp" href="{{ $sharedSettings['footer_whatsapp'] }}" target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp">
-                    <img src="{{ asset('media/icons/whatsapp.webp') }}" alt="" class="floating-action__icon" width="56" height="56">
+                    <img src="{{ asset('media/icons/whatsapp.webp') }}" alt="" class="floating-action__icon" width="56" height="56" loading="lazy">
                 </a>
             </div>
             @if(($sharedSettings['ai_assistant_enabled'] ?? '1') === '1')

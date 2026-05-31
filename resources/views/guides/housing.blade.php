@@ -46,7 +46,7 @@
                 <section class="guide-block guide-block--white">
                     <h2>How Australian Renting Works</h2>
                     <p>Australian rentals move quickly, and applications often depend on documentation, references, income clarity, and timing. Bonds, lease lengths, and inspection expectations can also feel unfamiliar if you've rented under a different system before.</p>
-                    <p>Keep your documents ready in advance and expect to inspect, compare, and apply quickly in competitive suburbs.</p>
+                    <p>Keep your documents ready in advance (including Australian <a class="text-link" href="/banking">bank statements</a>) and expect to inspect, compare, and apply quickly in competitive suburbs.</p>
                     <div class="guide-cta-box guide-cta-box--inline">
                         <h3>Need a short-stay option first?</h3>
                         <p>Use a serviced apartment or flexible stay partner while you learn the market and attend inspections.</p>
@@ -105,6 +105,11 @@
                             </article>
                         @endforeach
                     </div>
+                </section>
+
+                <section class="guide-block guide-block--white">
+                    <h2>Next Steps</h2>
+                    <p>With housing sorted, set up your finances with the <a class="text-link" href="/banking">Banking Guide</a>. If you need visa assistance, visit our <a class="text-link" href="/migration-services">Migration Services</a> page.</p>
                 </section>
             </div>
         </div>

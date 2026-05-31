@@ -93,6 +93,11 @@
                         <a class="text-link" href="{{ route('guides.new-to-australia') }}#working">Go to working in Australia</a>
                     </div>
                 </section>
+
+                <section class="guide-block guide-block--sand">
+                    <h2>Next Steps</h2>
+                    <p>Once your money setup is sorted, the next big item is finding a place to live. See the <a class="text-link" href="/housing">Housing Guide</a> for suburb selection, rental applications, and short-term accommodation options.</p>
+                </section>
             </div>
         </div>
     </section>

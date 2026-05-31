@@ -904,7 +904,7 @@
 
                 <div class="settlement-hero__visual">
                     <div class="settlement-hero__visual-stack">
-                        <img class="settlement-hero__image" src="{{ asset('media/services/service_her0.webp') }}" alt="Settlement services support for new arrivals in Australia">
+                        <img class="settlement-hero__image" src="{{ asset('media/services/service_her0.webp') }}" alt="Settlement services support for new arrivals in Australia" width="600" height="600">
                     </div>
                 </div>
             </div>
@@ -940,7 +940,7 @@
                         <div class="settlement-overview__content">
                             <span class="settlement-overview__number">03</span>
                             <strong>Settle into daily life</strong>
-                            <span>Get support for rental search, school fit, banking order, healthcare, and the community connections that make life work.</span>
+                            <span>Get support for <a class="text-link" href="/housing">rental search</a>, school fit, <a class="text-link" href="/banking">banking order</a>, healthcare, and the community connections that make life work.</span>
                         </div>
                     </article>
                 </div>
@@ -1038,7 +1038,7 @@
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.5-2.8 7.7-7 9-4.2-1.3-7-4.5-7-9V7l7-4z"></path></svg>
                                         Stage {{ $package['number'] }} support
                                     </span>
-                                    <img src="{{ asset($package['image']) }}" alt="{{ $package['stage'] }} support">
+                                    <img src="{{ asset($package['image']) }}" alt="{{ $package['stage'] }} support" loading="lazy">
                                 </div>
 
                                 <div class="settlement-package__card">
@@ -1113,7 +1113,7 @@
                     </div>
 
                     <div class="settlement-faqs__media">
-                        <img src="{{ asset('media/services/faq.webp') }}" alt="Settlement support frequently asked questions">
+                        <img src="{{ asset('media/services/faq.webp') }}" alt="Settlement support frequently asked questions" loading="lazy" width="600" height="450">
                     </div>
                 </div>
             </div>

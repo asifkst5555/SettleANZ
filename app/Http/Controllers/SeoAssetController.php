@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\DirectoryListing;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
 
@@ -44,7 +45,20 @@ class SeoAssetController extends Controller
                 ]);
         }
 
-        $urls = $pages->merge($posts)->values();
+        $listings = collect();
+        if (Schema::hasTable('directory_listings')) {
+            $listings = DirectoryListing::query()
+                ->where('is_published', true)
+                ->get()
+                ->map(fn (DirectoryListing $listing) => [
+                    'loc' => route('directory.show', $listing->slug),
+                    'lastmod' => $listing->updated_at ?: $listing->created_at ?: now(),
+                    'changefreq' => 'weekly',
+                    'priority' => '0.7',
+                ]);
+        }
+
+        $urls = $pages->merge($posts)->merge($listings)->values();
 
         $xml = view('seo.sitemap', [
             'urls' => $urls,
