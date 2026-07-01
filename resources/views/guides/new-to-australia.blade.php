@@ -27,13 +27,13 @@
             z-index: 1;
         }
 
-        .arrival-hero {
+         .arrival-hero {
             position: relative;
             overflow: hidden;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 5rem 0;
+            padding: 120px 0; /* Hero top/bottom 120px */
             background: #ffffff;
             color: #ffffff;
         }
@@ -70,8 +70,7 @@
 
         .arrival-hero .container,
         .arrival-shell .container {
-            width: min(calc(100% - 2rem), var(--max-width));
-            margin: 0 auto;
+            /* Inherited from site.css */
         }
 
         .arrival-hero__grid {
@@ -385,21 +384,31 @@
         .arrival-faq,
         .arrival-cta,
         .arrival-note {
-            border: 1px solid rgba(10, 100, 97, 0.11);
-            border-radius: 26px;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
             background: #ffffff;
-            box-shadow: 0 16px 40px rgba(12, 55, 66, 0.07);
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+
+        .arrival-card:hover,
+        .arrival-step:hover,
+        .arrival-day-card:hover,
+        .arrival-faq:hover,
+        .arrival-cta:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
         }
 
         .arrival-card {
             height: 100%;
-            padding: 1.35rem;
+            padding: 32px;
         }
 
         .arrival-card__media {
             overflow: hidden;
-            margin: -1.35rem -1.35rem 1.25rem;
-            border-radius: 26px 26px 0 0;
+            margin: -32px -32px 24px;
+            border-radius: var(--radius-card, 18px) var(--radius-card, 18px) 0 0;
         }
 
         .arrival-card__media img {

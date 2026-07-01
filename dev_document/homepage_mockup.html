@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { size: 1280px 7400px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #2C3A47; background:#fff; width:1280px; }
+
+  /* NAV */
+  .nav { background: #fff; border-bottom: 1px solid #ececec; padding: 0 56px; display: flex; align-items: center; height: 84px; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; margin-right: 56px; }
+  .nav-logo-mark { width: 46px; height: 46px; background: #065E5B; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; color: #E8773A; letter-spacing: -1px; font-family: Georgia, serif;}
+  .nav-logo-text { font-size: 21px; font-weight: 800; color: #065E5B; letter-spacing: -0.4px; }
+  .nav-logo-text span { color: #E8773A; }
+  .nav-links { display: flex; gap: 38px; align-items: center; flex: 1; }
+  .nav-link { font-size: 15px; color: #44525e; font-weight: 500; }
+
+  /* HERO */
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; min-height: 620px; border-bottom: 1px solid #ececec; }
+  .hero-left { padding: 80px 64px; display: flex; flex-direction: column; justify-content: center; }
+  .hero-eyebrow { font-size: 13px; font-weight: 700; color: #0B7A75; text-transform: uppercase; letter-spacing: 2.2px; margin-bottom: 26px; }
+  .hero-h1 { font-size: 50px; font-weight: 800; color: #065E5B; line-height: 1.28; margin-bottom: 26px; letter-spacing: -1px; }
+  .hero-sub { font-size: 18px; color: #5e7180; line-height: 1.8; margin-bottom: 40px; max-width: 480px; font-weight: 400; }
+  .hero-sub b { color: #2C3A47; font-weight: 700; }
+  .hero-ctas { display: flex; gap: 18px; margin-bottom: 30px; }
+  .btn-primary { background: #E8773A; color: #fff; border-radius: 12px; padding: 19px 36px; font-size: 16px; font-weight: 700; }
+  .btn-secondary { background: #fff; color: #0B7A75; border: 2px solid #0B7A75; border-radius: 12px; padding: 19px 36px; font-size: 16px; font-weight: 700; }
+  .trust-line { font-size: 14px; color: #94a3b0; font-weight: 500; }
+
+  .hero-right { position: relative; overflow: hidden; background: linear-gradient(160deg,#cfeae8 0%, #a9d9d6 55%, #7dc3bf 100%); }
+  .hero-right svg { width: 100%; height: 100%; display:block; }
+
+  /* SECTION BASE */
+  .sec { padding: 100px 64px; border-bottom: 1px solid #f2f2f2; }
+  .sec-sand { background: #F5F0E8; }
+  .sec-teal { background: #065E5B; }
+  .sec-white { background: #fff; }
+  .sec-label { font-size: 13px; font-weight: 700; color: #0B7A75; text-transform: uppercase; letter-spacing: 2.4px; text-align: center; margin-bottom: 20px; }
+  .sec-h2 { font-size: 40px; font-weight: 800; color: #065E5B; text-align: center; margin-bottom: 18px; letter-spacing: -0.6px; line-height: 1.35; max-width: 920px; margin-left:auto; margin-right:auto; }
+  .sec-sub { font-size: 17px; color: #5e7180; text-align: center; margin-bottom: 64px; line-height: 1.85; max-width: 720px; margin-left: auto; margin-right: auto; font-weight: 400; }
+
+  /* QUICK ENTRY */
+  .qe-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 28px; }
+  .qe-card { border: 1px solid #e8edf2; border-radius: 20px; background: #fff; padding: 40px 30px; text-align: center; }
+  .qe-icon { width: 76px; height: 76px; border-radius: 18px; background: #E6F4F3; display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; }
+  .qe-tag { font-size: 12.5px; font-weight: 700; color: #E8773A; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .qe-title { font-size: 22px; font-weight: 800; color: #065E5B; margin-bottom: 24px; }
+  .qe-cta { font-size: 15px; color: #0B7A75; font-weight: 700; }
+
+  /* PROBLEM REFRAME */
+  .pr-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; max-width: 1152px; margin: 0 auto; }
+  .pr-title { font-size: 36px; font-weight: 800; color: #065E5B; line-height: 1.5; margin-bottom: 36px; letter-spacing: -0.4px; }
+  .pr-list { list-style: none; margin-bottom: 36px; }
+  .pr-list li { font-size: 18px; color: #5e7180; padding: 12px 0 12px 36px; position: relative; line-height: 1.6; }
+  .pr-reframe { background: #E6F4F3; border-left: 5px solid #0B7A75; border-radius: 0 16px 16px 0; padding: 28px 32px; font-size: 21px; color: #065E5B; font-weight: 700; line-height: 1.65; }
+  .pr-visual { background: #fff; border: 1px solid #e8edf2; border-radius: 20px; padding: 52px 48px; display: flex; flex-direction: column; gap: 28px; }
+  .pr-step { display: flex; align-items: center; gap: 24px; }
+  .pr-step-num { width: 48px; height: 48px; border-radius: 50%; background: #0B7A75; color: #fff; font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .pr-step-num.done { background: #E6F4F3; color: #0B7A75; }
+  .pr-step-text { font-size: 18px; color: #3a4a57; font-weight: 600; }
+  .pr-step-line { width: 3px; height: 26px; background: #e0e8e8; margin-left: 23px; }
+
+  /* SETTLEMENT JOURNEY */
+  .jt-track { display: grid; grid-template-columns: repeat(4,1fr); gap: 32px; }
+  .jt-card {}
+  .jt-stage-label { font-size: 12.5px; font-weight: 800; color: #E8773A; text-transform: uppercase; letter-spacing: 2px; text-align: center; margin-bottom: 16px; }
+  .jt-img { height: 200px; border-radius: 20px; overflow: hidden; margin-bottom: 26px; }
+  .jt-img svg { width: 100%; height: 100%; display:block; }
+  .jt-num-row { display: flex; align-items: center; justify-content: center; margin-bottom: -50px; position:relative; z-index:2; }
+  .jt-num { width: 60px; height: 60px; border-radius: 50%; background: #fff; border: 3px solid #0B7A75; display: flex; align-items: center; justify-content: center; font-size:26px; }
+  .jt-body { background: #fff; border: 1px solid #e8edf2; border-radius: 20px; padding: 60px 26px 30px; text-align: center; }
+  .jt-title { font-size: 23px; font-weight: 800; color: #065E5B; margin-bottom: 14px; }
+  .jt-desc { font-size: 15px; color: #5e7180; line-height: 1.75; margin-bottom: 22px; font-weight: 400; min-height: 95px; }
+  .jt-link { font-size: 15px; color: #0B7A75; font-weight: 700; }
+
+  /* ROADMAP */
+  .rm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1152px; margin: 0 auto; }
+  .rm-h { font-size: 38px; font-weight: 800; color: #065E5B; margin-bottom: 20px; letter-spacing: -0.5px; }
+  .rm-sub { font-size: 18px; color: #5e7180; line-height: 1.75; margin-bottom: 38px; }
+  .rm-list { list-style: none; }
+  .rm-list li { font-size: 17px; color: #3a4a57; padding: 10px 0 10px 44px; position: relative; line-height: 1.6; font-weight: 600; }
+  .rm-form-card { background: #fff; border: 1px solid #e8edf2; border-radius: 24px; padding: 56px; box-shadow: 0 12px 48px rgba(6,94,91,0.08); }
+  .rm-form-title { font-size: 24px; font-weight: 800; color: #065E5B; margin-bottom: 30px; text-align: center; }
+  .rm-input { width: 100%; border: 2px solid #dde3ea; border-radius: 12px; padding: 18px 22px; font-size: 16px; margin-bottom: 20px; color: #2C3A47; display:block; }
+  .rm-btn { width: 100%; background: #E8773A; color: #fff; border-radius: 12px; padding: 19px; font-size: 17px; font-weight: 700; text-align:center; margin-bottom: 18px; }
+  .rm-note { font-size: 13px; color: #94a3b0; text-align: center; line-height: 1.6; }
+
+  /* BRAND STORY */
+  .bs-wrap { max-width: 1152px; margin: 0 auto; text-align: center; }
+  .bs-eyebrow { font-size: 13px; font-weight: 700; color: #9FE1CB; text-transform: uppercase; letter-spacing: 2.4px; margin-bottom: 26px; }
+  .bs-h { font-size: 42px; font-weight: 800; color: #fff; line-height: 1.45; margin-bottom: 30px; letter-spacing: -0.6px; max-width: 880px; margin-left: auto; margin-right: auto; }
+  .bs-h .ora { color: #E8773A; }
+  .bs-body { font-size: 18px; color: #c5e2e1; line-height: 1.95; max-width: 800px; margin: 0 auto 60px; font-weight: 400; }
+  .bs-pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-bottom: 56px; }
+  .bs-pillar { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 44px 36px; }
+  .bs-pillar-icon { width: 64px; height: 64px; border-radius: 16px; background: rgba(232,119,58,0.18); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size:28px; }
+  .bs-pillar-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+  .bs-pillar-text { font-size: 15px; color: #a8d4d2; line-height: 1.75; font-weight: 400; }
+  .bs-disclaimer { font-size: 13.5px; color: #6aadaa; line-height: 1.8; font-style: italic; margin-bottom: 40px; max-width: 760px; margin-left: auto; margin-right: auto; }
+  .bs-cta { display:inline-block; background: #E8773A; color: #fff; border-radius: 12px; padding: 19px 44px; font-size: 17px; font-weight: 700; }
+
+  /* SUCCESS STORIES */
+  .ss-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; max-width: 1152px; margin: 0 auto; }
+  .ss-card { background: #fff; border: 1px solid #e8edf2; border-radius: 20px; padding: 44px; }
+  .ss-quote-mark { font-size: 56px; color: #E8773A; line-height: 0.6; margin-bottom: 18px; font-family: Georgia, serif; }
+  .ss-text { font-size: 17px; color: #3a4a57; line-height: 1.85; margin-bottom: 30px; font-weight: 500; }
+  .ss-author { display: flex; align-items: center; gap: 18px; }
+  .ss-av { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg,#0B7A75,#065E5B); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:18px; flex-shrink:0; }
+  .ss-name { font-size: 17px; font-weight: 800; color: #2C3A47; }
+  .ss-loc { font-size: 14px; color: #94a3b0; font-weight: 400; }
+
+  /* MOST USED GUIDES */
+  .mg-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 22px; }
+  .mg-card { border: 1px solid #e8edf2; border-radius: 18px; background: #fff; padding: 36px 24px; text-align: center; position: relative; }
+  .mg-badge { position: absolute; top: -14px; right: 18px; background: #E8773A; color: #fff; font-size: 12px; font-weight: 800; padding: 6px 14px; border-radius: 14px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .mg-icon { width: 60px; height: 60px; border-radius: 15px; background: #E6F4F3; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size:26px; }
+  .mg-title { font-size: 16px; font-weight: 800; color: #065E5B; line-height: 1.45; }
+
+  /* FINAL CTA */
+  .fc-inner { text-align: center; max-width: 760px; margin: 0 auto; }
+  .fc-h { font-size: 42px; font-weight: 800; color: #fff; margin-bottom: 18px; letter-spacing: -0.6px; }
+  .fc-sub { font-size: 18px; color: #9dd5d2; margin-bottom: 48px; line-height: 1.85; font-weight: 400; }
+  .fc-form { display: flex; gap: 16px; max-width: 680px; margin: 0 auto 22px; }
+  .fc-form input { flex: 1; border-radius: 12px; padding: 19px 22px; font-size: 16px; }
+  .fc-form button { background: #E8773A; color: #fff; border-radius: 12px; padding: 19px 36px; font-size: 16px; font-weight: 700; white-space: nowrap; }
+  .fc-micro { font-size: 14px; color: #7abfbb; font-weight: 400; }
+
+  /* FOOTER */
+  .footer { background: #044340; padding: 90px 64px 36px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 60px; }
+  .footer-brand-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+  .footer-logo-mark { width: 50px; height: 50px; background: rgba(255,255,255,0.12); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #E8773A; font-family: Georgia, serif; }
+  .footer-brand-name { font-size: 26px; font-weight: 800; color: #fff; }
+  .footer-brand-name span { color: #E8773A; }
+  .footer-tagline { font-size: 15px; color: #6aadaa; line-height: 1.85; max-width: 320px; font-weight: 400; }
+  .footer-col-h { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 22px; letter-spacing: 0.3px; }
+  .footer-lnk { display: block; font-size: 15px; color: #6aadaa; margin-bottom: 14px; font-weight: 400; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 14px; color: #5a9a97; font-weight: 400; }
+  .footer-socials { display: flex; gap: 26px; font-size: 22px; color: #6aadaa; font-weight:700; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">SA</div>
+    <div class="nav-logo-text">Settle<span>ANZ</span></div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-link">Home</div>
+    <div class="nav-link">Australia ▾</div>
+    <div class="nav-link">New Zealand ▾</div>
+    <div class="nav-link">Services ▾</div>
+    <div class="nav-link">Blog</div>
+    <div class="nav-link">Directory</div>
+    <div class="nav-link">About</div>
+    <div class="nav-link">Contact</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">For new migrants, students &amp; skilled workers</div>
+    <div class="hero-h1">Landing in a new country shouldn't feel like guessing your next step.</div>
+    <div class="hero-sub">Most newcomers waste weeks figuring things out alone — banking, rentals, jobs, healthcare. <b>You don't need trial and error. You need a clear first 90-day plan.</b></div>
+    <div class="hero-ctas">
+      <div class="btn-primary">Get My Free 90-Day Roadmap</div>
+      <div class="btn-secondary">Explore Guides</div>
+    </div>
+    <div class="trust-line">✓ Built from real migrant experience. Australia &amp; New Zealand focused.</div>
+  </div>
+  <div class="hero-right">
+    <!-- Sydney Opera House + Harbour Bridge illustration -->
+    <svg viewBox="0 0 700 620" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f6e4c9"/>
+          <stop offset="45%" stop-color="#d8eee8"/>
+          <stop offset="100%" stop-color="#a9d9d6"/>
+        </linearGradient>
+        <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6fb8c4"/>
+          <stop offset="100%" stop-color="#3f8e9c"/>
+        </linearGradient>
+      </defs>
+      <rect width="700" height="620" fill="url(#sky)"/>
+      <!-- sun glow -->
+      <circle cx="540" cy="160" r="90" fill="#ffe9c7" opacity="0.7"/>
+      <!-- water -->
+      <rect x="0" y="430" width="700" height="190" fill="url(#water)"/>
+      <!-- harbour bridge -->
+      <path d="M -20 420 Q 350 270 720 420" stroke="#2C3A47" stroke-width="10" fill="none" opacity="0.55"/>
+      <path d="M -20 440 Q 350 300 720 440" stroke="#2C3A47" stroke-width="6" fill="none" opacity="0.35"/>
+      <!-- opera house sails -->
+      <g fill="#ffffff" opacity="0.96">
+        <path d="M 180 430 C 200 380 240 350 300 345 C 270 380 250 410 245 430 Z"/>
+        <path d="M 250 430 C 275 365 325 330 395 322 C 355 365 320 405 310 430 Z"/>
+        <path d="M 330 430 C 360 370 410 340 470 335 C 430 375 395 410 385 430 Z"/>
+        <path d="M 400 430 C 425 385 460 365 505 360 C 475 390 450 415 440 430 Z"/>
+      </g>
+      <!-- podium -->
+      <rect x="170" y="425" width="350" height="14" fill="#e8e3da"/>
+      <!-- city silhouette right -->
+      <g fill="#0B7A75" opacity="0.85">
+        <rect x="540" y="300" width="34" height="135"/>
+        <rect x="580" y="340" width="26" height="95"/>
+        <rect x="612" y="270" width="40" height="165"/>
+        <rect x="658" y="320" width="30" height="115"/>
+      </g>
+      <!-- left silhouette buildings -->
+      <g fill="#065E5B" opacity="0.75">
+        <rect x="0" y="350" width="36" height="85"/>
+        <rect x="40" y="320" width="46" height="115"/>
+        <rect x="92" y="365" width="30" height="70"/>
+        <rect x="128" y="335" width="38" height="100"/>
+      </g>
+      <!-- water reflections -->
+      <g stroke="#ffffff" stroke-width="3" opacity="0.35">
+        <line x1="220" y1="470" x2="290" y2="470"/>
+        <line x1="340" y1="500" x2="430" y2="500"/>
+        <line x1="120" y1="530" x2="220" y2="530"/>
+        <line x1="450" y1="560" x2="560" y2="560"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<!-- QUICK ENTRY -->
+<div class="sec sec-white">
+  <div class="sec-label">Get Started</div>
+  <div class="sec-h2">Where are you in your journey?</div>
+  <div class="sec-sub">Pick the path that matches where you are right now — every guide and tool on SettleANZ is organised around it.</div>
+  <div class="qe-grid">
+    <div class="qe-card">
+      <div class="qe-icon">🎓</div>
+      <div class="qe-tag">Before arrival setup</div>
+      <div class="qe-title">International Students</div>
+      <div class="qe-cta">Show me what to do first →</div>
+    </div>
+    <div class="qe-card">
+      <div class="qe-icon">💼</div>
+      <div class="qe-tag">Career start plan</div>
+      <div class="qe-title">Skilled Workers</div>
+      <div class="qe-cta">Help me land strong →</div>
+    </div>
+    <div class="qe-card">
+      <div class="qe-icon">🏠</div>
+      <div class="qe-tag">First 90 days support</div>
+      <div class="qe-title">New Immigrants</div>
+      <div class="qe-cta">Start my settlement plan →</div>
+    </div>
+    <div class="qe-card">
+      <div class="qe-icon">✈️</div>
+      <div class="qe-tag">Before you fly preparation</div>
+      <div class="qe-title">Future Migrants</div>
+      <div class="qe-cta">Help me prepare properly →</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM + REFRAME -->
+<div class="sec sec-sand">
+  <div class="pr-grid">
+    <div>
+      <div class="pr-title">Most people don't struggle because they're unprepared. They struggle because they're un-guided.</div>
+      <ul class="pr-list">
+        <li>Banking asks for documents you don't have ready</li>
+        <li>Rentals expect history you don't have</li>
+        <li>Work systems feel unfamiliar</li>
+        <li>Even basic life setup takes longer than expected</li>
+      </ul>
+      <div class="pr-reframe">We map your first 90 days so you know what matters first — and what can wait.</div>
+    </div>
+    <div class="pr-visual">
+      <div class="pr-step">
+        <div class="pr-step-num done">✓</div>
+        <div class="pr-step-text">Get an Australian SIM card</div>
+      </div>
+      <div class="pr-step-line"></div>
+      <div class="pr-step">
+        <div class="pr-step-num done">✓</div>
+        <div class="pr-step-text">Apply for your Tax File Number</div>
+      </div>
+      <div class="pr-step-line"></div>
+      <div class="pr-step">
+        <div class="pr-step-num">3</div>
+        <div class="pr-step-text">Open your bank account</div>
+      </div>
+      <div class="pr-step-line"></div>
+      <div class="pr-step">
+        <div class="pr-step-num">4</div>
+        <div class="pr-step-text">Set up Medicare</div>
+      </div>
+      <div class="pr-step-line"></div>
+      <div class="pr-step">
+        <div class="pr-step-num">5</div>
+        <div class="pr-step-text">Find your first rental</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTLEMENT JOURNEY -->
+<div class="sec sec-white">
+  <div class="sec-label">Our Services</div>
+  <div class="sec-h2">Your Settlement Journey, Step By Step</div>
+  <div class="sec-sub">Everything we create is designed around the real stages newcomers go through.</div>
+  <div class="jt-track">
+
+    <div class="jt-card">
+      <div class="jt-stage-label">Stage 01</div>
+      <div class="jt-img">
+        <!-- Airport / Arrive illustration -->
+        <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="200" fill="#E6F4F3"/>
+          <rect y="120" width="300" height="80" fill="#cfe8e6"/>
+          <path d="M40 130 L150 60 L260 130 Z" fill="#0B7A75" opacity="0.85"/>
+          <rect x="100" y="130" width="100" height="50" fill="#ffffff"/>
+          <circle cx="230" cy="40" r="22" fill="#ffe9c7"/>
+          <path d="M60 150 L240 150" stroke="#0B7A75" stroke-width="4" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="jt-num-row"><div class="jt-num">✈️</div></div>
+      <div class="jt-body">
+        <div class="jt-title">Arrive</div>
+        <div class="jt-desc">Airport pickup, temporary accommodation, concierge support and everything you need on day one.</div>
+        <div class="jt-link">Learn more →</div>
+      </div>
+    </div>
+
+    <div class="jt-card">
+      <div class="jt-stage-label">Stage 02</div>
+      <div class="jt-img">
+        <!-- House / Settle illustration -->
+        <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="200" fill="#F5F0E8"/>
+          <rect y="140" width="300" height="60" fill="#e6dccb"/>
+          <rect x="90" y="90" width="120" height="80" fill="#ffffff"/>
+          <path d="M80 90 L150 40 L220 90 Z" fill="#E8773A"/>
+          <rect x="135" y="120" width="30" height="50" fill="#0B7A75" opacity="0.8"/>
+          <rect x="105" y="105" width="22" height="22" fill="#cfe8e6"/>
+          <rect x="173" y="105" width="22" height="22" fill="#cfe8e6"/>
+        </svg>
+      </div>
+      <div class="jt-num-row"><div class="jt-num">🏠</div></div>
+      <div class="jt-body">
+        <div class="jt-title">Settle</div>
+        <div class="jt-desc">Find property, open bank accounts, get insurance, and set up the essentials of everyday life.</div>
+        <div class="jt-link">Learn more →</div>
+      </div>
+    </div>
+
+    <div class="jt-card">
+      <div class="jt-stage-label">Stage 03</div>
+      <div class="jt-img">
+        <!-- Work and invest illustration -->
+        <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="200" fill="#EEF3FE"/>
+          <rect y="150" width="300" height="50" fill="#dbe6fb"/>
+          <rect x="40" y="110" width="36" height="90" fill="#0B7A75" opacity="0.75"/>
+          <rect x="90" y="80" width="36" height="120" fill="#065E5B" opacity="0.85"/>
+          <rect x="140" y="130" width="36" height="70" fill="#0B7A75" opacity="0.6"/>
+          <rect x="190" y="60" width="36" height="140" fill="#E8773A" opacity="0.85"/>
+          <path d="M40 105 L90 75 L140 125 L190 55" stroke="#2C3A47" stroke-width="4" fill="none"/>
+        </svg>
+      </div>
+      <div class="jt-num-row"><div class="jt-num">📈</div></div>
+      <div class="jt-body">
+        <div class="jt-title">Work &amp; Invest</div>
+        <div class="jt-desc">Find jobs, start a business, manage taxes and explore investment opportunities across ANZ.</div>
+        <div class="jt-link">Learn more →</div>
+      </div>
+    </div>
+
+    <div class="jt-card">
+      <div class="jt-stage-label">Stage 04</div>
+      <div class="jt-img">
+        <!-- Explore / Auckland Sky Tower illustration -->
+        <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="esky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fde8c8"/>
+              <stop offset="100%" stop-color="#a9d9d6"/>
+            </linearGradient>
+          </defs>
+          <rect width="300" height="200" fill="url(#esky)"/>
+          <rect y="160" width="300" height="40" fill="#7dc3bf"/>
+          <circle cx="230" cy="50" r="18" fill="#ffe9c7"/>
+          <!-- sky tower -->
+          <path d="M150 160 L142 60 L158 60 Z" fill="#065E5B"/>
+          <ellipse cx="150" cy="62" rx="20" ry="10" fill="#0B7A75"/>
+          <rect x="147" y="35" width="6" height="28" fill="#065E5B"/>
+          <!-- hills -->
+          <path d="M0 170 Q60 140 130 165 T300 160 V200 H0 Z" fill="#0B7A75" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="jt-num-row"><div class="jt-num">🧭</div></div>
+      <div class="jt-body">
+        <div class="jt-title">Explore &amp; Enjoy</div>
+        <div class="jt-desc">Discover places, tours, entertainment, food and experiences across Australia and New Zealand.</div>
+        <div class="jt-link">Learn more →</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ROADMAP LEAD -->
+<div class="sec sec-sand">
+  <div class="rm-grid">
+    <div>
+      <div class="rm-h">Your first 90 days, simplified</div>
+      <div class="rm-sub">Download the exact checklist used by newcomers to avoid costly first-month mistakes.</div>
+      <ul class="rm-list">
+        <li>Before you fly checklist</li>
+        <li>First week priorities</li>
+        <li>Banking setup</li>
+        <li>Tax File Number steps</li>
+        <li>Housing decisions</li>
+        <li>Healthcare setup</li>
+        <li>Mistakes to avoid</li>
+      </ul>
+    </div>
+    <div class="rm-form-card">
+      <div class="rm-form-title">Get the free 90-day roadmap</div>
+      <div class="rm-input" style="color:#94a3b0;">Your name</div>
+      <div class="rm-input" style="color:#94a3b0;">Your email</div>
+      <div class="rm-btn">Send Me the Roadmap</div>
+      <div class="rm-note">Takes under 5 minutes to read. Saves weeks of confusion.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BRAND STORY -->
+<div class="sec sec-teal">
+  <div class="bs-wrap">
+    <div class="bs-eyebrow">Why SettleANZ Exists</div>
+    <div class="bs-h">Built on lived experience. Run as a <span class="ora">team</span>. Made for every newcomer who lands here next.</div>
+    <div class="bs-body">SettleANZ started with one person's arrival in Australia — and the realisation that nothing about settling in was explained clearly anywhere. That single experience became the foundation for a platform built by a team who understand the journey from the inside: researchers, writers, and locals across Australia and New Zealand, working together to turn confusion into a clear plan.</div>
+    <div class="bs-pillars">
+      <div class="bs-pillar">
+        <div class="bs-pillar-icon">💡</div>
+        <div class="bs-pillar-title">Lived Experience</div>
+        <div class="bs-pillar-text">Every guide starts from a real settlement journey, not a search engine summary.</div>
+      </div>
+      <div class="bs-pillar">
+        <div class="bs-pillar-icon">👥</div>
+        <div class="bs-pillar-title">A Team, Not One Voice</div>
+        <div class="bs-pillar-text">Researchers and locals across AU &amp; NZ keep every guide accurate and current.</div>
+      </div>
+      <div class="bs-pillar">
+        <div class="bs-pillar-icon">🧭</div>
+        <div class="bs-pillar-title">Built Around Your Journey</div>
+        <div class="bs-pillar-text">Structured around the real stages newcomers go through — not generic categories.</div>
+      </div>
+    </div>
+    <div class="bs-disclaimer">We do not provide migration advice. Only practical settlement guidance based on lived experience and research.</div>
+    <div class="bs-cta">Read Our Story</div>
+  </div>
+</div>
+
+<!-- SUCCESS STORIES -->
+<div class="sec sec-white">
+  <div class="sec-label">Real Results</div>
+  <div class="sec-h2">What changes after using SettleANZ</div>
+  <div class="ss-grid">
+    <div class="ss-card">
+      <div class="ss-quote-mark">"</div>
+      <div class="ss-text">I stopped wasting time comparing random advice and followed a clear order.</div>
+      <div class="ss-author">
+        <div class="ss-av">AR</div>
+        <div>
+          <div class="ss-name">Aisha Rahman</div>
+          <div class="ss-loc">Melbourne, VIC</div>
+        </div>
+      </div>
+    </div>
+    <div class="ss-card">
+      <div class="ss-quote-mark">"</div>
+      <div class="ss-text">I knew exactly what to do in my first week — no second guessing.</div>
+      <div class="ss-author">
+        <div class="ss-av">DK</div>
+        <div>
+          <div class="ss-name">Daniel Kim</div>
+          <div class="ss-loc">Sydney, NSW</div>
+        </div>
+      </div>
+    </div>
+    <div class="ss-card">
+      <div class="ss-quote-mark">"</div>
+      <div class="ss-text">The checklist helped me avoid signing a bad rental too early.</div>
+      <div class="ss-author">
+        <div class="ss-av">PN</div>
+        <div>
+          <div class="ss-name">Priya Nair</div>
+          <div class="ss-loc">Auckland, NZ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOST USED GUIDES -->
+<div class="sec sec-sand">
+  <div class="sec-label">Quick Start</div>
+  <div class="sec-h2">Start here if you're unsure</div>
+  <div class="mg-grid">
+    <div class="mg-card">
+      <div class="mg-badge">Most Used</div>
+      <div class="mg-icon">🏦</div>
+      <div class="mg-title">Open First Bank Account</div>
+    </div>
+    <div class="mg-card">
+      <div class="mg-icon">🏘️</div>
+      <div class="mg-title">Find First Rental</div>
+    </div>
+    <div class="mg-card">
+      <div class="mg-icon">🩺</div>
+      <div class="mg-title">Understand Medicare</div>
+    </div>
+    <div class="mg-card">
+      <div class="mg-icon">📄</div>
+      <div class="mg-title">Get Your TFN</div>
+    </div>
+    <div class="mg-card">
+      <div class="mg-icon">✅</div>
+      <div class="mg-title">Before You Fly Checklist</div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="sec sec-teal">
+  <div class="fc-inner">
+    <div class="fc-h">Start your first 90 days with clarity</div>
+    <div class="fc-sub">Join newcomers who are settling with structure instead of confusion.</div>
+    <div class="fc-form">
+      <input type="text" placeholder="Your name" />
+      <input type="email" placeholder="Your email" />
+      <button>Get the Free Roadmap</button>
+    </div>
+    <div class="fc-micro">No spam. Just practical updates when needed.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-row">
+        <div class="footer-logo-mark">SA</div>
+        <div class="footer-brand-name">Settle<span>ANZ</span></div>
+      </div>
+      <div class="footer-tagline">Practical settlement guidance for migrants, students, and skilled workers moving to Australia and New Zealand.</div>
+    </div>
+    <div>
+      <div class="footer-col-h">Australia</div>
+      <div class="footer-lnk">New to Australia</div>
+      <div class="footer-lnk">Living Cost AU</div>
+      <div class="footer-lnk">Housing Guide</div>
+      <div class="footer-lnk">Banking Guide</div>
+    </div>
+    <div>
+      <div class="footer-col-h">New Zealand</div>
+      <div class="footer-lnk">New to NZ</div>
+      <div class="footer-lnk">Living Cost NZ</div>
+      <div class="footer-lnk">Migration Services</div>
+    </div>
+    <div>
+      <div class="footer-col-h">Services</div>
+      <div class="footer-lnk">Arrive</div>
+      <div class="footer-lnk">Settle</div>
+      <div class="footer-lnk">Work &amp; Invest</div>
+      <div class="footer-lnk">Explore &amp; Enjoy</div>
+    </div>
+    <div>
+      <div class="footer-col-h">Company</div>
+      <div class="footer-lnk">About Us</div>
+      <div class="footer-lnk">Blog</div>
+      <div class="footer-lnk">Directory</div>
+      <div class="footer-lnk">Contact</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 SettleANZ. All rights reserved. · Privacy Policy · Terms of Service</div>
+    <div class="footer-socials">IG · TT · FB · X</div>
+  </div>
+</div>
+
+</body>
+</html>

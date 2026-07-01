@@ -4,333 +4,635 @@
     <style>
         .about-page {
             background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 24%, #f7fbfa 100%);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         .about-hero {
-            padding: 3.2rem 0 2.4rem;
+            padding: 120px 0;
+            background: radial-gradient(circle at 10% 20%, rgba(245, 240, 232, 0.4) 0%, rgba(255, 255, 255, 1) 90%);
+            border-bottom: 1px solid #ececec;
         }
 
         .about-hero__layout {
             display: grid;
-            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-            gap: clamp(1.2rem, 2.8vw, 2.4rem);
-            align-items: stretch;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
         }
 
         .about-hero__content {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .about-hero__badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            border-radius: 28px;
-            text-align: center;
-            background:
-                radial-gradient(circle at 10% 14%, rgba(242, 125, 43, 0.12), transparent 34%),
-                linear-gradient(135deg, #0e4f58 0%, #13344f 58%, #1a4f71 100%);
-            box-shadow: 0 26px 65px rgba(12, 43, 63, 0.24);
+            gap: 8px;
+            border: 1.5px solid rgba(11, 122, 117, 0.2);
+            background: rgba(11, 122, 117, 0.05);
+            color: #065E5B;
+            font-size: 13.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 8px 18px;
+            border-radius: 99px;
+            margin-bottom: 24px;
         }
 
-        .about-hero__content .eyebrow,
-        .about-hero__content h1,
-        .about-hero__content p {
-            color: #ffffff;
+        .badge-accent-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #e8773a;
         }
 
-        .about-hero__content .eyebrow {
-            color: rgba(255, 255, 255, 0.76);
+        .about-hero__title {
+            font-size: clamp(2.5rem, 4.8vw, 3.8rem);
+            font-weight: 800;
+            color: #065E5B;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: 2rem;
         }
 
-        .about-hero h1 {
-            margin-top: 0.65rem;
-            max-width: 7ch;
-            font-size: clamp(2.8rem, 5.2vw, 4.75rem);
-            line-height: 1.0;
-            letter-spacing: -0.03em;
+        .hero-quote-card {
+            background: #ffffff;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
+            padding: 32px;
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
+            position: relative;
+        }
+
+        .hero-quote-headline {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #065E5B;
+            line-height: 1.45;
+            margin-bottom: 1rem;
+            letter-spacing: -0.3px;
         }
 
         .about-hero__lead {
-            margin-top: 0.85rem;
-            max-width: 58ch;
-            color: rgba(255, 255, 255, 0.86);
-            line-height: 1.72;
-        }
-
-
-        .about-hero__quote {
-            width: min(100%, 500px);
-            margin-top: 1.25rem;
-            padding: 0.9rem 1rem;
-            border-radius: 14px;
-            border-left: 3px solid #f7a14f;
-            background: rgba(255, 255, 255, 0.12);
-            color: rgba(255, 255, 255, 0.95);
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 0.98rem;
-            line-height: 1.6;
-            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            color: #2c3a47;
+            line-height: 1.7;
+            margin: 0;
         }
 
         .about-hero__media {
             position: relative;
-            overflow: hidden;
-            border-radius: 28px;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            background: #dfe8ec;
-            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
-            min-height: 520px;
         }
 
-        .about-hero__media img {
+        .about-hero__image-frame {
+            position: relative;
+            width: 100%;
+            min-height: 528px;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 24px 56px rgba(6, 94, 91, 0.12);
+            border: 1px solid rgba(11, 122, 117, 0.12);
+        }
+
+        .about-hero__image-frame img {
+            display: block;
             width: 100%;
             height: 100%;
-            display: block;
+            min-height: 528px;
             object-fit: cover;
+            object-position: center top;
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-
-        .about-story {
-            padding: 0.75rem 0 2.8rem;
+        .about-hero__image-frame:hover img {
+            transform: scale(1.03);
         }
 
-        .about-page .section-heading.section-heading--narrow {
-            max-width: 850px;
-            margin: 0 auto 1.2rem;
-            text-align: center;
-        }
-
-        .about-page .section-heading.section-heading--narrow p {
-            max-width: 650px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-
-        .about-story__intro {
-            max-width: 1180px;
-            margin: 0 auto 1.2rem;
-            text-align: center;
-        }
-
-        .about-story__intro p {
-            margin-top: 0.8rem;
-            color: #556678;
-            max-width: 750px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .about-story__intro h2 {
-            max-width: 850px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-
-        .about-story__narrative {
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 2rem 0;
-        }
-
-        .about-story__narrative p {
-            margin: 0 0 1.1rem;
-            color: #374151;
-            font-size: 1.05rem;
-            line-height: 1.75;
-        }
-
-        .about-story__lead {
-            font-size: 1.25rem !important;
+        .about-hero__image-badge {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(11, 122, 117, 0.15);
+            border-radius: 99px;
+            padding: 8px 18px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
             font-weight: 600;
-            color: #1f2937 !important;
-            margin-bottom: 1.5rem !important;
+            color: #065E5B;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            z-index: 2;
         }
 
-        .about-story__closing {
-            font-size: 1.15rem !important;
-            font-weight: 600;
-            color: #0b7a75 !important;
-            margin-top: 2rem !important;
-            margin-bottom: 0.5rem !important;
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #e8773a;
+            position: relative;
         }
 
-        .about-story__signature {
-            font-size: 1rem !important;
-            font-weight: 700;
-            color: #0b7a75 !important;
-            margin-bottom: 0 !important;
-        }
-            font-size: 1.1rem;
-            line-height: 1.3;
-        }
-
-        .about-values {
-            padding: 0 0 3rem;
+        .badge-dot::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background-color: #e8773a;
+            opacity: 0.4;
+            animation: pulse 2s infinite;
         }
 
-        .about-values__grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1rem;
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 0.4; }
         }
 
-        .about-values .section-heading h2 {
-            max-width: 850px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-
-        .about-values__item {
-            padding: 1.2rem 1.1rem;
-            border: 1px solid rgba(11, 122, 117, 0.1);
-            border-radius: 18px;
+        /* Journey Timeline Styles */
+        .about-journey {
+            padding: 100px 0;
             background: #ffffff;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+            border-bottom: 1px solid #f2f2f2;
         }
 
-        .about-values__item h3 {
-            margin: 0 0 0.55rem;
-            color: var(--primary-dark);
-            font-size: 1.1rem;
+        .about-journey__grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 80px;
+            align-items: center;
         }
 
-        .about-values__item p {
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e6f4f3;
+            color: #0b7a75;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 6px 14px;
+            border-radius: 99px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-badge__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #e8773a;
+        }
+
+        .journey-h2 {
+            font-size: 38px;
+            font-weight: 800;
+            color: #065E5B;
+            margin-bottom: 2rem;
+            letter-spacing: -0.8px;
+            line-height: 1.25;
+        }
+
+        .journey-paragraphs p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            color: #2c3a47;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .journey-paragraphs p.journey-lead {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #065E5B;
+            line-height: 1.6;
+        }
+
+        .about-journey__timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+            padding-left: 3.5rem;
+            border-left: 3px solid rgba(11, 122, 117, 0.15);
+        }
+
+        .timeline-card {
+            background: #ffffff;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
+            padding: 32px;
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: calc(-3.5rem - 25px);
+            top: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #0b7a75;
+            border: 4px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(11, 122, 117, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .timeline-year {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #065E5B;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: #607080;
+            line-height: 1.6;
             margin: 0;
-            color: #566779;
-            line-height: 1.68;
-            font-size: 0.94rem;
         }
 
-        .about-cta {
-            padding: 2rem 0 4rem;
+        /* Community Section Styles */
+        .about-community {
+            padding: 100px 0;
+            background: #f5f0e8;
+            border-bottom: 1px solid #e0dbd3;
         }
 
-        .about-cta__panel {
+        .about-community__header {
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .community-h2 {
+            font-size: 38px;
+            font-weight: 800;
+            color: #065E5B;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.8px;
+        }
+
+        .community-intro {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.15rem;
+            color: #4A5568;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .about-community__grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .community-card {
+            background: #ffffff;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
+            padding: 32px;
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+
+        .community-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
+        }
+
+        .community-card__icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: #e6f4f3;
+            color: #0b7a75;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .community-card__icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .community-card h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #065E5B;
+            margin-bottom: 1rem;
+        }
+
+        .community-card p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            color: #2c3a47;
+            line-height: 1.75;
+            margin: 0;
+        }
+
+        /* Mission Styles */
+        .about-mission {
+            padding: 100px 0;
+            background: #ffffff;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .about-mission__box {
+            max-width: 1170px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #0e4f58 0%, #13344f 100%);
+            border-radius: 32px;
+            padding: 5rem 4rem;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 30px 60px rgba(14, 79, 88, 0.2);
             position: relative;
             overflow: hidden;
-            padding: clamp(3.5rem, 6vw, 5rem) clamp(1.2rem, 3.2vw, 2rem) clamp(2.2rem, 4vw, 3.6rem);
-            border-radius: 30px;
-            text-align: center;
-            background: linear-gradient(135deg, #15324a 0%, #0f5967 100%);
-            box-shadow: 0 26px 65px rgba(9, 34, 45, 0.3);
         }
 
-        .about-cta__panel::after {
+        .about-mission__box::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.12), transparent 40%);
+            background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.08), transparent 40%);
             pointer-events: none;
         }
 
-        .about-cta__content {
-            position: relative;
-            z-index: 1;
-            max-width: 850px;
-            margin: 0 auto;
+        .mission-quote-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 2.5rem;
+            color: #e8773a;
+            opacity: 0.9;
         }
 
-        .about-cta__eyebrow {
-            margin: 0;
-            color: rgba(233, 245, 246, 0.88);
-            font-size: 0.82rem;
-            letter-spacing: 0.16em;
+        .mission-quote-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mission-text {
+            font-size: clamp(1.6rem, 3.2vw, 2.2rem);
             font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .mission-divider {
+            width: 60px;
+            height: 4px;
+            background: #e8773a;
+            margin: 0 auto 2rem;
+            border-radius: 2px;
+        }
+
+        .mission-signature {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .about-cta__copy h2,
-        .about-cta__copy p {
-            color: #ffffff;
-            margin: 0;
+        /* Outer CTA Panel override styles to keep standard theme */
+        .about-cta {
+            padding: 100px 0 120px;
+            background: #f5f0e8;
         }
 
-        .about-cta__copy h2 {
-            margin-top: 0.8rem;
-            font-size: clamp(1.8rem, 4.6vw, 3.75rem);
-            line-height: 0.96;
-            letter-spacing: -0.02em;
+        .about-cta__header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
         }
 
-        .about-cta__copy p {
-            margin: 0.95rem auto 0;
-            max-width: 70ch;
-            color: rgba(235, 245, 247, 0.9);
+        .cta-h2 {
+            font-size: 38px;
+            font-weight: 800;
+            color: #065E5B;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.8px;
         }
 
-        .about-cta__actions {
-            margin-top: 1.5rem;
+        .cta-intro {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.15rem;
+            color: #607080;
+            line-height: 1.7;
+        }
+
+        .about-cta__grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .cta-card {
+            background: #ffffff;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
+            padding: 32px;
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+
+        .cta-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
+        }
+
+        .cta-card.highlighted {
+            border: 2px solid #0b7a75;
+            box-shadow: 0 20px 45px rgba(11, 122, 117, 0.06);
+        }
+
+        .cta-card.highlighted::after {
+            content: 'Recommended';
+            position: absolute;
+            top: -14px;
+            right: 28px;
+            background: #0b7a75;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 99px;
+        }
+
+        .cta-card__badge {
+            align-self: flex-start;
+            background: rgba(11, 122, 117, 0.08);
+            color: #0b7a75;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-card.highlighted .cta-card__badge {
+            background: #e8773a;
+            color: #ffffff;
+        }
+
+        .cta-card h3 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #065E5B;
+            margin-bottom: 1rem;
+        }
+
+        .cta-card p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.98rem;
+            color: #2c3a47;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .cta-card__button {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
+            gap: 8px;
+            background: #0b7a75;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(11, 122, 117, 0.15);
         }
 
-        .about-cta__actions .button {
-            min-width: 220px;
-            border-radius: 10px;
+        .cta-card__button svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
         }
 
-        .about-cta__actions .button--accent {
-            background: #f28f3a;
-            border-color: #f28f3a;
+        .cta-card__button:hover {
+            background: #065e5b;
             color: #ffffff;
         }
 
-        .about-cta__actions .button--ghost-light {
-            border-color: rgba(255, 255, 255, 0.3);
-            background: rgba(4, 16, 23, 0.42);
-            color: #ffffff;
+        .cta-card__button:hover svg {
+            transform: translateX(4px);
         }
 
+        .cta-card.highlighted .cta-card__button {
+            background: #e8773a;
+            box-shadow: 0 4px 12px rgba(232, 119, 58, 0.25);
+        }
+
+        .cta-card.highlighted .cta-card__button:hover {
+            background: #d3662d;
+        }
+
+        /* Responsive Breakpoints */
         @media (max-width: 1080px) {
             .about-hero__layout,
-            .about-values__grid {
+            .about-journey__grid,
+            .about-community__grid {
                 grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .about-cta__grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .about-hero__image-frame,
+            .about-hero__image-frame img {
+                min-height: 418px;
+            }
+            
+            .about-journey__timeline {
+                border-left: none;
+                padding-left: 0;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+            
+            .timeline-marker {
+                display: none;
             }
         }
 
         @media (max-width: 767px) {
             .about-hero {
-                padding-top: 2.2rem;
+                padding: 40px 0;
             }
 
+            .about-cta__grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-journey__timeline {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-mission__box {
+                padding: 3rem 1.5rem;
+            }
+            
             .about-hero h1 {
-                max-width: 80%;
+                font-size: 2.2rem;
             }
-
-            .about-hero__content {
-                padding: 1.2rem;
-                border-radius: 20px;
+            
+            .journey-h2, .community-h2, .cta-h2 {
+                font-size: 2rem;
             }
-
-            .about-hero__media {
-                min-height: 360px;
-                border-radius: 20px;
-            }
-
-            .about-story__narrative {
-                padding: 1.5rem 0;
-            }
-
-            .about-story__narrative p {
-                text-align: center;
-            }
-
-            .about-cta__panel {
-                border-radius: 22px;
-                padding: 2rem 1rem;
-            }
-
-            .about-cta__copy h2 {
-                line-height: 1.02;
-            }
-
-            .about-cta__actions .button {
-                width: 100%;
-                min-width: 0;
+            
+            .community-card {
+                padding: 2rem 1.5rem;
             }
         }
     </style>
@@ -338,85 +640,157 @@
 
 @section('content')
     <div class="about-page">
+        <!-- Hero Section -->
         <section id="top" class="about-hero">
             <div class="container about-hero__layout">
                 <div class="about-hero__content">
-                    <p class="eyebrow">About SettleANZ</p>
-                    <h1>I Built the Guide I Wish I Had in 2001</h1>
-                    <p class="about-hero__lead">SettleANZ is not generic relocation advice. It comes from the mistakes, stress, and lessons of building a life in Australia from zero, then turning that experience into a practical roadmap for others.</p>
-                    <p class="about-hero__quote">"You worked too hard to get here to spend your first year lost. I am here to make sure you do not."</p>
+                    <span class="about-hero__badge">
+                        <span class="badge-accent-dot"></span>
+                        ABOUT SETTLEANZ
+                    </span>
+                    <h1 class="about-hero__title">SettleANZ: Built on Real Immigrants' Experiences</h1>
+                    
+                    <div class="hero-quote-card">
+                        <h2 class="hero-quote-headline">He Had Faced Enough. So on the Day He Became a Citizen, He Made Himself a Promise.</h2>
+                        <p class="about-hero__lead">Years of hidden fees, wrong suburbs, and figuring it out alone. All of it led to one decision: No one else should have to learn this the hard way. SettleANZ was born.</p>
+                    </div>
                 </div>
 
                 <div class="about-hero__media">
-                    <img src="{{ asset('media/about/about.webp') }}" alt="Entel and the SettleANZ journey in Australia" width="666" height="1000">
-                </div>
-            </div>
-        </section>
-
-        <section class="about-story">
-            <div class="container">
-                <div class="about-story__intro section-heading section-heading--narrow">
-                    <p class="eyebrow">The journey behind the mission</p>
-                    <h2>What happened when I arrived in Australia</h2>
-                    <p>This is the exact experience that shaped SettleANZ, from early confusion to the turning point that changed everything.</p>
-                </div>
-
-                <div class="about-story__narrative">
-                    <p class="about-story__lead">I moved to Australia in 2001 without knowing a single person.</p>
-                    <p>No family. No contacts. No one who had done it before me to call when things went wrong.</p>
-                    <p>Nobody told me about the hidden bank fees. Nobody warned me about the suburb traps. Nobody explained how Medicare actually worked or in what order to do any of it.</p>
-                    <p>I arrived with one suitcase and a head full of dreams. Then reality hit.</p>
-                    <p>I couldn't open a bank account without an address. I couldn't get an address without a rental history. And I couldn't have a rental history without having already lived somewhere.</p>
-                    <p>The system wasn't built for people like me. It was built for people who were already inside it.</p>
-                    <p>I worked jobs I was overqualified for. I signed contracts I didn't fully understand just to have a roof over my head. I sent money home through transfer services that swallowed hundreds in fees.</p>
-                    <p>Every night, alone in a shared house, I used to question my decision. Life in front of me looked nothing like what I had been promised when I decided to leave home.</p>
-                    <p>Nobody tells you about that part.</p>
-                    <p>What got me through wasn't luck. It was the occasional stranger who took ten minutes to explain how something actually worked. A landlord who gave me a chance. A colleague who referred me to his friend. Small moments of guidance that changed everything and made me realise how much difference the right information at the right time can make.</p>
-                    <p>By 2004 I had permanent residency. By the end of that year, I was an Australian citizen.</p>
-                    <p>But I never forgot how those first years felt. The confusion. The loneliness. The expensive mistakes made simply because nobody told me the right order to do things.</p>
-                    <p>That's why I built SettleANZ. Not to repeat what government websites already say. But to be the person I desperately needed when I arrived — someone who had already walked the same road, made the same mistakes, and could hand you a guide map instead of leaving you to find your own way in the dark.</p>
-                    <p class="about-story__closing">You worked too hard to get here to spend your first year lost. I'm here to make sure you don't.</p>
-                    <p class="about-story__signature">— Entel</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="about-values">
-            <div class="container">
-                <div class="section-heading section-heading--narrow">
-                    <p class="eyebrow">What you get from this approach</p>
-                    <h2>Professional, practical help for your first year</h2>
-                </div>
-                <div class="about-values__grid">
-                    <article class="about-values__item">
-                        <h3>Right order, right timing</h3>
-                        <p>Clear step-by-step priorities so you do not miss dependencies that create delays.</p>
-                    </article>
-                    <article class="about-values__item">
-                        <h3>Fewer costly errors</h3>
-                        <p>Guidance that helps you avoid common mistakes in housing, banking, and first-month admin.</p>
-                    </article>
-                    <article class="about-values__item">
-                        <h3>Support that feels human</h3>
-                        <p>Advice based on lived experience and your real context, not only government checklists.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="about-cta">
-            <div class="container">
-                <div class="about-cta__panel">
-                    <div class="about-cta__content">
-                        <p class="about-cta__eyebrow">About SettleANZ</p>
-                        <div class="about-cta__copy">
-                            <h2>Ready to settle with confidence?</h2>
-                            <p>Use the guide first, then reach out if you want one-to-one help with your move.</p>
+                    <div class="about-hero__image-frame">
+                        <img src="{{ asset('media/about/founder.webp') }}" alt="SettleANZ Founder — Built on real immigrant experience" width="600" height="600">
+                        <div class="about-hero__image-badge">
+                            <span class="badge-dot"></span>
+                            <span>Lived Experience</span>
                         </div>
                     </div>
-                    <div class="about-cta__actions">
-                        <a class="button button--large button--accent" href="{{ route('guides.new-to-australia') }}">Start with the New Arrival Guide</a>
-                        <a class="button button--large button--ghost-light" href="{{ route('contact') }}">Contact SettleANZ</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journey Section -->
+        <section class="about-journey">
+            <div class="container">
+                <div class="about-journey__grid">
+                    <div class="about-journey__narrative">
+                        <div class="section-badge">
+                            <span class="section-badge__dot"></span>
+                            Our Story
+                        </div>
+                        <h2 class="journey-h2">Our Founder's Journey</h2>
+                        <div class="journey-paragraphs">
+                            <p class="journey-lead">In 2001, I arrived in Australia with one suitcase and a head full of dreams. I knew no one.</p>
+                            <p>I quickly discovered a system not built for newcomers: hidden bank fees, confusing Medicare, and the impossible loop of needing an address for a bank account without a rental history. I worked jobs below my qualifications, signed contracts I barely understood, and questioned my decision every night.</p>
+                            <p>What changed everything were small acts of kindness and timely advice: a stranger's explanation, a landlord's trust, a colleague's referral. These moments underscored the profound impact of accurate information. By 2004, as an Australian citizen, I made a promise: no one else should endure such avoidable struggles.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="about-journey__timeline">
+                        <div class="timeline-card">
+                            <div class="timeline-marker">
+                                <span class="timeline-year">2001</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h3>Arrived with a Suitcase</h3>
+                                <p>Landed alone, navigating hidden bank fees, confusing Medicare, and the address-banking loop.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-card">
+                            <div class="timeline-marker">
+                                <span class="timeline-year">2004</span>
+                            </div>
+                            <div class="timeline-content">
+                                <h3>The Citizenship Promise</h3>
+                                <p>Swore a promise that no other newcomer should have to learn this system the hard way.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section class="about-community">
+            <div class="container">
+                <div class="about-community__header">
+                    <div class="section-badge">
+                        <span class="section-badge__dot"></span>
+                        Our Growth
+                    </div>
+                    <h2 class="community-h2">From One Promise to a Community</h2>
+                    <p class="community-intro" style="margin-bottom: 1.5rem;">That promise became SettleANZ. Initially, I helped newcomers navigate banking, housing, and the unspoken rules of a new country. Soon, others joined immigrants who had faced similar challenges, and those I had helped who now wanted to pay it forward. What began as one man's commitment evolved into a supportive community of immigrants, each understanding the journey firsthand.</p>
+                    <p class="community-intro">Today, SettleANZ helps newcomers settle in their new homeland without confusion. We do this by combining lived experience with proven guidance. Every service we offer is built on real immigrant experiences.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Statement -->
+        <section class="about-mission">
+            <div class="container">
+                <div class="about-mission__box">
+                    <div class="mission-quote-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                    </div>
+                    <h2 class="mission-text">You shouldn't have to figure it out alone. You shouldn't have to learn the hard way. You deserve clarity, guidance, and support from someone who's been there.</h2>
+                    <div class="mission-divider"></div>
+                    <p class="mission-signature">— Our Mission</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call To Actions -->
+        <section class="about-cta">
+            <div class="container">
+                <div class="about-cta__header">
+                    <div class="section-badge">
+                        <span class="section-badge__dot"></span>
+                        Next Steps
+                    </div>
+                    <h2 class="cta-h2">Ready to Start Your Settlement Journey?</h2>
+                    <p class="cta-intro">Choose how you want to begin. Explore our guides or reach out for custom relocation support.</p>
+                </div>
+                
+                <div class="about-cta__grid">
+                    <!-- Card 1 -->
+                    <div class="cta-card">
+                        <span class="cta-card__badge">Self-Guided</span>
+                        <h3>Get Your Free 90-Day Roadmap</h3>
+                        <p>Access our comprehensive, step-by-step checklist. Learn the right order to get your bank account, TFN, Medicare, and housing sorted.</p>
+                        <a href="{{ route('guides.new-to-australia') }}" class="cta-card__button">
+                            <span>Get Your Roadmap</span>
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 11-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <!-- Card 2 -->
+                    <div class="cta-card highlighted">
+                        <span class="cta-card__badge">1-on-1 Help</span>
+                        <h3>Book a Free 15-Min Strategy Call</h3>
+                        <p>Unsure where to begin or have specific relocation questions? Let's have a quick, free video call to establish your priorities.</p>
+                        <a href="{{ route('contact') }}" class="cta-card__button">
+                            <span>Book a Free Call</span>
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 11-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <!-- Card 3 -->
+                    <div class="cta-card">
+                        <span class="cta-card__badge">Concierge</span>
+                        <h3>Explore Our Services & Pricing</h3>
+                        <p>From airport pickups to rental finding and neighbourhood orientation, view our premium support packages and transparent pricing.</p>
+                        <a href="{{ route('guides.settlement-services') }}" class="cta-card__button">
+                            <span>Explore Services</span>
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 11-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>

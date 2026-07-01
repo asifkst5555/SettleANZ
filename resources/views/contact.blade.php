@@ -67,11 +67,11 @@
         }
 
         .contact-page-final__panel {
-            padding: 1.15rem;
-            border: 1px solid rgba(13, 79, 89, 0.1);
-            border-radius: 18px;
+            padding: 32px;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
             background: #fff;
-            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
             height: 100%;
         }
 
@@ -156,11 +156,11 @@
         }
 
         .contact-page-final__form-card {
-            padding: 1rem;
-            border: 1px solid rgba(13, 79, 89, 0.12);
-            border-radius: 18px;
+            padding: 32px;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
             background: #fff;
-            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
             width: 100%;
             max-width: none;
             height: 100%;
@@ -179,19 +179,19 @@
 
         .contact-page-final__form {
             display: grid;
-            gap: 0.8rem;
+            gap: 20px; /* Field spacing 20px */
             flex: 1;
         }
 
         .contact-page-final__row {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.7rem;
+            gap: 20px; /* Field spacing 20px */
         }
 
         .contact-page-final__form label > span {
             display: block;
-            margin-bottom: 0.35rem;
+            margin-bottom: 8px; /* Label spacing 8px */
             color: #35535d;
             font-size: 0.76rem;
             font-weight: 700;
@@ -203,7 +203,7 @@
             width: 100%;
             padding: 0.62rem 0.66rem;
             border: 1px solid rgba(16, 88, 98, 0.16);
-            border-radius: 6px;
+            border-radius: var(--radius-input, 8px);
             background: #fff;
             font-size: 0.86rem;
         }

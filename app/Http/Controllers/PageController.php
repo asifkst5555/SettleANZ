@@ -29,198 +29,38 @@ class PageController extends Controller
         ]));
     }
 
-    public function migrationServices(): View
+    public function settlementServices(): View
     {
-        $agents = $this->directoryListings()
-            ->where('category', 'Immigration Lawyers')
-            ->map(fn ($agent) => (array) $agent->toArray())
-            ->merge(
-                collect(SiteDefaults::directoryListings())
-                    ->where('category', 'Immigration Lawyers')
-                    ->all(),
-            )
-            ->map(function (array $agent): object {
-                $agent['id'] = $agent['id'] ?? $agent['slug'];
-
-                return (object) $agent;
-            })
-            ->unique('slug')
-            ->sortByDesc('featured')
-            ->values()
-            ->take(5);
-
-        return view('guides.migration-services', array_merge($this->seo('migration-services', 'Australian Visa Help for Expats and Migrants | SettleANZ', 'Connect with registered migration agents, learn common visa pathways, and request a free visa eligibility check.'), [
-            'agents' => $agents,
+        return view('guides.settlement-services', array_merge($this->seo('settlement-services', 'SettleANZ — Personal Concierge Services', 'Personal Concierge Services for your journey to a thriving life in Australia & New Zealand.'), [
             'settings' => $this->settings(),
-            'visaTypes' => [
-                'Skilled migrant visas',
-                'Student visas',
-                'Partner visas',
-                'Working holiday visas',
-            ],
         ]));
     }
 
-    public function settlementServices(): View
+    public function arriveServices(): View
     {
-        return view('guides.settlement-services', array_merge($this->seo('settlement-services', 'Settlement Services for Expats & New Arrivals in Australia | SettleANZ', 'From airport pickup to your first rental, get real settlement support for new arrivals in Australia with personalised help at every stage.'), [
-            'packages' => [
-                [
-                    'number' => '01',
-                    'stage' => 'Pre-arrival',
-                    'headline' => 'Settle Fast — Pre-Arrival Strategy & Document Review',
-                    'tagline' => 'Be prepared for your new homeland before you land.',
-                    'image' => 'media/services/Pre-arrival.webp',
-                    'summary' => 'Before you land, know exactly what to do, in what order, with your specific documents reviewed by someone who has done it. No guesswork. No costly mistakes.',
-                    'starting_from' => '$79 AUD',
-                    'pricing' => [
-                        'Async plan $79 AUD',
-                        'Strategy call $148 AUD',
-                        'Full pre-arrival package $279 AUD',
-                    ],
-                    'includes_heading' => 'What\'s included',
-                    'timeline' => [
-                        [
-                            'title' => 'Document readiness review',
-                            'description' => 'Passport, visa, qualifications, references — what you have, what you\'re missing, what matters',
-                        ],
-                        [
-                            'title' => 'Personalised first-90-days action plan',
-                            'description' => 'Step by step, in order, matched to your visa, city, and family situation',
-                        ],
-                        [
-                            'title' => 'Vetted service referrals — pre-matched',
-                            'description' => 'Accountant, migration agent, school, GP — selected for your background and language needs',
-                        ],
-                        [
-                            'title' => '60-minute video strategy call',
-                            'description' => 'Live session with Entel — ask everything, leave with clarity',
-                        ],
-                        [
-                            'title' => 'Written summary delivered within 48hrs',
-                            'description' => 'Everything from the call in writing — your permanent reference document',
-                        ],
-                    ],
-                    'items' => [
-                        'Document readiness review for passports, visas, qualifications, and references.',
-                        'Personalised first-90-days action plan matched to your visa, city, and family situation.',
-                        'Vetted service referrals pre-matched to your background and language needs.',
-                        '60-minute video strategy call with Entel for live Q&A and clarity.',
-                        'Written summary delivered within 48 hours for permanent reference.',
-                    ],
-                ],
-                [
-                    'number' => '02',
-                    'stage' => 'Arrival day & first weeks',
-                    'headline' => 'Welcome to Australia — Airport Meet & Arrival Concierge',
-                    'tagline' => 'Step off the plane without feeling lost.',
-                    'image' => 'media/services/Arrival day & first weeks.webp',
-                    'summary' => 'From the moment you land to your first week, someone is there so you are not figuring everything out alone while jet-lagged.',
-                    'starting_from' => '$179 AUD',
-                    'pricing' => [
-                        'Meet & greet $179 AUD',
-                        'Full arrival day $299 AUD',
-                        'First week concierge $499 AUD',
-                    ],
-                    'includes_heading' => 'What\'s included',
-                    'timeline' => [
-                        [
-                            'title' => 'Airport arrivals meet and greet',
-                            'description' => 'Met at the gate by name. A familiar face when everything else is unfamiliar.',
-                        ],
-                        [
-                            'title' => 'SIM card and first cash sorted',
-                            'description' => 'Best local SIM for your needs set up before you leave the airport',
-                        ],
-                        [
-                            'title' => 'Transport to accommodation arranged',
-                            'description' => 'Accompanied to your first address — no Uber confusion when you\'re jet-lagged',
-                        ],
-                        [
-                            'title' => 'First-week trusted concierge access',
-                            'description' => 'WhatsApp access to Entel for the first 7 days — quick answers when you need them',
-                        ],
-                        [
-                            'title' => 'Neighbourhood orientation briefing',
-                            'description' => 'Where to shop, which GP bulk bills, nearest transport — the things Google won\'t tell you',
-                        ],
-                    ],
-                    'items' => [
-                        'Airport arrivals meet and greet, including a familiar face at the gate.',
-                        'SIM card setup and first cash guidance before leaving the airport.',
-                        'Transport arranged and supported to your first accommodation.',
-                        'WhatsApp concierge access for the first 7 days.',
-                        'Neighbourhood orientation with practical local advice you will actually use.',
-                    ],
-                ],
-                [
-                    'number' => '03',
-                    'stage' => 'Month 1–3',
-                    'headline' => 'Settle In — Your First 90 Days, Fully Supported',
-                    'tagline' => 'Your new country sorted for you.',
-                    'image' => 'media/services/Month 1–3.webp',
-                    'summary' => 'Housing, schools, banking, community, and healthcare support matched to who you are, where you are from, and how you want to live.',
-                    'starting_from' => '$749 AUD',
-                    'starting_from_meta' => '90-day package',
-                    'pricing' => [
-                        'Individual $749 AUD',
-                        'Family $949 AUD',
-                        'Premium with property search $1,399 AUD',
-                    ],
-                    'includes_heading' => 'What\'s included',
-                    'timeline' => [
-                        [
-                            'title' => 'Rental finding — on the ground',
-                            'description' => 'Entel or vetted local attends inspections, sends walkthroughs, submits applications on your behalf',
-                        ],
-                        [
-                            'title' => 'School placement — culturally matched',
-                            'description' => 'Not just ratings — which school has your community, speaks your language, fits your children',
-                        ],
-                        [
-                            'title' => 'Banking and financial setup',
-                            'description' => 'TFN, bank account, superannuation — in the right order, with the right providers',
-                        ],
-                        [
-                            'title' => 'Community and cultural connections',
-                            'description' => 'Introductions to your community group, cultural centre, mosque, temple, or church — wherever you belong',
-                        ],
-                        [
-                            'title' => 'Three support calls over 90 days',
-                            'description' => 'Week 1 kickoff · Day 30 check-in · Day 90 review and next steps',
-                        ],
-                        [
-                            'title' => 'Full vetted referral network access',
-                            'description' => 'GP, dentist, accountant, lawyer, gynaecologist — matched to your language, background, and location',
-                        ],
-                    ],
-                    'items' => [
-                        'Rental finding support with inspections, walkthroughs, and application help.',
-                        'School placement guidance based on community fit, language, and family needs.',
-                        'Banking and financial setup in the right order, including TFN, bank account, and super.',
-                        'Introductions to relevant community, cultural, or faith networks.',
-                        'Three support calls across 90 days plus access to a vetted referral network.',
-                    ],
-                ],
-            ],
-            'faqs' => [
-                [
-                    'question' => 'What does a settlement concierge in Australia do?',
-                    'answer' => 'A settlement concierge guides new arrivals through every practical step of settling in Australia — from pre-arrival document preparation to finding a rental, setting up a bank account, getting a Tax File Number, connecting with schools, and building community. At SettleANZ, the concierge service is run by Entel Dajsmaili, who went through the full migration and settlement journey himself in 2001. He knows what the system actually looks like from the inside not just what the government websites say.',
-                ],
-                [
-                    'question' => 'What is included in the airport meet and greet service?',
-                    'answer' => 'From the moment you land, someone is there with your name. We sort your SIM card before you leave the airport, arrange your transport to your first address, and give you a neighbourhood briefing, where to shop, which GP bulk bills, how to get around. For the first 7 days, you have direct WhatsApp access to Entel for any question that comes up. It is the difference between landing in a new country feeling lost and landing feeling like someone is in your corner from day one.',
-                ],
-                [
-                    'question' => 'How does SettleANZ help with finding a rental in Australia?',
-                    'answer' => 'Finding a rental in Australia is hard when you have no local rental history or references — which is the situation every new arrival faces. SettleANZ handles the search on the ground. Entel or a vetted local attends inspections on your behalf, sends you walkthroughs, and submits applications with supporting documentation that gives you the best chance of being approved. We also match you to suburbs that fit your commute, budget, community, and family needs — not just whatever comes up on realestate.com.au.',
-                ],
-                [
-                    'question' => 'How much does it cost to settle in Australia as an expat?',
-                    'answer' => 'In Sydney or Melbourne, expect to spend $3,000 to $6,000 AUD in your first 90 days, covering bond and rent in advance (typically 4 to 6 weeks upfront), furniture and household basics, SIM and utilities, groceries and transport, and professional services like accountants or school applications. Regional cities like Brisbane, Adelaide, and Perth are 20 to 30 percent cheaper. SettleANZ provides a personalised cost breakdown as part of the Pre-Arrival Strategy package, matched to your city and family situation.',
-                ],
-            ],
+        return view('guides.services.arrive', array_merge($this->seo('services.arrive', 'Stage 01 - Arrive | SettleANZ', 'Your Smooth Start in a New Land. Meticulous planning before you leave and a warm welcome upon arrival.'), [
+            'settings' => $this->settings(),
+        ]));
+    }
+
+    public function settleServices(): View
+    {
+        return view('guides.services.settle', array_merge($this->seo('services.settle', 'Stage 02 - Settle | SettleANZ', 'Establish Your Foundation. Helping you establish your new life, from finding a home to setting up essential services.'), [
+            'settings' => $this->settings(),
+        ]));
+    }
+
+    public function workInvestServices(): View
+    {
+        return view('guides.services.work-invest', array_merge($this->seo('services.work-invest', 'Stage 03 - Work & Invest | SettleANZ', 'Build Your Future. Help you thrive professionally and financially in Australia or New Zealand.'), [
+            'settings' => $this->settings(),
+        ]));
+    }
+
+    public function enjoyServices(): View
+    {
+        return view('guides.services.enjoy', array_merge($this->seo('services.enjoy', 'Stage 04 - Enjoy | SettleANZ', 'Embrace Your New Life Fully. Community integration, family support, and long-term planning.'), [
+            'settings' => $this->settings(),
         ]));
     }
 

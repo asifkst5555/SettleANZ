@@ -6,25 +6,8 @@
             position: relative;
             overflow: hidden;
             background:
-                radial-gradient(circle at top right, rgba(232, 119, 58, 0.12), transparent 26%),
-                linear-gradient(180deg, #f4eee5 0%, #ffffff 20%, #f7fbfa 100%);
-        }
-
-        .settlement-page::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 12% 12%, rgba(11, 122, 117, 0.06) 0 1px, transparent 1px),
-                radial-gradient(circle at 88% 18%, rgba(242, 125, 45, 0.08) 0 1px, transparent 1px);
-            background-size: 18px 18px, 22px 22px;
-            opacity: 0.35;
-            pointer-events: none;
-        }
-
-        .settlement-page > * {
-            position: relative;
-            z-index: 1;
+                radial-gradient(circle at top right, rgba(232, 119, 58, 0.08), transparent 35%),
+                linear-gradient(180deg, #fdfbfa 0%, #ffffff 20%, #f7fbfa 100%);
         }
 
         .settlement-hero {
@@ -32,1089 +15,991 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            min-height: calc(100svh - 88px);
-            padding: 2.5rem 0;
-            background:
-                linear-gradient(140deg, #0a524f 0%, #0c6a67 36%, #11807a 100%);
+            min-height: 580px;
+            padding: 80px 0;
+            background: linear-gradient(140deg, #0a524f 0%, #0c6a67 36%, #11807a 100%);
             color: #ffffff;
-        }
-
-        .settlement-hero .container {
-            width: min(calc(100% - 2rem), var(--max-width));
-            margin: 0 auto;
-        }
-
-        .settlement-hero::before,
-        .settlement-hero::after {
-            content: '';
-            position: absolute;
-            border-radius: 999px;
-            pointer-events: none;
         }
 
         .settlement-hero::before {
-            top: -160px;
-            right: -120px;
-            width: 380px;
-            height: 380px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0%, transparent 70%);
-        }
-
-        .settlement-hero::after {
-            bottom: -190px;
-            left: -140px;
-            width: 460px;
-            height: 460px;
-            background: radial-gradient(circle, rgba(232, 119, 58, 0.2) 0%, transparent 72%);
-        }
-
-        .settlement-hero__grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: clamp(1.5rem, 3vw, 2.75rem);
-            align-items: center;
-            width: 100%;
-        }
-
-        .settlement-hero__content,
-        .settlement-hero__visual {
-            position: relative;
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
             z-index: 1;
+        }
+
+        .settlement-hero__row {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
         .settlement-hero__content {
-            max-width: 560px;
-            padding-right: clamp(0.5rem, 1.8vw, 1.5rem);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
         }
 
-        .settlement-hero .eyebrow,
-        .settlement-hero h1,
-        .settlement-hero p {
-            color: #ffffff;
-        }
-
-        .settlement-hero .eyebrow {
-            color: rgba(255, 255, 255, 0.76);
+        .settlement-hero__label {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #9FE1CB;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.25rem;
+            display: block;
         }
 
         .settlement-hero h1 {
-            max-width: 9.5ch;
-            margin-top: 0.75rem;
-            font-size: clamp(2.8rem, 5.2vw, 4.75rem);
-            line-height: 0.93;
+            font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-weight: 800;
+            line-height: 1.15;
             letter-spacing: -0.02em;
+            margin-top: 0;
+            margin-bottom: 1.25rem;
+            color: #ffffff;
         }
 
         .settlement-hero__subhead {
-            max-width: 52ch;
-            margin-top: 1.05rem;
-            color: rgba(255, 255, 255, 0.88);
-            font-size: 1rem;
-            line-height: 1.72;
+            font-size: clamp(1.05rem, 2vw, 1.2rem);
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.25rem;
+            font-weight: 500;
         }
 
-        .settlement-hero__actions {
+        .settlement-hero__ctas {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.95rem;
-            margin-top: 1.55rem;
-        }
-
-        .settlement-hero__actions .button--ghost-light {
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            background: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-            box-shadow: none;
-        }
-
-        .settlement-hero__actions .button--ghost-light:hover,
-        .settlement-hero__actions .button--ghost-light:focus-visible {
-            background: rgba(255, 255, 255, 0.14);
-        }
-
-        .settlement-hero__visual-stack {
-            position: relative;
-            width: 100%;
-            max-width: 560px;
-            justify-self: end;
-        }
-
-        .settlement-hero__image {
-            display: block;
-            width: 100%;
-            height: min(72vh, 720px);
-            object-fit: cover;
-            object-position: center;
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            border-radius: 34px;
-            box-shadow: 0 36px 90px rgba(4, 24, 30, 0.26);
-        }
-
-        .settlement-overview {
-            padding: 1.25rem 0 1rem;
-        }
-
-        .settlement-overview__card {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.85rem;
-            align-items: stretch;
-        }
-
-        .settlement-overview__item {
-            display: grid;
-            grid-template-columns: 52px minmax(0, 1fr);
             gap: 1rem;
-            align-items: start;
-            padding: 1.25rem 1.2rem;
-            border: 1px solid rgba(11, 122, 117, 0.1);
-            border-radius: 24px;
-            background: #ffffff;
-            box-shadow: 0 20px 45px rgba(12, 55, 66, 0.08);
+            flex-wrap: wrap;
+            width: 100%;
         }
 
-        .settlement-overview__icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 52px;
-            height: 52px;
-            color: var(--primary-brand);
-        }
-
-        .settlement-overview__icon svg {
-            width: 38px;
-            height: 38px;
-            fill: currentColor;
-        }
-
-        .settlement-overview__content {
-            min-width: 0;
-        }
-
-        .settlement-overview__number {
-            display: inline-block;
-            margin-bottom: 0.35rem;
-            color: #6e838d;
-            font-size: 0.76rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        .settlement-overview__item strong {
-            display: block;
-            color: var(--primary-dark);
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1.18rem;
-            font-weight: 700;
-            line-height: 1.25;
-        }
-
-        .settlement-overview__content > span:not(.settlement-overview__number) {
-            display: block;
-            margin-top: 0.45rem;
-            color: #59707b;
-            line-height: 1.65;
-            font-size: 0.95rem;
-        }
-
-        .settlement-packages {
-            padding: 1rem 0 3.5rem;
-        }
-
-        .settlement-packages__intro {
-            max-width: 780px;
-            margin: 0 auto 1.45rem;
-            text-align: center;
-        }
-
-        .settlement-packages__intro p {
-            margin-top: 0.75rem;
-            color: #5f727c;
-        }
-
-        .settlement-package-grid {
-            display: grid;
-            gap: 1.2rem;
-        }
-
-        .settlement-package {
-            display: grid;
-            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-            gap: 4rem;
-            align-items: start;
-            padding: 3rem;
-            border: 1px solid rgba(11, 122, 117, 0.12);
-            border-radius: 32px;
-            background: rgba(255, 255, 255, 0.94);
-            box-shadow: 0 26px 62px rgba(12, 55, 66, 0.08);
-        }
-
-        .settlement-package--reverse {
-            grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
-        }
-
-        .settlement-package--reverse .settlement-package__aside {
-            order: -1;
-        }
-
-        .settlement-package__stage {
+        .settlement-hero__btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            color: #657983;
-            font-size: 0.82rem;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 15px;
             font-weight: 700;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+            cursor: pointer;
         }
 
-        .settlement-package__number {
-            display: inline-grid;
-            place-items: center;
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            background: linear-gradient(180deg, #ff9a4f 0%, #f27d2d 100%);
-            color: #ffffff;
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
+        .settlement-hero__btn--primary {
+            background: #E8773A;
+            color: #ffffff !important;
+            border: none;
+            box-shadow: 0 4px 14px rgba(232, 119, 58, 0.25);
         }
 
-        .settlement-package__headline {
-            max-width: 20ch;
-            color: var(--primary-dark);
-            font-size: clamp(1.72rem, 2.5vw, 2.28rem);
-            line-height: 1.02;
-            letter-spacing: -0.04em;
+        .settlement-hero__btn--primary:hover {
+            background: #d36528;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(232, 119, 58, 0.35);
         }
 
-        .settlement-package__tagline {
-            margin-top: 0.55rem;
-            color: var(--primary-brand);
-            font-size: 0.96rem;
-            font-weight: 700;
+        .settlement-hero__btn--secondary {
+            background: transparent;
+            color: #ffffff !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
         }
 
-        .settlement-package__summary {
-            max-width: 49ch;
-            margin-top: 0.7rem;
-            color: #556a75;
-            line-height: 1.6;
-            font-size: 0.95rem;
+        .settlement-hero__btn--secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
         }
 
-        .settlement-package__includes-title {
-            margin-top: 1.15rem;
-            color: var(--primary-dark);
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            line-height: 1.25;
+        .settlement-hero__visual-container {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
         }
 
-        .settlement-package__timeline {
+        .settlement-hero__visual {
             position: relative;
-            display: grid;
-            gap: 1.5rem;
-            margin-top: 1.15rem;
-            padding-left: 0;
-        }
-
-        .settlement-package__timeline::before {
-            content: '';
-            position: absolute;
-            left: 28px;
-            top: 8px;
-            bottom: 8px;
-            width: 2px;
-            background: linear-gradient(180deg, rgba(11, 122, 117, 0.22) 0%, rgba(11, 122, 117, 0.08) 100%);
-        }
-
-        .settlement-package__timeline-item {
-            position: relative;
-            display: grid;
-            grid-template-columns: 56px minmax(0, 1fr);
-            gap: 1rem;
-            align-items: start;
-        }
-
-        .settlement-package__timeline-icon {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            place-items: center;
-            width: 56px;
-            height: 56px;
-            border-radius: 999px;
-            background: #ffffff;
-            color: var(--primary-brand);
-            box-shadow:
-                0 0 0 8px rgba(225, 243, 241, 0.95),
-                inset 0 0 0 1px rgba(11, 122, 117, 0.1);
-        }
-
-        .settlement-package__timeline-icon svg {
-            width: 28px;
-            height: 28px;
-            fill: currentColor;
-        }
-
-        .settlement-package__timeline-content {
-            padding-top: 0.15rem;
-        }
-
-        .settlement-package__timeline-content strong {
-            display: block;
-            color: #12233c;
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1.32rem;
-            font-weight: 700;
-            line-height: 1.18;
-            letter-spacing: -0.03em;
-        }
-
-        .settlement-package__timeline-content span {
-            display: block;
-            margin-top: 0.45rem;
-            color: #5d6d78;
-            font-size: 0.98rem;
-            line-height: 1.6;
-            max-width: 42ch;
-        }
-
-        .settlement-package__list {
-            display: grid;
-            gap: 0.68rem;
-            margin-top: 1rem;
-        }
-
-        .settlement-package__list li {
-            display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
-            gap: 0.7rem;
-            align-items: start;
-            color: #38505b;
-            line-height: 1.48;
-            font-size: 0.93rem;
-        }
-
-        .settlement-package__list-icon {
-            display: inline-grid;
-            place-items: center;
-            width: 34px;
-            height: 34px;
-            margin-top: 0.05rem;
-            border-radius: 11px;
-            background: #eff7f5;
-            color: var(--primary-brand);
-            box-shadow: inset 0 0 0 1px rgba(11, 122, 117, 0.08);
-        }
-
-        .settlement-package__list-icon svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .settlement-package__aside {
-            display: grid;
-            align-content: start;
-            gap: 0.8rem;
-        }
-
-        .settlement-package__media {
-            position: relative;
+            width: 100%;
+            max-width: 440px;
+            aspect-ratio: 1 / 1;
+            border-radius: 32px;
             overflow: hidden;
-            min-height: 210px;
-            border-radius: 26px;
-            background: #dfeceb;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .settlement-package--pre-arrival .settlement-package__media {
-            min-height: 400px;
-            height: 400px;
-        }
-
-        .settlement-package--pre-arrival .settlement-package__media img {
-            object-position: center 50%;
-        }
-
-        .settlement-package--month-support .settlement-package__media {
-            min-height: 450px;
-            height: 450px;
-        }
-
-        .settlement-package--month-support .settlement-package__media img {
-            object-position: center 50%;
-        }
-
-        .settlement-package__media::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(8, 48, 57, 0.02), rgba(8, 48, 57, 0.22));
-            pointer-events: none;
-        }
-
-        .settlement-package__media img {
-            display: block;
+        .settlement-hero__visual img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
-        .settlement-package__badge {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
+        @media (max-width: 991px) {
+            .settlement-hero {
+                padding: 60px 0;
+            }
+            .settlement-hero__row {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            .settlement-hero__content {
+                align-items: center;
+            }
+            .settlement-hero__ctas {
+                justify-content: center;
+            }
+            .settlement-hero__visual-container {
+                justify-content: center;
+            }
+            .settlement-hero__visual {
+                max-width: 380px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .settlement-hero__ctas {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .settlement-hero__btn {
+                width: 100%;
+            }
+        }
+
+        .intro-quote-section {
+            padding: 5rem 0 3rem;
+            text-align: center;
+        }
+
+        .intro-quote-card {
+            width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
+            padding: 32px;
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
+            position: relative;
+        }
+
+        .intro-quote-text {
+            font-size: clamp(1.15rem, 2vw, 1.45rem);
+            color: var(--body-text);
+            line-height: 1.6;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
             z-index: 1;
+        }
+
+        .intro-quote-author {
+            color: var(--secondary-text);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .stages-overview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            padding-bottom: 5rem;
+        }
+
+        @media (max-width: 991px) {
+            .stages-overview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stage-card {
+            background: #ffffff;
+            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
+            border-radius: var(--radius-card, 18px);
+            padding: 32px;
+            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+
+        .stage-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
+        }
+
+        .stage-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.55rem;
-            min-height: 42px;
-            padding: 0.7rem 0.9rem;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 999px;
-            background: rgba(8, 43, 51, 0.72);
-            color: #ffffff;
-            backdrop-filter: blur(10px);
-        }
-
-        .settlement-package__badge svg {
-            width: 16px;
-            height: 16px;
-            color: #ffb16d;
-        }
-
-        .settlement-package__card {
-            display: grid;
-            gap: 0.75rem;
-            padding: 2.5rem;
-            border-radius: 26px;
-            background:
-                linear-gradient(180deg, rgba(11, 122, 117, 0.08) 0%, rgba(255, 255, 255, 0.98) 100%);
-            box-shadow: inset 0 0 0 1px rgba(11, 122, 117, 0.08);
-        }
-
-        .settlement-package__card-label {
-            color: #6d8088;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .settlement-package__price {
-            color: var(--primary-dark);
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1.7rem;
-            font-weight: 700;
-            line-height: 1.06;
-        }
-
-        .settlement-package__price-meta {
-            margin: 0.2rem 0 0.55rem;
-            color: #5e707b;
-            font-size: 0.85rem;
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        .settlement-package__price-note {
-            color: #5e707b;
-            font-size: 0.88rem;
-            line-height: 1.5;
-        }
-
-        .settlement-package__pricing {
-            display: grid;
-            gap: 0.7rem;
-        }
-
-        .settlement-package__pricing li {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.7rem 0.85rem;
-            border: 1px solid rgba(11, 122, 117, 0.1);
-            border-radius: 14px;
-            background: #ffffff;
-            color: #37525c;
-            font-size: 0.9rem;
-        }
-
-        .settlement-package__pricing li svg {
-            width: 14px;
-            height: 14px;
-            flex: 0 0 auto;
+            gap: 0.5rem;
+            background: var(--light-brand-fill);
             color: var(--primary-brand);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            align-self: flex-start;
+            margin-bottom: 1.25rem;
         }
 
-        .settlement-package__cta {
-            margin-top: 0.1rem;
+        .stage-title {
+            font-size: 1.6rem;
+            color: var(--body-text);
+            font-weight: 800;
+            margin-bottom: 1rem;
         }
 
-        .settlement-eligibility {
-            padding: 0 0 3.25rem;
+        .stage-description {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--secondary-text);
+            margin-bottom: 2rem;
         }
 
-        .settlement-eligibility__panel {
-            position: relative;
-            overflow: hidden;
+        .stage-bullets-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2.5rem 0;
             display: grid;
-            place-items: center;
-            min-height: 420px;
-            padding: 3.5rem 2rem;
-            border-radius: 32px;
-            background:
-                linear-gradient(rgba(11, 122, 117, 0.2), rgba(11, 122, 117, 0.2)),
-                linear-gradient(rgba(9, 25, 31, 0.72), rgba(9, 25, 31, 0.72)),
-                url('{{ asset('media/services/Eligibility check.webp') }}') center/cover no-repeat;
-            box-shadow: 0 28px 70px rgba(10, 41, 47, 0.2);
+            gap: 1.25rem;
         }
 
-        .settlement-eligibility__copy h2,
-        .settlement-eligibility__copy p,
-        .settlement-eligibility__copy .eyebrow {
+        .stage-bullet-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+        }
+
+        .stage-bullet-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            color: var(--primary-brand);
+            margin-top: 0.2rem;
+        }
+
+        .stage-bullet-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stage-bullet-text strong {
+            display: block;
+            font-size: 1rem;
+            color: var(--body-text);
+            font-weight: 700;
+            margin-bottom: 0.15rem;
+        }
+
+        .stage-bullet-text span {
+            font-size: 0.92rem;
+            color: var(--secondary-text);
+            line-height: 1.5;
+            display: block;
+        }
+
+        .stage-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            background: var(--primary-brand);
             color: #ffffff;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: var(--radius-button);
+            text-decoration: none;
+            transition: background 0.25s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(11, 122, 117, 0.15);
         }
 
-        .settlement-eligibility__copy {
+        .stage-cta-btn:hover {
+            background: var(--primary-dark);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .stage-cta-btn::after {
+            content: ' →';
+            margin-left: 0.25rem;
+            transition: transform 0.2s;
+        }
+
+        .stage-cta-btn:hover::after {
+            transform: translateX(3px);
+        }
+
+        /* Disclaimer Styling */
+        .disclaimer-section {
+            padding: 0 0 5rem;
+        }
+
+        .disclaimer-card {
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--secondary-text);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.02);
+        }
+
+        .disclaimer-card h3 {
+            font-size: 1.05rem;
+            color: var(--body-text);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stage-card__image-container {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(10, 35, 45, 0.04);
+            border: 1px solid rgba(16, 88, 98, 0.06);
+        }
+
+        .stage-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: block;
+        }
+
+        .stage-card:hover .stage-card__image {
+            transform: scale(1.04);
+        }
+
+        /* ============================================
+           PREMIUM JOURNEY WORKFLOW — Stripe/Apple Style
+           ============================================ */
+        .journey-workflow {
+            position: relative;
+            padding: 7rem 0 6rem;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 40%, rgba(11,122,117,0.05) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 30%, rgba(232,119,58,0.04) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 50% 80%, rgba(11,122,117,0.03) 0%, transparent 70%),
+                #fafbfc;
+        }
+
+        /* Abstract blur blobs */
+        .journey-workflow::before,
+        .journey-workflow::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+        .journey-workflow::before {
+            width: 500px; height: 500px;
+            top: -120px; left: -100px;
+            background: radial-gradient(circle, rgba(11,122,117,0.14) 0%, transparent 70%);
+        }
+        .journey-workflow::after {
+            width: 400px; height: 400px;
+            bottom: -80px; right: -60px;
+            background: radial-gradient(circle, rgba(232,119,58,0.1) 0%, transparent 70%);
+        }
+
+        /* Dot pattern overlay */
+        .journey-workflow__dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(15,23,42,0.035) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .journey-workflow__inner {
             position: relative;
             z-index: 1;
-            max-width: 1120px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        .journey-workflow__eyebrow {
             text-align: center;
-        }
-
-        .settlement-eligibility__copy .settlement-hero__actions {
-            justify-content: center;
-        }
-
-        .settlement-eligibility__copy p {
-            max-width: 72ch;
-            margin-top: 0.7rem;
-            color: rgba(255, 255, 255, 0.86);
-            font-size: 0.96rem;
-            line-height: 1.65;
-            margin-inline: auto;
-        }
-
-        .settlement-eligibility__copy h2 {
-            max-width: 18ch;
-            margin-top: 1rem;
-            margin-inline: auto;
-            font-size: clamp(2.45rem, 4.8vw, 4.1rem);
-            line-height: 0.98;
-            letter-spacing: -0.05em;
-        }
-
-        .settlement-faqs {
-            padding: 0 0 3.8rem;
-        }
-
-        .settlement-faqs__intro {
-            max-width: 780px;
-            margin: 0 auto 1.45rem;
-            text-align: center;
-        }
-
-        .settlement-faqs__intro p {
-            margin-top: 0.75rem;
-            color: #5f727c;
-        }
-
-        .settlement-faqs__layout {
-            display: grid;
-            grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .settlement-faqs__media {
-            overflow: hidden;
-            border: 1px solid rgba(11, 122, 117, 0.12);
-            border-radius: 30px;
-            background: #e6efed;
-            box-shadow: 0 22px 56px rgba(12, 55, 66, 0.08);
-        }
-
-        .settlement-faqs__media img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 1.12;
-            object-fit: cover;
-        }
-
-        .settlement-faqs__content {
-            display: grid;
-            gap: 0.85rem;
-        }
-
-        .settlement-faq-list {
-            display: grid;
-            gap: 0.85rem;
-        }
-
-        .settlement-faq {
-            padding: 1rem 1.15rem;
-            border: 1px solid rgba(11, 122, 117, 0.12);
-            border-radius: 999px;
-            background: #ffffff;
-            box-shadow: 0 14px 36px rgba(12, 55, 66, 0.06);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease;
-        }
-
-        .settlement-faq[open] {
-            border-color: rgba(11, 122, 117, 0.22);
-            border-radius: 26px;
-            box-shadow: 0 18px 42px rgba(12, 55, 66, 0.08);
-        }
-
-        .settlement-faq summary {
-            list-style: none;
-            cursor: pointer;
-            display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #0b7a75;
+            margin-bottom: 0.75rem;
+            display: flex;
             align-items: center;
-            gap: 1rem;
-            color: var(--primary-dark);
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 0.98rem;
-            font-weight: 700;
-            line-height: 1.4;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        .journey-workflow__eyebrow::before,
+        .journey-workflow__eyebrow::after {
+            content: '';
+            width: 32px; height: 1px;
+            background: linear-gradient(90deg, transparent, #0b7a75, transparent);
         }
 
-        .settlement-faq summary::before {
-            content: '+';
-            display: inline-grid;
-            place-items: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 999px;
-            color: var(--primary-dark);
-            font-size: 1.75rem;
-            font-weight: 500;
-            line-height: 1;
+        .journey-workflow__heading {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
         }
 
-        .settlement-faq[open] summary::before {
-            content: '−';
+        .journey-workflow__subtitle {
+            text-align: center;
+            font-size: 1.125rem;
+            color: #64748b;
+            max-width: 640px;
+            margin: 0 auto 4rem;
+            line-height: 1.7;
         }
 
-        .settlement-faq summary::-webkit-details-marker {
+        /* Connection Path — hidden */
+        .journey-workflow__path-wrap {
+            position: relative;
+        }
+
+        .journey-workflow__path {
             display: none;
         }
 
-        .settlement-faq p {
-            margin-top: 0.85rem;
-            padding-left: 2.95rem;
-            color: #566975;
-            line-height: 1.58;
-            font-size: 0.94rem;
+        /* Cards Grid */
+        .journey-workflow__grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.75rem;
+            position: relative;
+            z-index: 1;
         }
 
-        @media (max-width: 1180px) {
-            .settlement-hero__grid {
-                grid-template-columns: 1fr;
-            }
-
-            .settlement-hero__content {
-                max-width: none;
-                padding-right: 0;
-            }
-
-            .settlement-hero__visual-stack {
-                margin-left: 0;
-                width: 100%;
-                justify-self: stretch;
-            }
-
-            .settlement-hero__image {
-                height: min(58vh, 680px);
-            }
+        /* Individual Card */
+        .jw-card {
+            position: relative;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 28px;
+            padding: 2.25rem 1.75rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1),
+                        box-shadow 0.4s cubic-bezier(0.16,1,0.3,1),
+                        border-color 0.4s ease;
+            box-shadow: 0 4px 24px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+            /* Scroll animation initial state */
+            opacity: 0;
+            transform: translateY(40px);
         }
 
+        .jw-card.jw-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gradient border glow on hover */
+        .jw-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 29px;
+            padding: 2px;
+            background: var(--jw-gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .jw-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(15,23,42,0.1), 0 8px 24px rgba(15,23,42,0.06);
+        }
+        .jw-card:hover::before {
+            opacity: 1;
+        }
+
+        .jw-card:focus-visible {
+            outline: 3px solid var(--jw-color);
+            outline-offset: 4px;
+        }
+
+        /* Stage-specific color tokens — Teal & Orange brand palette */
+        .jw-card[data-stage="1"] { --jw-color: #065e5b; --jw-bg: rgba(6,94,91,0.08); --jw-gradient: linear-gradient(135deg, #065e5b, #0b7a75); transition-delay: 0s; }
+        .jw-card[data-stage="2"] { --jw-color: #0b7a75; --jw-bg: rgba(11,122,117,0.08); --jw-gradient: linear-gradient(135deg, #0b7a75, #14a89f); transition-delay: 0.12s; }
+        .jw-card[data-stage="3"] { --jw-color: #c96a30; --jw-bg: rgba(232,119,58,0.08); --jw-gradient: linear-gradient(135deg, #c96a30, #e8773a); transition-delay: 0.24s; }
+        .jw-card[data-stage="4"] { --jw-color: #e8773a; --jw-bg: rgba(232,119,58,0.08); --jw-gradient: linear-gradient(135deg, #e8773a, #f0935e); transition-delay: 0.36s; }
+
+        /* Icon container */
+        .jw-card__icon-wrap {
+            width: 72px; height: 72px;
+            border-radius: 22px;
+            background: var(--jw-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1),
+                        background 0.4s ease;
+            /* Scroll animation initial */
+            transform: scale(0);
+        }
+        .jw-card.jw-visible .jw-card__icon-wrap {
+            transform: scale(1);
+        }
+        .jw-card__icon-wrap svg {
+            width: 32px; height: 32px;
+            color: var(--jw-color);
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        .jw-card:hover .jw-card__icon-wrap {
+            background: var(--jw-color);
+        }
+        .jw-card:hover .jw-card__icon-wrap svg {
+            color: #ffffff;
+            transform: rotate(-8deg) scale(1.08);
+        }
+
+        /* Stage badge */
+        .jw-card__badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--jw-color);
+            background: var(--jw-bg);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Card title */
+        .jw-card__title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+
+        /* Card description */
+        .jw-card__desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.65;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        /* Connector dots — hidden */
+        .jw-card__dot {
+            display: none;
+        }
+
+        /* ---- Responsive ---- */
         @media (max-width: 1024px) {
-            .settlement-overview__card,
-            .settlement-package,
-            .settlement-package--reverse,
-            .settlement-faqs__layout {
-                grid-template-columns: 1fr;
+            .journey-workflow { padding: 5rem 0 4rem; }
+            .journey-workflow__grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+                max-width: 600px;
+                margin: 0 auto;
             }
-
-            .settlement-package--reverse .settlement-package__aside {
-                order: initial;
+            .journey-workflow__path { display: none; }
+            .jw-card__dot { display: none; }
+            .jw-card {
+                transition-delay: 0s !important;
             }
-
-            .settlement-package__headline,
-            .settlement-hero h1 {
-                max-width: none;
-            }
+            .jw-card[data-stage="1"] { transition-delay: 0s !important; }
+            .jw-card[data-stage="2"] { transition-delay: 0.08s !important; }
+            .jw-card[data-stage="3"] { transition-delay: 0.16s !important; }
+            .jw-card[data-stage="4"] { transition-delay: 0.24s !important; }
         }
 
-        @media (max-width: 767px) {
-            .settlement-hero {
-                min-height: calc(100svh - 72px);
-                padding: 1.75rem 0;
+        @media (max-width: 640px) {
+            .journey-workflow { padding: 4rem 0 3rem; }
+            .journey-workflow__subtitle { font-size: 1rem; margin-bottom: 2.5rem; }
+            .journey-workflow__grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                gap: 1.25rem;
             }
-
-            .settlement-hero .container {
-                width: min(calc(100% - 2rem), var(--max-width));
-            }
-
-            .settlement-hero__content {
-                text-align: center;
-            }
-
-            .settlement-hero__content .eyebrow,
-            .settlement-hero__content h1,
-            .settlement-hero__subhead {
-                text-align: center !important;
-            }
-
-            .settlement-hero h1 {
-                font-size: clamp(2.55rem, 11vw, 3.8rem);
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .settlement-hero__subhead {
-                font-size: 1rem;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .settlement-hero__actions {
-                justify-content: center;
-            }
-
-            .settlement-hero__actions {
-                display: grid;
-            }
-
-            .settlement-hero__actions .button,
-            .settlement-package__cta .button {
-                width: 100%;
-            }
-
-            .settlement-hero__visual-stack {
-                max-width: none;
-            }
-
-            .settlement-hero__image,
-            .settlement-package,
-            .settlement-eligibility__panel,
-            .settlement-overview__card {
-                border-radius: 24px;
-            }
-
-            .settlement-hero__image {
-                height: auto;
-                aspect-ratio: 0.88;
-            }
-
-            .settlement-package,
-            .settlement-eligibility__panel,
-            .settlement-overview__card {
-                padding: 1.15rem;
-            }
-
-            .settlement-package__card,
-            .settlement-faq,
-            .settlement-overview__item,
-            .settlement-eligibility__aside {
-                padding: 1.1rem;
-            }
-
-            .settlement-package__timeline::before {
-                left: 22px;
-            }
-
-            .settlement-package__timeline-item {
-                grid-template-columns: 44px minmax(0, 1fr);
-                gap: 0.9rem;
-            }
-
-            .settlement-package__timeline-icon {
-                width: 44px;
-                height: 44px;
-                box-shadow:
-                    0 0 0 6px rgba(225, 243, 241, 0.95),
-                    inset 0 0 0 1px rgba(11, 122, 117, 0.1);
-            }
-
-            .settlement-package__timeline-icon svg {
-                width: 22px;
-                height: 22px;
-            }
-
-            .settlement-package__timeline-content strong {
-                font-size: 1.08rem;
-            }
-
-            .settlement-package__timeline-content span {
-                font-size: 0.94rem;
-            }
-
-            .settlement-overview__item {
-                grid-template-columns: 44px minmax(0, 1fr);
-                gap: 0.85rem;
-            }
-
-            .settlement-overview__icon {
-                width: 44px;
-                height: 44px;
-            }
-
-            .settlement-overview__icon svg {
-                width: 32px;
-                height: 32px;
-            }
-
-            .settlement-faq {
-                border-radius: 24px;
-            }
-
-            .settlement-faq p {
-                padding-left: 0;
-            }
+            .jw-card { border-radius: 22px; padding: 1.75rem 1.5rem 1.5rem; }
+            .jw-card__icon-wrap { width: 60px; height: 60px; border-radius: 18px; }
+            .jw-card__icon-wrap svg { width: 28px; height: 28px; }
+            .jw-card__title { font-size: 1.2rem; }
         }
     </style>
 @endsection
 
 @section('content')
     <div class="settlement-page">
-        <section id="top" class="settlement-hero">
-            <div class="container settlement-hero__grid">
-                <div class="settlement-hero__content">
-                    <p class="eyebrow">Settlement services</p>
-                    <h1>The only independent concierge for new arrivals in Australia</h1>
-                    <p class="settlement-hero__subhead">We help you at every step of your journey. We find the right person for your specific situation — personally vetted by Entel</p>
-
-                    <div class="settlement-hero__actions">
-                        <a class="button button--large" href="#settlement-packages">Explore Packages</a>
-                        <button class="button button--large button--ghost-light" type="button" data-open-lead-modal>Download SettleANZ Guide</button>
+        <!-- Hero section -->
+        <section class="settlement-hero">
+            <div class="container">
+                <div class="settlement-hero__row">
+                    <div class="settlement-hero__content">
+                        <span class="settlement-hero__label">Settlement Services</span>
+                        <h1>SettleANZ — Personal Concierge Services</h1>
+                        <p class="settlement-hero__subhead">Your Journey to a Thriving Life in Australia & New Zealand</p>
+                        <div class="settlement-hero__ctas">
+                            <a href="#stages" class="settlement-hero__btn settlement-hero__btn--primary">Explore Packages</a>
+                            <a href="#lead-strip" data-open-lead-modal class="settlement-hero__btn settlement-hero__btn--secondary">Check Your Eligibility Free</a>
+                        </div>
                     </div>
-
-                </div>
-
-                <div class="settlement-hero__visual">
-                    <div class="settlement-hero__visual-stack">
-                        <img class="settlement-hero__image" src="{{ asset('media/services/service_her0.webp') }}" alt="Settlement services support for new arrivals in Australia" width="600" height="600">
+                    <div class="settlement-hero__visual-container">
+                        <div class="settlement-hero__visual">
+                            <img src="{{ asset('media/services/service_hero.webp') }}" alt="SettleANZ Personal Concierge Services" />
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="settlement-overview">
+        <!-- Intro Quote section -->
+        <section class="intro-quote-section">
             <div class="container">
-                <div class="settlement-overview__card">
-                    <article class="settlement-overview__item">
-                        <span class="settlement-overview__icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 3 6.7v5.9c0 5.2 3.6 9.9 9 11 5.4-1.1 9-5.8 9-11V6.7L12 2.5Zm4.2 7.2-4.9 5a1 1 0 0 1-1.4 0l-2.2-2.2 1.4-1.4 1.5 1.5 4.2-4.3 1.4 1.4Z"/></svg>
-                        </span>
-                        <div class="settlement-overview__content">
-                            <span class="settlement-overview__number">01</span>
-                            <strong>Plan before you land</strong>
-                            <span>Reduce mistakes early with document review, a first-90-days action plan, and personally matched referrals.</span>
-                        </div>
-                    </article>
-                    <article class="settlement-overview__item">
-                        <span class="settlement-overview__icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 19h19v2h-19v-2Zm18.6-7.5a1.5 1.5 0 0 0-1.84-1.06l-4.74 1.27-6.16-5.74-1.93.52 3.69 6.39-4.43 1.19-1.76-1.38-1.45.39 2.31 4 14.42-3.86A1.5 1.5 0 0 0 21.1 11.5Z"/></svg>
-                        </span>
-                        <div class="settlement-overview__content">
-                            <span class="settlement-overview__number">02</span>
-                            <strong>Arrive with less stress</strong>
-                            <span>Get airport support, transport help, local orientation, and fast answers in those first confusing days.</span>
-                        </div>
-                    </article>
-                    <article class="settlement-overview__item">
-                        <span class="settlement-overview__icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 11.2l1.3 1.5L5 11.7V21h5v-6h4v6h5v-9.3l1.2 1 1.3-1.5L12 3Zm0 5.6a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2Z"/></svg>
-                        </span>
-                        <div class="settlement-overview__content">
-                            <span class="settlement-overview__number">03</span>
-                            <strong>Settle into daily life</strong>
-                            <span>Get support for <a class="text-link" href="/housing">rental search</a>, school fit, <a class="text-link" href="/banking">banking order</a>, healthcare, and the community connections that make life work.</span>
-                        </div>
-                    </article>
+                <div class="intro-quote-card">
+                    <p class="intro-quote-text">
+                        Moving to a new country is a significant life event; you should not plan it according to random advice from strangers on the internet. Seek guidance from someone who has done this before you.
+                    </p>
+                    <p class="intro-quote-author">
+                        SettleANZ offers comprehensive support, broken down into four clear stages, ensuring you navigate your new beginning with confidence and ease.
+                    </p>
+                    <h3 style="margin-top: 1.5rem; font-size: 1.25rem; color: var(--primary-brand); font-weight: 700;">Guiding You Every Step of the Way</h3>
                 </div>
             </div>
         </section>
 
-        <section id="settlement-packages" class="settlement-packages">
-            <div class="container">
-                <div class="settlement-packages__intro">
-                    <p class="eyebrow">Packages</p>
-                    <h2>A premium service path with clear stages, pricing, and outcomes</h2>
-                    <p>The direction from the PDF is kept intact here, but presented with stronger hierarchy and easier scanning so people can quickly find the package that matches where they are in the move.</p>
-                </div>
+        <!-- Premium Journey Workflow Section -->
+        <section class="journey-workflow" aria-labelledby="jw-heading">
+            <div class="journey-workflow__dots" aria-hidden="true"></div>
+            <div class="journey-workflow__inner">
+                <p class="journey-workflow__eyebrow">Simplifying Your Move, Every Step of the Way</p>
+                <h2 class="journey-workflow__heading" id="jw-heading">Your Relocation Journey</h2>
+                <p class="journey-workflow__subtitle">A guided 4-stage roadmap designed to help migrants confidently move, settle, build their future, and truly belong in Australia or New&nbsp;Zealand.</p>
 
-                <div class="settlement-package-grid">
-                    @foreach ($packages as $package)
-                        <article class="settlement-package{{ $loop->first ? ' settlement-package--pre-arrival' : '' }}{{ $loop->index === 1 ? ' settlement-package--reverse' : '' }}{{ $loop->last ? ' settlement-package--month-support' : '' }}">
-                            <div class="settlement-package__content">
-                                <div class="settlement-package__stage">
-                                    <span class="settlement-package__number">{{ $package['number'] }}</span>
-                                    <span>{{ $package['stage'] }}</span>
-                                </div>
+                <div class="journey-workflow__path-wrap">
+                    <!-- Gradient connection path -->
+                    <div class="journey-workflow__path" aria-hidden="true"></div>
 
-                                <h3 class="settlement-package__headline">{{ $package['headline'] }}</h3>
-                                <p class="settlement-package__tagline">{{ $package['tagline'] }}</p>
-                                <p class="settlement-package__summary">{{ $package['summary'] }}</p>
-
-                                @if (!empty($package['timeline']))
-                                    <p class="settlement-package__includes-title">{{ $package['includes_heading'] ?? "What's included" }}</p>
-                                    <div class="settlement-package__timeline" aria-label="{{ $package['stage'] }} inclusions">
-                                        @foreach ($package['timeline'] as $timelineItem)
-                                            <article class="settlement-package__timeline-item">
-                                                <span class="settlement-package__timeline-icon" aria-hidden="true">
-                                                    @php
-                                                        $timelineTitle = strtolower($timelineItem['title']);
-                                                    @endphp
-                                                    @if (str_contains($timelineTitle, 'document'))
-                                                        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v13.5A1.5 1.5 0 0 1 18.5 22h-11A1.5 1.5 0 0 1 6 20.5V2Zm8 1.8V8h4.2L14 3.8ZM9 11h6v1.8H9V11Zm0 3.6h6v1.8H9v-1.8Zm0-7.2h2.8v1.8H9V7.4Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'airport') || str_contains($timelineTitle, 'arrival'))
-                                                        <svg viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"><path d="m22 2-7 20-4-9-9-4 20-7Z"></path><path d="m22 2-11 11"></path></svg>
-                                                    @elseif (str_contains($timelineTitle, 'sim') || str_contains($timelineTitle, 'cash') || str_contains($timelineTitle, 'bank'))
-                                                        <svg viewBox="0 0 24 24"><path d="M7 2h8l5 5v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V8h4.5L14 3.5ZM9 11h6v2H9v-2Zm0 4h6v2H9v-2Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'rental') || str_contains($timelineTitle, 'rent') || str_contains($timelineTitle, 'housing'))
-                                                        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21h-6v-6h-6v6H3v-10.5Zm2 1V19h2v-6h10v6h2v-7.5L12 5.6 5 11.5Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'school') || str_contains($timelineTitle, 'education') || str_contains($timelineTitle, 'placement'))
-                                                        <svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 8-4v6h2V8L12 3Zm-6 9.5V16c0 2 3 3.5 6 3.5s6-1.5 6-3.5v-3.5l-6 3-6-3Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'banking') || str_contains($timelineTitle, 'financial') || str_contains($timelineTitle, 'superannuation'))
-                                                        <svg viewBox="0 0 24 24"><path d="M12 3 2 8v2h20V8L12 3Zm-7 9h2v6H5v-6Zm4 0h2v6H9v-6Zm4 0h2v6h-2v-6Zm4 0h2v6h-2v-6ZM2 20h20v2H2v-2Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'transport') || str_contains($timelineTitle, 'accommodation') || str_contains($timelineTitle, 'travel'))
-                                                        <svg viewBox="0 0 24 24"><path d="M6 3h12l3 8v8h-2v-2H5v2H3v-8l3-8Zm1.4 2-2 5h13.2l-2-5H7.4ZM6 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm12 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'community') || str_contains($timelineTitle, 'cultural') || str_contains($timelineTitle, 'connection'))
-                                                        <svg viewBox="0 0 24 24"><path d="M16 11a3 3 0 1 0-2.999-3A3 3 0 0 0 16 11Zm-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm0 2c-2.67 0-8 1.34-8 4v2h10v-2c0-1.22.94-2.27 2.31-3.05A10.1 10.1 0 0 0 8 13Zm8 0c-.29 0-.62.02-.97.05 1.2.87 1.97 1.99 1.97 3.45v2H24v-2c0-2.66-5.33-4-8-4Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'support call') || str_contains($timelineTitle, 'calls') || str_contains($timelineTitle, 'check-in'))
-                                                        <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.4 15.4 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.56.57 1 1 0 0 1 1 1V21a1 1 0 0 1-1 1A18 18 0 0 1 2 4a1 1 0 0 1 1-1h4.26a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.56 1 1 0 0 1-.24 1l-2 2.24Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'concierge') || str_contains($timelineTitle, 'whatsapp') || str_contains($timelineTitle, 'access'))
-                                                        <svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5h-3.2L10 20.3V16H6.5A2.5 2.5 0 0 1 4 13.5v-8Zm4 2.3h8v2H8v-2Zm0 3.8h5.6v2H8v-2Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'neighbourhood') || str_contains($timelineTitle, 'orientation') || str_contains($timelineTitle, 'local'))
-                                                        <svg viewBox="0 0 24 24"><path d="M12 2.5c4.1 0 7.5 3.4 7.5 7.5 0 5.3-7.5 11.5-7.5 11.5S4.5 15.3 4.5 10c0-4.1 3.4-7.5 7.5-7.5Zm0 10.2a2.7 2.7 0 1 0 0-5.4 2.7 2.7 0 0 0 0 5.4Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'plan'))
-                                                        <svg viewBox="0 0 24 24"><path d="M17 2v2h3a1 1 0 0 1 1 1v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a1 1 0 0 1 1-1h3V2h2v2h6V2h2ZM5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9H5Zm3 3h3v3H8v-3Zm5 0h3v1.8h-3V12Zm0 3.2h3V17h-3v-1.8Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'referral'))
-                                                        <svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm-6 14.5c0-2.5 3.1-4.5 6-4.5s6 2 6 4.5V19H6v-1.5ZM18 7h4v2h-4V7Zm0 4h4v2h-4v-2Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'video') || str_contains($timelineTitle, 'call'))
-                                                        <svg viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h9A2.5 2.5 0 0 1 17 7.5v1.8l3.8-2A1 1 0 0 1 22 8.2v7.6a1 1 0 0 1-1.2.9L17 14.7v1.8A2.5 2.5 0 0 1 14.5 19h-9A2.5 2.5 0 0 1 3 16.5v-9Z"/></svg>
-                                                    @elseif (str_contains($timelineTitle, 'written') || str_contains($timelineTitle, 'summary'))
-                                                        <svg viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16l-4-2.2L12 20l-3-2.2L5 20V4a2 2 0 0 1 2-2Zm2 5v2h6V7H9Zm0 4v2h6v-2H9Z"/></svg>
-                                                    @else
-                                                        <svg viewBox="0 0 24 24"><path d="M11 2.5a7 7 0 0 0-7 7c0 5.2 7 12 7 12s7-6.8 7-12a7 7 0 0 0-7-7Zm0 9.3a2.3 2.3 0 1 1 0-4.6 2.3 2.3 0 0 1 0 4.6Z"/></svg>
-                                                    @endif
-                                                </span>
-                                                <div class="settlement-package__timeline-content">
-                                                    <strong>{{ $timelineItem['title'] }}</strong>
-                                                    <span>{{ $timelineItem['description'] }}</span>
-                                                </div>
-                                            </article>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <ul class="settlement-package__list">
-                                        @foreach ($package['items'] as $item)
-                                            <li>
-                                                <span class="settlement-package__list-icon" aria-hidden="true">
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"></path></svg>
-                                                </span>
-                                                <span>{{ $item }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
+                    <div class="journey-workflow__grid" role="list">
+                        <!-- Stage 01 — Arrive -->
+                        <a href="#stage-arrive" class="jw-card" data-stage="1" role="listitem" aria-label="Stage 01: Arrive — Prepare everything before and immediately after arrival">
+                            <span class="jw-card__dot" aria-hidden="true"></span>
+                            <div class="jw-card__icon-wrap">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                                </svg>
                             </div>
+                            <span class="jw-card__badge">Stage 01</span>
+                            <h3 class="jw-card__title">Arrive</h3>
+                            <p class="jw-card__desc">Prepare everything before and immediately after arrival — documents, housing, SIM, transport and your first-week action plan.</p>
+                        </a>
 
-                            <aside class="settlement-package__aside" aria-label="{{ $package['stage'] }} details">
-                                <div class="settlement-package__media">
-                                    <span class="settlement-package__badge">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.5-2.8 7.7-7 9-4.2-1.3-7-4.5-7-9V7l7-4z"></path></svg>
-                                        Stage {{ $package['number'] }} support
-                                    </span>
-                                    <img src="{{ asset($package['image']) }}" alt="{{ $package['stage'] }} support" loading="lazy">
-                                </div>
+                        <!-- Stage 02 — Settle -->
+                        <a href="#stage-settle" class="jw-card" data-stage="2" role="listitem" aria-label="Stage 02: Settle — Find housing, schools, banking and essential services">
+                            <span class="jw-card__dot" aria-hidden="true"></span>
+                            <div class="jw-card__icon-wrap">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                </svg>
+                            </div>
+                            <span class="jw-card__badge">Stage 02</span>
+                            <h3 class="jw-card__title">Settle</h3>
+                            <p class="jw-card__desc">Find housing, schools, banking and essential services — feel confident and grounded in your new environment.</p>
+                        </a>
 
-                                <div class="settlement-package__card">
-                                    <p class="settlement-package__card-label">Starting from</p>
-                                    <p class="settlement-package__price">{{ $package['starting_from'] }}</p>
-                                    @if (!empty($package['starting_from_meta']))
-                                        <p class="settlement-package__price-meta">{{ $package['starting_from_meta'] }}</p>
-                                    @endif
-                                    <p class="settlement-package__price-note">Choose the level of support that matches where you are now, then keep the next stage open for later if needed.</p>
+                        <!-- Stage 03 — Work & Invest -->
+                        <a href="#stage-work-invest" class="jw-card" data-stage="3" role="listitem" aria-label="Stage 03: Work and Invest — Career growth, financial planning and investment">
+                            <span class="jw-card__dot" aria-hidden="true"></span>
+                            <div class="jw-card__icon-wrap">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </div>
+                            <span class="jw-card__badge">Stage 03</span>
+                            <h3 class="jw-card__title">Work & Invest</h3>
+                            <p class="jw-card__desc">Build your career and financial future with smart planning, credential recognition and the right opportunities.</p>
+                        </a>
 
-                                    <ul class="settlement-package__pricing">
-                                        @foreach ($package['pricing'] as $price)
-                                            <li>
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m9 12 2 2 4-4"></path></svg>
-                                                <span>{{ $price }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                        <!-- Stage 04 — Enjoy -->
+                        <a href="#stage-enjoy" class="jw-card" data-stage="4" role="listitem" aria-label="Stage 04: Enjoy — Lifestyle, community, citizenship and long-term future">
+                            <span class="jw-card__dot" aria-hidden="true"></span>
+                            <div class="jw-card__icon-wrap">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                                </svg>
+                            </div>
+                            <span class="jw-card__badge">Stage 04</span>
+                            <h3 class="jw-card__title">Enjoy</h3>
+                            <p class="jw-card__desc">Experience a balanced and fulfilling life while creating lasting memories — citizenship, community and belonging.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                                    <div class="settlement-package__cta">
-                                        <button class="button button--large button--full" type="button"
-                                            data-open-package-modal
-                                            data-package-number="{{ $package['number'] }}"
-                                            data-package-stage="{{ $package['stage'] }}"
-                                            data-package-headline="{{ $package['headline'] }}"
-                                            data-package-price="{{ $package['starting_from'] }}">
-                                            Book this Service Now
-                                        </button>
+        <script>
+        (function() {
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('jw-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.jw-card, .journey-workflow__path').forEach(function(el) {
+                observer.observe(el);
+            });
+        })();
+        </script>
+
+        <!-- Stages Grid Section -->
+        <section class="stages-section" id="stages">
+            <div class="container">
+                <div class="stages-overview-grid">
+                    <!-- Stage 1 -->
+                    <div class="stage-card" id="stage-arrive">
+                        <div>
+                            <div class="stage-card__image-container">
+                                <img src="{{ asset('media/services/services_new/stage-1.webp') }}" class="stage-card__image" alt="Stage 1: Arrive" />
+                            </div>
+                            <span class="stage-badge">Stage 01</span>
+                            <h2 class="stage-title">Arrive: Your Smooth Start</h2>
+                            <p class="stage-description">
+                                The first stage covers everything before and immediately after you land. Most people underestimate how much preparation matters — the wrong paperwork, the wrong suburb, the wrong sequence of steps in the first week can cost you months. This stage makes sure your arrival is the beginning of something good, not the start of a stressful scramble.
+                            </p>
+                            
+                            <ul class="stage-bullets-list">
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Pre-arrival document review</strong>
+                                        <span>We review your visa, qualifications, references and flag exactly what's missing before you land.</span>
                                     </div>
-                                </div>
-                            </aside>
-                        </article>
-                    @endforeach
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Personalised 90-day action plan</strong>
+                                        <span>Your specific steps, in the right order — matched to your visa type, city, family, and profession.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Airport meet & greet</strong>
+                                        <span>Someone who knows Australia or New Zealand meets you at arrivals. SIM sorted, transport handled, neighbourhood briefing done.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Vetted referrals — culturally matched</strong>
+                                        <span>GP who speaks your language. Accountant who knows your visa. Migration lawyer we personally trust. Not Google results.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="/settlement-services/arrive" class="stage-cta-btn">Explore Arrival Service</a>
+                    </div>
+
+                    <!-- Stage 2 -->
+                    <div class="stage-card" id="stage-settle">
+                        <div>
+                            <div class="stage-card__image-container">
+                                <img src="{{ asset('media/services/services_new/stage-2.webp') }}" class="stage-card__image" alt="Stage 2: Settle" />
+                            </div>
+                            <span class="stage-badge">Stage 02</span>
+                            <h2 class="stage-title">Settle: Establish Your Foundation</h2>
+                            <p class="stage-description">
+                                You have found your feet. The adrenaline of arrival is fading and the real work begins finding a permanent home, choosing schools for your children, understanding how banking and healthcare work, and starting to feel like you belong somewhere. This stage handles the practical foundations that make everything else possible.
+                            </p>
+                            
+                            <ul class="stage-bullets-list">
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Rental finding on the ground</strong>
+                                        <span>We attend open homes, send video walkthroughs, and submit applications on your behalf. No rental history? We know how to handle that.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>School placement culturally matched</strong>
+                                        <span>Not just school ratings. Which school has your community, has ESL support, and fits your children's specific needs.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Banking and financial setup</strong>
+                                        <span>TFN or IRD, bank account, superannuation or KiwiSaver — in the right order, with the right providers for your situation.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Community & cultural connections</strong>
+                                        <span>Introductions to your cultural community, mosque, temple, church, or professional network — wherever you belong.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="/settlement-services/settle" class="stage-cta-btn">Explore Settlement Services</a>
+                    </div>
+
+                    <!-- Stage 3 -->
+                    <div class="stage-card" id="stage-work-invest">
+                        <div>
+                            <div class="stage-card__image-container">
+                                <img src="{{ asset('media/services/services_new/stage-3.webp') }}" class="stage-card__image" alt="Stage 3: Work & Invest" />
+                            </div>
+                            <span class="stage-badge">Stage 03</span>
+                            <h2 class="stage-title">Work & Invest: Build Your Future</h2>
+                            <p class="stage-description">
+                                You are settled enough to think beyond survival. Now comes the question every migrant eventually asks: how do I get the most out of this country professionally and financially? This stage helps you navigate the job market, understand your earning potential, and start making smart decisions with what you earn, so your future here is as secure as your present.
+                            </p>
+                            
+                            <ul class="stage-bullets-list">
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Job pathways and recruitment referrals</strong>
+                                        <span>Referred to vetted recruitment agencies that know how to place skilled migrants, not just any recruiter.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Credential recognition support</strong>
+                                        <span>Guidance on NZQA, skills assessment bodies, and professional registration for regulated occupations.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Tax, super and financial planning</strong>
+                                        <span>Referral to accountants and financial planners who specialise in migrants — your tax situation is not the same as a local's.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Property and business investment</strong>
+                                        <span>Introduction to property investment, mortgage brokers, buyers agents, and business setup — when you are ready to go beyond earning to building.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="/settlement-services/work-invest" class="stage-cta-btn">Explore Work & Invest Services</a>
+                    </div>
+
+                    <!-- Stage 4 -->
+                    <div class="stage-card" id="stage-enjoy">
+                        <div>
+                            <div class="stage-card__image-container">
+                                <img src="{{ asset('media/services/services_new/stage-4.webp') }}" class="stage-card__image" alt="Stage 4: Enjoy" />
+                            </div>
+                            <span class="stage-badge">Stage 04</span>
+                            <h2 class="stage-title">Enjoy: Embrace Your New Lifestyle</h2>
+                            <p class="stage-description">
+                                The hardest part is behind you. You have a home, an income, a routine. The stress of arrival has given way to something quieter and more meaningful — a sense that this place is actually yours. This final stage is about deepening that feeling. Exploring your new country. Building real belonging. And for some, giving back to the people arriving after you, the way you wish someone had done for you.
+                            </p>
+                            
+                            <ul class="stage-bullets-list">
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Citizenship pathway guidance</strong>
+                                        <span>When you are ready to make it official — understanding the citizenship timeline, eligibility, and application process for Australia or New Zealand.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Long-term property and wealth planning</strong>
+                                        <span>Referrals to buyers agents, financial planners, and property investment specialists for building long-term wealth in your new country.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Community and cultural deepening</strong>
+                                        <span>Going beyond survival connections — festivals, cultural organisations, professional networks, and spaces where you feel genuinely at home.</span>
+                                    </div>
+                                </li>
+                                <li class="stage-bullet-item">
+                                    <svg class="stage-bullet-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4 5.6 5.6L20 7.8l-1.4-1.4z"/></svg>
+                                    <div class="stage-bullet-text">
+                                        <strong>Giving back: Mentoring new arrivals</strong>
+                                        <span>If you want to support the people coming after you, we will connect you with opportunities to mentor, guide, and welcome the next generation of new arrivals.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="/settlement-services/enjoy" class="stage-cta-btn">Explore Enjoy Services</a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="eligibility-check" class="settlement-eligibility">
+        <!-- Disclaimer box -->
+        <section class="disclaimer-section">
             <div class="container">
-                <div class="settlement-eligibility__panel">
-                    <div class="settlement-eligibility__copy">
-                        <p class="eyebrow">Eligibility check</p>
-                        <h2>Not  sure  which  stage  you're  at  or  which  package  fits?</h2>
-                        <p>Tell Entel where you are in your journey — pre-arrival, just landed, or a month in — and he'll point you to the right support.</p>
-
-                        <div class="settlement-hero__actions">
-                            <a class="button button--large" href="/contact">Ask a Question First</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="settlement-faqs">
-            <div class="container">
-                <div class="settlement-faqs__intro">
-                    <p class="eyebrow">Frequently asked questions</p>
-                    <h2>Questions people usually ask before choosing settlement support</h2>
-                    <p>Clear answers to the practical questions people usually ask before choosing a settlement support package.</p>
-                </div>
-
-                <div class="settlement-faqs__layout">
-                    <div class="settlement-faqs__content">
-                        <div class="settlement-faq-list">
-                            @foreach ($faqs as $faq)
-                                <details class="settlement-faq"@if ($loop->first) open @endif>
-                                    <summary>{{ $faq['question'] }}</summary>
-                                    <p>{{ $faq['answer'] }}</p>
-                                </details>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="settlement-faqs__media">
-                        <img src="{{ asset('media/services/faq.webp') }}" alt="Settlement support frequently asked questions" loading="lazy" width="600" height="450">
-                    </div>
+                <div class="disclaimer-card">
+                    <h3>Disclaimer</h3>
+                    <p>
+                        We are NOT a registered migration agent and do NOT provide immigration advice, visa assistance, or visa application services. We provide practical settlement guidance for newcomers to Australia (housing, banking, healthcare, employment, community integration). For visa advice, contact a MARA-registered migration agent (search: <a href="https://www.mara.gov.au" target="_blank" rel="noopener">www.mara.gov.au</a>).
+                    </p>
                 </div>
             </div>
         </section>

@@ -9,10 +9,19 @@ class SiteDefaults
         return [
             ['label' => 'Home', 'href' => '/#top', 'visible' => true],
             ['label' => 'New to Australia', 'href' => '/new-to-australia', 'visible' => true],
-            ['label' => 'Settlement Services', 'href' => '/settlement-services', 'visible' => true],
-            ['label' => 'Housing', 'href' => '/housing', 'visible' => false],
-            ['label' => 'Banking', 'href' => '/banking', 'visible' => false],
-            ['label' => 'Migration', 'href' => '/migration-services', 'visible' => false],
+            ['label' => 'New to New Zealand', 'href' => '/new-to-new-zealand', 'visible' => true],
+            [
+                'label' => 'Settlement Services',
+                'href' => '/settlement-services',
+                'visible' => true,
+                'submenu' => [
+                    ['label' => 'service', 'href' => '/settlement-services'],
+                    ['label' => 'Stage 01 - Arrive', 'href' => '/settlement-services/arrive'],
+                    ['label' => 'Stage 02 - Settle', 'href' => '/settlement-services/settle'],
+                    ['label' => 'Stage 03 - Work & Invest', 'href' => '/settlement-services/work-invest'],
+                    ['label' => 'Stage 04 - Enjoy', 'href' => '/settlement-services/enjoy'],
+                ]
+            ],
             ['label' => 'Blog', 'href' => '/blog', 'visible' => true],
             ['label' => 'Directory', 'href' => '/directory', 'visible' => true],
             ['label' => 'About', 'href' => '/about', 'visible' => true],
@@ -38,16 +47,10 @@ class SiteDefaults
                 'href' => '/new-to-australia',
             ],
             [
-                'title' => 'Housing Guide',
-                'eyebrow' => 'Relocation guide',
-                'description' => 'Understand bonds, lease types, suburb choices, and the difference between short-term and long-term accommodation.',
-                'href' => '/housing',
-            ],
-            [
-                'title' => 'Banking Guide',
-                'eyebrow' => 'Finance guide',
-                'description' => 'Comparison-friendly content for bank accounts, transfer tools, tax file numbers, and superannuation basics.',
-                'href' => '/banking',
+                'title' => 'Settlement Services',
+                'eyebrow' => 'Full package guidance',
+                'description' => 'Personalised support from airport pickup to securing your first rental and building your community.',
+                'href' => '/settlement-services',
             ],
         ];
     }

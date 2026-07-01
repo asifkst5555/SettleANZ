@@ -49,39 +49,33 @@ Route::get('/new-to-australia', function () {
     ]);
 })->name('guides.new-to-australia');
 
+Route::get('/new-to-new-zealand', function () {
+    $seo = Schema::hasTable('page_seo') ? PageSeo::forPage('new-to-new-zealand') : null;
+    return view('guides.new-to-new-zealand', [
+        'metaTitle'       => $seo?->meta_title       ?: 'New to New Zealand? Complete Guide for New Arrivals 2026 | SettleANZ',
+        'metaDescription' => $seo?->meta_description ?: 'Just arrived in New Zealand or moving soon? Here\'s exactly what to do first — IRD number, bank account, ACC, housing — in the right order.',
+        'metaOgTitle'     => $seo?->og_title         ?: null,
+        'metaOgDesc'      => $seo?->og_description   ?: null,
+        'metaOgImage'     => $seo?->og_image         ?: null,
+        'metaCanonical'   => $seo?->canonical_url    ?: null,
+        'metaNoIndex'     => $seo?->no_index         ?? false,
+        'metaSchemaType'  => $seo?->schema_type      ?: null,
+        'readingTime' => '2026 guide',
+        'lastUpdated' => '2026',
+        'tocItems' => [
+            ['id' => 'before-you-land', 'label' => 'Before You Land'],
+            ['id' => 'dos-and-donts', 'label' => 'Dos and Don\'ts'],
+            ['id' => 'first-7-days', 'label' => 'First 7 Days'],
+            ['id' => 'faq', 'label' => 'FAQ'],
+        ],
+    ]);
+})->name('guides.new-to-new-zealand');
+
 Route::get('/settlement-services', [PageController::class, 'settlementServices'])->name('guides.settlement-services');
-
-Route::get('/housing', function () {
-    return view('guides.housing', [
-        'metaTitle' => 'Finding a Home in Australia as an Expat | SettleANZ',
-        'metaDescription' => 'A practical housing guide for expats covering short-term stays, rentals, suburbs, common mistakes, and trusted relocation partners.',
-        'bookingLabel' => 'Book a Free Relocation Call',
-        'featuredPartners' => [
-            ['name' => 'Harbour Move Co.', 'description' => 'Relocation support for suburb shortlists, inspection coordination, and family move planning.', 'cta' => 'Talk to Harbour Move Co.'],
-            ['name' => 'Anchor Relocation', 'description' => 'Useful for first-month setup, furnished stays, and getting settled before your long-term lease begins.', 'cta' => 'Book with Anchor Relocation'],
-            ['name' => 'Southern Cross Settling', 'description' => 'A hands-on relocation partner for newcomers who want help comparing areas, agents, and housing options.', 'cta' => 'Speak to Southern Cross'],
-        ],
-    ]);
-})->name('guides.housing');
-
-Route::get('/banking', function () {
-    return view('guides.banking', [
-        'metaTitle' => 'Banking in Australia as an Expat | SettleANZ',
-        'metaDescription' => 'A practical expat banking guide covering account setup, transfer tools, tax file numbers, and superannuation basics.',
-        'bankComparison' => [
-            ['name' => 'Airwallex', 'monthly_fee' => '$0', 'transfer_fee' => 'Low FX spread', 'online_setup' => 'Yes', 'rating' => 'Best for most people', 'recommended' => true],
-            ['name' => 'CommBank', 'monthly_fee' => 'Varies by account', 'transfer_fee' => 'Higher than specialist tools', 'online_setup' => 'Partial', 'rating' => 'Trusted major bank', 'recommended' => false],
-            ['name' => 'Westpac', 'monthly_fee' => 'Varies by account', 'transfer_fee' => 'Moderate', 'online_setup' => 'Partial', 'rating' => 'Good branch access', 'recommended' => false],
-        ],
-        'transferTools' => [
-            ['name' => 'Wise', 'summary' => 'Strong for transparent pricing and a smooth app experience when sending money internationally.', 'cta' => 'Compare Wise'],
-            ['name' => 'OFX', 'summary' => 'Useful for larger transfers when you want rate support and a more guided process.', 'cta' => 'Compare OFX'],
-            ['name' => 'WorldRemit', 'summary' => 'A familiar option for smaller personal transfers, depending on your corridor and payout method.', 'cta' => 'Compare WorldRemit'],
-        ],
-    ]);
-})->name('guides.banking');
-
-Route::get('/migration-services', [PageController::class, 'migrationServices'])->name('guides.migration-services');
+Route::get('/settlement-services/arrive', [PageController::class, 'arriveServices'])->name('services.arrive');
+Route::get('/settlement-services/settle', [PageController::class, 'settleServices'])->name('services.settle');
+Route::get('/settlement-services/work-invest', [PageController::class, 'workInvestServices'])->name('services.work-invest');
+Route::get('/settlement-services/enjoy', [PageController::class, 'enjoyServices'])->name('services.enjoy');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/directory', [DirectoryController::class, 'index'])->name('directory.index');

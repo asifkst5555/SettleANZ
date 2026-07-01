@@ -1,0 +1,898 @@
+@extends('layouts.app')
+
+@section('page_styles')
+    <style>
+        .service-detail-page {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at top right, rgba(11, 122, 117, 0.08), transparent 35%),
+                linear-gradient(180deg, #fdfbfa 0%, #ffffff 20%, #f7fbfa 100%);
+        }
+
+        .service-hero {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            min-height: 520px;
+            padding: 80px 0;
+            background: linear-gradient(140deg, #0a524f 0%, #0c6a67 36%, #11807a 100%);
+            color: #ffffff;
+        }
+
+        .service-hero::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(232, 119, 58, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .service-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(159, 225, 203, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .service-hero__row {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-hero__content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .service-hero__badge {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #9FE1CB;
+            background: rgba(159, 225, 203, 0.15);
+            border: 1px solid rgba(159, 225, 203, 0.25);
+            padding: 6px 14px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            backdrop-filter: blur(4px);
+        }
+
+        .service-hero h1 {
+            font-size: clamp(2.2rem, 3.8vw, 3rem);
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-top: 0;
+            margin-bottom: 1.25rem;
+            color: #ffffff;
+        }
+
+        .service-hero__subhead {
+            font-size: clamp(1.05rem, 2vw, 1.2rem);
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .service-hero__highlights {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .service-hero__highlight-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 6px 12px;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+        }
+
+        .service-hero__highlight-icon {
+            width: 16px;
+            height: 16px;
+            color: #9FE1CB;
+            flex-shrink: 0;
+        }
+
+        .service-hero__visual-container {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        .service-hero__visual {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 4 / 3;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .service-hero__visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        @media (max-width: 991px) {
+            .service-hero {
+                padding: 60px 0;
+                min-height: auto;
+            }
+            .service-hero__row {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            .service-hero__content {
+                align-items: center;
+            }
+            .service-hero__highlights {
+                justify-content: center;
+            }
+            .service-hero__visual-container {
+                justify-content: center;
+            }
+            .service-hero__visual {
+                max-width: 380px;
+            }
+        }
+
+        .packages-section {
+            padding: 5rem 0;
+        }
+
+        /* New Flagship Layout styling */
+        .flagship-body__row {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        /* Left Column Details */
+        .flagship-details__title {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--body-text);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .flagship-details__intro {
+            font-size: 1.1rem;
+            color: var(--secondary-text);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        /* Timeline/Phases */
+        .flagship-timeline {
+            position: relative;
+            margin-bottom: 4rem;
+            padding-left: 2rem;
+            border-left: 2px solid rgba(16, 88, 98, 0.1);
+        }
+
+        .flagship-timeline__item {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .flagship-timeline__item:last-child {
+            margin-bottom: 0;
+        }
+
+        .flagship-timeline__bullet {
+            position: absolute;
+            left: calc(-2rem - 9px);
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 99px;
+            background: var(--primary-brand);
+            border: 4px solid #ffffff;
+            box-shadow: 0 0 0 4px rgba(16, 88, 98, 0.15);
+        }
+
+        .flagship-timeline__phase {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-brand);
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .flagship-timeline__title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--body-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .flagship-timeline__desc {
+            font-size: 0.95rem;
+            color: var(--secondary-text);
+            line-height: 1.5;
+        }
+
+        /* Inclusions Grid */
+        .flagship-inclusions__title {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--body-text);
+            margin-bottom: 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(16, 88, 98, 0.08);
+        }
+
+        .flagship-inclusions__grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .flagship-inclusion__card {
+            background: #ffffff;
+            border: 1px solid rgba(16, 88, 98, 0.06);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(10, 35, 45, 0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .flagship-inclusion__card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(10, 35, 45, 0.04);
+            border-color: rgba(16, 88, 98, 0.12);
+        }
+
+        .flagship-inclusion__icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(159, 225, 203, 0.15);
+            color: var(--primary-brand);
+            margin-bottom: 1rem;
+        }
+
+        .flagship-inclusion__card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--body-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .flagship-inclusion__card-desc {
+            font-size: 0.88rem;
+            color: var(--secondary-text);
+            line-height: 1.5;
+        }
+
+        /* Sidebar Sticky Box */
+        .flagship-sidebar {
+            position: sticky;
+            top: 100px;
+            z-index: 10;
+            display: grid;
+            gap: 2.5rem;
+        }
+
+        .flagship-sticky-card {
+            background: #ffffff;
+            border: 1px solid rgba(16, 88, 98, 0.08);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 36px rgba(10, 35, 45, 0.06);
+        }
+
+        .flagship-sticky-card__image-container {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(16, 88, 98, 0.06);
+        }
+
+        .flagship-sticky-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .flagship-sticky-card:hover .flagship-sticky-card__image {
+            transform: scale(1.03);
+        }
+
+        .flagship-sticky-card__body {
+            padding: 2rem;
+        }
+
+        .flagship-sticky-card__badge {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--cta-accent);
+            background: rgba(232, 119, 58, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .flagship-sticky-card__title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--body-text);
+            margin-bottom: 0.5rem;
+            line-height: 1.25;
+        }
+
+        .flagship-sticky-card__tagline {
+            font-size: 0.95rem;
+            color: var(--secondary-text);
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .flagship-checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.75rem;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .flagship-checklist__item {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.88rem;
+            color: var(--body-text);
+            font-weight: 600;
+        }
+
+        .flagship-checklist__icon {
+            width: 16px;
+            height: 16px;
+            color: #10B981;
+            flex-shrink: 0;
+        }
+
+        .flagship-sticky-card__price-box {
+            border-top: 1px solid rgba(16, 88, 98, 0.06);
+            padding-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .flagship-sticky-card__price-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--secondary-text);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .flagship-sticky-card__price-val {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-brand);
+        }
+
+        .pricing-section {
+            background: var(--page-background);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(16, 88, 98, 0.05);
+        }
+
+        .pricing-section h4 {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-brand);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pricing-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.65rem;
+        }
+
+        .pricing-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--body-text);
+            line-height: 1.4;
+        }
+
+        .pricing-bullet {
+            flex-shrink: 0;
+            width: 14px;
+            height: 14px;
+            color: var(--cta-accent);
+            margin-top: 0.15rem;
+        }
+
+        .package-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--primary-brand);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-radius: var(--radius-button);
+            text-decoration: none;
+            transition: background 0.25s, transform 0.2s;
+            box-shadow: 0 4px 12px rgba(11, 122, 117, 0.2);
+            border: 0;
+            cursor: pointer;
+        }
+
+        .package-cta-btn:hover {
+            background: var(--primary-dark);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Final CTA Banner */
+        .bottom-cta-banner {
+            padding: 2.5rem 0 5rem 0;
+        }
+
+        .bottom-cta-card {
+            background: linear-gradient(135deg, #fdfbfa 0%, #ffffff 100%);
+            border: 1px solid rgba(16, 88, 98, 0.1);
+            border-radius: 24px;
+            padding: 3.5rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(10, 35, 45, 0.04);
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .bottom-cta-card h2 {
+            font-size: 1.8rem;
+            color: var(--body-text);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .bottom-cta-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.25rem;
+        }
+
+        .bottom-cta-actions .button {
+            padding: 0.9rem 2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            border-radius: var(--radius-button);
+            transition: background 0.25s, transform 0.2s;
+        }
+
+        .bottom-cta-actions .btn-primary {
+            background: var(--primary-brand);
+            color: #ffffff;
+            border: 1px solid transparent;
+            box-shadow: 0 4px 12px rgba(11, 122, 117, 0.2);
+        }
+
+        .bottom-cta-actions .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .bottom-cta-actions .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--primary-brand);
+            color: var(--primary-brand);
+        }
+
+        .bottom-cta-actions .btn-secondary:hover {
+            background: var(--light-brand-fill);
+            transform: translateY(-2px);
+        }
+
+        /* Disclaimer Styling */
+        .disclaimer-section {
+            padding: 0 0 5rem;
+        }
+
+        .disclaimer-card {
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--secondary-text);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.02);
+        }
+
+        .disclaimer-card h3 {
+            font-size: 1.05rem;
+            color: var(--body-text);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Trust Strip styling */
+        .trust-strip {
+            background: rgba(16, 88, 98, 0.02);
+            border-top: 1px solid rgba(16, 88, 98, 0.04);
+            border-bottom: 1px solid rgba(16, 88, 98, 0.04);
+            padding: 2.5rem 0;
+            margin-bottom: 4rem;
+        }
+
+        .trust-strip__row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .trust-strip__item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .trust-strip__value {
+            font-size: 2.2rem;
+            font-weight: 850;
+            color: var(--primary-brand);
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            margin-bottom: 0.25rem;
+        }
+
+        .trust-strip__label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--secondary-text);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 991px) {
+            .flagship-body__row {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .flagship-sidebar {
+                position: static;
+                gap: 2rem;
+            }
+            .flagship-inclusions__grid {
+                grid-template-columns: 1fr;
+            }
+            .trust-strip__row {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+@endsection
+
+@section('content')
+    <div class="service-detail-page">
+        <!-- Hero section -->
+        <section class="service-hero">
+            <div class="container">
+                <div class="service-hero__row">
+                    <div class="service-hero__content">
+                        <span class="service-hero__badge">Stage 04. Enjoy</span>
+                        <h1>Enjoy: Embrace Your New Lifestyle</h1>
+                        <p class="service-hero__subhead">
+                            You have done the hard part. The stress of arrival, the scramble to find housing, the first awkward months of building a routine in an unfamiliar place — all of that is behind you. With the essentials in place, our ‘Enjoy’ services help you fully integrate, explore, and make the most of your new life.
+                        </p>
+                        <div class="service-hero__highlights">
+                            <span class="service-hero__highlight-pill">
+                                <svg class="service-hero__highlight-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                Citizenship Pathways
+                            </span>
+                            <span class="service-hero__highlight-pill">
+                                <svg class="service-hero__highlight-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                Long-Term Wealth
+                            </span>
+                            <span class="service-hero__highlight-pill">
+                                <svg class="service-hero__highlight-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                Mentoring Networks
+                            </span>
+                        </div>
+                    </div>
+                    <div class="service-hero__visual-container">
+                        <div class="service-hero__visual">
+                            <img src="{{ asset('media/services/services_new/enjoy_hero.webp') }}" alt="Stage 04: Enjoy" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Packages Section -->
+        <section class="packages-section">
+            <div class="container">
+                <div class="flagship-body__row">
+                    <!-- Left column flagship details -->
+                    <div class="flagship-details">
+                        <h2 class="flagship-details__title">Embrace Your New Lifestyle</h2>
+                        <p class="flagship-details__intro">
+                            With the housing and work foundations sorted, we help you integrate into local social life, enroll your family in great schools, and navigate long-term pathways.
+                        </p>
+
+                        <!-- Timeline / Steps -->
+                        <div class="flagship-timeline">
+                            <div class="flagship-timeline__item">
+                                <div class="flagship-timeline__bullet"></div>
+                                <span class="flagship-timeline__phase">Phase 01: Social Integration</span>
+                                <h3 class="flagship-timeline__title">Community & Lifestyle Integration</h3>
+                                <p class="flagship-timeline__desc">
+                                    Get connected to local clubs, cultural associations, and social groups matching your hobbies, driving licensing procedures, and local volunteering programs.
+                                </p>
+                            </div>
+                            <div class="flagship-timeline__item">
+                                <div class="flagship-timeline__bullet"></div>
+                                <span class="flagship-timeline__phase">Phase 02: Family Settlement</span>
+                                <h3 class="flagship-timeline__title">Childcare & School Enrollment</h3>
+                                <p class="flagship-timeline__desc">
+                                    In-depth school system consulting, pediatrician support, spousal job programs, and cultural adaptation support to help children settle.
+                                </p>
+                            </div>
+                            <div class="flagship-timeline__item">
+                                <div class="flagship-timeline__bullet"></div>
+                                <span class="flagship-timeline__phase">Phase 03: Long-term Planning</span>
+                                <h3 class="flagship-timeline__title">Citizenship Pathway Guidance</h3>
+                                <p class="flagship-timeline__desc">
+                                    When you're ready to make it permanent, we walk your entire family through residency timelines and visa transition updates.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Grid Showcase of Inclusions -->
+                        <h3 class="flagship-inclusions__title">Everything Included in Your Enjoy Stage Support</h3>
+                        <div class="flagship-inclusions__grid">
+                            <div class="flagship-inclusion__card">
+                                <div class="flagship-inclusion__icon-box">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                </div>
+                                <h4 class="flagship-inclusion__card-title">Social & Cultural Connections</h4>
+                                <p class="flagship-inclusion__card-desc">Introductions to local clubs, cultural associations, and social groups matching your hobbies.</p>
+                            </div>
+                            <div class="flagship-inclusion__card">
+                                <div class="flagship-inclusion__icon-box">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                </div>
+                                <h4 class="flagship-inclusion__card-title">Childcare & School Consulting</h4>
+                                <p class="flagship-inclusion__card-desc">Navigating education structures, finding pediatric care, and direct school enrollment workflows.</p>
+                            </div>
+                            <div class="flagship-inclusion__card">
+                                <div class="flagship-inclusion__icon-box">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                </div>
+                                <h4 class="flagship-inclusion__card-title">Healthcare Navigation</h4>
+                                <p class="flagship-inclusion__card-desc">Comprehensive walkthrough of Medicare/NZ health systems, clinics, and private family plans.</p>
+                            </div>
+                            <div class="flagship-inclusion__card">
+                                <div class="flagship-inclusion__icon-box">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                </div>
+                                <h4 class="flagship-inclusion__card-title">Driving & Public Transport</h4>
+                                <p class="flagship-inclusion__card-desc">Exchanging overseas licenses, transport cards, and local car ownership requirements.</p>
+                            </div>
+                            <div class="flagship-inclusion__card">
+                                <div class="flagship-inclusion__icon-box">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                </div>
+                                <h4 class="flagship-inclusion__card-title">Spousal Support & Networks</h4>
+                                <p class="flagship-inclusion__card-desc">Partner integration, social community introductions, and spousal employment advice.</p>
+                            </div>
+                            <div class="flagship-inclusion__card">
+                                <div class="flagship-inclusion__icon-box">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                </div>
+                                <h4 class="flagship-inclusion__card-title">Citizenship Eligibility Map</h4>
+                                <p class="flagship-inclusion__card-desc">Step-by-step guidance on residency durations, character criteria, and visa renewals.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right column sticky sidebar cards -->
+                    <div class="flagship-sidebar">
+                        <!-- Package 6 Card -->
+                        <div class="flagship-sticky-card">
+                            <div class="flagship-sticky-card__image-container">
+                                <img src="{{ asset('media/services/stage_04_Package_6.webp') }}" class="flagship-sticky-card__image" alt="Package 6: Community & Lifestyle Integration" />
+                            </div>
+                            <div class="flagship-sticky-card__body">
+                                <span class="flagship-sticky-card__badge">Stage 4: Lifestyle</span>
+                                <h3 class="flagship-sticky-card__title">Package 6: Community & Lifestyle Integration</h3>
+                                <p class="flagship-sticky-card__tagline">Connect, explore, and truly feel at home.</p>
+                                
+                                <ul class="flagship-checklist">
+                                    <li class="flagship-checklist__item">
+                                        <svg class="flagship-checklist__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        Social & Club Connections
+                                    </li>
+                                    <li class="flagship-checklist__item">
+                                        <svg class="flagship-checklist__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        Driving License Support
+                                    </li>
+                                    <li class="flagship-checklist__item">
+                                        <svg class="flagship-checklist__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        Citizenship Duration Check
+                                    </li>
+                                </ul>
+
+                                <div class="flagship-sticky-card__price-box">
+                                    <span class="flagship-sticky-card__price-label">Program Investment</span>
+                                    <span class="flagship-sticky-card__price-val">$1,499 AUD</span>
+                                </div>
+
+                                <button class="package-cta-btn" type="button"
+                                    data-open-package-modal
+                                    data-package-number="6"
+                                    data-package-stage="Stage 04. Enjoy: Embrace Your New Lifestyle"
+                                    data-package-headline="Community & Lifestyle Integration"
+                                    data-package-price="$1,499 AUD">
+                                    Discover Your Community
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Package 7 Card -->
+                        <div class="flagship-sticky-card">
+                            <div class="flagship-sticky-card__image-container">
+                                <img src="{{ asset('media/services/stage_04_Package_7.webp') }}" class="flagship-sticky-card__image" alt="Package 7: Family & Education Support" />
+                            </div>
+                            <div class="flagship-sticky-card__body">
+                                <span class="flagship-sticky-card__badge">Stage 4: Family</span>
+                                <h3 class="flagship-sticky-card__title">Package 7: Family & Education Support</h3>
+                                <p class="flagship-sticky-card__tagline">Ensure your family thrives in their new environment.</p>
+                                
+                                <ul class="flagship-checklist">
+                                    <li class="flagship-checklist__item">
+                                        <svg class="flagship-checklist__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        School & Childcare Consultation
+                                    </li>
+                                    <li class="flagship-checklist__item">
+                                        <svg class="flagship-checklist__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        Spousal Placement Support
+                                    </li>
+                                    <li class="flagship-checklist__item">
+                                        <svg class="flagship-checklist__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                        Pediatric Healthcare Mapping
+                                    </li>
+                                </ul>
+
+                                <div class="flagship-sticky-card__price-box">
+                                    <span class="flagship-sticky-card__price-label">Program Investment</span>
+                                    <span class="flagship-sticky-card__price-val">$2,599 AUD</span>
+                                </div>
+
+                                <button class="package-cta-btn" type="button"
+                                    data-open-package-modal
+                                    data-package-number="7"
+                                    data-package-stage="Stage 04. Enjoy: Embrace Your New Lifestyle"
+                                    data-package-headline="Family & Education Support"
+                                    data-package-price="$2,599 AUD">
+                                    Support Your Family’s Transition
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom CTA section -->
+        <section class="bottom-cta-banner">
+            <div class="container">
+                <div class="bottom-cta-card">
+                    <h2>Ready to Begin Your Journey?</h2>
+                    <div class="bottom-cta-actions">
+                        <a href="/settlement-services" class="button btn-primary">Explore All SettleANZ Services</a>
+                        <a href="/new-to-australia" class="button btn-secondary">Get Your Free 90-Day Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Strip section -->
+        <section class="trust-strip">
+            <div class="container">
+                <div class="trust-strip__row">
+                    <div class="trust-strip__item">
+                        <div class="trust-strip__value">99%</div>
+                        <div class="trust-strip__label">Family Integration</div>
+                    </div>
+                    <div class="trust-strip__item">
+                        <div class="trust-strip__value">94%</div>
+                        <div class="trust-strip__label">School Satisfaction</div>
+                    </div>
+                    <div class="trust-strip__item">
+                        <div class="trust-strip__value">Life-Long</div>
+                        <div class="trust-strip__label">Community Connections</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer Box -->
+        <section class="disclaimer-section">
+            <div class="container">
+                <div class="disclaimer-card">
+                    <h3>Disclaimer</h3>
+                    <p>
+                        We are NOT a registered migration agent and do NOT provide immigration advice, visa assistance, or visa application services. We provide practical settlement guidance for newcomers to Australia (housing, banking, healthcare, employment, community integration). For visa advice, contact a MARA-registered migration agent (search: <a href="https://www.mara.gov.au" target="_blank" rel="noopener">www.mara.gov.au</a>).
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+@endsection

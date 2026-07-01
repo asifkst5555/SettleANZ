@@ -335,12 +335,12 @@
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 auto !important;
-                padding: 0 1rem !important;
+                padding: 0 20px !important;
                 box-sizing: border-box !important;
             }
 
             .section {
-                padding: 2.5rem 0 !important;
+                padding: 56px 0 !important;
             }
 
             main {
@@ -355,16 +355,17 @@
 
             .site-header {
                 width: 100% !important;
-                overflow-x: hidden !important;
+                overflow: visible !important;
                 position: fixed !important;
                 inset: 0 0 auto 0 !important;
                 z-index: 1001 !important;
-                background: rgba(18, 50, 71, 0.94) !important;
-                box-shadow: none !important;
+                background: rgba(255, 255, 255, 0.96) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+                border-bottom: 1px solid var(--nav-border) !important;
             }
 
             .site-header .brand strong {
-                color: #ffffff !important;
+                color: #222222 !important;
             }
 
             .site-header .menu-toggle {
@@ -374,7 +375,7 @@
             }
 
             .site-header .menu-toggle span:not(.sr-only) {
-                background: #ffffff !important;
+                background: #222222 !important;
             }
 
             .site-header__inner {
@@ -714,7 +715,7 @@
             }
 
             .site-header .brand strong {
-                color: #ffffff !important;
+                color: #222222 !important;
             }
 
             .site-header .menu-toggle {
@@ -727,7 +728,7 @@
             }
 
             .site-header .menu-toggle span {
-                background: #ffffff !important;
+                background: #222222 !important;
             }
 
             .site-header .site-nav {
@@ -852,6 +853,89 @@
             color: #f27d2d !important;
             font-weight: 700;
         }
+
+        .site-header__inner {
+            width: min(calc(100% - 2rem), 1416px) !important;
+            max-width: 1416px !important;
+        }
+
+        @@media (min-width: 1280px) {
+            .site-nav {
+                gap: clamp(0.5rem, 1.5vw, 2.15rem) !important;
+            }
+            .site-nav a {
+                white-space: nowrap !important;
+            }
+        }
+
+        /* Navigation Dropdown Menu Styles */
+        .nav-dropdown {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #ffffff;
+            border: 1px solid var(--nav-border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(10, 35, 45, 0.12);
+            min-width: 220px;
+            padding: 0.75rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1020;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Show dropdown on hover */
+        .nav-dropdown:hover .dropdown-menu,
+        .nav-dropdown:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .dropdown-menu a {
+            display: block !important;
+            padding: 0.6rem 1.2rem !important;
+            color: var(--body-text) !important;
+            font-size: 14px !important;
+            text-align: left !important;
+            text-decoration: none !important;
+            background: transparent !important;
+            border-bottom: 0 !important;
+            box-shadow: none !important;
+            font-weight: 500 !important;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--light-brand-fill) !important;
+            color: var(--primary-brand) !important;
+        }
+
+        .dropdown-menu a.is-active {
+            color: var(--cta-accent) !important;
+            font-weight: 700 !important;
+            background-color: rgba(232, 119, 58, 0.05) !important;
+        }
+
+        .chevron {
+            font-size: 0.75rem;
+            margin-left: 0.25rem;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .nav-dropdown:hover .chevron {
+            transform: rotate(180deg);
+        }
     </style>
     <script defer src="{{ asset('site.js') }}?v={{ $siteJsVersion }}"></script>
     <script>
@@ -912,9 +996,7 @@
         <header @class(['site-header', 'site-header--home' => request()->routeIs('home')]) data-site-header>
             <div class="container site-header__inner">
                 <a class="brand" href="/#top" aria-label="SettleANZ home">
-                    <span>
-                        <strong>SettleANZ</strong>
-                    </span>
+                    <img src="{{ asset('media/logo/logo.webp') }}" alt="SettleANZ Logo" class="brand-logo" width="180" height="42">
                 </a>
 
                 <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav-drawer" data-mobile-menu-toggle>
@@ -930,8 +1012,36 @@
                             $itemPath = parse_url($item['href'], PHP_URL_PATH) ?: '/';
                             $itemPattern = trim($itemPath, '/');
                             $isActive = $itemPattern === '' ? request()->is('/') : (request()->is($itemPattern) || request()->is($itemPattern . '/*'));
+                            if (isset($item['submenu']) && !$isActive) {
+                                foreach ($item['submenu'] as $sub) {
+                                    $subPath = parse_url($sub['href'], PHP_URL_PATH) ?: '/';
+                                    $subPattern = trim($subPath, '/');
+                                    if ($subPattern !== '' && (request()->is($subPattern) || request()->is($subPattern . '/*'))) {
+                                        $isActive = true;
+                                        break;
+                                    }
+                                }
+                            }
                         @endphp
-                        <a href="{{ $item['href'] }}" @class(['is-active' => $isActive])>{{ $item['label'] }}</a>
+                        @if (isset($item['submenu']))
+                            <div class="nav-dropdown">
+                                <a href="{{ $item['href'] }}" @class(['is-active' => $isActive, 'dropdown-toggle'])>
+                                    {{ $item['label'] }} <span class="chevron">▾</span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    @foreach ($item['submenu'] as $subItem)
+                                        @php
+                                            $subItemPath = parse_url($subItem['href'], PHP_URL_PATH) ?: '/';
+                                            $subItemPattern = trim($subItemPath, '/');
+                                            $isSubActive = $subItemPattern === '' ? request()->is('/') : (request()->is($subItemPattern) || request()->is($subItemPattern . '/*'));
+                                        @endphp
+                                        <a href="{{ $subItem['href'] }}" @class(['dropdown-item', 'is-active' => $isSubActive])>{{ $subItem['label'] }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ $item['href'] }}" @class(['is-active' => $isActive])>{{ $item['label'] }}</a>
+                        @endif
                     @endforeach
                     <a class="button button--small site-nav__cta" href="/#lead-strip" data-open-lead-modal>Get Free Help</a>
                 </nav>
@@ -944,7 +1054,9 @@
             <button class="mobile-nav-drawer__backdrop" type="button" aria-label="Close navigation" data-mobile-menu-close></button>
             <div class="mobile-nav-drawer__panel" role="dialog" aria-modal="true" aria-label="Mobile navigation">
                 <div class="mobile-nav-drawer__head">
-                    <p>Menu</p>
+                    <a href="/#top" aria-label="SettleANZ home" data-mobile-menu-close style="display: inline-flex; align-items: center;">
+                        <img src="{{ asset('media/logo/logo.webp') }}" alt="SettleANZ Logo" class="brand-logo" style="height: 32px; width: auto; background: #ffffff; padding: 4px 8px; border-radius: 8px;">
+                    </a>
                     <button class="mobile-nav-drawer__close" type="button" aria-label="Close navigation" data-mobile-menu-close>&times;</button>
                 </div>
                 <nav class="mobile-nav-drawer__links" aria-label="Mobile navigation links">
@@ -953,8 +1065,34 @@
                             $itemPath = parse_url($item['href'], PHP_URL_PATH) ?: '/';
                             $itemPattern = trim($itemPath, '/');
                             $isActive = $itemPattern === '' ? request()->is('/') : (request()->is($itemPattern) || request()->is($itemPattern . '/*'));
+                            if (isset($item['submenu']) && !$isActive) {
+                                foreach ($item['submenu'] as $sub) {
+                                    $subPath = parse_url($sub['href'], PHP_URL_PATH) ?: '/';
+                                    $subPattern = trim($subPath, '/');
+                                    if ($subPattern !== '' && (request()->is($subPattern) || request()->is($subPattern . '/*'))) {
+                                        $isActive = true;
+                                        break;
+                                    }
+                                }
+                            }
                         @endphp
-                        <a href="{{ $item['href'] }}" @class(['is-active' => $isActive])>{{ $item['label'] }}</a>
+                        @if (isset($item['submenu']))
+                            <div class="mobile-nav-group" style="display: flex; flex-direction: column;">
+                                <a href="{{ $item['href'] }}" @class(['is-active' => $isActive])>{{ $item['label'] }}</a>
+                                <div class="mobile-submenu" style="padding-left: 1.25rem; display: flex; flex-direction: column; border-left: 2px solid rgba(255, 255, 255, 0.15); margin-left: 0.25rem; margin-bottom: 0.5rem;">
+                                    @foreach ($item['submenu'] as $subItem)
+                                        @php
+                                            $subItemPath = parse_url($subItem['href'], PHP_URL_PATH) ?: '/';
+                                            $subItemPattern = trim($subItemPath, '/');
+                                            $isSubActive = $subItemPattern === '' ? request()->is('/') : (request()->is($subItemPattern) || request()->is($subItemPattern . '/*'));
+                                        @endphp
+                                        <a href="{{ $subItem['href'] }}" @class(['is-active' => $isSubActive]) style="font-size: 0.9rem; padding: 0.6rem 0; opacity: 0.85;" data-mobile-menu-close>{{ $subItem['label'] }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ $item['href'] }}" @class(['is-active' => $isActive])>{{ $item['label'] }}</a>
+                        @endif
                     @endforeach
                     <a class="button button--small" href="/#lead-strip" data-open-lead-modal>Get Free Help</a>
                 </nav>
@@ -987,12 +1125,9 @@
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="/new-to-australia">New to Australia</a></li>
+                        <li><a href="/new-to-new-zealand">New to New Zealand</a></li>
                         <li><a href="/settlement-services">Settlement Services</a></li>
-                        <li><a href="/housing">Housing Guide</a></li>
-                        <li><a href="/banking">Banking Guide</a></li>
-                        <li><a href="/migration-services">Migration Services</a></li>
-                        <li><a href="/about">About</a></li>
-                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/directory">Directory</a></li>
                     </ul>
                 </div>
                 <div>
