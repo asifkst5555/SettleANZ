@@ -779,7 +779,7 @@
                 min-height: 100vh;
                 max-height: 100vh;
                 overflow-y: auto;
-                padding: 1rem 1rem 1.5rem;
+                padding: 0 1rem 1.5rem;
                 border: 0;
                 border-radius: 0;
                 background: rgba(18, 50, 71, 0.98);
@@ -787,11 +787,16 @@
             }
 
             .mobile-nav-drawer__head {
+                position: sticky;
+                top: 0;
+                background: rgba(18, 50, 71, 0.98);
+                z-index: 10;
                 display: grid;
                 grid-template-columns: minmax(0, 1fr) auto;
                 align-items: center;
                 gap: 1rem;
                 margin-bottom: 0.8rem;
+                padding-top: 1rem;
                 padding-bottom: 0.75rem;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             }
@@ -935,6 +940,18 @@
 
         .nav-dropdown:hover .chevron {
             transform: rotate(180deg);
+        }
+
+        /* Responsive Fixes & Premium Transitions */
+        .floating-actions {
+            transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.28s;
+        }
+
+        body:has(input:focus:not(.site-chat-input), textarea:focus, select:focus) .floating-actions {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            transform: translateY(12px) !important;
+            pointer-events: none !important;
         }
     </style>
     <script defer src="{{ asset('site.js') }}?v={{ $siteJsVersion }}"></script>
