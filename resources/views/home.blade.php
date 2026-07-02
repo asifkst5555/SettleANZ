@@ -1323,50 +1323,7 @@
   .bs-content-right p strong {
     color: #ffffff;
   }
-  .bs-pillars {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-    margin-bottom: 56px;
-  }
-  .bs-pillar {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 44px 30px;
-    text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-  }
-  .bs-pillar:hover {
-    transform: translateY(-5px);
-    background: rgba(255,255,255,0.07);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
-  }
-  .bs-pillar-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
-    background: rgba(232,119,58,0.18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    font-size: 28px;
-  }
-  .bs-pillar-title {
-    font-size: 20px;
-    font-weight: 800;
-    color: #fff !important;
-    margin-bottom: 14px;
-    line-height: 1.3;
-  }
-  .bs-pillar-text {
-    font-size: 15px;
-    color: #a8d4d2 !important;
-    line-height: 1.75;
-    font-weight: 400;
-  }
+
   .bs-disclaimer {
     font-size: 13.5px;
     color: #6aadaa !important;
@@ -1409,13 +1366,7 @@
     .bs-quote-text {
       font-size: 18px;
     }
-    .bs-pillars {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    .bs-pillar {
-      padding: 32px 24px;
-    }
+
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -2265,23 +2216,7 @@
             <p>Whether you're preparing to arrive, finding your first home, setting up your finances, building your career, or helping your family settle in, our goal is simple: <strong>Give you practical guidance that helps you make informed decisions with confidence.</strong></p>
           </div>
         </div>
-        <div class="bs-pillars">
-          <div class="bs-pillar">
-            <div class="bs-pillar-icon">💡</div>
-            <h3 class="bs-pillar-title">Lived Experience</h3>
-            <p class="bs-pillar-text">Every guide starts from a real settlement journey, not a search engine summary.</p>
-          </div>
-          <div class="bs-pillar">
-            <div class="bs-pillar-icon">👥</div>
-            <h3 class="bs-pillar-title">A Team, Not One Voice</h3>
-            <p class="bs-pillar-text">Researchers and locals across AU &amp; NZ keep every guide accurate and current.</p>
-          </div>
-          <div class="bs-pillar">
-            <div class="bs-pillar-icon">🧭</div>
-            <h3 class="bs-pillar-title">Built Around Your Journey</h3>
-            <p class="bs-pillar-text">Structured around the real stages newcomers go through — not generic categories.</p>
-          </div>
-        </div>
+
         <div class="bs-disclaimer">We do not provide migration advice. Only practical settlement guidance based on lived experience and research.</div>
         <a class="bs-cta" href="{{ route('about') }}">Learn More About SettleANZ</a>
       </div>
