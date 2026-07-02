@@ -512,9 +512,9 @@
   }
   .qe-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
-    max-width: 1280px;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 1200px;
     margin: 0 auto;
   }
   .qe-card {
@@ -522,13 +522,23 @@
     border-radius: var(--radius-card, 18px);
     background: #ffffff;
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1.15fr 0.85fr;
     overflow: hidden;
     box-shadow: var(--shadow-card, 0 10px 30px rgba(0, 0, 0, 0.04));
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
   }
+  .qe-card:nth-child(even) {
+    grid-template-columns: 0.85fr 1.15fr;
+  }
+  .qe-card:nth-child(even) .qe-card-content {
+    grid-column: 2;
+  }
+  .qe-card:nth-child(even) .qe-card-image {
+    grid-column: 1;
+    grid-row: 1;
+  }
   .qe-card:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-4px) scale(1.01);
     box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
   }
   .qe-card-content {
@@ -537,21 +547,7 @@
     flex-direction: column;
     justify-content: space-between;
   }
-  .qe-icon-wrap {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: #E6F4F3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-  }
-  .qe-icon-wrap svg {
-    width: 24px;
-    height: 24px;
-    color: #006B5D;
-  }
+
   .qe-tag {
     font-size: 11px;
     font-weight: 800;
@@ -640,11 +636,16 @@
 
   @media (max-width: 1199px) {
     .qe-card {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr !important;
+    }
+    .qe-card-content {
+      grid-column: auto !important;
     }
     .qe-card-image {
-      height: 240px;
-      min-height: 240px;
+      grid-column: auto !important;
+      grid-row: auto !important;
+      height: 280px;
+      min-height: 280px;
     }
   }
   @media (max-width: 900px) {
@@ -1746,9 +1747,6 @@
         <div class="qe-card">
           <div class="qe-card-content">
             <div>
-              <div class="qe-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.2c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"></path></svg>
-              </div>
               <div class="qe-tag">BEFORE YOU FLY PREPARATION</div>
               <h3 class="qe-title">Planning Your Move (Future Migrant)</h3>
               <p class="qe-desc">Avoid the $5,000–$15,000 in wasted costs and 6-month delays caused by choosing the wrong visa pathway or city.</p>
@@ -1761,7 +1759,6 @@
             </div>
             <a class="qe-cta-btn" href="{{ route('guides.settlement-services') }}">
               Help Me Plan My Move 
-
             </a>
           </div>
           <div class="qe-card-image">
@@ -1773,9 +1770,6 @@
         <div class="qe-card">
           <div class="qe-card-content">
             <div>
-              <div class="qe-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-              </div>
               <div class="qe-tag">BEFORE ARRIVAL SETUP</div>
               <h3 class="qe-title">Starting Your Studies (International Student)</h3>
               <p class="qe-desc">Avoid the $2,000–$4,000 in wasted housing costs and visa violations caused by not understanding work rights or choosing the wrong accommodation.</p>
@@ -1788,7 +1782,6 @@
             </div>
             <a class="qe-cta-btn" href="{{ route('guides.settlement-services') }}">
               Show Me What To Set Up First 
-
             </a>
           </div>
           <div class="qe-card-image">
@@ -1800,9 +1793,6 @@
         <div class="qe-card">
           <div class="qe-card-content">
             <div>
-              <div class="qe-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-              </div>
               <div class="qe-tag">CAREER START PLAN</div>
               <h3 class="qe-title">Building Your Career (Skilled Worker)</h3>
               <p class="qe-desc">Avoid the 3–6 month career setback caused by not understanding local experience requirements, workplace culture, or tax setup.</p>
@@ -1815,7 +1805,6 @@
             </div>
             <a class="qe-cta-btn" href="{{ route('guides.settlement-services') }}">
               Help Me Hit the Ground Running 
-
             </a>
           </div>
           <div class="qe-card-image">
@@ -1827,9 +1816,6 @@
         <div class="qe-card">
           <div class="qe-card-content">
             <div>
-              <div class="qe-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-              </div>
               <div class="qe-tag">FIRST 90 DAYS SUPPORT</div>
               <h3 class="qe-title">Settling Into Everyday Life (New Arrival)</h3>
               <p class="qe-desc">Avoid weeks of confusion, wrong decisions, and isolation caused by not knowing what to do first or in what order.</p>
@@ -1842,7 +1828,6 @@
             </div>
             <a class="qe-cta-btn" href="{{ route('guides.settlement-services') }}">
               Start My Settlement Plan 
-
             </a>
           </div>
           <div class="qe-card-image">
