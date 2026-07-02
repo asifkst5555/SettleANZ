@@ -1444,7 +1444,7 @@
     background: #fff;
     border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
     border-radius: var(--radius-card, 18px);
-    padding: 32px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
     min-width: 320px;
@@ -1456,18 +1456,18 @@
     box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
   }
   .ss-quote-mark {
-    font-size: 56px;
+    font-size: 44px;
     color: #E8773A;
     line-height: 0.6;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
     font-family: Georgia, serif;
     text-align: left;
   }
   .ss-text {
-    font-size: 16.5px;
+    font-size: 15px;
     color: #3a4a57;
-    line-height: 1.85;
-    margin-bottom: 30px;
+    line-height: 1.7;
+    margin-bottom: 20px;
     font-weight: 500;
     text-align: left;
     flex-grow: 1;
@@ -1475,12 +1475,12 @@
   .ss-author {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 14px;
     margin-top: auto;
   }
   .ss-av {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: linear-gradient(135deg,#0B7A75,#065E5B);
     display: flex;
@@ -1488,7 +1488,7 @@
     justify-content: center;
     color: #fff;
     font-weight: 800;
-    font-size: 18px;
+    font-size: 16px;
     flex-shrink: 0;
     overflow: hidden;
   }
@@ -1498,13 +1498,13 @@
     object-fit: cover;
   }
   .ss-name {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 800;
     color: #2C3A47;
     text-align: left;
   }
   .ss-loc {
-    font-size: 14px;
+    font-size: 13.5px;
     color: #94a3b0;
     font-weight: 400;
     text-align: left;
@@ -1556,7 +1556,7 @@
       flex: 0 0 auto;
       width: 100%;
       min-width: 0;
-      padding: 32px 24px;
+      padding: 24px 20px;
     }
     .testimonial-band__controls {
       display: none;
