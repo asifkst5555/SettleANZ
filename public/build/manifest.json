@@ -1,0 +1,44 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-kTrxFxq0.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/site/pages/blog-index.css": {
+    "file": "assets/blog-index-x1XGuNl0.css",
+    "name": "blog-index",
+    "names": [
+      "blog-index.css"
+    ],
+    "src": "resources/css/site/pages/blog-index.css",
+    "isEntry": true
+  },
+  "resources/css/site/pages/contact.css": {
+    "file": "assets/contact-B3vVXSV3.css",
+    "name": "contact",
+    "names": [
+      "contact.css"
+    ],
+    "src": "resources/css/site/pages/contact.css",
+    "isEntry": true
+  },
+  "resources/css/site/pages/home.css": {
+    "file": "assets/home-V7VSi3Po.css",
+    "name": "home",
+    "names": [
+      "home.css"
+    ],
+    "src": "resources/css/site/pages/home.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BtSzlmyq.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
