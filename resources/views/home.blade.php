@@ -1563,89 +1563,13 @@
     }
   }
 
-  /* ═══════════════════════════════════════════════════════════════
-     SECTION 9 — MOST USED GUIDES
-     ═══════════════════════════════════════════════════════════════ */
-  .mg-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 22px;
-  }
-  .mg-card {
-    border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
-    border-radius: var(--radius-card, 18px);
-    background: #fff;
-    padding: 32px 24px;
-    text-align: center;
-    position: relative;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-    box-shadow: var(--shadow-card, 0 10px 30px rgba(0, 0, 0, 0.04));
-  }
-  .mg-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
-  }
-  .mg-badge {
-    position: absolute;
-    top: -14px;
-    right: 18px;
-    background: #E8773A;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 800;
-    padding: 6px 14px;
-    border-radius: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
-  .mg-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 15px;
-    background: #E6F4F3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 26px;
-  }
-  .mg-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: #065E5B;
-    line-height: 1.45;
-  }
-
-  @media (max-width: 1023px) {
-    .mg-grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-  }
-  @media (max-width: 767px) {
-    .mg-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-  }
-  @media (max-width: 480px) {
-    .mg-grid {
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-  }
-
   /* Dynamic Blog Section */
   .blog-section-title {
-    font-size: 28px;
+    font-size: clamp(24px, 4vw, 32px);
     font-weight: 800;
     color: #065E5B;
     text-align: center;
-    margin-top: 70px;
+    margin-top: 0;
     margin-bottom: 36px;
   }
   .blog-grid {
@@ -2506,44 +2430,12 @@
     </div>
   </div>
 
-  <!-- MOST USED GUIDES & DYNAMIC BLOG -->
+  <!-- MOST-READ GUIDES SECTION -->
   <div class="sec sec-sand">
     <div class="sec-container">
-      <div class="sec-label">Quick Start</div>
-      <h2 class="sec-h2">Start here if you're unsure</h2>
-      <p class="sec-sub">Start Here: Our Most-Read Guides</p>
       
-      <div class="mg-grid">
-        <!-- Guide 1 -->
-        <a class="mg-card" href="{{ route('guides.settlement-services') }}">
-          <div class="mg-badge">Most Used</div>
-          <div class="mg-icon">🏦</div>
-          <div class="mg-title">Open First Bank Account</div>
-        </a>
-        <!-- Guide 2 -->
-        <a class="mg-card" href="{{ route('guides.settlement-services') }}">
-          <div class="mg-icon">🏘️</div>
-          <div class="mg-title">Find First Rental</div>
-        </a>
-        <!-- Guide 3 -->
-        <a class="mg-card" href="{{ route('guides.settlement-services') }}">
-          <div class="mg-icon">🩺</div>
-          <div class="mg-title">Understand Medicare</div>
-        </a>
-        <!-- Guide 4 -->
-        <a class="mg-card" href="{{ route('guides.settlement-services') }}">
-          <div class="mg-icon">📄</div>
-          <div class="mg-title">Get Your TFN</div>
-        </a>
-        <!-- Guide 5 -->
-        <a class="mg-card" href="{{ route('guides.new-to-australia') }}">
-          <div class="mg-icon">✅</div>
-          <div class="mg-title">Before You Fly Checklist</div>
-        </a>
-      </div>
-
       <!-- DYNAMIC BLOG POSTS SECTION -->
-      <h2 class="blog-section-title">Latest Insights &amp; Settlement Guides</h2>
+      <h2 class="blog-section-title">Start Here: Our Most-Read Guides</h2>
       <div class="blog-grid" data-reveal-stagger="home-guides">
         @foreach ($latestPosts as $post)
           <article class="blog-card" data-reveal-stagger-item data-reveal-stagger-index="{{ $loop->index }}">
@@ -2557,7 +2449,6 @@
             <div class="blog-card__body">
               <p class="blog-card__tag">{{ $post->category }}</p>
               <h3><a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a></h3>
-              <p class="blog-card__excerpt">{{ $post->excerpt }}</p>
               <div class="blog-card__footer">
                 <div class="blog-card__meta">
                   <span>{{ $post->author_name }}</span>
