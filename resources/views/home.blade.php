@@ -676,6 +676,23 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 32px;
   }
+  @media (min-width: 1024px) {
+    .jt-track {
+      padding-bottom: 90px;
+    }
+    .jt-track .jt-card:nth-child(1) {
+      transform: translateY(90px);
+    }
+    .jt-track .jt-card:nth-child(2) {
+      transform: translateY(60px);
+    }
+    .jt-track .jt-card:nth-child(3) {
+      transform: translateY(30px);
+    }
+    .jt-track .jt-card:nth-child(4) {
+      transform: translateY(0);
+    }
+  }
   .jt-card {
     display: flex;
     flex-direction: column;
@@ -702,31 +719,11 @@
     display: block;
     object-fit: cover;
   }
-  .jt-num-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: -30px;
-    position: relative;
-    z-index: 2;
-  }
-  .jt-num {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #fff;
-    border: 3px solid #0B7A75;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  }
   .jt-body {
     background: #fff;
     border: 1px solid #e8edf2;
     border-radius: 20px;
-    padding: 50px 26px 30px;
+    padding: 30px 26px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -778,7 +775,7 @@
       gap: 40px;
     }
     .jt-body {
-      padding: 45px 20px 25px;
+      padding: 24px 20px 25px;
     }
     .jt-desc {
       min-height: auto;
@@ -1872,9 +1869,6 @@
           <div class="jt-img">
             <img src="{{ asset('media/home/h_stage_1.webp') }}" alt="Arrive" loading="lazy" width="300" height="200">
           </div>
-          <div class="jt-num-row">
-            <div class="jt-num">✈️</div>
-          </div>
           <div class="jt-body">
             <h3 class="jt-title">Arrive</h3>
             <p class="jt-desc">Airport to Home in 24 Hours. Skip the overwhelm. We handle airport pickup, temporary accommodation, SIM card setup, and neighborhood orientation, so you can focus on settling in, not logistics.</p>
@@ -1887,9 +1881,6 @@
           <div class="jt-stage-label">Stage 02</div>
           <div class="jt-img">
             <img src="{{ asset('media/home/h_stage_2.webp') }}" alt="Settle" loading="lazy" width="300" height="200">
-          </div>
-          <div class="jt-num-row">
-            <div class="jt-num">🏠</div>
           </div>
           <div class="jt-body">
             <h3 class="jt-title">Settle</h3>
@@ -1904,9 +1895,6 @@
           <div class="jt-img">
             <img src="{{ asset('media/home/h_stage_3.webp') }}" alt="Work &amp; Invest" loading="lazy" width="300" height="200">
           </div>
-          <div class="jt-num-row">
-            <div class="jt-num">📈</div>
-          </div>
           <div class="jt-body">
             <h3 class="jt-title">Work &amp; Invest</h3>
             <p class="jt-desc">Land Your First Role in 120 Days or less. Local experience is the barrier. We show you how to overcome it. Resume optimization, interview coaching, workplace culture navigation, and professional networking—so you hit the ground running and build momentum from day one.</p>
@@ -1919,9 +1907,6 @@
           <div class="jt-stage-label">Stage 04</div>
           <div class="jt-img">
             <img src="{{ asset('media/home/h_stage_4.webp') }}" alt="Explore &amp; Enjoy" loading="lazy" width="300" height="200">
-          </div>
-          <div class="jt-num-row">
-            <div class="jt-num">🧭</div>
           </div>
           <div class="jt-body">
             <h3 class="jt-title">Explore &amp; Enjoy</h3>
