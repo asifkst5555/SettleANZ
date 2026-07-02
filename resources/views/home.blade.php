@@ -18,6 +18,29 @@
   }
   @media (max-width: 767px) {
     .sec { padding: 56px 0; }
+    .hero-badge {
+      font-size: 10px;
+      letter-spacing: 0.4px;
+      padding: 4px 10px 4px 5px;
+      gap: 6px;
+      margin-bottom: 16px;
+      white-space: nowrap;
+    }
+    .badge-icon-wrap {
+      width: 20px;
+      height: 20px;
+    }
+    .badge-icon {
+      width: 10px;
+      height: 10px;
+    }
+  }
+  @media (max-width: 360px) {
+    .hero-badge {
+      font-size: 9px;
+      letter-spacing: 0.3px;
+      padding: 3px 8px 3px 4px;
+    }
   }
   .sec-sand {
     background: var(--page-background, #F5F0E8);
