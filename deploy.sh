@@ -1,10 +1,13 @@
 #!/bin/bash
 set -e
 
+# Define PHP 8.3 binary path on Hostinger
+PHP_BIN="/opt/alt/php83/usr/bin/php"
+
 echo "🚀 Starting manual deployment..."
 
-# 1. Put site in maintenance mode (optional, prevents users from getting errors during build)
-php artisan down || true
+# 1. Put site in maintenance mode (optional)
+$PHP_BIN artisan down || true
 
 # 2. Pull latest code from GitHub
 echo "📥 Pulling latest changes from GitHub..."
@@ -12,7 +15,7 @@ git pull origin main
 
 # 3. Install Composer dependencies
 echo "📦 Installing Composer dependencies..."
-composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+$PHP_BIN $(which composer) install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
 # 4. Build assets (checks if npm is available)
 if command -v npm &> /dev/null
@@ -26,15 +29,15 @@ fi
 
 # 5. Run database migrations
 echo "🗄️ Running database migrations..."
-php artisan migrate --force
+$PHP_BIN artisan migrate --force
 
 # 6. Optimize and clear cache
 echo "🧹 Optimizing config, routes, and views..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+$PHP_BIN artisan config:cache
+$PHP_BIN artisan route:cache
+$PHP_BIN artisan view:cache
 
 # 7. Bring site back online
-php artisan up
+$PHP_BIN artisan up
 
 echo "✅ Deployment completed successfully!"
