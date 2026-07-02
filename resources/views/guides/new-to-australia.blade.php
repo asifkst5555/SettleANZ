@@ -1557,7 +1557,6 @@
                             <p>Use the same checklist from this page in a format you can keep open during your first week in Australia.</p>
                             <div class="arrival-cta__actions">
                                 <button class="button button--small" type="button" data-open-lead-modal>Send me the checklist</button>
-                                <a class="button button--small button--outline" href="/settlement-services">Explore settlement support</a>
                             </div>
                         </div>
 
@@ -1566,7 +1565,6 @@
                             <p>If you want support with pre-arrival planning, arrival day, housing, banking order, or your first 90 days, explore the settlement services page for the structured support path.</p>
                             <div class="arrival-cta__actions">
                                 <a class="button button--small" href="/settlement-services">View settlement services</a>
-                                <a class="button button--small button--outline" href="/contact">Ask a question first</a>
                             </div>
                         </div>
                     </section>
