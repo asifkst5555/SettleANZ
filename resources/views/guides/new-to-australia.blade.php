@@ -995,15 +995,15 @@
             box-shadow: none;
         }
 
-        @media (max-width: 1180px) {
+        @media (max-width: 1024px) {
             .arrival-hero__grid,
-            .arrival-faq-grid {
+            .arrival-faq-grid,
+            .arrival-grid-2,
+            .arrival-grid-3,
+            .arrival-grid-cta,
+            .arrival-day-grid,
+            .arrival-guidance__panel {
                 grid-template-columns: 1fr;
-            }
-
-            .arrival-hero__visual {
-                justify-self: stretch;
-                max-width: none;
             }
 
             .arrival-hero::before {
@@ -1012,16 +1012,6 @@
                 left: -8%;
                 width: 116%;
                 border-radius: 0 0 50% 50% / 0 0 18% 18%;
-            }
-        }
-
-        @media (max-width: 720px) {
-            .arrival-grid-2,
-            .arrival-grid-3,
-            .arrival-grid-cta,
-            .arrival-day-grid,
-            .arrival-guidance__panel {
-                grid-template-columns: 1fr;
             }
 
             .arrival-guidance__column--do {
@@ -1075,10 +1065,15 @@
                 width: 100%;
             }
 
+            .arrival-hero__visual {
+                max-width: 100%;
+            }
+
             .arrival-hero__image {
                 height: auto;
                 aspect-ratio: 0.88;
                 border-radius: 24px;
+                max-width: 100%;
             }
 
             .arrival-section,
@@ -1099,6 +1094,14 @@
             .arrival-faq,
             .arrival-cta {
                 padding: 1.15rem;
+            }
+
+            .arrival-card__media {
+                margin: -1.15rem -1.15rem 1.15rem;
+            }
+
+            .arrival-card__media img {
+                height: 200px;
             }
 
             .arrival-timeline {

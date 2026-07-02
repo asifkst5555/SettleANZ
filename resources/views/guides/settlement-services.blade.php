@@ -161,6 +161,7 @@
             }
             .settlement-hero__content {
                 align-items: center;
+                text-align: center;
             }
             .settlement-hero__ctas {
                 justify-content: center;
@@ -672,6 +673,12 @@
             .jw-card__icon-wrap { width: 60px; height: 60px; border-radius: 18px; }
             .jw-card__icon-wrap svg { width: 28px; height: 28px; }
             .jw-card__title { font-size: 1.2rem; }
+        }
+
+        @media (max-width: 767px) {
+            .disclaimer-card {
+                text-align: center;
+            }
         }
     </style>
 @endsection

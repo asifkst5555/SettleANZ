@@ -611,11 +611,57 @@
                 padding: 40px 0;
             }
 
-            .about-cta__grid {
-                grid-template-columns: 1fr;
+            .about-hero__content {
+                align-items: center;
+                text-align: center;
             }
-            
+
+            .about-journey__narrative {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .journey-h2,
+            .journey-paragraphs p {
+                text-align: center;
+            }
+
             .about-journey__timeline {
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+
+            .timeline-card {
+                text-align: center;
+            }
+
+            .community-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 2rem 1.5rem;
+            }
+
+            .community-card__icon {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .cta-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .cta-card__badge {
+                align-self: center;
+            }
+
+            .about-cta__grid {
                 grid-template-columns: 1fr;
             }
             
@@ -629,10 +675,6 @@
             
             .journey-h2, .community-h2, .cta-h2 {
                 font-size: 2rem;
-            }
-            
-            .community-card {
-                padding: 2rem 1.5rem;
             }
         }
     </style>

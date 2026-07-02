@@ -915,9 +915,179 @@
         }
 
         @media (max-width: 1024px) {
-            .arrival-hero__grid { grid-template-columns: 1fr; }
-            .arrival-grid-2, .arrival-dd-grid, .arrival-faq-grid, .arrival-grid-cta, .arrival-guidance__panel { grid-template-columns: 1fr; }
-            .arrival-guidance__column--do { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+            .arrival-hero__grid,
+            .arrival-faq-grid,
+            .arrival-grid-2,
+            .arrival-grid-3,
+            .arrival-grid-cta,
+            .arrival-day-grid,
+            .arrival-dd-grid,
+            .arrival-guidance__panel {
+                grid-template-columns: 1fr;
+            }
+
+            .arrival-hero::before {
+                top: 0;
+                bottom: 30%;
+                left: -8%;
+                width: 116%;
+                border-radius: 0 0 50% 50% / 0 0 18% 18%;
+            }
+
+            .arrival-guidance__column--do {
+                border-right: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .arrival-guidance__head,
+            .arrival-guidance__row {
+                padding-left: 1.15rem;
+                padding-right: 1.15rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .arrival-hero {
+                min-height: 0;
+                padding: 1.8rem 0 1.6rem;
+            }
+
+            .arrival-hero__content {
+                padding: 0;
+                border-radius: 0;
+                text-align: center;
+            }
+
+            .arrival-hero__content .eyebrow,
+            .arrival-hero__content h1,
+            .arrival-hero__content .arrival-hero__lead,
+            .arrival-hero__content .arrival-hero__quote,
+            .arrival-hero__content .arrival-hero__quote p,
+            .arrival-hero__content .arrival-hero__quote span {
+                text-align: center !important;
+            }
+
+            .arrival-hero__lead {
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            .arrival-hero h1 {
+                max-width: none;
+                font-size: clamp(2.55rem, 11vw, 3.95rem);
+            }
+
+            .arrival-cta__actions {
+                display: grid;
+            }
+
+            .arrival-cta__actions .button {
+                width: 100%;
+            }
+
+            .arrival-hero__visual {
+                max-width: 100%;
+            }
+
+            .arrival-hero__image {
+                height: auto;
+                aspect-ratio: 0.88;
+                border-radius: 24px;
+                max-width: 100%;
+            }
+
+            .arrival-section,
+            .arrival-photo-card,
+            .arrival-card,
+            .arrival-step,
+            .arrival-day-card,
+            .arrival-faq,
+            .arrival-cta,
+            .arrival-note {
+                border-radius: 24px;
+            }
+
+            .arrival-section,
+            .arrival-card,
+            .arrival-step,
+            .arrival-day-card,
+            .arrival-faq,
+            .arrival-cta {
+                padding: 1.15rem;
+            }
+
+            .arrival-card__media {
+                width: auto !important;
+                height: 200px;
+                margin: -1.15rem -1.15rem 1.15rem;
+                border-radius: 24px 24px 0 0;
+            }
+
+            .arrival-card__media img {
+                height: 100%;
+            }
+
+            .arrival-timeline {
+                gap: 1.5rem;
+            }
+
+            .arrival-timeline::before {
+                left: 29px;
+            }
+
+            .arrival-timeline::after {
+                left: 29px;
+            }
+
+            .arrival-step {
+                min-height: 78px;
+                padding: 0.15rem 0 0.15rem 0;
+            }
+
+            .arrival-step::before {
+                left: 19px;
+                top: 19px;
+                width: 18px;
+                height: 18px;
+            }
+
+            .arrival-step__head {
+                min-height: 58px;
+            }
+
+            .arrival-step__number {
+                left: 0;
+                top: 0;
+                width: 58px;
+                height: 58px;
+                border-width: 6px;
+                font-size: 1.1rem;
+            }
+
+            .arrival-step h3 {
+                font-size: 1.05rem;
+            }
+
+            .arrival-step__body strong {
+                font-size: 0.74rem;
+            }
+
+            .arrival-step__copy,
+            .arrival-step__body {
+                margin-left: 76px;
+            }
+
+            .arrival-note p {
+                font-size: 1.04rem;
+            }
+
+            .arrival-pro-tip p {
+                font-size: 1.105rem;
+            }
+
+            .arrival-faq p {
+                padding-left: 0;
+            }
         }
     </style>
 @endsection

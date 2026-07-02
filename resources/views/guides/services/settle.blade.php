@@ -162,6 +162,7 @@
             }
             .service-hero__content {
                 align-items: center;
+                text-align: center;
             }
             .service-hero__highlights {
                 justify-content: center;
@@ -524,9 +525,22 @@
             .flagship-inclusions__grid {
                 grid-template-columns: 1fr;
             }
+            .flagship-inclusion__card {
+                grid-column: auto !important;
+            }
             .trust-strip__row {
                 flex-direction: column;
                 align-items: center;
+            }
+            .flagship-details__title,
+            .flagship-details__intro {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .disclaimer-card {
+                text-align: center;
             }
         }
     </style>

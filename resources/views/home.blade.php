@@ -18,29 +18,6 @@
   }
   @media (max-width: 767px) {
     .sec { padding: 56px 0; }
-    .hero-badge {
-      font-size: 10px;
-      letter-spacing: 0.4px;
-      padding: 4px 10px 4px 5px;
-      gap: 6px;
-      margin-bottom: 16px;
-      white-space: nowrap;
-    }
-    .badge-icon-wrap {
-      width: 20px;
-      height: 20px;
-    }
-    .badge-icon {
-      width: 10px;
-      height: 10px;
-    }
-  }
-  @media (max-width: 360px) {
-    .hero-badge {
-      font-size: 9px;
-      letter-spacing: 0.3px;
-      padding: 3px 8px 3px 4px;
-    }
   }
   .sec-sand {
     background: var(--page-background, #F5F0E8);
@@ -434,7 +411,7 @@
     .hero {
       min-height: auto;
       display: block;
-      padding: 60px 0 20px 0;
+      padding: 120px 0 20px 0;
     }
     .hero-container {
       grid-template-columns: 1fr;
@@ -493,7 +470,7 @@
   }
   @media (max-width: 640px) {
     .hero {
-      padding: 70px 0 20px 0;
+      padding: 110px 0 20px 0;
     }
     .hero-h1 {
       font-size: 32px;
@@ -792,6 +769,7 @@
     .pr-title {
       font-size: 28px;
       margin-bottom: 24px;
+      text-align: center;
     }
     .pr-list li {
       font-size: 16px;
@@ -920,6 +898,7 @@
     }
     .jt-desc {
       min-height: auto;
+      text-align: center;
     }
   }
 
@@ -1879,6 +1858,37 @@
     line-height: 1.8;
     color: #44525e;
     margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .hero-badge {
+      font-size: clamp(7.5px, 2vw, 9px) !important;
+      letter-spacing: 0.1px !important;
+      padding: 4px 8px 4px 4px !important;
+      gap: 5px !important;
+      margin-bottom: 16px !important;
+      white-space: nowrap !important;
+      text-align: center !important;
+      justify-content: center !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .badge-icon-wrap {
+      width: 20px !important;
+      height: 20px !important;
+    }
+    .badge-icon {
+      width: 10px !important;
+      height: 10px !important;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .hero-badge {
+      font-size: 7.5px !important;
+      letter-spacing: 0px !important;
+      padding: 3px 6px 3px 4px !important;
+    }
   }
 </style>
 
