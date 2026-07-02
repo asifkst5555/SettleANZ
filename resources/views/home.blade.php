@@ -1168,20 +1168,7 @@
     text-align: center;
     line-height: 1.4;
   }
-  .rm-bottom-callout {
-    margin-top: 36px;
-    text-align: center;
-  }
-  .rm-bottom-callout span {
-    display: inline-block;
-    background: #FFF3EB;
-    border: 1px solid #FDE6D8;
-    color: #C25E26;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 12px 28px;
-    border-radius: 999px;
-  }
+
 
   @media (max-width: 991px) {
     .rm-box-container {
@@ -2186,10 +2173,7 @@
         </div>
       </div>
 
-      <!-- Bottom Callout Note -->
-      <div class="rm-bottom-callout">
-        <span>Common mistakes to avoid (the $2K–$5K errors most immigrants make)</span>
-      </div>
+
     </div>
   </div>
 
