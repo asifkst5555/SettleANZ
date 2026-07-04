@@ -679,7 +679,7 @@
                     </div>
                     <div class="service-hero__visual-container">
                         <div class="service-hero__visual">
-                            <img src="{{ asset('media/services/services_new/enjoy_hero.webp') }}" alt="Stage 04: Enjoy" />
+                            <img src="{{ \App\Support\AssetVersion::url('media/services/services_new/enjoy_hero.webp') }}" alt="Stage 04: Enjoy" />
                         </div>
                     </div>
                 </div>
@@ -778,7 +778,7 @@
                         <!-- Package 6 Card -->
                         <div class="flagship-sticky-card">
                             <div class="flagship-sticky-card__image-container">
-                                <img src="{{ asset('media/services/stage_04_Package_6.webp') }}" class="flagship-sticky-card__image" alt="Package 6: Community & Lifestyle Integration" />
+                                <img src="{{ \App\Support\AssetVersion::url('media/services/stage_04_Package_6.webp') }}" class="flagship-sticky-card__image" alt="Package 6: Community & Lifestyle Integration" />
                             </div>
                             <div class="flagship-sticky-card__body">
                                 <span class="flagship-sticky-card__badge">Stage 4: Lifestyle</span>
@@ -819,7 +819,7 @@
                         <!-- Package 7 Card -->
                         <div class="flagship-sticky-card">
                             <div class="flagship-sticky-card__image-container">
-                                <img src="{{ asset('media/services/stage_04_Package_7.webp') }}" class="flagship-sticky-card__image" alt="Package 7: Family & Education Support" />
+                                <img src="{{ \App\Support\AssetVersion::url('media/services/stage_04_Package_7.webp') }}" class="flagship-sticky-card__image" alt="Package 7: Family & Education Support" />
                             </div>
                             <div class="flagship-sticky-card__body">
                                 <span class="flagship-sticky-card__badge">Stage 4: Family</span>

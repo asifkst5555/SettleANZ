@@ -592,7 +592,7 @@
                     </div>
                     <div class="service-hero__visual-container">
                         <div class="service-hero__visual">
-                            <img src="{{ asset('media/services/Pre-arrival.webp') }}" alt="Stage 01: Arrive" />
+                            <img src="{{ \App\Support\AssetVersion::url('media/services/Pre-arrival.webp') }}" alt="Stage 01: Arrive" />
                         </div>
                     </div>
                 </div>
@@ -691,7 +691,7 @@
                         <!-- Package 1 Card -->
                         <div class="flagship-sticky-card">
                             <div class="flagship-sticky-card__image-container">
-                                <img src="{{ asset('media/services/stage_01_Package_1.webp') }}" class="flagship-sticky-card__image" alt="Package 1: Pre-Arrival Strategy & Document Review" />
+                                <img src="{{ \App\Support\AssetVersion::url('media/services/stage_01_Package_1.webp') }}" class="flagship-sticky-card__image" alt="Package 1: Pre-Arrival Strategy & Document Review" />
                             </div>
                             <div class="flagship-sticky-card__body">
                                 <span class="flagship-sticky-card__badge">Stage 1: Pre-Arrival</span>
@@ -749,7 +749,7 @@
                         <!-- Package 2 Card -->
                         <div class="flagship-sticky-card">
                             <div class="flagship-sticky-card__image-container">
-                                <img src="{{ asset('media/services/stage_01_Package_2.webp') }}" class="flagship-sticky-card__image" alt="Package 2: Airport Meet & Arrival Concierge" />
+                                <img src="{{ \App\Support\AssetVersion::url('media/services/stage_01_Package_2.webp') }}" class="flagship-sticky-card__image" alt="Package 2: Airport Meet & Arrival Concierge" />
                             </div>
                             <div class="flagship-sticky-card__body">
                                 <span class="flagship-sticky-card__badge">Stage 1: Arrival</span>

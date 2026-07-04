@@ -575,7 +575,7 @@
                     </div>
                     <div class="service-hero__visual-container">
                         <div class="service-hero__visual">
-                            <img src="{{ asset('media/services/Month 1–3.webp') }}" alt="Stage 02: Settle" />
+                            <img src="{{ \App\Support\AssetVersion::url('media/services/Month 1–3.webp') }}" alt="Stage 02: Settle" />
                         </div>
                     </div>
                 </div>
@@ -680,7 +680,7 @@
                     <div class="flagship-sidebar">
                         <div class="flagship-sticky-card">
                             <div class="flagship-sticky-card__image-container">
-                                <img src="{{ asset('media/services/services_new/Package 3.webp') }}" class="flagship-sticky-card__image" alt="Flagship Package" />
+                                <img src="{{ \App\Support\AssetVersion::url('media/services/services_new/Package 3.webp') }}" class="flagship-sticky-card__image" alt="Flagship Package" />
                             </div>
                             <div class="flagship-sticky-card__body">
                                 <span class="flagship-sticky-card__badge">Flagship Program</span>

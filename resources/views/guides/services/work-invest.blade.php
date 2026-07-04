@@ -616,7 +616,7 @@
                     </div>
                     <div class="service-hero__visual-container">
                         <div class="service-hero__visual">
-                            <img src="{{ asset('media/services/services_new/work-invest_hero.webp') }}" alt="Stage 03: Work & Invest" />
+                            <img src="{{ \App\Support\AssetVersion::url('media/services/services_new/work-invest_hero.webp') }}" alt="Stage 03: Work & Invest" />
                         </div>
                     </div>
                 </div>
@@ -715,7 +715,7 @@
                         <!-- Package 4 Card -->
                         <div class="flagship-sticky-card">
                             <div class="flagship-sticky-card__image-container">
-                                <img src="{{ asset('media/services/stage_03_Package_4.webp') }}" class="flagship-sticky-card__image" alt="Package 4: Career Kickstart & Professional Integration" />
+                                <img src="{{ \App\Support\AssetVersion::url('media/services/stage_03_Package_4.webp') }}" class="flagship-sticky-card__image" alt="Package 4: Career Kickstart & Professional Integration" />
                             </div>
                             <div class="flagship-sticky-card__body">
                                 <span class="flagship-sticky-card__badge">Stage 3: Career</span>
@@ -756,7 +756,7 @@
                         <!-- Package 5 Card -->
                         <div class="flagship-sticky-card">
                             <div class="flagship-sticky-card__image-container">
-                                <img src="{{ asset('media/services/stage_03_Package_5.webp') }}" class="flagship-sticky-card__image" alt="Package 5: Financial Foundations & Investment Guidance" />
+                                <img src="{{ \App\Support\AssetVersion::url('media/services/stage_03_Package_5.webp') }}" class="flagship-sticky-card__image" alt="Package 5: Financial Foundations & Investment Guidance" />
                             </div>
                             <div class="flagship-sticky-card__body">
                                 <span class="flagship-sticky-card__badge">Stage 3: Wealth</span>

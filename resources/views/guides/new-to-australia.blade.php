@@ -1207,7 +1207,7 @@
                         <div class="arrival-grid-2" style="margin-top: 1.5rem;">
                                 <article class="arrival-card arrival-card--cool">
                                     <div class="arrival-card__media">
-                                        <img src="{{ asset('media/services/Pre-arrival.webp') }}" alt="Pre-arrival planning for moving to Australia" loading="lazy" width="700" height="528">
+                                        <img src="{{ \App\Support\AssetVersion::url('media/services/Pre-arrival.webp') }}" alt="Pre-arrival planning for moving to Australia" loading="lazy" width="700" height="528">
                                     </div>
 
                                     <div class="arrival-card__head">
