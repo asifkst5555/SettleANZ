@@ -1,64 +1,51 @@
-# cPanel Deployment Guide
+# Hostinger Deployment Guide
 
-This project can be deployed to cPanel safely, but the server should be treated as a production target, not a build machine.
+This project now follows the standard Laravel production layout for shared hosting:
+
+- the Laravel root contains `artisan`, `app/`, `bootstrap/`, `config/`, `database/`, `public/`, `resources/`, `routes/`, `storage/`, `vendor/`, and `composer.json`
+- `storage/` stays a real directory
+- only `public/storage` is a symlink, and it points to `storage/app/public`
 
 ## 1. Hosting Requirements
 
-Minimum recommendations:
+- PHP 8.3 or higher
+- MySQL or MariaDB
+- SSH access preferred
+- ability to set the document root to the Laravel `public/` directory
 
-- PHP `8.3` or higher
-- MySQL or MariaDB database
-- Composer access preferred
-- SSH access preferred but not required
-- ability to change document root preferred
+## 2. Deployment Model
 
-## 2. Important Rule For cPanel
+Do not upload the Laravel source into `public_html` and then move folders around.
 
-Do not depend on Node.js or `npm run dev` on the server.
+Upload the application outside `public_html`, then point the web root at the app's `public/` directory.
 
-For cPanel deployment:
+Example layout:
 
-1. build assets locally
-2. upload the compiled project
-3. run Laravel in production mode
+```text
+/home/USERNAME/settleanz-app
+/home/USERNAME/settleanz-app/public
+```
 
-Use Node `22` locally. This repo includes `.nvmrc` for that.
+Document root:
 
-## 3. One-Command Package (Recommended)
+```text
+/home/USERNAME/settleanz-app/public
+```
 
-Use this script to create a cPanel-ready package:
+## 3. Package For Upload
+
+Run this locally from WSL:
 
 ```bash
 cd /home/asifk/projects/SettleANZ
 bash scripts/cpanel-package.sh
 ```
 
-It creates:
+It creates a deploy bundle at `deploy/cpanel/settleanz-app`.
 
-- `deploy/cpanel/settleanz-app` (full Laravel app for outside `public_html`)
-- `deploy/cpanel/public_html` (fallback public web root files)
-- `deploy/cpanel/UPLOAD-STEPS.txt` (quick reminder)
+## 4. Production `.env` Values
 
-## 4. Local Build Before Upload (Manual)
-
-Run these commands in WSL on your machine:
-
-```bash
-cd /home/asifk/projects/SettleANZ
-nvm use 22
-composer install --no-dev --optimize-autoloader
-npm install
-npm run build
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-```
-
-After `npm run build`, the compiled assets will be inside `public/build` and are ready to upload.
-
-## 5. Production `.env` Values
-
-Use MySQL in cPanel production. Example:
+Use values like these on Hostinger:
 
 ```env
 APP_NAME=SettleANZ
@@ -69,10 +56,11 @@ APP_URL=https://your-domain.com
 DB_CONNECTION=mysql
 DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=your_cpanel_db_name
-DB_USERNAME=your_cpanel_db_user
-DB_PASSWORD=your_cpanel_db_password
+DB_DATABASE=your_database
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
 
+FILESYSTEM_DISK=public
 CACHE_STORE=file
 SESSION_DRIVER=file
 QUEUE_CONNECTION=database
@@ -80,108 +68,44 @@ LOG_CHANNEL=stack
 LOG_LEVEL=error
 ```
 
-Notes:
+## 5. First Server Commands
 
-- `APP_DEBUG` must be `false`
-- use the real domain in `APP_URL`
-- `file` drivers are usually simpler on shared hosting than Redis
-
-## 6. Best Deployment Structure
-
-Best option:
-
-- put the Laravel app in a folder outside `public_html`
-- point the domain or subdomain document root to the app's `public` folder
-
-Example structure:
-
-```text
-/home/USERNAME/settleanz-app
-/home/USERNAME/settleanz-app/public
-```
-
-Then set the document root to:
-
-```text
-/home/USERNAME/settleanz-app/public
-```
-
-This is the cleanest and safest Laravel setup on cPanel.
-
-## 7. If cPanel Does Not Let You Point To `public/`
-
-Fallback option (already prepared by `scripts/cpanel-package.sh`):
-
-- upload `deploy/cpanel/settleanz-app` outside `public_html`, for example `/home/USERNAME/settleanz-app`
-- upload contents of `deploy/cpanel/public_html` into `/home/USERNAME/public_html`
-- edit `/home/USERNAME/public_html/index.php` and replace `__APP_PATH__` with your real app path
-
-Example:
-
-```php
-require '/home/USERNAME/settleanz-app/vendor/autoload.php';
-$app = require_once '/home/USERNAME/settleanz-app/bootstrap/app.php';
-```
-
-Use your real cPanel username and folder names.
-
-## 8. File Upload Checklist
-
-Upload these project parts (or just upload `deploy/cpanel/settleanz-app`):
-
-- `app`
-- `bootstrap`
-- `config`
-- `database`
-- `public`
-- `resources`
-- `routes`
-- `storage`
-- `vendor`
-- `.env`
-- `artisan`
-- `composer.json`
-- `composer.lock`
-
-Do not upload:
-
-- `node_modules`
-- local cache junk
-- development-only files you do not need
-
-## 9. First Commands On The Server
-
-If SSH or Terminal is available in cPanel, run:
+After the files are in place, run:
 
 ```bash
-php artisan key:generate
-php artisan migrate --force
 php artisan storage:link
+php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 ```
 
-If the app key is already set in `.env`, you do not need to generate it again.
+If the `storage/` directory or `bootstrap/cache/` is missing or not writable, create/fix them first:
 
-## 10. Permissions
+```bash
+mkdir -p storage/framework/cache storage/framework/sessions storage/framework/testing storage/framework/views storage/logs bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
 
-Typical safe permissions:
+## 6. Hostinger Shared Hosting Checklist
 
-- folders `755`
-- files `644`
-- `storage` and `bootstrap/cache` must be writable
+- keep the project root outside `public_html`
+- point the domain or subdomain to `public/`
+- build frontend assets locally, not on the host
+- use the deployment script in this repo for repeatable updates
+- never create a second `storage` copy or rename it to `storage.2`, `storage.3`, and so on
 
-If Laravel shows permission errors, fix those two areas first.
+## 7. Deployment Script
 
-## 11. Practical Recommendation For This Project
+The server-side deployment script is `deploy.sh` in the project root.
 
-For SettleANZ, use this workflow:
+It:
 
-1. develop locally in WSL
-2. build frontend assets locally with Node 22
-3. use MySQL for production on cPanel
-4. upload the full Laravel app with built assets
-5. point the domain to the `public` directory if cPanel allows it
+- pulls the latest Git changes
+- installs Composer dependencies
+- builds assets when `npm` is available
+- creates Laravel runtime directories if needed
+- keeps `storage/` as a real directory
+- creates only the `public/storage` symlink
 
-That will keep the project much more stable than trying to build on the hosting server.
+Run it from the Laravel root on the server.

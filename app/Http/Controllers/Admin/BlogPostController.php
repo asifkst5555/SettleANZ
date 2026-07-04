@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -469,54 +470,36 @@ class BlogPostController extends Controller
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $base = Str::slug($originalName) ?: 'image';
 
-        // Determine the correct public web root for both deployment modes:
-        // - Best mode: document root points to app/public -> use public_path() directly
-        // - Fallback mode: app is outside public_html, files go to public_html
-        $publicRoot = \App\Support\BlogMedia::publicWebRoot();
-        $blogDir = $publicRoot . '/storage/blog';
-
-        // Create directories with proper permissions
-        if (!is_dir($blogDir)) {
-            $storageBase = $publicRoot . '/storage';
-            if (!is_dir($storageBase)) {
-                mkdir($storageBase, 0777, true);
-            }
-            mkdir($blogDir, 0777, true);
-        }
+        $disk = Storage::disk('public');
 
         // Ensure unique filename
         $filename = $base . '.' . $extension;
         $i = 1;
-        while (file_exists($blogDir . '/' . $filename)) {
+        while ($disk->exists('blog/' . $filename)) {
             $filename = $base . '-' . $i . '.' . $extension;
             $i++;
         }
 
-        $destination = $blogDir . '/' . $filename;
-
-        // Try to move the file and verify it was successful
-        $moved = $file->move($blogDir, $filename);
-        if (!$moved) {
-            $error = error_get_last() ? error_get_last()['message'] : 'Unknown error';
-            \Log::error('Blog image upload failed: ' . $error . ' | Path: ' . $blogDir);
+        try {
+            $storedPath = $disk->putFileAs('blog', $file, $filename);
+        } catch (\Throwable $exception) {
+            \Log::error('Blog image upload failed: ' . $exception->getMessage());
             return response()->json([
-                'message' => 'Failed to save file: ' . $error,
+                'message' => 'Failed to save file: ' . $exception->getMessage(),
             ], 500);
         }
 
-        // Verify file actually exists after move
-        if (!file_exists($destination)) {
-            $error = error_get_last() ? error_get_last()['message'] : 'File not found after move';
-            \Log::error('Blog image upload verification failed: ' . $error);
+        if ($storedPath === false || !$disk->exists($storedPath)) {
+            \Log::error('Blog image upload verification failed for path: ' . $filename);
             return response()->json([
                 'message' => 'File upload failed. Please check storage/blog folder permissions.',
             ], 500);
         }
 
-        // Return URL - /storage/blog/ works in both deployment modes
+        // Return URL from the public disk so the storage symlink is the only web-facing link.
         return response()->json([
             'filename' => $filename,
-            'url'      => asset('storage/blog/' . $filename),
+            'url'      => $disk->url($storedPath),
         ]);
     }
 

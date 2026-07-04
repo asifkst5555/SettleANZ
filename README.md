@@ -29,7 +29,7 @@ Key rules:
 - keep the Laravel app outside `public_html` when possible
 - expose only the `public` directory to the web
 
-See [docs/cpanel-deployment.md](/home/asifk/projects/SettleANZ/docs/cpanel-deployment.md) for the deployment guide.
+See [docs/cpanel-deployment.md](docs/cpanel-deployment.md) for the deployment guide.
 
 Quick packaging command:
 
@@ -76,5 +76,5 @@ If you open the project from `\\wsl$...` and use Windows PHP or Composer, you ma
 
 ## Next Documents
 
-- [docs/implementation-guide.md](/home/asifk/projects/SettleANZ/docs/implementation-guide.md)
-- [docs/cpanel-deployment.md](/home/asifk/projects/SettleANZ/docs/cpanel-deployment.md)
+- [docs/implementation-guide.md](docs/implementation-guide.md)
+- [docs/cpanel-deployment.md](docs/cpanel-deployment.md)
