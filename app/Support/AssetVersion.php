@@ -11,7 +11,11 @@ class AssetVersion
         $filePath = public_path($path);
 
         if (! is_file($filePath)) {
-            return $url;
+            $filePath = base_path($path);
+
+            if (! is_file($filePath)) {
+                return $url;
+            }
         }
 
         $modifiedAt = filemtime($filePath);
