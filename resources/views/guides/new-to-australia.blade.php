@@ -124,7 +124,7 @@
             max-width: 46ch;
             margin-top: 1.1rem;
             color: rgba(255, 255, 255, 0.88);
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
             font-size: 1rem;
             font-weight: 400;
             line-height: 1.65;
