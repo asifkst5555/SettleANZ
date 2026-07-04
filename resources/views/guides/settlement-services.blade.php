@@ -9,6 +9,7 @@
             position: relative;
             overflow: hidden;
             background: linear-gradient(180deg, #f8fbfa 0%, #ffffff 30%, #f2f7f6 100%);
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         }
 
         /* ---- HERO SECTION ---- */
@@ -85,11 +86,11 @@
         }
 
         .settlement-hero h1 {
-            font-size: clamp(2.4rem, 4vw, 3.4rem);
-            font-family: 'Playfair Display', Georgia, serif;
-            font-weight: 700;
-            line-height: 1.12;
-            letter-spacing: -0.02em;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-size: clamp(2.45rem, 4.2vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.16;
+            letter-spacing: -1.2px;
             margin-top: 0;
             margin-bottom: 1.5rem;
             color: #ffffff;
@@ -97,20 +98,22 @@
 
         .settlement-hero h1 .text-highlight {
             color: #E8773A;
-            font-style: italic;
+            font-style: normal;
         }
 
         .settlement-hero__subhead {
-            font-size: clamp(1rem, 1.6vw, 1.1rem);
-            line-height: 1.65;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-size: clamp(1rem, 1.45vw, 1.1rem);
+            line-height: 1.7;
             color: rgba(255, 255, 255, 0.85);
             margin-bottom: 1rem;
             font-weight: 400;
         }
 
         .settlement-hero__subhead-secondary {
-            font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-            line-height: 1.65;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-size: clamp(0.98rem, 1.35vw, 1.05rem);
+            line-height: 1.7;
             color: rgba(255, 255, 255, 0.75);
             margin-bottom: 2.25rem;
             font-weight: 400;
@@ -236,7 +239,7 @@
 
         .path-card__stage-title {
             font-size: 1rem;
-            font-weight: 700;
+            font-weight: 800;
             color: #0f172a;
             display: flex;
             align-items: center;
@@ -382,11 +385,12 @@
         }
 
         .stage-header__title {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.2;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-size: clamp(1.45rem, 2vw, 1.7rem);
+            font-weight: 800;
+            color: #0A4A45;
+            line-height: 1.22;
+            letter-spacing: -0.3px;
         }
 
         .stage-header__line {
@@ -455,19 +459,22 @@
         }
 
         .stage-content__subtitle {
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
             color: #E8773A;
             margin-bottom: 1.25rem;
             line-height: 1.3;
+            letter-spacing: -0.1px;
         }
 
         .stage-content__description {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             font-size: 1.02rem;
             line-height: 1.7;
             color: #475569;
             margin-bottom: 2rem;
+            font-weight: 400;
         }
 
         .stage-content__btn {
@@ -516,6 +523,7 @@
             border: 1px solid rgba(15, 23, 42, 0.08);
             border-radius: 16px;
             padding: 2rem;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             font-size: 0.9rem;
             line-height: 1.6;
             color: var(--secondary-text, #64748b);
@@ -523,9 +531,10 @@
         }
 
         .disclaimer-card h3 {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             font-size: 1.05rem;
             color: var(--body-text, #0f172a);
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
