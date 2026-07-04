@@ -17,28 +17,13 @@ This repository has been scaffolded in WSL and is ready for the first build phas
 - Tailwind CSS for fast implementation of the design system
 - Filament or a custom admin panel for managing pages, articles, listings, guides, and leads
 
-## cPanel-Friendly Approach
+## Deployment
 
-This project is being prepared for shared hosting and cPanel deployment.
+The project now uses the standard Laravel deployment layout.
 
-Key rules:
+Use [deployment.sh](deployment.sh) on the server to install dependencies, clear caches, link public storage, and rebuild optimized framework caches.
 
-- build frontend assets locally with Node 22 before upload
-- upload compiled `public/build` assets to the server
-- use MySQL in production, not SQLite
-- keep the Laravel app outside `public_html` when possible
-- expose only the `public` directory to the web
-
-See [docs/cpanel-deployment.md](docs/cpanel-deployment.md) for the deployment guide.
-
-Quick packaging command:
-
-```bash
-cd /home/asifk/projects/SettleANZ
-bash scripts/cpanel-package.sh
-```
-
-That generates a deployment bundle in `deploy/cpanel`.
+Migration notes are in [docs/migration-notes.md](docs/migration-notes.md).
 
 ## Local Setup
 
@@ -77,4 +62,4 @@ If you open the project from `\\wsl$...` and use Windows PHP or Composer, you ma
 ## Next Documents
 
 - [docs/implementation-guide.md](docs/implementation-guide.md)
-- [docs/cpanel-deployment.md](docs/cpanel-deployment.md)
+- [docs/migration-notes.md](docs/migration-notes.md)
