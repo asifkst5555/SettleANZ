@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -466,22 +467,24 @@ class BlogPostController extends Controller
         $file = $request->file('image');
         $extension = strtolower($file->getClientOriginalExtension() ?: $file->extension());
 
-        // Build a clean, slugged base name from the original filename
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $base = Str::slug($originalName) ?: 'image';
 
-        $disk = Storage::disk('public');
+        $uploadDir = public_path('media/blog');
 
-        // Ensure unique filename
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0775, true);
+        }
+
         $filename = $base . '.' . $extension;
         $i = 1;
-        while ($disk->exists('blog/' . $filename)) {
+        while (file_exists($uploadDir . '/' . $filename)) {
             $filename = $base . '-' . $i . '.' . $extension;
             $i++;
         }
 
         try {
-            $storedPath = $disk->putFileAs('blog', $file, $filename);
+            $file->move($uploadDir, $filename);
         } catch (\Throwable $exception) {
             \Log::error('Blog image upload failed: ' . $exception->getMessage());
             return response()->json([
@@ -489,17 +492,17 @@ class BlogPostController extends Controller
             ], 500);
         }
 
-        if ($storedPath === false || !$disk->exists($storedPath)) {
+        $savedPath = $uploadDir . '/' . $filename;
+        if (!file_exists($savedPath)) {
             \Log::error('Blog image upload verification failed for path: ' . $filename);
             return response()->json([
-                'message' => 'File upload failed. Please check storage/blog folder permissions.',
+                'message' => 'File upload failed. Please check media/blog folder permissions.',
             ], 500);
         }
 
-        // Return URL from the public disk so the storage symlink is the only web-facing link.
         return response()->json([
             'filename' => $filename,
-            'url'      => $disk->url($storedPath),
+            'url'      => asset('media/blog/' . $filename),
         ]);
     }
 

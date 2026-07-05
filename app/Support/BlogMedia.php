@@ -2,8 +2,6 @@
 
 namespace App\Support;
 
-use Illuminate\Support\Facades\Storage;
-
 class BlogMedia
 {
     public static function normalizeFilename(?string $filename): ?string
@@ -13,7 +11,7 @@ class BlogMedia
         }
 
         $filename = ltrim((string) $filename, '/');
-        $filename = preg_replace('#^storage/blog/#', '', $filename) ?? $filename;
+        $filename = preg_replace('#^(storage/blog/|media/blog/)#', '', $filename) ?? $filename;
 
         return $filename !== '' ? $filename : null;
     }
@@ -25,13 +23,17 @@ class BlogMedia
             return null;
         }
 
-        return Storage::disk('public')->url('blog/' . $filename);
+        return asset('media/blog/' . $filename);
     }
 
     public static function exists(?string $filename): bool
     {
         $filename = self::normalizeFilename($filename);
+        if ($filename === null) {
+            return false;
+        }
 
-        return $filename !== null && Storage::disk('public')->exists('blog/' . $filename);
+        $path = public_path('media/blog/' . $filename);
+        return file_exists($path);
     }
 }

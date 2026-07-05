@@ -1231,7 +1231,7 @@
 
                                 <article class="arrival-card arrival-card--warm">
                                     <div class="arrival-card__media">
-                                        <img src="{{ asset('storage/blog/Moving Checklist What to Sort Before You Fly.webp') }}" alt="Checklist and booking steps before arriving in Australia" loading="lazy" width="1500" height="1000">
+                                        <img src="{{ asset('media/blog/Moving Checklist What to Sort Before You Fly.webp') }}" alt="Checklist and booking steps before arriving in Australia" loading="lazy" width="1500" height="1000">
                                     </div>
 
                                     <div class="arrival-card__head">
