@@ -29,6 +29,9 @@
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     @endif
 
+    <link rel="icon" type="image/webp" href="{{ asset('media/favicon/favicon.webp') }}">
+    <link rel="shortcut icon" href="{{ asset('media/favicon/favicon.webp') }}">
+
     {{-- Open Graph --}}
     <meta property="og:type" content="{{ $seoOgType }}">
     <meta property="og:site_name" content="SettleANZ">
