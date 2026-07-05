@@ -577,23 +577,26 @@ class BlogPostController extends Controller
 
     protected function applyPublicationState(array $validated, Request $request): array
     {
-        $statusAction = (string) $request->input('status_action', '');
+        $statusAction = $request->input('status_action');
 
-        if ($statusAction === 'draft') {
-            $validated['is_published'] = false;
-        } elseif ($statusAction === 'publish') {
+        if ($statusAction === 'publish') {
             $validated['is_published'] = true;
+        } elseif ($statusAction === 'draft') {
+            $validated['is_published'] = false;
+        } elseif (array_key_exists('is_published', $validated)) {
+            $validated['is_published'] = filter_var($validated['is_published'], FILTER_VALIDATE_BOOLEAN);
+        } else {
+            $validated['is_published'] = false;
         }
 
-        $validated['is_published'] = filter_var($validated['is_published'] ?? false, FILTER_VALIDATE_BOOLEAN);
-        $validated['is_featured_home'] = $validated['is_published']
-            ? filter_var($validated['is_featured_home'] ?? false, FILTER_VALIDATE_BOOLEAN)
-            : false;
-
-        if ($validated['is_published']) {
-            $validated['published_at'] = $validated['published_at'] ?? Carbon::now();
-        } else {
+        if (!$validated['is_published']) {
+            $validated['is_featured_home'] = false;
             $validated['published_at'] = null;
+        } else {
+            $validated['is_featured_home'] = filter_var($validated['is_featured_home'] ?? false, FILTER_VALIDATE_BOOLEAN);
+            if (empty($validated['published_at'])) {
+                $validated['published_at'] = Carbon::now();
+            }
         }
 
         return $validated;
