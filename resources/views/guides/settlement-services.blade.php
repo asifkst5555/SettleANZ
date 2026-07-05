@@ -615,12 +615,41 @@
                 width: 100%;
             }
 
+            .path-card {
+                padding: 1.25rem;
+                text-align: center;
+            }
+
+            .path-card__item {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+                padding: 0.75rem 0.5rem;
+            }
+
+            .path-card__info {
+                align-items: center;
+            }
+
+            .path-card__stage-title {
+                justify-content: center;
+            }
+
+            .path-card__arrow {
+                display: none;
+            }
+
             .stage-header__title {
                 font-size: 1.35rem;
             }
 
             .stage-content-col {
                 padding: 1.5rem 1.25rem;
+                text-align: center;
+            }
+
+            .stage-content__btn {
+                width: 100%;
             }
         }
 

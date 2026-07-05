@@ -75,4 +75,36 @@
     ];
 @endphp
 
+@push('styles')
+<style>
+    @media (max-width: 575px) {
+        .service-package {
+            padding: 0.75rem 0;
+        }
+        .service-package__head {
+            margin-bottom: 1rem;
+        }
+        .service-package__grid {
+            gap: 1rem;
+        }
+        .service-package .service-section-title {
+            text-align: center;
+        }
+        .service-stats {
+            padding: 1rem 0;
+        }
+        .service-next {
+            padding: 1.5rem 0;
+        }
+        .service-stage-hero {
+            padding: 40px 0 56px;
+        }
+        .service-stage-hero::after {
+            height: 40px;
+            bottom: -20px;
+        }
+    }
+</style>
+@endpush
+
 @include('guides.services.partials.service-detail')
