@@ -29,8 +29,8 @@
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     @endif
 
-    <link rel="icon" type="image/webp" sizes="32x32" href="{{ asset('media/favicon/favicon.webp') }}">
-    <link rel="shortcut icon" href="{{ asset('media/favicon/favicon.webp') }}" type="image/webp">
+    <link rel="icon" type="image/x-icon" href="{{ asset('media/favicon/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('media/favicon/favicon.ico') }}">
 
     {{-- Open Graph --}}
     <meta property="og:type" content="{{ $seoOgType }}">
