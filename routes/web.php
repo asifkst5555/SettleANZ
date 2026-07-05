@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', [SeoAssetController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoAssetController::class, 'robots'])->name('robots');
+Route::get('/favicon.ico', fn() => redirect('/public/media/favicon/favicon.ico', 301));
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 
