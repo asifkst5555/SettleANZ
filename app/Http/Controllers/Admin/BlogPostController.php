@@ -470,7 +470,7 @@ class BlogPostController extends Controller
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $base = Str::slug($originalName) ?: 'image';
 
-        $uploadDir = public_path('media/blog');
+        $uploadDir = base_path('media/blog');
 
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0775, true);
@@ -502,7 +502,7 @@ class BlogPostController extends Controller
 
         return response()->json([
             'filename' => $filename,
-            'url'      => asset('public/media/blog/' . $filename),
+            'url'      => asset('media/blog/' . $filename),
         ]);
     }
 

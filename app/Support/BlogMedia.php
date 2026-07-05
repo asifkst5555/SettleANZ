@@ -23,7 +23,7 @@ class BlogMedia
             return null;
         }
 
-        return asset('public/media/blog/' . $filename);
+        return asset('media/blog/' . $filename);
     }
 
     public static function exists(?string $filename): bool
@@ -33,7 +33,7 @@ class BlogMedia
             return false;
         }
 
-        $path = public_path('media/blog/' . $filename);
+        $path = base_path('media/blog/' . $filename);
         return file_exists($path);
     }
 }
