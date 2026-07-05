@@ -502,7 +502,7 @@ class BlogPostController extends Controller
 
         return response()->json([
             'filename' => $filename,
-            'url'      => asset('media/blog/' . $filename),
+            'url'      => asset('public/media/blog/' . $filename),
         ]);
     }
 

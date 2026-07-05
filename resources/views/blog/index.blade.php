@@ -241,7 +241,7 @@
             </div>
         </div>
         <div class="blog-hero-v2__visual" aria-hidden="true">
-            <img src="{{ asset('media/blog/blog_hero.webp') }}" alt="" class="blog-hero-v2__image" width="1000" height="530">
+            <img src="{{ asset('public/media/blog/blog_hero.webp') }}" alt="" class="blog-hero-v2__image" width="1000" height="530">
         </div>
     </section>
 

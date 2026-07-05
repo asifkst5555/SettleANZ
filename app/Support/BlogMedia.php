@@ -11,7 +11,7 @@ class BlogMedia
         }
 
         $filename = ltrim((string) $filename, '/');
-        $filename = preg_replace('#^(storage/blog/|media/blog/)#', '', $filename) ?? $filename;
+        $filename = preg_replace('#^(storage/blog/|media/blog/|public/media/blog/)#', '', $filename) ?? $filename;
 
         return $filename !== '' ? $filename : null;
     }
@@ -23,7 +23,7 @@ class BlogMedia
             return null;
         }
 
-        return asset('media/blog/' . $filename);
+        return asset('public/media/blog/' . $filename);
     }
 
     public static function exists(?string $filename): bool
