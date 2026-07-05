@@ -635,6 +635,10 @@
                 gap: 1.25rem;
             }
 
+            .service-section-title {
+                text-align: center;
+            }
+
             .service-stats {
                 padding: 1.5rem 0;
             }
