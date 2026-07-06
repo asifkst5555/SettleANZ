@@ -392,7 +392,6 @@
         }
 
         .arrival-card:hover,
-        .arrival-step:hover,
         .arrival-day-card:hover,
         .arrival-faq:hover,
         .arrival-cta:hover {
