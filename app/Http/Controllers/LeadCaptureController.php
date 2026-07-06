@@ -32,6 +32,7 @@ class LeadCaptureController extends Controller
             'preferred_date' => ['nullable', 'date'],
             'preferred_time' => ['nullable', 'string', 'max:100'],
             'consultation_format' => ['nullable', 'string', 'max:100'],
+            'visa_type' => ['nullable', 'string', 'max:100'],
         ]);
 
         $firstName = $validated['first_name'] ?? null;
@@ -72,6 +73,7 @@ class LeadCaptureController extends Controller
                 'preferred_date' => $validated['preferred_date'] ?? null,
                 'preferred_time' => $validated['preferred_time'] ?? null,
                 'consultation_format' => $validated['consultation_format'] ?? null,
+                'visa_type' => $validated['visa_type'] ?? null,
                 'referrer' => $request->headers->get('referer'),
                 'session_id' => $request->session()->getId(),
             ],

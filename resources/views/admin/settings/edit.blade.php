@@ -322,6 +322,9 @@
                         <label><span>Instagram link</span><input type="text" name="social_instagram" value="{{ old('social_instagram', $settings['social_instagram']) }}"></label>
                         <label><span>LinkedIn link</span><input type="text" name="social_linkedin" value="{{ old('social_linkedin', $settings['social_linkedin']) }}"></label>
                         <label><span>Pinterest link</span><input type="text" name="social_pinterest" value="{{ old('social_pinterest', $settings['social_pinterest']) }}"></label>
+                        <label><span>Reddit link</span><input type="text" name="social_reddit" value="{{ old('social_reddit', $settings['social_reddit'] ?? '') }}"></label>
+                        <label><span>TikTok link</span><input type="text" name="social_tiktok" value="{{ old('social_tiktok', $settings['social_tiktok'] ?? '') }}"></label>
+                        <label><span>YouTube link</span><input type="text" name="social_youtube" value="{{ old('social_youtube', $settings['social_youtube'] ?? '') }}"></label>
                         <label><span>Founder story link</span><input type="text" name="founder_story_link" value="{{ old('founder_story_link', $settings['founder_story_link']) }}"></label>
                         <label><span>Migration CTA label</span><input type="text" name="migration_cta_label" value="{{ old('migration_cta_label', $settings['migration_cta_label']) }}" required></label>
                         <label><span>Directory apply link</span><input type="text" name="directory_apply_link" value="{{ old('directory_apply_link', $settings['directory_apply_link']) }}" required></label>

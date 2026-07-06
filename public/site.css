@@ -315,7 +315,7 @@ h3 {
 .text-link:hover,
 .site-footer a:hover,
 .footer-whatsapp:hover {
-    color: var(--primary-brand);
+    color: var(--cta-accent);
 }
 
 .menu-toggle {
@@ -967,6 +967,16 @@ main {
     border-radius: 999px;
     font-size: 13px;
     font-weight: 600;
+    transition: background 0.2s, border-color 0.2s;
+}
+.social-row a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #e8773a;
+    color: #e8773a;
+}
+.social-row a svg {
+    width: 18px;
+    height: 18px;
 }
 
 .subscribe-form {
@@ -6893,7 +6903,7 @@ select {
 .founder-story-link,
 .site-footer a:hover,
 .site-footer a:focus-visible {
-    color: var(--primary-brand);
+    color: var(--cta-accent);
 }
 
 .menu-toggle,

@@ -84,6 +84,39 @@ Route::post('/directory/{slug}/review', [DirectoryController::class, 'storeRevie
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
+Route::get('/migration-services', function () {
+    $seo = Schema::hasTable('page_seo') ? PageSeo::forPage('migration-services') : null;
+    return view('migration-services', [
+        'metaTitle'       => $seo?->meta_title       ?: 'Migration Services | Vinit Joshi MARN 1386616 | SettleANZ',
+        'metaDescription' => $seo?->meta_description ?: 'Professional visa and migration assistance from Vinit Joshi, Registered Migration Agent (MARN 1386616). Skilled, partner, student, employer-sponsored visas, and tribunal reviews.',
+        'metaOgTitle'     => $seo?->og_title         ?: null,
+        'metaOgDesc'      => $seo?->og_description   ?: null,
+        'metaCanonical'   => $seo?->canonical_url    ?: null,
+        'metaNoIndex'     => $seo?->no_index         ?? false,
+        'metaSchemaType'  => $seo?->schema_type      ?: null,
+    ]);
+})->name('guides.migration-services');
+
+Route::get('/housing', function () {
+    return redirect()->route('guides.settlement-services', 301);
+})->name('guides.housing');
+
+Route::get('/banking', function () {
+    return redirect()->route('guides.settlement-services', 301);
+})->name('guides.banking');
+
+Route::get('/consultation', function () {
+    return view('consultation', [
+        'metaTitle'       => 'Book a Visa Consultation | Vinit Joshi MARN 1386616 | SettleANZ',
+        'metaDescription' => 'Schedule a professional consultation with Vinit Joshi, Registered Migration Agent (MARN 1386616). Get expert visa advice tailored to your situation.',
+        'metaOgTitle'     => null,
+        'metaOgDesc'      => null,
+        'metaCanonical'   => null,
+        'metaNoIndex'     => false,
+        'metaSchemaType'  => null,
+    ]);
+})->name('consultation');
+
 Route::get('/privacy-policy', function () {
     $seo = Schema::hasTable('page_seo') ? PageSeo::forPage('privacy-policy') : null;
     return view('legal.privacy-policy', [

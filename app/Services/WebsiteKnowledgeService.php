@@ -241,6 +241,13 @@ class WebsiteKnowledgeService
             ],
             [
                 'kind' => 'primary_page',
+                'title' => 'Migration Services — Registered Migration Agent',
+                'route' => '/migration-services',
+                'summary' => 'Migration services page featuring a registered migration agent. Services include skilled visas (189, 190, 491, 482, 186), partner and family visas, student visas, employer-sponsored visas, AAT/MRT tribunal reviews, NOICC responses, visa cancellations, health and character waivers, and ministerial interventions. Common pitfalls highlighted: wrong subclass, EOI errors, weak submissions.',
+                'search' => 'migration services registered migration agent visa skilled partner student employer sponsored tribunal review NOICC cancellation health character waiver ministerial intervention consultation booking',
+            ],
+            [
+                'kind' => 'primary_page',
                 'title' => 'About SettleANZ',
                 'route' => '/about',
                 'summary' => 'Founder story: Entel Dajsmaili arrived 2001 with one suitcase, became Australian citizen 2004, made a promise that no one else should learn the system the hard way. Built from lived experience. Three pathways: free 90-day roadmap, free 15-min strategy call, or paid concierge services.',
@@ -259,6 +266,13 @@ class WebsiteKnowledgeService
                 'route' => '/directory',
                 'summary' => 'Curated directory of trusted expat services with search and filter by city (Brisbane, Melbourne, Sydney) and category (Inspection, Legal Services, Finance). Current listings: Property Inspectors Brisbane (4.9), Settlement Lawyers Melbourne (4.8), Finance Brokers Sydney (4.5). Businesses can apply for listing.',
                 'search' => 'directory partners services property inspectors brisbane settlement lawyers melbourne finance brokers sydney inspection legal finance business listing apply',
+            ],
+            [
+                'kind' => 'primary_page',
+                'title' => 'Book a Consultation',
+                'route' => '/consultation',
+                'summary' => 'Consultation booking page where users can schedule a visa consultation with a registered migration agent. Form captures first name, last name, email, phone, visa type interest, and situation details. Urgent cases (deadline under 7 days, NOICC, overstaying) are flagged for urgent review.',
+                'search' => 'book consultation schedule visa consultation booking form urgent NOICC deadline overstaying',
             ],
             [
                 'kind' => 'primary_page',
@@ -399,15 +413,15 @@ class WebsiteKnowledgeService
             [
                 'kind' => 'faq',
                 'title' => 'FAQ: How do I find housing in Australia?',
-                'route' => '/housing',
-                'summary' => 'Use the Housing Guide for practical help with rentals, suburbs, leases, and common mistakes. The Directory page lists relocation companies and real estate agents. Key steps include researching suburbs, understanding rental applications, and avoiding common pitfalls.',
+                'route' => '/settlement-services',
+                'summary' => 'SettleANZ helps with rental finding, suburb selection, and lease guidance through the Settlement Services program. The Directory page lists relocation companies and real estate agents. Key steps include researching suburbs, understanding rental applications, and avoiding common pitfalls.',
                 'search' => 'find housing rent apartment lease suburb relocation real estate agent rental application common mistakes housing guide',
             ],
             [
                 'kind' => 'faq',
                 'title' => 'FAQ: How do I open a bank account in Australia?',
-                'route' => '/banking',
-                'summary' => 'The Banking Guide covers account setup, newcomer-friendly banks, money transfers, TFN, and superannuation. Popular options include CommBank, Westpac, and transfer tools like Wise, OFX, and WorldRemit. Some banks allow pre-arrival account setup.',
+                'route' => '/settlement-services',
+                'summary' => 'SettleANZ helps with banking setup, newcomer-friendly accounts, money transfers, TFN, and superannuation. Popular options include CommBank, Westpac, and transfer tools like Wise, OFX, and WorldRemit. Some banks allow pre-arrival account setup.',
                 'search' => 'open bank account commbank westpac tfn superannuation money transfer wise ofx worldremit pre-arrival account setup banking guide',
             ],
             [

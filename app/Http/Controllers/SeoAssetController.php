@@ -19,9 +19,8 @@ class SeoAssetController extends Controller
             ['loc' => route('directory.index'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => route('guides.new-to-australia'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.9'],
             ['loc' => route('guides.settlement-services'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.8'],
-            ['loc' => route('guides.housing'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.8'],
-            ['loc' => route('guides.banking'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.8'],
-            ['loc' => route('guides.migration-services'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.8'],
+            ['loc' => route('guides.migration-services'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.9'],
+            ['loc' => route('consultation'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => route('privacy-policy'), 'lastmod' => now(), 'changefreq' => 'yearly', 'priority' => '0.3'],
             ['loc' => route('terms-of-service'), 'lastmod' => now(), 'changefreq' => 'yearly', 'priority' => '0.3'],
         ]);
