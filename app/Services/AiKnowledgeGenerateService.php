@@ -136,7 +136,7 @@ class AiKnowledgeGenerateService
             '1. Answers must be practical, grounded in real migrant experiences, and actionable.',
             '2. Use simple language. Avoid jargon unless explained.',
             '3. Include specific details (e.g., costs, timelines, requirements) where relevant.',
-            '4. Reference SettleANZ pages when helpful (e.g., /banking, /housing, /migration-services, /settlement-services, /new-to-australia, /directory, /contact).',
+            '4. Reference SettleANZ pages when helpful (e.g., /banking, /housing, /settlement-services, /new-to-australia, /directory, /contact).',
             '5. For regulated topics (visas, legal, tax), add a disclaimer to consult a professional.',
             '6. Do not invent policies, laws, or facts. If uncertain, say so briefly.',
             '7. Each entry must be unique and cover a different aspect of the topic.',

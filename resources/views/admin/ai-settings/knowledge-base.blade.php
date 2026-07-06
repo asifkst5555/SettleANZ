@@ -45,7 +45,7 @@
                         <div><strong>/settlement-services</strong> — Settlement Hub</div>
                         <div><strong>/housing</strong> — Housing Guide</div>
                         <div><strong>/banking</strong> — Banking Guide</div>
-                        <div><strong>/migration-services</strong> — Migration Services</div>
+                        <div><strong>/contact</strong> — Contact page</div>
                         <div><strong>/blog</strong> — Blog Index</div>
                         <div><strong>/directory</strong> — Directory</div>
                         <div><strong>/contact</strong> — Contact Page</div>

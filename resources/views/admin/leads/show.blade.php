@@ -27,7 +27,7 @@
             'homepage', 'homepage-popup' => 'Homepage',
             'homepage-guide-strip' => 'Homepage guide',
             'settlement-services' => 'Settlement services',
-            'migration-services-page' => 'Migration services',
+            'migration-services-page' => 'Contact page (legacy)',
             'migration-agent-booking-modal' => 'Migration agents',
             default => (string) str($page)->replace(['-', '_'], ' ')->title(),
         };

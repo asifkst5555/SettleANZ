@@ -45,7 +45,7 @@ class WebsiteKnowledgeService
         $lines = [
             'SettleANZ website overview:',
             '- SettleANZ helps people settling in Australia and New Zealand with migration guidance, housing help, banking guidance, healthcare guidance, relocation checklists, blog guides, trusted directory listings, and direct contact pathways.',
-            '- Core public sections include Home (/), New to Australia (/new-to-australia), Housing (/housing), Banking (/banking), Migration Services (/migration-services), Blog (/blog), Directory (/directory), and Contact (/contact).',
+            '- Core public sections include Home (/), New to Australia (/new-to-australia), Housing (/housing), Banking (/banking), Blog (/blog), Directory (/directory), and Contact (/contact).',
             '- Businesses can apply to be featured through the directory apply link. Human support is available by email or WhatsApp from the Contact page.',
         ];
 
@@ -149,7 +149,7 @@ class WebsiteKnowledgeService
             'australia', 'new zealand', 'settleanz', 'visa', 'migration', 'housing', 'rent', 'suburb',
             'bank', 'banking', 'transfer', 'health', 'insurance', 'medicare', 'directory', 'contact',
             'moving', 'relocation', 'guide', 'checklist', 'blog', 'expat', 'migrant', 'new arrival',
-            'school', 'work', 'job', 'tfn', 'super', 'partner', 'whatsapp', 'consultation', 'listing',
+            'school', 'work', 'job', 'tfn', 'super', 'partner', 'whatsapp', 'listing',
             'services', 'support', 'healthcare', 'student visa', 'working holiday', 'partner visa',
             'email', 'apply', 'business', 'agent', 'lawyer', 'directory', 'article', 'post', 'category',
             'settlement', 'before arriving', 'pre-arrival', 'about', 'privacy', 'terms',
@@ -241,13 +241,6 @@ class WebsiteKnowledgeService
             ],
             [
                 'kind' => 'primary_page',
-                'title' => 'Migration Services — Registered Migration Agent',
-                'route' => '/migration-services',
-                'summary' => 'Migration services page featuring a registered migration agent. Services include skilled visas (189, 190, 491, 482, 186), partner and family visas, student visas, employer-sponsored visas, AAT/MRT tribunal reviews, NOICC responses, visa cancellations, health and character waivers, and ministerial interventions. Common pitfalls highlighted: wrong subclass, EOI errors, weak submissions.',
-                'search' => 'migration services registered migration agent visa skilled partner student employer sponsored tribunal review NOICC cancellation health character waiver ministerial intervention consultation booking',
-            ],
-            [
-                'kind' => 'primary_page',
                 'title' => 'About SettleANZ',
                 'route' => '/about',
                 'summary' => 'Founder story: Entel Dajsmaili arrived 2001 with one suitcase, became Australian citizen 2004, made a promise that no one else should learn the system the hard way. Built from lived experience. Three pathways: free 90-day roadmap, free 15-min strategy call, or paid concierge services.',
@@ -266,13 +259,6 @@ class WebsiteKnowledgeService
                 'route' => '/directory',
                 'summary' => 'Curated directory of trusted expat services with search and filter by city (Brisbane, Melbourne, Sydney) and category (Inspection, Legal Services, Finance). Current listings: Property Inspectors Brisbane (4.9), Settlement Lawyers Melbourne (4.8), Finance Brokers Sydney (4.5). Businesses can apply for listing.',
                 'search' => 'directory partners services property inspectors brisbane settlement lawyers melbourne finance brokers sydney inspection legal finance business listing apply',
-            ],
-            [
-                'kind' => 'primary_page',
-                'title' => 'Book a Consultation',
-                'route' => '/consultation',
-                'summary' => 'Consultation booking page where users can schedule a visa consultation with a registered migration agent. Form captures first name, last name, email, phone, visa type interest, and situation details. Urgent cases (deadline under 7 days, NOICC, overstaying) are flagged for urgent review.',
-                'search' => 'book consultation schedule visa consultation booking form urgent NOICC deadline overstaying',
             ],
             [
                 'kind' => 'primary_page',
@@ -323,7 +309,7 @@ class WebsiteKnowledgeService
                 'kind' => 'faq',
                 'title' => 'FAQ: How should visitors use the site?',
                 'route' => '/new-to-australia',
-                'summary' => 'A good visitor flow is to start with New to Australia for checklists, then go to Housing, Banking, Migration Services, Blog, Directory, or Contact depending on the next need.',
+                'summary' => 'A good visitor flow is to start with New to Australia for checklists, then go to Housing, Banking, Blog, Directory, or Contact depending on the next need.',
                 'search' => 'how use site where start visitor flow new to australia checklist housing banking migration services blog directory contact',
             ],
             [
@@ -339,13 +325,6 @@ class WebsiteKnowledgeService
                 'route' => (string) ($settings['directory_apply_link'] ?? '/contact'),
                 'summary' => 'Businesses can use the configured directory apply link or contact pathway to start a directory listing enquiry for inclusion in the SettleANZ directory.',
                 'search' => 'business listing apply directory how does it work directory apply link featured listing promote services',
-            ],
-            [
-                'kind' => 'faq',
-                'title' => 'FAQ: What is on the migration page?',
-                'route' => '/migration-services',
-                'summary' => 'The migration page explains common visa types, why registered migration agents matter, featured agents, and consultation request forms for visa support.',
-                'search' => 'migration page visa types registered migration agent featured migration agents consultation request forms skilled student partner working holiday',
             ],
             [
                 'kind' => 'faq',
@@ -374,13 +353,6 @@ class WebsiteKnowledgeService
                 'route' => '/contact',
                 'summary' => (string) ($settings['contact_response_time'] ?? 'We usually respond within 24 hours.'),
                 'search' => 'response time reply how fast respond contact response time 24 hours',
-            ],
-            [
-                'kind' => 'faq',
-                'title' => 'FAQ: How can someone book migration help?',
-                'route' => '/migration-services',
-                'summary' => 'Visitors can use the migration services page to review visa types, choose a featured migration agent, request a consultation, or submit their situation through the migration form.',
-                'search' => 'book migration help consultation visa support featured migration agent request consultation migration form',
             ],
             [
                 'kind' => 'faq',
@@ -427,8 +399,8 @@ class WebsiteKnowledgeService
             [
                 'kind' => 'faq',
                 'title' => 'FAQ: What visa options are available?',
-                'route' => '/migration-services',
-                'summary' => 'Common visa pathways include skilled migration, student visas, partner visas, and working holiday visas. The Migration Services page explains visa types, the importance of registered migration agents, and how to request a consultation.',
+                'route' => '/contact',
+                'summary' => 'Common visa pathways include skilled migration, student visas, partner visas, and working holiday visas. For specific visa advice, contact our team through the contact page at /contact.',
                 'search' => 'visa options skilled migration student partner working holiday registered migration agent consultation visa types',
             ],
             [

@@ -24,7 +24,6 @@ class SiteDefaults
             ],
             ['label' => 'Blog', 'href' => '/blog', 'visible' => true],
             ['label' => 'Directory', 'href' => '/directory', 'visible' => true],
-            ['label' => 'Migration Services', 'href' => '/migration-services', 'visible' => true],
             ['label' => 'About', 'href' => '/about', 'visible' => true],
             ['label' => 'Contact', 'href' => '/contact', 'visible' => true],
         ];

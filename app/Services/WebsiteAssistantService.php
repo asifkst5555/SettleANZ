@@ -161,12 +161,8 @@ class WebsiteAssistantService
             return $responseTime;
         }
 
-        if (Str::contains($text, ['book consultation', 'book a consultation', 'schedule consultation'])) {
-            return 'You can book a consultation with a registered migration agent through our booking page at /consultation. Please provide your details and our team will contact you.';
-        }
-
-        if (Str::contains($text, ['migration consultation', 'book migration help', 'migration agent'])) {
-            return 'SettleANZ works with registered migration agents who can assist with your visa needs. You can book a consultation at /consultation. In the meantime, I can help with general information about housing, banking, TFN, and settling in. Would any of that be useful?';
+        if (Str::contains($text, ['migration consultation', 'book migration help', 'migration agent', 'book consultation', 'book a consultation', 'schedule consultation'])) {
+            return 'SettleANZ works with registered migration agents who can assist with your visa needs. Please reach out through our contact page at /contact. In the meantime, I can help with general information about housing, banking, TFN, and settling in. Would any of that be useful?';
         }
 
         if (Str::contains($text, ['whatsapp', 'chat on whatsapp', 'whatsapp help'])) {
@@ -186,11 +182,11 @@ class WebsiteAssistantService
         }
 
         if (Str::contains($text, ['page_id=12', 'page id 12'])) {
-            return 'Our consultation booking page is at /consultation. You can fill in your details there and our team will follow up.';
+            return 'Please reach out through our contact page at /contact and our team will follow up.';
         }
 
         if (Str::contains($text, ['how do i book', 'how to book', 'booking page'])) {
-            return 'To book a consultation with a registered migration agent, visit /consultation. For settlement support packages, visit /settlement-services.';
+            return 'Please reach out through our contact page at /contact. For settlement support packages, visit /settlement-services.';
         }
 
         if (Str::contains($text, ['what can this website help me with', 'what does this website do', 'what services do you offer overall', 'what can settleanz help with overall'])) {
@@ -707,7 +703,7 @@ You are the SettleANZ Virtual Assistant, an AI-powered guide for people moving t
 - New Zealand settlement (high-level only)
 
 ### What you CANNOT answer (redirect immediately):
-- Visa recommendations, eligibility, or application help -> redirect to MARA-registered migration agent and /consultation
+- Visa recommendations, eligibility, or application help -> redirect to MARA-registered migration agent via /contact
 - Financial or investment advice -> redirect to ASIC-registered financial adviser
 - Legal advice -> redirect to a qualified lawyer
 - Tax advice beyond basics -> redirect to a tax accountant or ATO
@@ -787,7 +783,7 @@ User: "Sydney."
 Assistant: "Sydney's rental market is competitive. Here is what works for newcomers: book 2 to 4 weeks of short-term accommodation first, use your employment contract as a rental reference, and target private landlords who are often more flexible than agencies. Would you like me to walk through what goes in a strong rental cover letter?"
 
 User: "Can you help with my visa?"
-Assistant: "That requires a registered migration agent, which I am not. I am an AI assistant and can only provide general information. For visa eligibility and application help, please book a consultation with a registered agent at /consultation. What I can help with is what happens after you get your visa, such as housing, banking, or TFN setup. Would any of that be useful?"
+Assistant: "That requires a registered migration agent, which I am not. I am an AI assistant and can only provide general information. For visa eligibility and application help, please contact our team through the contact page at /contact. What I can help with is what happens after you get your visa, such as housing, banking, or TFN setup. Would any of that be useful?"
 PROMPT;
 
         $followUpLine = $followUpPhrase !== '' ? "\nIf more explanation is genuinely needed, end with: \"" . $followUpPhrase . "\"" : '';

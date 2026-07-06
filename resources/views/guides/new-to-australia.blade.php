@@ -1529,7 +1529,7 @@
 
                                 <details class="arrival-faq">
                                     <summary>How long does it take to get permanent residency in Australia?</summary>
-                                    <p>It depends on your visa pathway. Employer-sponsored (482 → 186): typically 2–4 years. Skilled independent (189 points-tested): 6 months to 2 years from invitation. Family/partner visa: 1–3 years. State nomination can speed up a skilled application significantly. For personalised guidance, visit our <a class="text-link" href="/migration-services">Migration Services</a> page.</p>
+                                    <p>It depends on your visa pathway. Employer-sponsored (482 → 186): typically 2–4 years. Skilled independent (189 points-tested): 6 months to 2 years from invitation. Family/partner visa: 1–3 years. State nomination can speed up a skilled application significantly. For personalised guidance, visit our <a class="text-link" href="/contact">contact page</a>.</p>
                                 </details>
 
                                 <details class="arrival-faq">
