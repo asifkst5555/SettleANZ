@@ -103,7 +103,7 @@ class EmailService
             'lead_name' => $lead->full_name ?? $lead->first_name ?? 'Valued Lead',
             'lead_email' => $lead->email,
             'company_name' => config('app.name'),
-            'company_logo' => asset('images/logo.png'),
+            'company_logo' => asset('media/logo/logo.webp'),
             'current_year' => date('Y'),
         ], $variables);
 

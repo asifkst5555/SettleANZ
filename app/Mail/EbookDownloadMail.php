@@ -41,6 +41,7 @@ class EbookDownloadMail extends Mailable
                 'expiresAt' => $this->token->expires_at->format('F j, Y \a\t g:i A'),
                 'expiresInHours' => config('ebook.download.token_expiry_hours', 72),
                 'companyName' => config('app.name'),
+                'companyLogo' => asset('media/logo/logo.webp'),
             ],
         );
     }

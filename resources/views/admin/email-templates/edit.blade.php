@@ -44,7 +44,7 @@
                     <label class="admin-form-grid__full">
                         <span>Subject *</span>
                         <input type="text" name="subject" value="{{ old('subject', $template->subject) }}" required class="w-full border rounded px-3 py-2 @error('subject') border-red-500 @enderror">
-                        <small style="display:block;margin-top:6px;color:#667788;">Use variables like <code>{{ '{{ lead_name }}' }}</code>, <code>{{ '{{ ebook_title }}' }}</code>, etc.</small>
+                        <small style="display:block;margin-top:6px;color:#667788;">Use variables like <code>@{{ lead_name }}</code>, <code>@{{ ebook_title }}</code>, etc.</small>
                         @error('subject') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </label>
                     <label class="admin-form-grid__full">
@@ -57,6 +57,12 @@
                             @endforeach
                         </small>
                         @error('body_html') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </label>
+                    <label class="admin-form-grid__full">
+                        <span>Plain Text Body</span>
+                        <textarea name="body_text" rows="8" class="w-full border rounded px-3 py-2 font-mono text-sm @error('body_text') border-red-500 @enderror">{{ old('body_text', $template->body_text) }}</textarea>
+                        <small style="display:block;margin-top:6px;color:#667788;">Optional plain text version for email clients that don't support HTML.</small>
+                        @error('body_text') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </label>
                 </div>
             </div>
