@@ -13,9 +13,22 @@ try {
     
     // Try common Laravel directory structures
     $basePaths = [
-        __DIR__ . '/..',           // standard: public/ is inside project root
-        __DIR__ . '/../../',       // some hosts
+        __DIR__ . '/..',                    // standard: public/ is inside project root
+        __DIR__ . '/../../',                // some hosts
+        __DIR__,                            // everything in public_html
+        '/home/u821611941/domains/settleanz.com',
+        '/home/u821611941/domains/settleanz.com/public_html',
+        '/home/u821611941/settleanz',
+        '/home/u821611941/public_html',
     ];
+    
+    // Also scan for vendor in parent directories
+    $dir = __DIR__;
+    for ($i = 0; $i < 5; $i++) {
+        $basePaths[] = $dir;
+        $dir = dirname($dir);
+    }
+    $basePaths = array_unique(array_map('realpath', array_filter($basePaths)));
     
     $vendorPath = null;
     $bootstrapPath = null;
