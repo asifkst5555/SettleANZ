@@ -86,7 +86,11 @@ class PageController extends Controller
         }
 
         return collect(SiteDefaults::blogPosts())
-            ->map(fn (array $post) => (object) $post)
+            ->map(function (array $post) {
+                $obj = (object) $post;
+                $obj->image_url = \App\Support\BlogMedia::url($obj->image ?? '');
+                return $obj;
+            })
             ->sortByDesc('published_at')
             ->values();
     }

@@ -13,6 +13,18 @@ use App\Http\Controllers\Admin\AiKnowledgeController as AdminAiKnowledgeControll
 use App\Http\Controllers\Admin\AdminAiSettingsController;
 use App\Http\Controllers\Admin\AiContentController as AdminAiContentController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
+// Ebook System Controllers
+use App\Http\Controllers\Admin\EbookController as AdminEbookController;
+use App\Http\Controllers\Admin\EbookCategoryController as AdminEbookCategoryController;
+use App\Http\Controllers\Admin\EbookTagController as AdminEbookTagController;
+use App\Http\Controllers\Admin\EbookLeadController as AdminEbookLeadController;
+use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
+use App\Http\Controllers\Admin\EmailTemplateController as AdminEmailTemplateController;
+use App\Http\Controllers\Admin\CampaignController as AdminCampaignController;
+use App\Http\Controllers\Admin\AiAssistantController as AdminAiAssistantController;
+use App\Http\Controllers\Admin\EbookAnalyticsController as AdminEbookAnalyticsController;
+use App\Http\Controllers\Admin\EbookSettingsController as AdminEbookSettingsController;
+use App\Http\Controllers\Admin\EmailSettingsController as AdminEmailSettingsController;
 use App\Http\Controllers\BlogController;
 use App\Models\PageSeo;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +32,9 @@ use App\Http\Controllers\DirectoryController;
 use App\Http\Controllers\LeadCaptureController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SeoAssetController;
+use App\Http\Controllers\EbookLandingController;
+use App\Http\Controllers\EbookDownloadController;
+use App\Http\Controllers\RoadmapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', [SeoAssetController::class, 'sitemap'])->name('sitemap');
@@ -192,6 +207,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/ai/page-seo', [AdminAiContentController::class, 'pageSeo'])->name('admin.ai.page-seo');
     Route::put('/seo/{pageKey}', [AdminPageSeoController::class, 'update'])->name('admin.seo.update');
 
+    // Email Settings
+    Route::get('/email-settings', [AdminEmailSettingsController::class, 'index'])->name('admin.email-settings.index');
+    Route::put('/email-settings', [AdminEmailSettingsController::class, 'update'])->name('admin.email-settings.update');
+
     Route::post('/logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
 
     // Notifications API
@@ -200,6 +219,99 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
     Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
     Route::delete('/notifications/{notification}', [AdminNotificationController::class, 'destroy'])->name('admin.notifications.destroy');
+
+    // ======================
+    // Ebook Lead Magnet System
+    // ======================
+    Route::prefix('ebooks')->name('admin.ebooks.')->group(function () {
+        Route::get('/', [AdminEbookController::class, 'index'])->name('index');
+        Route::get('/create', [AdminEbookController::class, 'create'])->name('create');
+        Route::post('/', [AdminEbookController::class, 'store'])->name('store');
+        Route::get('/{ebook}', [AdminEbookController::class, 'show'])->name('show');
+        Route::get('/{ebook}/edit', [AdminEbookController::class, 'edit'])->name('edit');
+        Route::put('/{ebook}', [AdminEbookController::class, 'update'])->name('update');
+        Route::delete('/{ebook}', [AdminEbookController::class, 'destroy'])->name('destroy');
+        Route::post('/{ebook}/publish', [AdminEbookController::class, 'publish'])->name('publish');
+        Route::post('/{ebook}/archive', [AdminEbookController::class, 'archive'])->name('archive');
+    });
+
+    // Ebook Categories
+    Route::get('/ebook-categories', [AdminEbookCategoryController::class, 'index'])->name('admin.ebook-categories.index');
+    Route::post('/ebook-categories', [AdminEbookCategoryController::class, 'store'])->name('admin.ebook-categories.store');
+    Route::put('/ebook-categories/{category}', [AdminEbookCategoryController::class, 'update'])->name('admin.ebook-categories.update');
+    Route::delete('/ebook-categories/{category}', [AdminEbookCategoryController::class, 'destroy'])->name('admin.ebook-categories.destroy');
+
+    // Ebook Tags
+    Route::get('/ebook-tags', [AdminEbookTagController::class, 'index'])->name('admin.ebook-tags.index');
+    Route::post('/ebook-tags', [AdminEbookTagController::class, 'store'])->name('admin.ebook-tags.store');
+    Route::put('/ebook-tags/{tag}', [AdminEbookTagController::class, 'update'])->name('admin.ebook-tags.update');
+    Route::delete('/ebook-tags/{tag}', [AdminEbookTagController::class, 'destroy'])->name('admin.ebook-tags.destroy');
+
+    // Ebook Leads
+    Route::get('/ebook-leads', [AdminEbookLeadController::class, 'index'])->name('admin.ebook-leads.index');
+    Route::get('/ebook-leads/{lead}', [AdminEbookLeadController::class, 'show'])->name('admin.ebook-leads.show');
+    Route::put('/ebook-leads/{lead}', [AdminEbookLeadController::class, 'update'])->name('admin.ebook-leads.update');
+    Route::delete('/ebook-leads/{lead}', [AdminEbookLeadController::class, 'destroy'])->name('admin.ebook-leads.destroy');
+
+    // Download Logs & Tokens
+    Route::get('/downloads', [AdminDownloadController::class, 'index'])->name('admin.downloads.index');
+    Route::get('/downloads/tokens', [AdminDownloadController::class, 'tokens'])->name('admin.downloads.tokens');
+    Route::post('/downloads/tokens/{token}/revoke', [AdminDownloadController::class, 'revokeToken'])->name('admin.downloads.tokens.revoke');
+
+    // Email Templates
+    Route::get('/email-templates', [AdminEmailTemplateController::class, 'index'])->name('admin.email-templates.index');
+    Route::get('/email-templates/create', [AdminEmailTemplateController::class, 'create'])->name('admin.email-templates.create');
+    Route::post('/email-templates', [AdminEmailTemplateController::class, 'store'])->name('admin.email-templates.store');
+    Route::get('/email-templates/{template}/edit', [AdminEmailTemplateController::class, 'edit'])->name('admin.email-templates.edit');
+    Route::put('/email-templates/{template}', [AdminEmailTemplateController::class, 'update'])->name('admin.email-templates.update');
+    Route::delete('/email-templates/{template}', [AdminEmailTemplateController::class, 'destroy'])->name('admin.email-templates.destroy');
+
+    // Campaigns
+    Route::get('/campaigns', [AdminCampaignController::class, 'index'])->name('admin.campaigns.index');
+    Route::get('/campaigns/create', [AdminCampaignController::class, 'create'])->name('admin.campaigns.create');
+    Route::post('/campaigns', [AdminCampaignController::class, 'store'])->name('admin.campaigns.store');
+    Route::get('/campaigns/{campaign}/edit', [AdminCampaignController::class, 'edit'])->name('admin.campaigns.edit');
+    Route::put('/campaigns/{campaign}', [AdminCampaignController::class, 'update'])->name('admin.campaigns.update');
+    Route::delete('/campaigns/{campaign}', [AdminCampaignController::class, 'destroy'])->name('admin.campaigns.destroy');
+    Route::post('/campaigns/{campaign}/send', [AdminCampaignController::class, 'send'])->name('admin.campaigns.send');
+    Route::post('/campaigns/{campaign}/duplicate', [AdminCampaignController::class, 'duplicate'])->name('admin.campaigns.duplicate');
+
+    // AI Admin Assistant
+    Route::get('/ai-assistant', [AdminAiAssistantController::class, 'index'])->name('admin.ai-assistant.index');
+    Route::post('/ai-assistant/chat', [AdminAiAssistantController::class, 'chat'])->name('admin.ai-assistant.chat');
+    Route::post('/ai-assistant/generate-email', [AdminAiAssistantController::class, 'generateDownloadEmail'])->name('admin.ai-assistant.generate-email');
+    Route::post('/ai-assistant/rewrite', [AdminAiAssistantController::class, 'rewriteEmail'])->name('admin.ai-assistant.rewrite');
+    Route::post('/ai-assistant/send', [AdminAiAssistantController::class, 'sendAiEmail'])->name('admin.ai-assistant.send');
+    Route::get('/ai-assistant/conversations/{conversation}', [AdminAiAssistantController::class, 'conversationHistory'])->name('admin.ai-assistant.conversation');
+    Route::delete('/ai-assistant/conversations', [AdminAiAssistantController::class, 'clearConversations'])->name('admin.ai-assistant.clear');
+
+    // Ebook Analytics
+    Route::get('/ebook-analytics', [AdminEbookAnalyticsController::class, 'index'])->name('admin.ebook-analytics.index');
+    Route::get('/ebook-analytics/overview', [AdminEbookAnalyticsController::class, 'overview'])->name('admin.ebook-analytics.overview');
+    Route::get('/ebook-analytics/downloads-over-time', [AdminEbookAnalyticsController::class, 'downloadsOverTime'])->name('admin.ebook-analytics.downloads-over-time');
+    Route::get('/ebook-analytics/leads-over-time', [AdminEbookAnalyticsController::class, 'leadsOverTime'])->name('admin.ebook-analytics.leads-over-time');
+    Route::get('/ebook-analytics/top-ebooks', [AdminEbookAnalyticsController::class, 'topEbooks'])->name('admin.ebook-analytics.top-ebooks');
+    Route::get('/ebook-analytics/export', [AdminEbookAnalyticsController::class, 'export'])->name('admin.ebook-analytics.export');
+
+    // Ebook Settings
+    Route::get('/ebook-settings', [AdminEbookSettingsController::class, 'index'])->name('admin.ebook-settings.index');
+    Route::put('/ebook-settings', [AdminEbookSettingsController::class, 'update'])->name('admin.ebook-settings.update');
 });
 
 Route::post('/lead-capture', [LeadCaptureController::class, 'store'])->name('lead-capture.store');
+
+// Homepage Roadmap Lead Magnet
+Route::post('/get-roadmap', [RoadmapController::class, 'claim'])->name('roadmap.claim');
+Route::get('/roadmap/thank-you/{token}', [RoadmapController::class, 'thankYou'])->name('roadmap.thank-you');
+
+// Ebook Lead Magnet Public Routes
+Route::get('/ebook/{slug}', [EbookLandingController::class, 'show'])->name('ebook.landing');
+Route::post('/ebook/capture', [EbookLandingController::class, 'capture'])->name('ebook.capture');
+Route::get('/ebook/{slug}/thank-you/{token?}', [EbookLandingController::class, 'thankYou'])->name('ebook.thank-you');
+
+// Secure Download Routes
+Route::get('/download/expired', [EbookDownloadController::class, 'expired'])->name('ebook.download.expired');
+Route::get('/download/error', [EbookDownloadController::class, 'error'])->name('ebook.download.error');
+Route::get('/download/{token}', [EbookDownloadController::class, 'download'])
+    ->name('ebook.download')
+    ->middleware('throttle:' . config('ebook.download.rate_limit_per_ip', 10) . ',' . config('ebook.download.rate_limit_decay_minutes', 60));

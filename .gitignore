@@ -43,7 +43,8 @@ temp_render_home.php
 *.bak
 *.legacy
 
-# ---------------------------------------------------------------------------
 # cPanel / production: keep public/media and other runtime assets in Git.
 # Do not add patterns that ignore public/media/** or legal PDFs at repo root.
 # ---------------------------------------------------------------------------
+*.code-workspace
+

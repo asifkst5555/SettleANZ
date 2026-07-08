@@ -1182,7 +1182,7 @@
             </div>
         </footer>
 
-        <div class="lead-modal" data-lead-modal @unless($errors->any()) hidden @endunless>
+        <div class="lead-modal" data-lead-modal hidden>
             <div class="lead-modal__backdrop" data-close-lead-modal></div>
             <div class="lead-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
                 <button class="lead-modal__close" type="button" aria-label="Close popup" data-close-lead-modal>&times;</button>
@@ -1191,14 +1191,15 @@
                     <h2 id="lead-modal-title">Moving to Australia or New Zealand?</h2>
                     <p class="lead-modal__subtitle">Get the free SettleANZ Starter Guide, everything you need for your first 90 days.</p>
                 </div>
-                <form class="lead-form lead-form--modal" method="POST" action="{{ route('lead-capture.store') }}">
+                <form class="lead-form lead-form--modal" method="POST" action="{{ route('roadmap.claim') }}" data-async-form data-success-target="roadmap-form-message">
                     @csrf
-                    <input type="hidden" name="form_type" value="popup">
-                    <input type="hidden" name="source_page" value="homepage-popup">
+                    <div style="display:none">
+                        <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+                    </div>
                     <div class="lead-form__field">
-                        <label for="lead-first-name">Your Name</label>
-                        <input type="text" id="lead-first-name" name="first_name" value="{{ old('first_name') }}" placeholder="Enter your name" required>
-                        @error('first_name')<small class="lead-form__error">{{ $message }}</small>@enderror
+                        <label for="lead-name">Your Name</label>
+                        <input type="text" id="lead-name" name="name" value="{{ old('name') }}" placeholder="Enter your name" required>
+                        @error('name')<small class="lead-form__error">{{ $message }}</small>@enderror
                     </div>
                     <div class="lead-form__field">
                         <label for="lead-email">Email Address</label>
@@ -1207,6 +1208,7 @@
                     </div>
                     <button class="button button--large button--full lead-form__submit" type="submit">Send Me the Guide</button>
                     <p class="lead-form__hint">No spam. Unsubscribe anytime.</p>
+                    <p id="roadmap-form-message" class="package-form-message async-form-status" hidden></p>
                 </form>
             </div>
         </div>
@@ -1273,6 +1275,39 @@
                     <h3>Oops! Something went wrong</h3>
                     <p id="packageFormModalErrorText">Please try again later.</p>
                     <button class="button button--large" type="button" data-close-package-form-modal>Try Again</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-modal-overlay" id="roadmapFormModalOverlay" hidden>
+            <div class="form-modal">
+                <div class="form-modal__loading" id="roadmapFormModalLoading" hidden>
+                    <div class="form-modal__spinner"></div>
+                    <h3>Sending your guide...</h3>
+                    <p>Please wait while we send the download link.</p>
+                </div>
+                <div class="form-modal__success" id="roadmapFormModalSuccess" hidden>
+                    <div class="form-modal__icon form-modal__icon--success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Guide Sent!</h3>
+                    <p id="roadmapFormModalSuccessMessage">Check your email — we’ve sent the download link for your free roadmap!</p>
+                    <button class="button button--large" type="button" data-close-roadmap-form-modal>Got it</button>
+                </div>
+                <div class="form-modal__error" id="roadmapFormModalError" hidden>
+                    <div class="form-modal__icon form-modal__icon--error">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h3>Oops! Something went wrong</h3>
+                    <p id="roadmapFormModalErrorText">Please try again later.</p>
+                    <button class="button button--large" type="button" data-close-roadmap-form-modal>Try Again</button>
                 </div>
             </div>
         </div>

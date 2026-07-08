@@ -15,6 +15,11 @@ class Lead extends Model
         'first_name',
         'full_name',
         'email',
+        'phone',
+        'company',
+        'country',
+        'consent',
+        'ebook_id',
         'goal',
         'form_type',
         'source_page',
@@ -24,12 +29,33 @@ class Lead extends Model
         'metadata',
         'ip_address',
         'user_agent',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_term',
+        'utm_content',
     ];
 
     protected $casts = [
         'metadata' => 'array',
         'subscribed_at' => 'datetime',
+        'consent' => 'boolean',
     ];
+
+    public function ebook(): BelongsTo
+    {
+        return $this->belongsTo(Ebook::class);
+    }
+
+    public function downloadTokens(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DownloadToken::class);
+    }
+
+    public function downloadLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DownloadLog::class);
+    }
 
     public function conversation(): BelongsTo
     {

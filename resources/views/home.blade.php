@@ -1,6 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+@if(session('success'))
+<div style="max-width:1200px;margin:1rem auto;padding:1rem 1.25rem;background:#d1fae5;border:1px solid #a7f3d0;border-radius:12px;color:#065f46;font-weight:600;text-align:center;">
+  {{ session('success') }}
+</div>
+@endif
+
+@if($errors->any())
+<div style="max-width:1200px;margin:1rem auto;padding:1rem 1.25rem;background:#fee2e2;border:1px solid #fecaca;border-radius:12px;color:#7f1d1d;font-weight:500;">
+  <ul style="margin:0;padding-left:1.25rem;">
+    @foreach($errors->all() as $error) <li>{{ $error }}</li> @endforeach
+  </ul>
+</div>
+@endif
 <style>
   /* Base & Utilities Scoped for Homepage */
   .hp-wrapper {
@@ -1976,15 +1989,18 @@
         <div class="rm-box-right">
           <div class="rm-form-card">
             <h3 class="rm-form-title">Get the free 90-day roadmap</h3>
-            <form method="POST" action="{{ route('lead-capture.store') }}">
+            <form method="POST" action="{{ route('roadmap.claim') }}" data-async-form data-success-target="roadmap-form-message">
               @csrf
-              <input type="hidden" name="form_type" value="homepage-roadmap">
-              <input type="hidden" name="source_page" value="homepage-roadmap">
+              <div style="display:none">
+                <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+              </div>
               <label><span class="sr-only">Your name</span>
-                <input class="rm-input" type="text" name="first_name" placeholder="Your name" required>
+                <input class="rm-input" type="text" name="name" value="{{ old('name') }}" placeholder="Your name" required>
+                @error('name')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
               </label>
               <label><span class="sr-only">Your email</span>
-                <input class="rm-input" type="email" name="email" placeholder="Your email" required>
+                <input class="rm-input" type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required>
+                @error('email')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
               </label>
               <button class="rm-btn" type="submit">Send Me the Roadmap</button>
             </form>
@@ -2215,15 +2231,18 @@
         <h2 class="fc-h">Start your first 90 days with clarity</h2>
         <p class="fc-sub">Join newcomers who are settling with structure instead of confusion.</p>
         
-        <form class="fc-form" method="POST" action="{{ route('lead-capture.store') }}">
+        <form class="fc-form" method="POST" action="{{ route('roadmap.claim') }}" data-async-form data-success-target="roadmap-form-message">
           @csrf
-          <input type="hidden" name="form_type" value="homepage-footer">
-          <input type="hidden" name="source_page" value="homepage-footer">
+          <div style="display:none">
+            <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+          </div>
           <label><span class="sr-only">Your name</span>
-            <input type="text" name="first_name" placeholder="Your name" required>
+            <input type="text" name="name" value="{{ old('name') }}" placeholder="Your name" required>
+            @error('name')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
           </label>
           <label><span class="sr-only">Your email</span>
-            <input type="email" name="email" placeholder="Your email" required>
+            <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required>
+            @error('email')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
           </label>
           <button type="submit">Get the Free Roadmap</button>
         </form>

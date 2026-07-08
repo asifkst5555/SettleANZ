@@ -17,7 +17,16 @@ class NotificationController extends Controller
         $notifications = AdminNotification::with(['lead', 'review'])
             ->latest()
             ->limit(20)
-            ->get();
+            ->get()
+            ->map(function ($notification) {
+                if ($notification->type === 'lead' && !$notification->lead) {
+                    $notification->link = null;
+                }
+                if ($notification->type === 'review' && !$notification->review) {
+                    $notification->link = null;
+                }
+                return $notification;
+            });
 
         $unreadCount = AdminNotification::unread()->count();
 
@@ -35,7 +44,16 @@ class NotificationController extends Controller
         $notifications = AdminNotification::unread()
             ->latest()
             ->limit(10)
-            ->get();
+            ->get()
+            ->map(function ($notification) {
+                if ($notification->type === 'lead' && !$notification->lead) {
+                    $notification->link = null;
+                }
+                if ($notification->type === 'review' && !$notification->review) {
+                    $notification->link = null;
+                }
+                return $notification;
+            });
 
         $unreadCount = AdminNotification::unread()->count();
 

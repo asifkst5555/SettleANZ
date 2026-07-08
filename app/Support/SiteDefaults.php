@@ -379,6 +379,15 @@ class SiteDefaults
             'ai_uncertainty_handling' => 'say_uncertain',
             'ai_follow_up_phrase' => '',
             'ai_closing_phrase' => '',
+            // Email / SMTP Settings
+            'mail_mailer' => 'log',
+            'smtp_host' => '',
+            'smtp_port' => '587',
+            'smtp_username' => '',
+            'smtp_password' => '',
+            'mail_encryption' => 'tls',
+            'mail_from_address' => '',
+            'mail_from_name' => '',
         ];
     }
 }

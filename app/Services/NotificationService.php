@@ -18,6 +18,7 @@ class NotificationService
             'contact-page' => 'New contact form submission from ' . ($lead->city ?? 'website'),
             'consultation-booking' => 'New consultation booking request',
             'directory-lead' => 'New lead from directory listing',
+            'homepage_roadmap' => 'New arrival checklist roadmap claimed',
             default => 'New lead received',
         };
 

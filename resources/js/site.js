@@ -22,6 +22,13 @@
     const packageFormModalErrorText = document.getElementById('packageFormModalErrorText');
     const packageFormModalSuccessMessage = document.getElementById('packageFormModalSuccessMessage');
     const closePackageFormModalTriggers = document.querySelectorAll('[data-close-package-form-modal]');
+    const roadmapFormModalOverlay = document.getElementById('roadmapFormModalOverlay');
+    const roadmapFormModalLoading = document.getElementById('roadmapFormModalLoading');
+    const roadmapFormModalSuccess = document.getElementById('roadmapFormModalSuccess');
+    const roadmapFormModalError = document.getElementById('roadmapFormModalError');
+    const roadmapFormModalErrorText = document.getElementById('roadmapFormModalErrorText');
+    const roadmapFormModalSuccessMessage = document.getElementById('roadmapFormModalSuccessMessage');
+    const closeRoadmapFormModalTriggers = document.querySelectorAll('[data-close-roadmap-form-modal]');
     const chatSection = document.querySelector('.site-chat');
     const chatPanel = document.querySelector('[data-chat-panel]');
     const chatToggleButtons = document.querySelectorAll('[data-chat-toggle]');
@@ -425,6 +432,39 @@
         }, 300);
     };
 
+    const showRoadmapFormModal = (type, message = '') => {
+        if (!roadmapFormModalOverlay) return;
+
+        if (roadmapFormModalLoading) roadmapFormModalLoading.hidden = true;
+        if (roadmapFormModalSuccess) roadmapFormModalSuccess.hidden = true;
+        if (roadmapFormModalError) roadmapFormModalError.hidden = true;
+
+        if (type === 'loading' && roadmapFormModalLoading) {
+            roadmapFormModalLoading.hidden = false;
+        } else if (type === 'success' && roadmapFormModalSuccess) {
+            roadmapFormModalSuccess.hidden = false;
+        } else if (type === 'error' && roadmapFormModalError) {
+            roadmapFormModalError.hidden = false;
+            if (roadmapFormModalErrorText && message) {
+                roadmapFormModalErrorText.textContent = message;
+            }
+        }
+
+        roadmapFormModalOverlay.hidden = false;
+        window.setTimeout(() => {
+            roadmapFormModalOverlay.classList.add('is-visible');
+        }, 10);
+    };
+
+    const closeRoadmapFormModal = () => {
+        if (!roadmapFormModalOverlay) return;
+
+        roadmapFormModalOverlay.classList.remove('is-visible');
+        window.setTimeout(() => {
+            roadmapFormModalOverlay.hidden = true;
+        }, 300);
+    };
+
     const openChatPanel = async () => {
         if (!chatPanel) return;
         chatPanel.hidden = false;
@@ -591,6 +631,7 @@
     closeLeadModalTriggers.forEach((trigger) => trigger.addEventListener('click', () => closeLeadModal(true)));
     closeBookingModalTriggers.forEach((trigger) => trigger.addEventListener('click', closeBookingModal));
     closePackageModalTriggers.forEach((trigger) => trigger.addEventListener('click', closePackageModal));
+    closeRoadmapFormModalTriggers.forEach((trigger) => trigger.addEventListener('click', closeRoadmapFormModal));
     openPackageModalTriggers.forEach((trigger) => {
         console.log('Binding click to:', trigger);
         trigger.addEventListener('click', () => {
@@ -746,6 +787,7 @@
         const statusId = form.dataset.successTarget;
         const statusEl = statusId ? document.getElementById(statusId) : null;
         const isPackageForm = Boolean(form.closest('[data-package-modal]'));
+        const isRoadmapForm = form.action.includes('/get-roadmap');
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -759,6 +801,8 @@
 
             if (isPackageForm) {
                 showPackageFormModal('loading');
+            } else if (isRoadmapForm) {
+                showRoadmapFormModal('loading');
             }
 
             try {
@@ -790,6 +834,12 @@
                         packageFormModalSuccessMessage.textContent = payload.message || defaultBookingThanks;
                     }
                     showPackageFormModal('success');
+                } else if (isRoadmapForm) {
+                    closeLeadModal();
+                    if (roadmapFormModalSuccessMessage) {
+                        roadmapFormModalSuccessMessage.textContent = payload.message || 'Check your email — we\'ve sent the download link for your free roadmap!';
+                    }
+                    showRoadmapFormModal('success');
                 } else if (statusEl) {
                     statusEl.textContent = payload.message || 'Thanks - we will be in touch within 24 hours.';
                     statusEl.hidden = false;
@@ -801,6 +851,9 @@
                 if (isPackageForm) {
                     closePackageModal();
                     showPackageFormModal('error', error.message || 'Something went wrong. Please try again.');
+                } else if (isRoadmapForm) {
+                    closeLeadModal();
+                    showRoadmapFormModal('error', error.message || 'Something went wrong. Please try again.');
                 } else if (statusEl) {
                     statusEl.textContent = error.message || 'Something went wrong. Please try again.';
                     statusEl.hidden = false;

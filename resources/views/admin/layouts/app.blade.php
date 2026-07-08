@@ -6,6 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $metaTitle ?? 'Admin | SettleANZ' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,7 +63,30 @@
                 </div>
 
                 <a @class(['is-active' => request()->routeIs('admin.ai-knowledge.*')]) href="{{ route('admin.ai-knowledge.index') }}">AI Knowledge Entries</a>
+                <a @class(['is-active' => request()->routeIs('admin.email-settings.*')]) href="{{ route('admin.email-settings.index') }}">Email Settings</a>
                 <a @class(['is-active' => request()->routeIs('admin.seo.*')]) href="{{ route('admin.seo.index') }}">SEO Manager</a>
+
+                {{-- Ebook Lead Magnet System --}}
+                <div class="admin-sidebar__dropdown">
+                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+                        <span>Ebook System</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="admin-sidebar__dropdown-menu">
+                        <a @class(['is-active' => request()->routeIs('admin.ebooks.*')]) href="{{ route('admin.ebooks.index') }}">Ebook Library</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-categories.*')]) href="{{ route('admin.ebook-categories.index') }}">Categories</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-tags.*')]) href="{{ route('admin.ebook-tags.index') }}">Tags</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-leads.*')]) href="{{ route('admin.ebook-leads.index') }}">Ebook Leads</a>
+                        <a @class(['is-active' => request()->routeIs('admin.downloads.*')]) href="{{ route('admin.downloads.index') }}">Download Logs</a>
+                        <a @class(['is-active' => request()->routeIs('admin.downloads.tokens*')]) href="{{ route('admin.downloads.tokens') }}">Download Tokens</a>
+                        <a @class(['is-active' => request()->routeIs('admin.email-templates.*')]) href="{{ route('admin.email-templates.index') }}">Email Templates</a>
+                        <a @class(['is-active' => request()->routeIs('admin.campaigns.*')]) href="{{ route('admin.campaigns.index') }}">Campaigns</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-assistant.*')]) href="{{ route('admin.ai-assistant.index') }}">AI Assistant</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-analytics.*')]) href="{{ route('admin.ebook-analytics.index') }}">Analytics</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-settings.*')]) href="{{ route('admin.ebook-settings.index') }}">Settings</a>
+                    </div>
+                </div>
+
                 <a href="/" target="_blank" rel="noreferrer">View Website</a>
             </nav>
         </aside>
@@ -306,7 +330,9 @@
             notificationsList.querySelectorAll('.admin-notifications__item').forEach(item => {
                 item.addEventListener('click', async function(e) {
                     const notificationId = this.dataset.notificationId;
+                    const targetLink = this.getAttribute('href');
                     if (notificationId) {
+                        e.preventDefault();
                         try {
                             await fetch(`{{ url('admin/notifications') }}/${notificationId}/read`, {
                                 method: 'POST',
@@ -317,6 +343,11 @@
                             });
                         } catch (error) {
                             console.error('Error marking notification as read:', error);
+                        }
+                        if (targetLink && targetLink !== '#') {
+                            window.location.href = targetLink;
+                        } else {
+                            fetchNotifications();
                         }
                     }
                 });
