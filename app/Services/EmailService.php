@@ -21,10 +21,21 @@ class EmailService
 
         if ($mailer === 'smtp') {
             Config::set('mail.mailers.smtp.host', SiteSetting::getValue('smtp_host', config('mail.mailers.smtp.host')));
-            Config::set('mail.mailers.smtp.port', (int) SiteSetting::getValue('smtp_port', config('mail.mailers.smtp.port')));
+            $port = (int) SiteSetting::getValue('smtp_port', config('mail.mailers.smtp.port'));
+            Config::set('mail.mailers.smtp.port', $port);
             Config::set('mail.mailers.smtp.username', SiteSetting::getValue('smtp_username', config('mail.mailers.smtp.username')));
             Config::set('mail.mailers.smtp.password', SiteSetting::getValue('smtp_password', config('mail.mailers.smtp.password')));
+
+            // Laravel 11+ / Symfony Mailer uses 'scheme' instead of 'encryption'.
+            // 'smtp' scheme = STARTTLS on port 587, 'smtps' = direct SSL on port 465.
             $encryption = SiteSetting::getValue('mail_encryption', 'tls');
+            if ($encryption === 'ssl' || $port === 465) {
+                Config::set('mail.mailers.smtp.scheme', 'smtps');
+            } else {
+                // STARTTLS (port 587) or no encryption — use 'smtp' scheme
+                Config::set('mail.mailers.smtp.scheme', 'smtp');
+            }
+            // Also set the legacy key for backward compatibility
             Config::set('mail.mailers.smtp.encryption', $encryption ?: null);
         }
 
@@ -35,7 +46,10 @@ class EmailService
             Config::set('mail.from.name', $fromName ?: config('app.name'));
         }
 
-        Mail::purge();
+        // Purge both the specific smtp mailer and any default cached instance
+        // to force Symfony to rebuild the transport with the new config
+        Mail::purge('smtp');
+        Mail::purge($mailer);
     }
 
     public function sendDownloadEmail(Lead $lead, DownloadToken $token, ?int $templateId = null): void
