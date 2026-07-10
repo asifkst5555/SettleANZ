@@ -11,12 +11,12 @@
             <a class="button button--small" href="/" target="_blank" rel="noreferrer">Open site</a>
         </section>
 
-        <section class="admin-stats-grid">
-            <article class="admin-stat-card"><span>Total leads</span><strong>{{ $leadCount }}</strong><small>Stored enquiries and form submissions</small></article>
-            <article class="admin-stat-card"><span>New leads</span><strong>{{ $newLeadCount }}</strong><small>Waiting for review or follow-up</small></article>
-            <article class="admin-stat-card"><span>Contact form leads</span><strong>{{ $contactLeadCount }}</strong><small>Submitted through the contact page</small></article>
-            <article class="admin-stat-card"><span>Booked consultations</span><strong>{{ $consultationBookingCount }}</strong><small>Requests sent from migration agents section</small></article>
-            <article class="admin-stat-card"><span>Package requests</span><strong>{{ $packageBookingCount }}</strong><small>Booking requests from settlement services page</small></article>
+        <section class="admin-card-stats-grid">
+            <x-admin-stat-card label="Total Leads" :value="$leadCount" desc="Stored enquiries & submissions" />
+            <x-admin-stat-card label="New Leads" :value="$newLeadCount" desc="Pending review or follow-up" :accent="true" />
+            <x-admin-stat-card label="Ebook Downloads" :value="$ebookStats['overview']['total_downloads'] ?? 0" desc="Downloaded via magnet landing pages" />
+            <x-admin-stat-card label="Consultations" :value="$consultationBookingCount" desc="Migration agent bookings" />
+            <x-admin-stat-card label="Package Requests" :value="$packageBookingCount" desc="Settlement packages requested" />
         </section>
 
         <section class="admin-two-column-grid">
@@ -99,6 +99,46 @@
                     @empty
                         <p class="admin-empty-text">No contact form submissions yet.</p>
                     @endforelse
+                </div>
+            </section>
+
+            <section class="admin-panel-card">
+                <div class="admin-section-head">
+                    <div><h3>Top Performing Ebooks</h3><p>Most popular downloads and conversion rates.</p></div>
+                    <a class="text-link" href="{{ route('admin.ebook-analytics.index') }}">Full Analytics</a>
+                </div>
+                <div class="admin-table-wrap" style="margin-top: 1rem; border: none; box-shadow: none;">
+                    <table class="admin-table" style="font-size: 0.85rem;">
+                        <thead>
+                            <tr>
+                                <th style="padding: 0.5rem 0.75rem;">Ebook Title</th>
+                                <th style="padding: 0.5rem 0.75rem; text-align: center;">Downloads</th>
+                                <th style="padding: 0.5rem 0.75rem; text-align: center;">Leads</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($ebookStats['top_ebooks'] ?? [] as $ebook)
+                                <tr>
+                                    <td style="padding: 0.65rem 0.75rem;">
+                                        <strong>{{ $ebook['title'] }}</strong>
+                                        <small style="color:var(--admin-muted); display: block; margin-top: 0.2rem;">Format: {{ strtoupper($ebook['file_type'] ?? 'pdf') }}</small>
+                                    </td>
+                                    <td style="padding: 0.65rem 0.75rem; text-align: center; font-weight: 700; color: #0b7a75;">
+                                        {{ $ebook['download_count'] }}
+                                    </td>
+                                    <td style="padding: 0.65rem 0.75rem; text-align: center;">
+                                        {{ $ebook['lead_count'] }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" style="text-align: center; color: var(--admin-muted); padding: 1.5rem 0;">
+                                        No ebooks published yet.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </section>
 

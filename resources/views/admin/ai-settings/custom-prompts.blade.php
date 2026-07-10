@@ -3,17 +3,15 @@
 @section('page-title', 'Custom Prompts')
 
 @section('content')
-    <div class="admin-main__inner" style="display:grid;grid-template-columns:240px 1fr;gap:2rem;">
-        @include('admin.ai-settings.partials.sidebar', ['active' => 'custom-prompts'])
+    <div class="admin-main__inner" style="display:block;">
+        @include('admin.settings.partials.tabs')
 
-        <div>
-            <section class="admin-topbar" style="margin-bottom:1.5rem;">
-                <div>
-                    <p class="eyebrow">AI Settings</p>
-                    <h2>Custom Prompts</h2>
-                    <p>Add custom phrases or completely override AI behavior with a custom system prompt.</p>
-                </div>
-            </section>
+        <div style="display:grid;grid-template-columns:240px 1fr;gap:2rem;margin-top:1.5rem;">
+            {{-- Sidebar --}}
+            @include('admin.ai-settings.partials.sidebar', ['active' => 'custom-prompts'])
+
+            {{-- Main Content --}}
+            <div>
 
             @if (session('status'))
                 <div style="background:#e8f5e9;border:1px solid #66bb6a;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#2e7d32;font-weight:600;">
@@ -76,4 +74,5 @@
             </form>
         </div>
     </div>
+</div>
 @endsection

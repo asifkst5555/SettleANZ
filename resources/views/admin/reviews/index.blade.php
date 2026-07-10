@@ -1,212 +1,6 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <style>
-        .reviews-table-wrap {
-            border: 1px solid #edf2f7;
-            border-radius: 0.75rem;
-            background: #fff;
-            width: 100%;
-            overflow-x: visible;
-        }
-        .reviews-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-        .reviews-table thead {
-            background: #f3f4f6;
-        }
-        .reviews-table th {
-            padding: 1rem 0.75rem;
-            text-align: left;
-            font-weight: 600;
-            color: #374151;
-            border-bottom: 2px solid #e5e7eb;
-            white-space: nowrap;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-        .reviews-table td {
-            padding: 1rem 0.75rem;
-            border-bottom: 1px solid #e5e7eb;
-            vertical-align: top;
-        }
-        .reviews-table tbody tr:hover {
-            background: #f9fafb;
-        }
-        .reviews-table tbody tr.row--pending {
-            background: rgba(251, 191, 36, 0.05);
-        }
-        .reviews-table td strong,
-        .reviews-table td small {
-            display: block;
-        }
-        .reviews-table td small {
-            color: #6b7280;
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-        }
-        .reviews-listing-link {
-            color: #0b7a75;
-            font-weight: 500;
-            text-decoration: none;
-        }
-        .reviews-listing-link:hover {
-            text-decoration: underline;
-        }
-        .reviews-rating {
-            display: flex;
-            gap: 2px;
-        }
-        .reviews-rating .star {
-            color: #d1d5db;
-            font-size: 1rem;
-        }
-        .reviews-rating .star.filled {
-            color: #f59e0b;
-        }
-        .reviews-status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.375rem 0.75rem;
-            border-radius: 999px;
-            background: #e8f5f4;
-            color: #0b7a75;
-            font-size: 0.82rem;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .reviews-status-badge--pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        .reviews-status-badge--rejected {
-            background: #fee2e2;
-            color: #7f1d1d;
-        }
-        .reviews-view-btn {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        .reviews-view-btn:hover {
-            background: #bfdbfe;
-        }
-        
-        /* Review Modal Styles */
-        .review-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow: auto;
-        }
-        .review-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .review-modal__content {
-            background: #fff;
-            border-radius: 14px;
-            width: 92%;
-            max-width: 560px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid #e5e7eb;
-        }
-        .review-modal__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .review-modal__header h3 {
-            margin: 0;
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #1f2937;
-        }
-        .review-modal__close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #6b7280;
-            cursor: pointer;
-            padding: 0;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-        }
-        .review-modal__close:hover {
-            background: #f3f4f6;
-            color: #374151;
-        }
-        .review-modal__body {
-            padding: 1.25rem;
-        }
-        .review-modal__comment {
-            margin: 0;
-            background: #f8fafc;
-            padding: 1.1rem 1.15rem;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            white-space: pre-wrap;
-            word-break: break-word;
-            color: #1e293b;
-            font-size: 0.98rem;
-            line-height: 1.55;
-        }
-        .review-modal__footer {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 1.25rem;
-            border-top: 1px solid #e5e7eb;
-            background: #f9fafb;
-            border-radius: 0 0 12px 12px;
-        }
-        .review-modal__footer-form {
-            margin: 0;
-            display: inline-flex;
-        }
-        .reviews-modal-close-btn {
-            background: #f3f4f6;
-            color: #374151;
-            margin-left: auto;
-        }
-        .reviews-modal-close-btn:hover {
-            background: #e5e7eb;
-        }
-        @media (max-width: 480px) {
-            .review-modal__footer {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .reviews-modal-close-btn {
-                margin-left: 0;
-            }
-        }
-        @media (max-width: 1100px) {
-            .reviews-table-wrap {
-                overflow-x: auto;
-            }
-            .reviews-table {
-                min-width: 760px;
-            }
-        }
-    </style>
 
     <div class="admin-main__inner">
         <section class="admin-topbar">
@@ -248,21 +42,38 @@
         </section>
 
         <section class="admin-panel-card" style="padding: 0;">
+            {{-- Bulk Action Bar --}}
+            <form id="bulkActionForm" method="POST" action="{{ route('admin.reviews.bulk') }}" style="display:none;">
+                @csrf
+                <input type="hidden" name="action" id="bulkActionValue">
+                <div id="bulkActionBar" class="admin-bulk-bar" style="display:none;">
+                    <span class="admin-bulk-bar__count" id="bulkSelectedCount">0 selected</span>
+                    <div class="admin-bulk-bar__actions">
+                        <button type="button" class="button button--small" style="background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;" onclick="submitBulk('approve')">Approve Selected</button>
+                        <button type="button" class="button button--small" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;" onclick="submitBulk('reject')">Reject Selected</button>
+                        <button type="button" class="button button--small" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;" onclick="submitBulk('delete')">Delete Selected</button>
+                        <button type="button" class="button button--small button--ghost" onclick="clearSelection()">Cancel</button>
+                    </div>
+                </div>
+            </form>
+
             <div class="reviews-table-wrap">
                 <table class="reviews-table admin-table-mobile-cards">
                     <thead>
                         <tr>
-                            <th style="width: 18%;">Reviewer</th>
-                            <th style="width: 20%;">Listing</th>
-                            <th style="width: 10%;">Rating</th>
-                            <th style="width: 12%;">Status</th>
-                            <th style="width: 12%;">Date</th>
+                            <th style="width: 3%;"><input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)"></th>
+                            <th style="width: 17%;">Reviewer</th>
+                            <th style="width: 19%;">Listing</th>
+                            <th style="width: 9%;">Rating</th>
+                            <th style="width: 11%;">Status</th>
+                            <th style="width: 11%;">Date</th>
                             <th style="width: 26%;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($reviews as $review)
                         <tr class="{{ $review->status === 'pending' ? 'row--pending' : '' }}">
+                            <td data-label="Select" style="text-align:center;"><input type="checkbox" class="review-checkbox" value="{{ $review->id }}" onchange="updateBulkBar()"></td>
                             <td data-label="Reviewer">
                                 <strong>{{ $review->reviewer_name }}</strong>
                                 <small><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 0.25rem;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>{{ $review->reviewer_email }}</small>
@@ -354,7 +165,7 @@
                         
                         @empty
                         <tr>
-                            <td colspan="6" style="text-align: center; padding: 3rem;">
+                            <td colspan="7" style="text-align: center; padding: 3rem;">
                                 <div style="font-size: 3rem; margin-bottom: 1rem;">⭐</div>
                                 <h3>No reviews found.</h3>
                                 <p style="color: #6b7280;">Reviews will appear here when users submit them.</p>
@@ -403,5 +214,55 @@
                 }
             }
         });
+
+        // Bulk actions
+        function toggleSelectAll(source) {
+            document.querySelectorAll('.review-checkbox').forEach(function(cb) {
+                cb.checked = source.checked;
+            });
+            updateBulkBar();
+        }
+
+        function updateBulkBar() {
+            const checkboxes = document.querySelectorAll('.review-checkbox:checked');
+            const count = checkboxes.length;
+            const bar = document.getElementById('bulkActionBar');
+            const countDisplay = document.getElementById('bulkSelectedCount');
+            if (count > 0) {
+                bar.style.display = 'flex';
+                countDisplay.textContent = count + ' selected';
+            } else {
+                bar.style.display = 'none';
+                document.getElementById('selectAllCheckbox').checked = false;
+            }
+        }
+
+        function submitBulk(action) {
+            const checkboxes = document.querySelectorAll('.review-checkbox:checked');
+            if (checkboxes.length === 0) return;
+            if (action === 'delete' && !confirm('Are you sure you want to delete ' + checkboxes.length + ' review(s)?')) return;
+            
+            const form = document.getElementById('bulkActionForm');
+            document.getElementById('bulkActionValue').value = action;
+            
+            // Remove any existing hidden inputs
+            form.querySelectorAll('input[type="hidden"][name="ids[]"]').forEach(function(el) { el.remove(); });
+            
+            checkboxes.forEach(function(cb) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = cb.value;
+                form.appendChild(input);
+            });
+            
+            form.submit();
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.review-checkbox').forEach(function(cb) { cb.checked = false; });
+            document.getElementById('selectAllCheckbox').checked = false;
+            updateBulkBar();
+        }
     </script>
 @endsection

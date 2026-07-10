@@ -16,6 +16,10 @@ class EmailService
 {
     public function applyMailConfig(): void
     {
+        if (Mail::getFacadeRoot() instanceof \Illuminate\Support\Testing\Fakes\MailFake) {
+            return;
+        }
+
         $mailer = SiteSetting::getValue('mail_mailer', 'log');
         Config::set('mail.default', $mailer);
 
@@ -80,13 +84,11 @@ class EmailService
         ]);
 
         try {
-            Mail::html($bodyHtml, function ($message) use ($to, $subject, $attachmentPath) {
-                $message->to($to)
-                    ->subject($subject);
-                if ($attachmentPath) {
-                    $message->attach($attachmentPath);
-                }
-            });
+            $mail = new \App\Mail\CustomHtmlMail($subject, $bodyHtml);
+            if ($attachmentPath) {
+                $mail->attach($attachmentPath);
+            }
+            Mail::to($to)->send($mail);
 
             $log->markSent();
         } catch (\Exception $e) {
@@ -103,7 +105,7 @@ class EmailService
             'lead_name' => $lead->full_name ?? $lead->first_name ?? 'Valued Lead',
             'lead_email' => $lead->email,
             'company_name' => config('app.name'),
-            'company_logo' => asset('media/logo/logo.webp'),
+            'company_logo' => asset('media/logo/email_logo.png'),
             'current_year' => date('Y'),
         ], $variables);
 

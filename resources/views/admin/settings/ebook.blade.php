@@ -4,13 +4,7 @@
 
 @section('content')
 <div class="admin-main__inner">
-    <section class="admin-topbar">
-        <div>
-            <p class="eyebrow">Ebook System</p>
-            <h2>Settings</h2>
-            <p>Configure download behaviour and system preferences</p>
-        </div>
-    </section>
+    @include('admin.settings.partials.tabs')
 
     <form action="{{ route('admin.ebook-settings.update') }}" method="POST" class="admin-edit-form">
         @csrf

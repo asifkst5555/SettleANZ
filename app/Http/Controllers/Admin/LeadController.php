@@ -14,7 +14,7 @@ class LeadController extends Controller
     {
         abort_unless($request->user()?->is_admin, 403);
 
-        $leadQuery = Lead::query()->latest();
+        $leadQuery = Lead::with('ebook')->latest();
 
         if ($status = $request->string('status')->toString()) {
             $leadQuery->where('status', $status);
@@ -22,6 +22,13 @@ class LeadController extends Controller
 
         if ($formType = $request->string('type')->toString()) {
             $leadQuery->where('form_type', $formType);
+        }
+
+        if ($search = $request->string('search')->toString()) {
+            $leadQuery->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
         }
 
         return view('admin.leads.index', [

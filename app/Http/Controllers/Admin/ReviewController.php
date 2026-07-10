@@ -60,4 +60,31 @@ class ReviewController extends Controller
 
         return redirect()->route('admin.reviews.index')->with('success', 'Review deleted.');
     }
+
+    public function bulk(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'action' => ['required', 'string', 'in:approve,reject,delete'],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:reviews,id'],
+        ]);
+
+        $reviews = Review::whereIn('id', $validated['ids']);
+
+        match ($validated['action']) {
+            'approve' => $reviews->update(['status' => 'approved', 'approved_at' => now()]),
+            'reject' => $reviews->update(['status' => 'rejected', 'rejected_at' => now()]),
+            'delete' => $reviews->delete(),
+        };
+
+        $count = count($validated['ids']);
+        $actionLabel = match ($validated['action']) {
+            'approve' => 'approved',
+            'reject' => 'rejected',
+            'delete' => 'deleted',
+        };
+
+        return redirect()->route('admin.reviews.index')
+            ->with('status', "{$count} review(s) {$actionLabel} successfully.");
+    }
 }

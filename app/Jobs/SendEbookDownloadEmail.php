@@ -49,7 +49,7 @@ class SendEbookDownloadEmail implements ShouldQueue
                 'expires_at' => $this->token->expires_at->format('F j, Y \a\t g:i A'),
                 'expires_in_hours' => (string) config('ebook.download.token_expiry_hours', 72),
                 'company_name' => config('app.name'),
-                'company_logo' => asset('media/logo/logo.webp'),
+                'company_logo' => asset('media/logo/email_logo.png'),
                 'current_year' => date('Y'),
             ];
 
@@ -58,44 +58,103 @@ class SendEbookDownloadEmail implements ShouldQueue
             $downloadUrl = route('ebook.download', ['token' => $this->token->token]);
             $expiresAt = $this->token->expires_at->format('F j, Y \a\t g:i A');
             $companyName = config('app.name');
-            $companyLogo = asset('media/logo/logo.webp');
+            $companyLogo = asset('media/logo/email_logo.png');
             $hours = config('ebook.download.token_expiry_hours', 72);
+            $supportEmail = \App\Models\SiteSetting::getValue('email_theme_support_email', 'support@settleanz.com');
+            $year = date('Y');
 
             $bodyHtml = <<<HTML
 <!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background-color:#f5f0e8;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f0e8;">
-<tr><td align="center" style="padding:40px 20px;">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
-<tr><td align="center" style="padding:30px 0 20px 0;">
-<img src="{$companyLogo}" alt="{$companyName}" style="height:44px;width:auto;display:block;margin:0 auto;border:0;">
-</td></tr>
-<tr><td style="background:#ffffff;border-radius:12px;padding:40px 35px;box-shadow:0 2px 12px rgba(11,122,117,0.08);">
-<h2 style="color:#065e5b;font-size:24px;margin:0 0 8px 0;font-weight:700;">Your Download is Ready!</h2>
-<p style="color:#607080;font-size:14px;margin:0 0 24px 0;">Ebook access link inside</p>
-<hr style="border:none;border-top:1px solid #e6f4f3;margin:0 0 24px 0;">
-<p style="color:#2c3a47;font-size:16px;line-height:1.6;margin:0 0 16px 0;">Hi {$this->lead->full_name},</p>
-<p style="color:#2c3a47;font-size:16px;line-height:1.6;margin:0 0 16px 0;">Thank you for your interest in <strong style="color:#0b7a75;">{$ebook->title}</strong>.</p>
-<p style="color:#607080;font-size:15px;line-height:1.6;margin:0 0 20px 0;font-style:italic;">{$ebook->description}</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0;"><tr><td align="center">
-<a href="{$downloadUrl}" style="background:#e8773a;color:#ffffff;padding:15px 40px;border-radius:8px;text-decoration:none;font-size:16px;font-weight:bold;display:inline-block;box-shadow:0 4px 12px rgba(232,119,58,0.3);">Download Your Ebook</a>
-</td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e6f4f3;border-radius:8px;margin:0 0 20px 0;"><tr><td style="padding:16px 20px;">
-<p style="font-size:13px;color:#0b7a75;margin:0 0 4px 0;font-weight:600;">&#9200; Expires {$expiresAt}</p>
-<p style="font-size:13px;color:#607080;margin:0;">You can download it up to {$hours} times within this period.</p>
-</td></tr></table>
-<p style="font-size:13px;color:#607080;margin:0 0 0 0;">If the button above doesn't work, copy and paste this URL into your browser:</p>
-<p style="font-size:13px;margin:4px 0 0 0;"><a href="{$downloadUrl}" style="color:#0b7a75;word-break:break-all;">{$downloadUrl}</a></p>
-</td></tr>
-<tr><td align="center" style="padding:24px 20px;">
-<p style="font-size:12px;color:#607080;line-height:1.5;margin:0 0 6px 0;">You received this email because you requested this ebook from {$companyName}.</p>
-<p style="font-size:12px;color:#607080;line-height:1.5;margin:0;">&copy; {$companyName} " . date('Y') . ". All rights reserved.</p>
-</td></tr>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Download Ready</title>
+</head>
+<body style="margin:0;padding:0;background:#f5f7fa;font-family:Arial,Helvetica,sans-serif;color:#334155;">
+<center style="width:100%;background:#f5f7fa;padding:32px 12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;">
+<tr>
+<td align="center" style="padding:36px 30px 20px;">
+<img src="{$companyLogo}" alt="{$companyName}" width="170" style="display:block;width:170px;max-width:100%;height:auto;border:0;">
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 40px 10px;">
+<h1 style="margin:0;font-size:28px;line-height:36px;font-weight:700;color:#0f172a;">
+Your 90-Day Roadmap is Ready
+</h1>
+</td>
+</tr>
+
+<tr>
+<td style="padding:10px 40px 0;font-size:16px;line-height:28px;color:#475569;">
+<p style="margin:0 0 18px;">Hi {$this->lead->full_name},</p>
+
+<p style="margin:0 0 18px;">
+Thank you for downloading <strong>{$ebook->title}</strong>.
+Your download is now ready.
+</p>
+
+<p style="margin:0 0 18px;">
+This secure link expires on <strong>{$expiresAt}</strong>.<br>
+You can download your file up to <strong>{$hours}</strong> times during this period.
+</p>
+</td>
+</tr>
+
+<tr>
+<td align="center" style="padding:14px 40px 26px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td bgcolor="#0f766e" style="border-radius:8px;">
+<a href="{$downloadUrl}" style="display:inline-block;padding:14px 34px;font-size:16px;font-weight:bold;color:#ffffff;text-decoration:none;background:#0f766e;border-radius:8px;">
+Download Your Roadmap
+</a>
+</td>
+</tr>
 </table>
-</td></tr>
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 40px 28px;font-size:14px;line-height:24px;color:#64748b;">
+If the button doesn't work, copy and paste this link into your browser:
+<br><br>
+<a href="{$downloadUrl}" style="color:#0f766e;word-break:break-all;text-decoration:none;">
+{$downloadUrl}
+</a>
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 40px;">
+<hr style="border:none;border-top:1px solid #e5e7eb;margin:0;">
+</td>
+</tr>
+
+<tr>
+<td style="padding:28px 40px;font-size:14px;line-height:24px;color:#64748b;">
+If you have any questions, simply reply to this email or contact us at
+<a href="mailto:{$supportEmail}" style="color:#0f766e;text-decoration:none;">{$supportEmail}</a>.
+</td>
+</tr>
+
+<tr>
+<td style="background:#fafafa;border-top:1px solid #e5e7eb;padding:24px 40px;text-align:center;font-size:13px;line-height:22px;color:#94a3b8;">
+<div style="color:#475569;font-weight:bold;margin-bottom:6px;">{$companyName}</div>
+<div style="margin-bottom:12px;">© {$year} {$companyName}. All rights reserved.</div>
+<div>
+<a href="mailto:{$supportEmail}" style="color:#64748b;text-decoration:none;">Support</a>
+&nbsp;&nbsp;•&nbsp;&nbsp;
+<a href="#" style="color:#64748b;text-decoration:none;">Unsubscribe</a>
+</div>
+</td>
+</tr>
+
 </table>
+</center>
 </body>
 </html>
 HTML;

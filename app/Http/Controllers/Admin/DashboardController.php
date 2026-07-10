@@ -15,6 +15,9 @@ class DashboardController extends Controller
     {
         abort_unless($request->user()?->is_admin, 403);
 
+        $analyticsService = app(\App\Services\AnalyticsService::class);
+        $ebookStats = $analyticsService->getDashboardStats();
+
         return view('admin.dashboard', [
             'metaTitle' => 'Admin Dashboard | SettleANZ',
             'leadCount' => Lead::count(),
@@ -31,6 +34,7 @@ class DashboardController extends Controller
             'recentPackageBookings' => Lead::query()->where('form_type', 'package_booking')->latest()->limit(5)->get(),
             'recentPosts' => BlogPost::query()->latest('published_at')->limit(5)->get(),
             'featuredListings' => DirectoryListing::query()->where('featured', true)->latest()->limit(5)->get(),
+            'ebookStats' => $ebookStats,
         ]);
     }
 }

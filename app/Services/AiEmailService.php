@@ -18,15 +18,17 @@ class AiEmailService
     private int $maxTokens;
     private float $temperature;
     private int $timeout;
+    private string $baseUrl;
 
     public function __construct()
     {
         $this->provider = config('ebook.ai.provider', 'openai');
-        $this->model = config('ebook.ai.model', 'gpt-4o');
+        $this->model = trim((string) SiteSetting::getValue('ai_openai_model', config('ebook.ai.model', 'gpt-4o')));
         $this->apiKey = trim((string) SiteSetting::getValue('ai_openai_api_key', config('ebook.ai.api_key')));
         $this->maxTokens = config('ebook.ai.max_tokens', 2000);
         $this->temperature = config('ebook.ai.temperature', 0.7);
         $this->timeout = config('ebook.ai.timeout', 60);
+        $this->baseUrl = rtrim((string) SiteSetting::getValue('ai_openai_base_url', config('ebook.ai.providers.openai.url', 'https://api.openai.com/v1/chat/completions')), '/');
     }
 
     public function generateDownloadEmail(array $data, string $tone = 'professional', string $language = 'en'): array
@@ -55,6 +57,131 @@ class AiEmailService
         $prompt = $this->buildCampaignPrompt($campaignData, $tone, $language);
 
         return $this->callAI($prompt);
+    }
+
+    public function copilotChat(string $message, string $systemPrompt, string $conversationHistory = ''): array
+    {
+        return $this->callAI($message, $systemPrompt . "\n\n" . $conversationHistory);
+    }
+
+    public function copilotChatStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature = 0.2): array
+    {
+        return $this->callAIStructured($message, $systemPrompt, $historyMessages, $temperature);
+    }
+
+    private function callAIStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature): array
+    {
+        return match ($this->provider) {
+            'openai' => $this->callOpenAIStructured($message, $systemPrompt, $historyMessages, $temperature),
+            'gemini' => $this->callGeminiStructured($message, $systemPrompt, $historyMessages, $temperature),
+            'claude' => $this->callClaudeStructured($message, $systemPrompt, $historyMessages, $temperature),
+            'deepseek' => $this->callDeepSeekStructured($message, $systemPrompt, $historyMessages, $temperature),
+            default => throw new Exception("Unsupported AI provider: {$this->provider}"),
+        };
+    }
+
+    private function callOpenAIStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature): array
+    {
+        $messages = [['role' => 'system', 'content' => $systemPrompt]];
+
+        foreach ($historyMessages as $msg) {
+            $messages[] = [
+                'role' => $msg['role'] === 'assistant' ? 'assistant' : 'user',
+                'content' => $msg['content'],
+            ];
+        }
+
+        $messages[] = ['role' => 'user', 'content' => $message];
+
+        $url = str_ends_with($this->baseUrl, '/chat/completions')
+            ? $this->baseUrl
+            : $this->baseUrl . '/chat/completions';
+
+        $response = $this->httpClient()->post($url, [
+            'model' => $this->model,
+            'messages' => $messages,
+            'max_tokens' => $this->maxTokens,
+            'temperature' => $temperature,
+        ]);
+
+        return $this->parseResponse($response->json(), 'openai');
+    }
+
+    private function callGeminiStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature): array
+    {
+        $contents = [];
+
+        foreach ($historyMessages as $msg) {
+            $role = $msg['role'] === 'assistant' ? 'model' : 'user';
+            $contents[] = ['role' => $role, 'parts' => [['text' => $msg['content']]]];
+        }
+
+        $contents[] = ['role' => 'user', 'parts' => [['text' => $message]]];
+
+        $url = config('ebook.ai.providers.gemini.url') . "?key={$this->apiKey}";
+
+        $response = $this->httpClient()->post($url, [
+            'contents' => $contents,
+            'systemInstruction' => $systemPrompt ? ['parts' => [['text' => $systemPrompt]]] : null,
+            'generationConfig' => [
+                'maxOutputTokens' => $this->maxTokens,
+                'temperature' => $temperature,
+            ],
+        ]);
+
+        return $this->parseResponse($response->json(), 'gemini');
+    }
+
+    private function callClaudeStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature): array
+    {
+        $claudeMessages = [];
+
+        foreach ($historyMessages as $msg) {
+            $claudeMessages[] = [
+                'role' => $msg['role'] === 'assistant' ? 'assistant' : 'user',
+                'content' => $msg['content'],
+            ];
+        }
+
+        $claudeMessages[] = ['role' => 'user', 'content' => $message];
+
+        $response = $this->httpClient()
+            ->withHeaders([
+                'x-api-key' => $this->apiKey,
+                'anthropic-version' => '2023-06-01',
+            ])
+            ->post(config('ebook.ai.providers.claude.url', 'https://api.anthropic.com/v1/messages'), [
+                'model' => $this->model,
+                'system' => $systemPrompt ?: 'You are a helpful email marketing assistant.',
+                'messages' => $claudeMessages,
+                'max_tokens' => $this->maxTokens,
+                'temperature' => $temperature,
+            ]);
+
+        return $this->parseResponse($response->json(), 'claude');
+    }
+
+    private function callDeepSeekStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature): array
+    {
+        $messages = [['role' => 'system', 'content' => $systemPrompt]];
+
+        foreach ($historyMessages as $msg) {
+            $messages[] = [
+                'role' => $msg['role'] === 'assistant' ? 'assistant' : 'user',
+                'content' => $msg['content'],
+            ];
+        }
+
+        $messages[] = ['role' => 'user', 'content' => $message];
+
+        $response = $this->httpClient()->post(config('ebook.ai.providers.deepseek.url', 'https://api.deepseek.com/v1/chat/completions'), [
+            'model' => $this->model,
+            'messages' => $messages,
+            'max_tokens' => $this->maxTokens,
+            'temperature' => $temperature,
+        ]);
+
+        return $this->parseResponse($response->json(), 'deepseek');
     }
 
     public function chat(string $message, string $conversationHistory = ''): array
@@ -166,7 +293,11 @@ PROMPT;
 
         $messages[] = ['role' => 'user', 'content' => $prompt];
 
-        $response = $this->httpClient()->post(config('ebook.ai.providers.openai.url', 'https://api.openai.com/v1/chat/completions'), [
+        $url = str_ends_with($this->baseUrl, '/chat/completions')
+            ? $this->baseUrl
+            : $this->baseUrl . '/chat/completions';
+
+        $response = $this->httpClient()->post($url, [
             'model' => $this->model,
             'messages' => $messages,
             'max_tokens' => $this->maxTokens,

@@ -3,23 +3,28 @@
 @section('page-title', 'Knowledge Base')
 
 @section('content')
-    <div class="admin-main__inner" style="display:grid;grid-template-columns:240px 1fr;gap:2rem;">
-        @include('admin.ai-settings.partials.sidebar', ['active' => 'knowledge-base'])
+    <div class="admin-main__inner" style="display:block;">
+        @include('admin.settings.partials.tabs')
 
-        <div>
-            <section class="admin-topbar" style="margin-bottom:1.5rem;">
-                <div>
-                    <p class="eyebrow">AI Settings</p>
-                    <h2>Knowledge Base</h2>
-                    <p>Overview of content the AI is trained on.</p>
-                </div>
-                <div>
-                    <a href="{{ route('admin.ai-knowledge.generate-form') }}" class="ai-btn" style="background:#fff0ec;color:#d17453;padding:0.85rem 1.4rem;border-radius:10px;font-weight:700;font-size:0.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:0.7rem;position:relative;overflow:hidden;transition:all 0.3s ease;flex-shrink:0;">
-                        <span class="ai-btn__label">Bulk Generate with AI</span>
-                        <span></span><span></span><span></span><span></span>
-                    </a>
-                </div>
-            </section>
+        <div style="display:grid;grid-template-columns:240px 1fr;gap:2rem;margin-top:1.5rem;">
+            {{-- Sidebar --}}
+            @include('admin.ai-settings.partials.sidebar', ['active' => 'knowledge-base'])
+
+            {{-- Main Content --}}
+            <div>
+                <section class="admin-topbar" style="margin-bottom:1.5rem;">
+                    <div>
+                        <p class="eyebrow">AI Settings</p>
+                        <h2>Knowledge Base</h2>
+                        <p>Overview of content the AI is trained on.</p>
+                    </div>
+                    <div>
+                        <a href="{{ route('admin.ai-knowledge.generate-form') }}" class="ai-btn" style="background:#fff0ec;color:#d17453;padding:0.85rem 1.4rem;border-radius:10px;font-weight:700;font-size:0.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:0.7rem;position:relative;overflow:hidden;transition:all 0.3s ease;flex-shrink:0;">
+                            <span class="ai-btn__label">Bulk Generate with AI</span>
+                            <span></span><span></span><span></span><span></span>
+                        </a>
+                    </div>
+                </section>
 
             @if (session('status'))
                 <div style="background:#e8f5e9;border:1px solid #66bb6a;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#2e7d32;font-weight:600;">
@@ -89,6 +94,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <style>
         .ai-btn {

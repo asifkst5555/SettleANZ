@@ -3,19 +3,6 @@
 @section('page-title', 'AI Admin Assistant')
 
 @section('content')
-<style>
-    .chat-container { display:grid; grid-template-columns:280px 1fr; gap:1.5rem; height:calc(100vh - 12rem); }
-    .chat-sidebar { background:white; border:1px solid #e5e7eb; border-radius:0.75rem; display:flex; flex-direction:column; overflow:hidden; }
-    .chat-sidebar-header { padding:1rem; border-bottom:1px solid #e5e7eb; }
-    .chat-conv-list { flex:1; overflow-y:auto; padding:0.5rem; }
-    .chat-conv-item { padding:0.625rem; border-radius:0.5rem; cursor:pointer; transition:background 0.2s; }
-    .chat-conv-item:hover { background:#f9fafb; }
-    .chat-main { background:white; border:1px solid #e5e7eb; border-radius:0.75rem; display:flex; flex-direction:column; overflow:hidden; }
-    .chat-messages { flex:1; overflow-y:auto; padding:1.5rem; }
-    .chat-input-area { border-top:1px solid #e5e7eb; padding:1rem; }
-    .chat-bubble-user { display:inline-block; background:#2563eb; color:white; border-radius:12px 12px 4px 12px; padding:0.625rem 1rem; max-width:75%; }
-    .chat-bubble-ai { display:inline-block; background:#f3f4f6; color:#1f2937; border-radius:12px 12px 12px 4px; padding:0.625rem 1rem; max-width:75%; }
-</style>
 
 <div class="admin-main__inner">
     <section class="admin-topbar">

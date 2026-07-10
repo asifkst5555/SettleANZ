@@ -3,19 +3,6 @@
 @section('page-title', 'Download Logs')
 
 @section('content')
-<style>
-    .dl-table { width:100%; border-collapse:collapse; }
-    .dl-table thead { background:#f3f4f6; }
-    .dl-table th { padding:0.65rem 0.5rem; text-align:left; font-weight:600; color:#374151; border-bottom:2px solid #e5e7eb; font-size:0.8125rem; letter-spacing:0.01em; }
-    .dl-table th:first-child { padding-left:0.75rem; }
-    .dl-table th:last-child { padding-right:0.75rem; }
-    .dl-table td { padding:0.7rem 0.5rem; border-bottom:1px solid #e5e7eb; vertical-align:middle; font-size:0.875rem; }
-    .dl-table td:first-child { padding-left:0.75rem; }
-    .dl-table td:last-child { padding-right:0.75rem; }
-    .dl-table tbody tr:hover { background:#f9fafb; }
-    .dl-wrap { border:1px solid #edf2f7; border-radius:0.75rem; background:#fff; overflow-x:auto; }
-</style>
-
 <div class="admin-main__inner">
     <section class="admin-topbar">
         <div>
@@ -26,32 +13,32 @@
     </section>
 
     <section class="admin-panel-card">
-        <div style="padding:1rem 1.25rem;border-bottom:1px solid #e5e7eb;">
+        <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--admin-border);">
             <form method="GET" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:end;">
-                <div>
-                    <label style="display:block;font-size:0.8125rem;font-weight:500;color:#374151;margin-bottom:0.25rem;">Ebook</label>
-                    <select name="ebook_id" style="border:1px solid #d1d5db;border-radius:0.375rem;padding:0.5rem;font-size:0.875rem;">
+                <div class="admin-form-group" style="margin-bottom:0;">
+                    <label class="admin-form-label">Ebook</label>
+                    <select name="ebook_id" class="admin-form-select">
                         <option value="">All</option>
                         @foreach($ebooks as $ebook)
                         <option value="{{ $ebook->id }}" @selected(request('ebook_id') == $ebook->id)>{{ $ebook->title }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div>
-                    <label style="display:block;font-size:0.8125rem;font-weight:500;color:#374151;margin-bottom:0.25rem;">From</label>
-                    <input type="date" name="date_from" value="{{ request('date_from') }}" style="border:1px solid #d1d5db;border-radius:0.375rem;padding:0.5rem;font-size:0.875rem;">
+                <div class="admin-form-group" style="margin-bottom:0;">
+                    <label class="admin-form-label">From</label>
+                    <input type="date" name="date_from" value="{{ request('date_from') }}" class="admin-form-input">
                 </div>
-                <div>
-                    <label style="display:block;font-size:0.8125rem;font-weight:500;color:#374151;margin-bottom:0.25rem;">To</label>
-                    <input type="date" name="date_to" value="{{ request('date_to') }}" style="border:1px solid #d1d5db;border-radius:0.375rem;padding:0.5rem;font-size:0.875rem;">
+                <div class="admin-form-group" style="margin-bottom:0;">
+                    <label class="admin-form-label">To</label>
+                    <input type="date" name="date_to" value="{{ request('date_to') }}" class="admin-form-input">
                 </div>
-                <button type="submit" style="padding:0.5rem 1rem;border:1px solid #d7e1ea;border-radius:0.375rem;background:white;cursor:pointer;font-weight:500;">Filter</button>
+                <button type="submit" class="admin-action-btn" style="background:#e2e8f0;color:#1e293b;">Filter</button>
             </form>
         </div>
 
         @if($downloads->count() > 0)
-        <div class="dl-wrap" style="border:none;">
-            <table class="dl-table">
+        <div class="admin-table-wrap" style="border:none;">
+            <table class="admin-table">
                 <thead>
                     <tr>
                         <th>Ebook</th>
@@ -77,14 +64,14 @@
                 </tbody>
             </table>
         </div>
-        <div style="padding:1.5rem;border-top:1px solid #e5e7eb;">
+        <div class="admin-pagination" style="border-top:1px solid var(--admin-border);">
             {{ $downloads->links() }}
         </div>
         @else
-        <div style="text-align:center;padding:3rem 1rem;color:#6b7280;">
-            <div style="font-size:3rem;margin-bottom:1rem;">📥</div>
-            <h3>No download logs yet</h3>
-            <p style="color:#6b7280;">Download logs will appear here when users start downloading your ebooks.</p>
+        <div class="admin-empty-state">
+            <div class="admin-empty-state__icon">📥</div>
+            <h3 class="admin-empty-state__title">No download logs yet</h3>
+            <p class="admin-empty-state__text">Download logs will appear here when users start downloading your ebooks.</p>
         </div>
         @endif
     </section>

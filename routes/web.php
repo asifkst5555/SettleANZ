@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\EbookLeadController as AdminEbookLeadController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
 use App\Http\Controllers\Admin\EmailTemplateController as AdminEmailTemplateController;
 use App\Http\Controllers\Admin\CampaignController as AdminCampaignController;
+use App\Http\Controllers\Admin\AdminCopilotController;
 use App\Http\Controllers\Admin\AiAssistantController as AdminAiAssistantController;
 use App\Http\Controllers\Admin\EbookAnalyticsController as AdminEbookAnalyticsController;
 use App\Http\Controllers\Admin\EbookSettingsController as AdminEbookSettingsController;
@@ -173,6 +174,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('admin.reviews.approve');
     Route::post('/reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('admin.reviews.reject');
     Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+    Route::post('/reviews/bulk', [AdminReviewController::class, 'bulk'])->name('admin.reviews.bulk');
 
     Route::get('/settings', [AdminSiteSettingController::class, 'edit'])->name('admin.settings.edit');
     Route::put('/settings', [AdminSiteSettingController::class, 'update'])->name('admin.settings.update');
@@ -210,6 +212,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Email Settings
     Route::get('/email-settings', [AdminEmailSettingsController::class, 'index'])->name('admin.email-settings.index');
     Route::put('/email-settings', [AdminEmailSettingsController::class, 'update'])->name('admin.email-settings.update');
+
+    // Social Media Settings
+    Route::get('/social-settings', [AdminSiteSettingController::class, 'socialEdit'])->name('admin.social-settings.index');
+    Route::put('/social-settings', [AdminSiteSettingController::class, 'socialUpdate'])->name('admin.social-settings.update');
 
     Route::post('/logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
 
@@ -262,9 +268,13 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/email-templates', [AdminEmailTemplateController::class, 'index'])->name('admin.email-templates.index');
     Route::get('/email-templates/create', [AdminEmailTemplateController::class, 'create'])->name('admin.email-templates.create');
     Route::post('/email-templates', [AdminEmailTemplateController::class, 'store'])->name('admin.email-templates.store');
+    Route::post('/email-templates/render-preview', [AdminEmailTemplateController::class, 'renderPreview'])->name('admin.email-templates.render-preview');
     Route::get('/email-templates/{template}/edit', [AdminEmailTemplateController::class, 'edit'])->name('admin.email-templates.edit');
     Route::put('/email-templates/{template}', [AdminEmailTemplateController::class, 'update'])->name('admin.email-templates.update');
     Route::delete('/email-templates/{template}', [AdminEmailTemplateController::class, 'destroy'])->name('admin.email-templates.destroy');
+    Route::post('/email-templates/{template}/send-test', [AdminEmailTemplateController::class, 'sendTestEmail'])->name('admin.email-templates.send-test');
+    Route::post('/email-templates/{template}/duplicate', [AdminEmailTemplateController::class, 'duplicate'])->name('admin.email-templates.duplicate');
+    Route::post('/email-templates/{template}/revisions/{revision}/restore', [AdminEmailTemplateController::class, 'restoreRevision'])->name('admin.email-templates.restore-revision');
 
     // Campaigns
     Route::get('/campaigns', [AdminCampaignController::class, 'index'])->name('admin.campaigns.index');
@@ -279,6 +289,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // AI Admin Assistant
     Route::get('/ai-assistant', [AdminAiAssistantController::class, 'index'])->name('admin.ai-assistant.index');
     Route::post('/ai-assistant/chat', [AdminAiAssistantController::class, 'chat'])->name('admin.ai-assistant.chat');
+    Route::post('/ai-assistant/copilot/session', [AdminCopilotController::class, 'session'])->name('admin.ai-assistant.copilot.session');
+    Route::post('/ai-assistant/copilot/reset', [AdminCopilotController::class, 'reset'])->name('admin.ai-assistant.copilot.reset');
+    Route::post('/ai-assistant/copilot/{conversation}/message', [AdminCopilotController::class, 'message'])->name('admin.ai-assistant.copilot.message');
+    Route::get('/ai-assistant/copilot/{conversation}/history', [AdminCopilotController::class, 'history'])->name('admin.ai-assistant.copilot.history');
     Route::post('/ai-assistant/generate-email', [AdminAiAssistantController::class, 'generateDownloadEmail'])->name('admin.ai-assistant.generate-email');
     Route::post('/ai-assistant/rewrite', [AdminAiAssistantController::class, 'rewriteEmail'])->name('admin.ai-assistant.rewrite');
     Route::post('/ai-assistant/send', [AdminAiAssistantController::class, 'sendAiEmail'])->name('admin.ai-assistant.send');

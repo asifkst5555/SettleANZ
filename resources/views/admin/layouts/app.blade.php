@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('admin.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-notifications.css') }}">
 </head>
-<body class="admin-shell-body">
+<body class="admin-shell-body" data-route="{{ request()->route()?->getName() ?? '' }}">
     <!-- Toast Notification Container -->
     <div id="notificationContainer" class="notification-container"></div>
     
@@ -38,52 +38,86 @@
 
             <nav class="admin-sidebar__nav" aria-label="Admin navigation">
                 <a @class(['is-active' => request()->routeIs('admin.dashboard')]) href="{{ route('admin.dashboard') }}">Dashboard</a>
-                <a @class(['is-active' => request()->routeIs('admin.leads.*') && !request('type')]) href="{{ route('admin.leads.index') }}">All Leads</a>
-                <a @class(['is-active' => request()->routeIs('admin.leads.index') && request('type') === 'contact-page']) href="{{ route('admin.leads.index', ['type' => 'contact-page']) }}">Contact Submissions</a>
-                <a @class(['is-active' => request()->routeIs('admin.leads.index') && request('type') === 'consultation-booking']) href="{{ route('admin.leads.index', ['type' => 'consultation-booking']) }}">Book Consultations</a>
-                <a @class(['is-active' => request()->routeIs('admin.leads.index') && request('type') === 'package_booking']) href="{{ route('admin.leads.index', ['type' => 'package_booking']) }}">Package Requests</a>
-                <a @class(['is-active' => request()->routeIs('admin.blog-posts.*')]) href="{{ route('admin.blog-posts.index') }}">Blog Posts</a>
-                <a @class(['is-active' => request()->routeIs('admin.directory-listings.*')]) href="{{ route('admin.directory-listings.index') }}">Directory Listings</a>
-                <a @class(['is-active' => request()->routeIs('admin.reviews.*')]) href="{{ route('admin.reviews.index') }}">Reviews</a>
 
-                {{-- AI Settings Dropdown --}}
-                <div class="admin-sidebar__dropdown">
+                {{-- Lead Center (Unified Inbox) Dropdown --}}
+                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.leads.*') || request()->routeIs('admin.ebook-leads.*')])>
                     <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>AI Settings</span>
+                        <span>Lead Center</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.api-connection')]) href="{{ route('admin.ai-settings.api-connection') }}">API Connection</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.chat-appearance')]) href="{{ route('admin.ai-settings.chat-appearance') }}">Chat Appearance</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.response-behavior')]) href="{{ route('admin.ai-settings.response-behavior') }}">Response Behavior</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.content-rules')]) href="{{ route('admin.ai-settings.content-rules') }}">Content Rules</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.custom-prompts')]) href="{{ route('admin.ai-settings.custom-prompts') }}">Custom Prompts</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.knowledge-base')]) href="{{ route('admin.ai-settings.knowledge-base') }}">Knowledge Base</a>
+                        <a @class(['is-active' => request()->routeIs('admin.leads.index') && !request('type')]) href="{{ route('admin.leads.index') }}">All Inquiries</a>
+                        <a @class(['is-active' => request()->routeIs('admin.leads.index') && request('type') === 'contact-page']) href="{{ route('admin.leads.index', ['type' => 'contact-page']) }}">Contact Form</a>
+                        <a @class(['is-active' => request()->routeIs('admin.leads.index') && in_array(request('type'), ['consultation-booking', 'package_booking'])]) href="{{ route('admin.leads.index', ['type' => 'consultation-booking']) }}">Bookings & Packages</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-leads.index')]) href="{{ route('admin.ebook-leads.index') }}">Ebook Downloads</a>
                     </div>
                 </div>
 
-                <a @class(['is-active' => request()->routeIs('admin.ai-knowledge.*')]) href="{{ route('admin.ai-knowledge.index') }}">AI Knowledge Entries</a>
-                <a @class(['is-active' => request()->routeIs('admin.email-settings.*')]) href="{{ route('admin.email-settings.index') }}">Email Settings</a>
-                <a @class(['is-active' => request()->routeIs('admin.seo.*')]) href="{{ route('admin.seo.index') }}">SEO Manager</a>
-
-                {{-- Ebook Lead Magnet System --}}
-                <div class="admin-sidebar__dropdown">
+                {{-- Content & Core Dropdown --}}
+                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.blog-posts.*') || request()->routeIs('admin.directory-listings.*') || request()->routeIs('admin.reviews.*')])>
                     <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>Ebook System</span>
+                        <span>Content & Core</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.ebooks.*')]) href="{{ route('admin.ebooks.index') }}">Ebook Library</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-categories.*')]) href="{{ route('admin.ebook-categories.index') }}">Categories</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-tags.*')]) href="{{ route('admin.ebook-tags.index') }}">Tags</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-leads.*')]) href="{{ route('admin.ebook-leads.index') }}">Ebook Leads</a>
-                        <a @class(['is-active' => request()->routeIs('admin.downloads.*')]) href="{{ route('admin.downloads.index') }}">Download Logs</a>
-                        <a @class(['is-active' => request()->routeIs('admin.downloads.tokens*')]) href="{{ route('admin.downloads.tokens') }}">Download Tokens</a>
+                        <a @class(['is-active' => request()->routeIs('admin.blog-posts.*')]) href="{{ route('admin.blog-posts.index') }}">Blog Posts</a>
+                        <a @class(['is-active' => request()->routeIs('admin.directory-listings.*')]) href="{{ route('admin.directory-listings.index') }}">Directory Listings</a>
+                        <a @class(['is-active' => request()->routeIs('admin.reviews.*')]) href="{{ route('admin.reviews.index') }}">Moderator Reviews</a>
+                    </div>
+                </div>
+
+                {{-- AI Operations Dropdown --}}
+                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.ai-knowledge.*') || request()->routeIs('admin.ai-assistant.*')])>
+                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+                        <span>AI Operations</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="admin-sidebar__dropdown-menu">
+                        <a @class(['is-active' => request()->routeIs('admin.ai-knowledge.*')]) href="{{ route('admin.ai-knowledge.index') }}">AI Knowledge Base</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-assistant.*')]) href="{{ route('admin.ai-assistant.index') }}">Admin AI Assistant</a>
+                    </div>
+                </div>
+
+                {{-- Ebook Library (standalone) --}}
+                <a @class(['is-active' => request()->routeIs('admin.ebooks.*')]) href="{{ route('admin.ebooks.index') }}">Ebook Library</a>
+
+                {{-- Marketing & Mail Dropdown --}}
+                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.email-templates.*') || request()->routeIs('admin.campaigns.*')])>
+                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+                        <span>Marketing & Mail</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="admin-sidebar__dropdown-menu">
                         <a @class(['is-active' => request()->routeIs('admin.email-templates.*')]) href="{{ route('admin.email-templates.index') }}">Email Templates</a>
                         <a @class(['is-active' => request()->routeIs('admin.campaigns.*')]) href="{{ route('admin.campaigns.index') }}">Campaigns</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-assistant.*')]) href="{{ route('admin.ai-assistant.index') }}">AI Assistant</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-analytics.*')]) href="{{ route('admin.ebook-analytics.index') }}">Analytics</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-settings.*')]) href="{{ route('admin.ebook-settings.index') }}">Settings</a>
+                    </div>
+                </div>
+
+                {{-- Reports & Logs Dropdown --}}
+                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.downloads.*') || request()->routeIs('admin.ebook-analytics.*')])>
+                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+                        <span>Reports & Logs</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="admin-sidebar__dropdown-menu">
+                        <a @class(['is-active' => request()->routeIs('admin.downloads.index')]) href="{{ route('admin.downloads.index') }}">Download Logs</a>
+                        <a @class(['is-active' => request()->routeIs('admin.downloads.tokens')]) href="{{ route('admin.downloads.tokens') }}">Download Tokens</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-analytics.index')]) href="{{ route('admin.ebook-analytics.index') }}">Ebook Analytics</a>
+                    </div>
+                </div>
+
+                {{-- System Settings Dropdown --}}
+                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.settings.*') || request()->routeIs('admin.ai-settings.*') || request()->routeIs('admin.email-settings.*') || request()->routeIs('admin.ebook-settings.*') || request()->routeIs('admin.seo.*')])>
+                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+                        <span>System Settings</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="admin-sidebar__dropdown-menu">
+                        <a @class(['is-active' => request()->routeIs('admin.settings.edit')]) href="{{ route('admin.settings.edit') }}">General Settings</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.*')]) href="{{ route('admin.ai-settings.api-connection') }}">AI Configuration</a>
+                        <a @class(['is-active' => request()->routeIs('admin.email-settings.*')]) href="{{ route('admin.email-settings.index') }}">SMTP & Mail Themes</a>
+                        <a @class(['is-active' => request()->routeIs('admin.ebook-settings.*')]) href="{{ route('admin.ebook-settings.index') }}">Ebook Defaults</a>
+                        <a @class(['is-active' => request()->routeIs('admin.seo.*')]) href="{{ route('admin.seo.index') }}">SEO Manager</a>
                     </div>
                 </div>
 
@@ -469,6 +503,8 @@
     .admin-sidebar__dropdown-menu a:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
     .admin-sidebar__dropdown-menu a.is-active { background: rgba(255, 255, 255, 0.18); color: #fff; font-weight: 600; }
     </style>
+    @include('admin.partials.ai-copilot')
+
     <script>
     (function() {
         function initProDropdowns() {

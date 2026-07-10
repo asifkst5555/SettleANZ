@@ -10,6 +10,7 @@ class EmailTemplateDTO
         public readonly string $bodyHtml,
         public readonly ?string $bodyText = null,
         public readonly ?array $variables = [],
+        public readonly ?array $builderJson = null,
         public readonly string $type = 'download',
         public readonly bool $isActive = true,
     ) {}
@@ -22,6 +23,7 @@ class EmailTemplateDTO
             bodyHtml: $data['body_html'],
             bodyText: $data['body_text'] ?? null,
             variables: $data['variables'] ?? [],
+            builderJson: isset($data['builder_json']) ? (is_array($data['builder_json']) ? $data['builder_json'] : json_decode($data['builder_json'], true)) : null,
             type: $data['type'] ?? 'download',
             isActive: (bool) ($data['is_active'] ?? true),
         );
@@ -35,6 +37,7 @@ class EmailTemplateDTO
             'body_html' => $this->bodyHtml,
             'body_text' => $this->bodyText,
             'variables' => $this->variables,
+            'builder_json' => $this->builderJson,
             'type' => $this->type,
             'is_active' => $this->isActive,
         ];

@@ -20,6 +20,7 @@ class StoreEmailTemplateRequest extends FormRequest
             'body_html' => ['required', 'string'],
             'body_text' => ['nullable', 'string'],
             'variables' => ['nullable', 'array'],
+            'builder_json' => ['nullable', 'string'],
             'type' => ['required', Rule::in(['download', 'campaign', 'follow_up', 'verification'])],
             'is_active' => ['boolean'],
         ];
