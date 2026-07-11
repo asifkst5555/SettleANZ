@@ -38,6 +38,7 @@ class EbookDownloadMail extends Mailable
                 'ebookTitle' => $this->token->ebook?->title ?? 'Ebook',
                 'ebookDescription' => $this->token->ebook?->description ?? '',
                 'downloadUrl' => route('ebook.download', ['token' => $this->token->token]),
+                'viewUrl' => route('ebook.view', ['token' => $this->token->token]),
                 'expiresAt' => $this->token->expires_at->format('F j, Y \a\t g:i A'),
                 'expiresInHours' => config('ebook.download.token_expiry_hours', 72),
                 'companyName' => config('app.name'),
