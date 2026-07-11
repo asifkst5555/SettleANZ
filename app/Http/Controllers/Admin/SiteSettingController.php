@@ -13,7 +13,7 @@ class SiteSettingController extends Controller
 {
     public function edit(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $settings = SiteSetting::keyValueMap();
 
@@ -26,7 +26,7 @@ class SiteSettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'contact_email' => ['required', 'email'],
@@ -50,7 +50,7 @@ class SiteSettingController extends Controller
 
     public function socialEdit(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $settings = SiteSetting::keyValueMap();
 
@@ -62,7 +62,7 @@ class SiteSettingController extends Controller
 
     public function socialUpdate(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'social_facebook' => ['nullable', 'string', 'max:255'],

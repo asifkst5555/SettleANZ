@@ -15,7 +15,7 @@ class DocumentationController extends Controller
     {
         // Check if user is admin
         $user = auth()->user();
-        abort_unless($user?->is_admin, 403);
+        abort_unless($user?->hasPermission('settings.view'), 403);
 
         // Generate PDF from blade view
         $pdf = Pdf::loadView('seo-documentation');
@@ -41,7 +41,7 @@ class DocumentationController extends Controller
      */
     public function clientGuidePdf(): Response
     {
-        abort_unless(auth()->user()?->is_admin, 403);
+        abort_unless(auth()->user()?->hasPermission('settings.view'), 403);
 
         $pdf = Pdf::loadView('client-guide-documentation');
         $pdf->setOption([

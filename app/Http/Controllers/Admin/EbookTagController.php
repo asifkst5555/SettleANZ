@@ -12,7 +12,7 @@ class EbookTagController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         return view('admin.ebooks.tags', [
             'metaTitle' => 'Ebook Tags | Admin',
@@ -22,7 +22,7 @@ class EbookTagController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:50', 'unique:ebook_tags,name'],
@@ -36,7 +36,7 @@ class EbookTagController extends Controller
 
     public function update(Request $request, EbookTag $tag): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:50', 'unique:ebook_tags,name,' . $tag->id],
@@ -50,7 +50,7 @@ class EbookTagController extends Controller
 
     public function destroy(Request $request, EbookTag $tag): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $tag->delete();
 

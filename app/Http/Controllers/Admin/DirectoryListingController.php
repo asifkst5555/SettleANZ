@@ -13,7 +13,7 @@ class DirectoryListingController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         return view('admin.directory-listings.index', [
             'metaTitle' => 'Directory Listings | SettleANZ Admin',
@@ -23,7 +23,7 @@ class DirectoryListingController extends Controller
 
     public function create(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         return view('admin.directory-listings.create', [
             'metaTitle' => 'New Directory Listing | SettleANZ Admin',
@@ -37,7 +37,7 @@ class DirectoryListingController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $this->validateListing($request);
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['name']);
@@ -50,7 +50,7 @@ class DirectoryListingController extends Controller
 
     public function edit(Request $request, DirectoryListing $directoryListing): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         return view('admin.directory-listings.edit', [
             'metaTitle' => 'Edit Directory Listing | SettleANZ Admin',
@@ -60,7 +60,7 @@ class DirectoryListingController extends Controller
 
     public function update(Request $request, DirectoryListing $directoryListing): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $this->validateListing($request, $directoryListing->id);
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['name']);
@@ -73,7 +73,7 @@ class DirectoryListingController extends Controller
 
     public function destroy(Request $request, DirectoryListing $directoryListing): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $directoryListing->delete();
 
@@ -82,7 +82,7 @@ class DirectoryListingController extends Controller
 
     public function toggleFeatured(Request $request, DirectoryListing $directoryListing): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $directoryListing->update(['featured' => !$directoryListing->featured]);
 

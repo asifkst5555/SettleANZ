@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\SendLeadAutoReply;
 use App\Models\Conversation;
 use App\Models\Lead;
 use App\Models\SiteSetting;
@@ -60,6 +61,7 @@ class WebsiteAssistantService
     private function captureLead(Conversation $conversation, string $content): ?Lead
     {
         $lead = $conversation->lead()->first();
+        $isNewLead = !$lead;
         $email = $this->extractEmail($content) ?: $lead?->email;
         $name = $this->extractName($content) ?: $lead?->full_name;
         $goal = $lead?->goal ?: $this->inferGoal($content);
@@ -102,6 +104,10 @@ class WebsiteAssistantService
         $lead->ip_address = request()->ip();
         $lead->user_agent = request()->userAgent();
         $lead->save();
+
+        if ($isNewLead) {
+            SendLeadAutoReply::dispatch($lead)->onQueue('emails');
+        }
 
         return $lead;
     }

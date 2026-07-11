@@ -17,7 +17,7 @@ class CampaignController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $query = Campaign::with(['emailTemplate', 'ebook', 'creator'])->latest();
 
@@ -34,7 +34,7 @@ class CampaignController extends Controller
 
     public function create(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         return view('admin.campaigns.create', [
             'metaTitle' => 'Create Campaign | Admin',
@@ -61,7 +61,7 @@ class CampaignController extends Controller
 
     public function edit(Request $request, Campaign $campaign): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         return view('admin.campaigns.edit', [
             'metaTitle' => "Edit: {$campaign->name} | Admin",
@@ -85,7 +85,7 @@ class CampaignController extends Controller
 
     public function destroy(Request $request, Campaign $campaign): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $campaign->delete();
 
@@ -95,7 +95,7 @@ class CampaignController extends Controller
 
     public function send(Request $request, Campaign $campaign): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         if (!$campaign->isDraft()) {
             return back()->withErrors(['Campaign has already been sent or is in progress.']);
@@ -109,7 +109,7 @@ class CampaignController extends Controller
 
     public function duplicate(Request $request, Campaign $campaign): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $duplicate = $campaign->replicate();
         $duplicate->name = $campaign->name . ' (Copy)';

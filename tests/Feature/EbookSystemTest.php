@@ -148,4 +148,69 @@ class EbookSystemTest extends TestCase
         $response = $this->get('/ebook/non-existent-ebook');
         $response->assertStatus(404);
     }
+
+    public function test_admin_can_preview_ebook(): void
+    {
+        $category = EbookCategory::factory()->create();
+        $file = UploadedFile::fake()->create('ebook.pdf', 1000);
+
+        $dto = new EbookDTO(
+            title: 'Test Ebook',
+            slug: 'test-ebook',
+            description: 'A test ebook description',
+            file: $file,
+            status: EbookStatus::Published,
+            categoryIds: [$category->id],
+            author: 'Test Author',
+        );
+
+        $ebook = $this->ebookService->create($dto);
+
+        $response = $this->actingAs($this->admin)
+            ->get(route('admin.ebooks.preview', $ebook));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/pdf');
+    }
+
+    public function test_admin_can_preview_ebook_range(): void
+    {
+        $category = EbookCategory::factory()->create();
+        $file = UploadedFile::fake()->create('ebook.pdf', 1000);
+
+        $dto = new EbookDTO(
+            title: 'Test Ebook',
+            slug: 'test-ebook',
+            description: 'A test ebook description',
+            file: $file,
+            status: EbookStatus::Published,
+            categoryIds: [$category->id],
+            author: 'Test Author',
+        );
+
+        $ebook = $this->ebookService->create($dto);
+
+        $response = $this->actingAs($this->admin)
+            ->withHeaders(['Range' => 'bytes=0-499'])
+            ->get(route('admin.ebooks.preview', $ebook));
+
+        $response->assertStatus(206);
+        $response->assertHeader('Content-Type', 'application/pdf');
+        $response->assertHeader('Content-Range', "bytes 0-499/{$ebook->file_size}");
+        $response->assertHeader('Content-Length', '500');
+    }
+
+    public function test_admin_preview_handles_missing_file(): void
+    {
+        $ebook = Ebook::factory()->create([
+            'file_path' => 'missing-file.pdf',
+            'file_size' => 1000,
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->get(route('admin.ebooks.preview', $ebook));
+
+        $response->assertStatus(404);
+        $response->assertJson(['message' => 'PDF file not found.']);
+    }
 }

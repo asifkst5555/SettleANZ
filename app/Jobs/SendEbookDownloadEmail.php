@@ -37,6 +37,8 @@ class SendEbookDownloadEmail implements ShouldQueue
 
         $ebook = $this->token->ebook;
 
+        $viewUrl = route('ebook.view', ['token' => $this->token->token]);
+
         if ($template) {
             $variables = [
                 'lead_name' => $this->lead->full_name ?? 'Valued Reader',
@@ -45,6 +47,7 @@ class SendEbookDownloadEmail implements ShouldQueue
                 'ebook_description' => $ebook->description,
                 'ebook_author' => $ebook->author ?? config('app.name'),
                 'download_url' => route('ebook.download', ['token' => $this->token->token]),
+                'view_url' => $viewUrl,
                 'download_link' => "<a href=\"" . route('ebook.download', ['token' => $this->token->token]) . "\">Click here to download</a>",
                 'expires_at' => $this->token->expires_at->format('F j, Y \a\t g:i A'),
                 'expires_in_hours' => (string) config('ebook.download.token_expiry_hours', 72),
@@ -108,9 +111,14 @@ You can download your file up to <strong>{$hours}</strong> times during this per
 <td align="center" style="padding:14px 40px 26px;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td bgcolor="#0f766e" style="border-radius:8px;">
-<a href="{$downloadUrl}" style="display:inline-block;padding:14px 34px;font-size:16px;font-weight:bold;color:#ffffff;text-decoration:none;background:#0f766e;border-radius:8px;">
-Download Your Roadmap
+<td bgcolor="#0f766e" style="border-radius:8px;padding:0 6px 0 0;">
+<a href="{$viewUrl}" style="display:inline-block;padding:14px 24px;font-size:15px;font-weight:bold;color:#ffffff;text-decoration:none;background:#0f766e;border-radius:8px;">
+View Online
+</a>
+</td>
+<td bgcolor="#e8773a" style="border-radius:8px;">
+<a href="{$downloadUrl}" style="display:inline-block;padding:14px 34px;font-size:16px;font-weight:bold;color:#ffffff;text-decoration:none;background:#e8773a;border-radius:8px;">
+Download PDF
 </a>
 </td>
 </tr>
@@ -120,11 +128,15 @@ Download Your Roadmap
 
 <tr>
 <td style="padding:0 40px 28px;font-size:14px;line-height:24px;color:#64748b;">
-If the button doesn't work, copy and paste this link into your browser:
-<br><br>
-<a href="{$downloadUrl}" style="color:#0f766e;word-break:break-all;text-decoration:none;">
-{$downloadUrl}
-</a>
+Having trouble viewing? <a href="{$viewUrl}" style="color:#0f766e;text-decoration:none;">Open in your browser</a> instead.
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 40px 0;font-size:13px;line-height:20px;color:#94a3b8;">
+If the buttons don't work, copy and paste these links:<br><br>
+<strong>View:</strong> <a href="{$viewUrl}" style="color:#0f766e;word-break:break-all;text-decoration:none;">{$viewUrl}</a><br><br>
+<strong>Download:</strong> <a href="{$downloadUrl}" style="color:#0f766e;word-break:break-all;text-decoration:none;">{$downloadUrl}</a>
 </td>
 </tr>
 

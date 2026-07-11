@@ -16,7 +16,7 @@ class EbookAnalyticsController extends Controller
 
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         return view('admin.downloads.analytics', [
             'metaTitle' => 'Download Analytics | Admin',
@@ -26,14 +26,14 @@ class EbookAnalyticsController extends Controller
 
     public function overview(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         return response()->json($this->analyticsService->getDashboardStats());
     }
 
     public function downloadsOverTime(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         $days = $request->integer('days', 30);
 
@@ -44,7 +44,7 @@ class EbookAnalyticsController extends Controller
 
     public function leadsOverTime(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         $days = $request->integer('days', 30);
 
@@ -55,7 +55,7 @@ class EbookAnalyticsController extends Controller
 
     public function topEbooks(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         $limit = $request->integer('limit', 5);
 
@@ -66,7 +66,7 @@ class EbookAnalyticsController extends Controller
 
     public function export(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         $type = $request->string('type', 'leads')->toString();
         $filters = $request->except('type');

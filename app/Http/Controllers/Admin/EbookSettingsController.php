@@ -13,7 +13,7 @@ class EbookSettingsController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $siteSettings = SiteSetting::keyValueMap();
 
@@ -29,7 +29,7 @@ class EbookSettingsController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'token_expiry_hours' => ['required', 'integer', 'min:1', 'max:720'],

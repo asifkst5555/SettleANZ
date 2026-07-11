@@ -26,6 +26,13 @@ use App\Http\Controllers\Admin\AiAssistantController as AdminAiAssistantControll
 use App\Http\Controllers\Admin\EbookAnalyticsController as AdminEbookAnalyticsController;
 use App\Http\Controllers\Admin\EbookSettingsController as AdminEbookSettingsController;
 use App\Http\Controllers\Admin\EmailSettingsController as AdminEmailSettingsController;
+use App\Http\Controllers\Admin\System\RoleController;
+use App\Http\Controllers\Admin\System\PermissionController;
+use App\Http\Controllers\Admin\System\UserManagementController;
+use App\Http\Controllers\Admin\System\ActivityLogController;
+use App\Http\Controllers\Admin\System\LoginHistoryController;
+use App\Http\Controllers\Admin\System\FeatureFlagController;
+use App\Http\Controllers\Admin\System\ImpersonationController;
 use App\Http\Controllers\BlogController;
 use App\Models\PageSeo;
 use Illuminate\Support\Facades\Schema;
@@ -145,6 +152,27 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/documentation/client-guide', [AdminDocumentationController::class, 'clientGuidePdf'])->name('admin.documentation.client-guide');
     
     Route::get('/leads', [AdminLeadController::class, 'index'])->name('admin.leads.index');
+    Route::get('/leads/reports', [AdminLeadController::class, 'reports'])->name('admin.leads.reports');
+    Route::get('/leads/calendar', [AdminLeadController::class, 'calendar'])->name('admin.leads.calendar');
+    Route::get('/leads/export', [AdminLeadController::class, 'export'])->name('admin.leads.export');
+    Route::post('/leads/bulk-action', [AdminLeadController::class, 'bulkAction'])->name('admin.leads.bulk-action');
+    Route::patch('/leads/{lead}/status', [AdminLeadController::class, 'updateStatus'])->name('admin.leads.update-status');
+    Route::post('/leads/{lead}/notes', [AdminLeadController::class, 'addNote'])->name('admin.leads.notes.store');
+    Route::delete('/leads/{lead}/notes/{note}', [AdminLeadController::class, 'deleteNote'])->name('admin.leads.notes.destroy');
+    Route::post('/leads/{lead}/tasks', [AdminLeadController::class, 'addTask'])->name('admin.leads.tasks.store');
+    Route::patch('/leads/{lead}/tasks/{task}', [AdminLeadController::class, 'updateTask'])->name('admin.leads.tasks.update');
+    Route::delete('/leads/{lead}/tasks/{task}', [AdminLeadController::class, 'deleteTask'])->name('admin.leads.tasks.destroy');
+    Route::post('/leads/{lead}/files', [AdminLeadController::class, 'uploadFile'])->name('admin.leads.files.store');
+    Route::delete('/leads/{lead}/files/{file}', [AdminLeadController::class, 'deleteFile'])->name('admin.leads.files.destroy');
+    Route::get('/leads/tags', [AdminLeadController::class, 'tagsList'])->name('admin.leads.tags');
+    Route::post('/leads/tags', [AdminLeadController::class, 'createTag'])->name('admin.leads.tags.create');
+    Route::post('/leads/{lead}/tags/attach', [AdminLeadController::class, 'attachTag'])->name('admin.leads.tags.attach');
+    Route::delete('/leads/{lead}/tags/{tag}', [AdminLeadController::class, 'detachTag'])->name('admin.leads.tags.detach');
+    Route::put('/leads/{lead}/tags', [AdminLeadController::class, 'updateLeadTags'])->name('admin.leads.tags.update');
+    Route::post('/leads/{lead}/recalculate-score', [AdminLeadController::class, 'recalculateScore'])->name('admin.leads.recalculate-score');
+    Route::get('/leads/charts', [AdminLeadController::class, 'charts'])->name('admin.leads.charts');
+    Route::get('/leads/calendar-events', [AdminLeadController::class, 'calendarEvents'])->name('admin.leads.calendar-events');
+    Route::get('/staff/search', [AdminLeadController::class, 'searchStaff'])->name('admin.staff.search');
     Route::get('/leads/{lead}', [AdminLeadController::class, 'show'])->name('admin.leads.show');
     Route::get('/leads/{lead}/edit', [AdminLeadController::class, 'edit'])->name('admin.leads.edit');
     Route::put('/leads/{lead}', [AdminLeadController::class, 'update'])->name('admin.leads.update');
@@ -234,6 +262,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/create', [AdminEbookController::class, 'create'])->name('create');
         Route::post('/', [AdminEbookController::class, 'store'])->name('store');
         Route::get('/{ebook}', [AdminEbookController::class, 'show'])->name('show');
+        Route::get('/{ebook}/preview', [AdminEbookController::class, 'preview'])->name('preview');
+        Route::get('/{ebook}/view', [AdminEbookController::class, 'viewer'])->name('viewer');
         Route::get('/{ebook}/edit', [AdminEbookController::class, 'edit'])->name('edit');
         Route::put('/{ebook}', [AdminEbookController::class, 'update'])->name('update');
         Route::delete('/{ebook}', [AdminEbookController::class, 'destroy'])->name('destroy');
@@ -310,6 +340,77 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Ebook Settings
     Route::get('/ebook-settings', [AdminEbookSettingsController::class, 'index'])->name('admin.ebook-settings.index');
     Route::put('/ebook-settings', [AdminEbookSettingsController::class, 'update'])->name('admin.ebook-settings.update');
+
+    // ======================
+    // System - RBAC Routes
+    // ======================
+    Route::prefix('system')->name('admin.system.')->group(function () {
+        // Users
+        Route::middleware('permission:user_management.view')->group(function () {
+            Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
+            Route::get('/users/create', [UserManagementController::class, 'create'])->name('users.create');
+            Route::post('/users', [UserManagementController::class, 'store'])->name('users.store');
+            Route::get('/users/{user}/edit', [UserManagementController::class, 'edit'])->name('users.edit');
+            Route::put('/users/{user}', [UserManagementController::class, 'update'])->name('users.update');
+            Route::delete('/users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
+            Route::put('/users/{user}/suspend', [UserManagementController::class, 'suspend'])->name('users.suspend');
+            Route::put('/users/{user}/activate', [UserManagementController::class, 'activate'])->name('users.activate');
+            Route::put('/users/{user}/reset-password', [UserManagementController::class, 'resetPassword'])->name('users.reset-password');
+            Route::post('/users/{user}/force-logout', [UserManagementController::class, 'forceLogout'])->name('users.force-logout');
+            Route::get('/users/{user}/login-history', [UserManagementController::class, 'loginHistory'])->name('users.login-history');
+            Route::get('/users/{user}/activity', [UserManagementController::class, 'activity'])->name('users.activity');
+        });
+
+        // Roles
+        Route::middleware('permission:roles_management.view')->group(function () {
+            Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+            Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+            Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+            Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+            Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+            Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+            Route::post('/roles/{role}/clone', [RoleController::class, 'clone'])->name('roles.clone');
+            Route::get('/roles/{role}/permissions', [RoleController::class, 'permissions'])->name('roles.permissions');
+            Route::put('/roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.update-permissions');
+        });
+
+        // Permissions
+        Route::middleware('permission:permissions_management.view')->group(function () {
+            Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+            Route::get('/permissions/create', [PermissionController::class, 'create'])->name('permissions.create');
+            Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+            Route::get('/permissions/matrix', [PermissionController::class, 'matrix'])->name('permissions.matrix');
+            Route::get('/permissions/{permission}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
+            Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update');
+            Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+        });
+
+        // Feature Flags
+        Route::middleware('permission:feature_flags.view')->group(function () {
+            Route::get('/feature-flags', [FeatureFlagController::class, 'index'])->name('feature-flags.index');
+            Route::get('/feature-flags/create', [FeatureFlagController::class, 'create'])->name('feature-flags.create');
+            Route::post('/feature-flags', [FeatureFlagController::class, 'store'])->name('feature-flags.store');
+            Route::get('/feature-flags/{flag}/edit', [FeatureFlagController::class, 'edit'])->name('feature-flags.edit');
+            Route::put('/feature-flags/{flag}', [FeatureFlagController::class, 'update'])->name('feature-flags.update');
+            Route::put('/feature-flags/{flag}/toggle', [FeatureFlagController::class, 'toggle'])->name('feature-flags.toggle');
+            Route::delete('/feature-flags/{flag}', [FeatureFlagController::class, 'destroy'])->name('feature-flags.destroy');
+        });
+
+        // Activity Logs
+        Route::middleware('permission:activity_logs.view')->group(function () {
+            Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+            Route::get('/activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->name('activity-logs.show');
+        });
+
+        // Login History
+        Route::middleware('permission:login_history.view')->group(function () {
+            Route::get('/login-history', [LoginHistoryController::class, 'index'])->name('login-history.index');
+        });
+    });
+
+    // Impersonation
+    Route::post('/impersonate/{user}', [ImpersonationController::class, 'impersonate'])->name('admin.system.impersonate');
+    Route::post('/impersonate/leave', [ImpersonationController::class, 'leave'])->name('admin.system.impersonate.leave');
 });
 
 Route::post('/lead-capture', [LeadCaptureController::class, 'store'])->name('lead-capture.store');
@@ -328,4 +429,7 @@ Route::get('/download/expired', [EbookDownloadController::class, 'expired'])->na
 Route::get('/download/error', [EbookDownloadController::class, 'error'])->name('ebook.download.error');
 Route::get('/download/{token}', [EbookDownloadController::class, 'download'])
     ->name('ebook.download')
+    ->middleware('throttle:' . config('ebook.download.rate_limit_per_ip', 10) . ',' . config('ebook.download.rate_limit_decay_minutes', 60));
+Route::get('/view/{token}', [EbookDownloadController::class, 'viewPdf'])
+    ->name('ebook.view')
     ->middleware('throttle:' . config('ebook.download.rate_limit_per_ip', 10) . ',' . config('ebook.download.rate_limit_decay_minutes', 60));

@@ -26,7 +26,7 @@ class AdminCopilotController extends Controller
 
     public function message(Request $request, AiConversation $conversation): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $validated = $request->validate([
             'content' => ['required', 'string', 'max:1800'],

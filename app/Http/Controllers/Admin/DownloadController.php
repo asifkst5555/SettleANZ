@@ -18,7 +18,7 @@ class DownloadController extends Controller
 
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         $query = DownloadLog::with(['ebook:id,title', 'lead:id,full_name,email'])->latest();
 
@@ -43,7 +43,7 @@ class DownloadController extends Controller
 
     public function tokens(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         $query = DownloadToken::with(['ebook:id,title', 'lead:id,full_name,email'])->latest();
 
@@ -59,7 +59,7 @@ class DownloadController extends Controller
 
     public function revokeToken(Request $request, DownloadToken $token): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('reports_logs.view'), 403);
 
         $this->downloadService->revokeToken($token);
 

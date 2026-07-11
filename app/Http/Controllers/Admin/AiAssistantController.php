@@ -29,7 +29,7 @@ class AiAssistantController extends Controller
 
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         return view('admin.ai-assistant.index', [
             'metaTitle' => 'AI Admin Assistant | Admin',
@@ -42,7 +42,7 @@ class AiAssistantController extends Controller
 
     public function chat(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $validated = $request->validate([
             'message' => ['required', 'string', 'max:2000'],
@@ -92,7 +92,7 @@ class AiAssistantController extends Controller
 
     public function rewriteEmail(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $validated = $request->validate([
             'content' => ['required', 'string'],
@@ -114,7 +114,7 @@ class AiAssistantController extends Controller
 
     public function sendAiEmail(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $validated = $request->validate([
             'lead_id' => ['required', 'integer', 'exists:leads,id'],
@@ -141,7 +141,7 @@ class AiAssistantController extends Controller
 
     public function conversationHistory(Request $request, AiConversation $conversation): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         return response()->json([
             'conversation' => $conversation->load('messages'),
@@ -150,7 +150,7 @@ class AiAssistantController extends Controller
 
     public function clearConversations(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         AiConversation::where('user_id', $request->user()->id)->delete();
 

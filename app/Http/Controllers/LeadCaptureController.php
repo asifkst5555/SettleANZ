@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendLeadAutoReply;
 use App\Models\Lead;
 use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
@@ -33,6 +34,11 @@ class LeadCaptureController extends Controller
             'preferred_time' => ['nullable', 'string', 'max:100'],
             'consultation_format' => ['nullable', 'string', 'max:100'],
             'visa_type' => ['nullable', 'string', 'max:100'],
+            'referral_url' => ['nullable', 'string', 'max:500'],
+            'form_name' => ['nullable', 'string', 'max:100'],
+            'landing_page_name' => ['nullable', 'string', 'max:255'],
+            'package_name' => ['nullable', 'string', 'max:255'],
+            'preferred_contact_method' => ['nullable', 'string', 'max:100'],
         ]);
 
         $firstName = $validated['first_name'] ?? null;
@@ -56,12 +62,20 @@ class LeadCaptureController extends Controller
             'first_name' => $firstName,
             'full_name' => $fullName,
             'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
             'goal' => $goal,
             'form_type' => $validated['form_type'] ?? 'general',
+            'form_name' => $validated['form_name'] ?? null,
             'source_page' => $validated['source_page'] ?? 'homepage',
+            'landing_page_name' => $validated['landing_page_name'] ?? null,
+            'package_name' => $validated['package_name'] ?? null,
+            'visa_type' => $validated['visa_type'] ?? null,
+            'preferred_date' => $validated['preferred_date'] ?? null,
+            'preferred_time' => $validated['preferred_time'] ?? null,
+            'preferred_contact_method' => $validated['preferred_contact_method'] ?? null,
+            'referral_url' => $validated['referral_url'] ?? $request->headers->get('referer'),
             'status' => 'new',
             'metadata' => [
-                'phone' => $validated['phone'] ?? null,
                 'last_name' => $lastName,
                 'subject' => $validated['subject'] ?? null,
                 'message' => $validated['message'] ?? null,
@@ -70,11 +84,7 @@ class LeadCaptureController extends Controller
                 'help_details' => $validated['help_details'] ?? null,
                 'listing_id' => $validated['listing_id'] ?? null,
                 'listing_name' => $validated['listing_name'] ?? null,
-                'preferred_date' => $validated['preferred_date'] ?? null,
-                'preferred_time' => $validated['preferred_time'] ?? null,
                 'consultation_format' => $validated['consultation_format'] ?? null,
-                'visa_type' => $validated['visa_type'] ?? null,
-                'referrer' => $request->headers->get('referer'),
                 'session_id' => $request->session()->getId(),
             ],
             'ip_address' => $request->ip(),
@@ -83,6 +93,12 @@ class LeadCaptureController extends Controller
 
         // Create notification for new lead
         NotificationService::createLeadNotification($lead);
+
+        // Dispatch auto-reply email for contact and booking leads
+        $autoReplyTypes = ['contact-page', 'package_booking', 'consultation-booking', 'migration-consultation'];
+        if (in_array($validated['form_type'] ?? 'general', $autoReplyTypes, true)) {
+            SendLeadAutoReply::dispatch($lead)->onQueue('emails');
+        }
 
         $formType = $validated['form_type'] ?? 'general';
         $successMessage = match ($formType) {

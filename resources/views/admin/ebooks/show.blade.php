@@ -7,6 +7,8 @@
     .ebook-detail-label { font-size:0.875rem; color:#6b7280; margin-bottom:0.25rem; }
     .ebook-detail-value { font-weight:600; color:#1f2937; }
 </style>
+<link rel="stylesheet" href="{{ asset('css/pdf-viewer.css') }}">
+<script src="{{ asset('js/pdf-viewer.js') }}"></script>
 
 <div class="admin-main__inner">
     <section class="admin-topbar">
@@ -15,8 +17,30 @@
             <h2>{{ $ebook->title }}</h2>
             <p>Ebook details, leads, and download activity</p>
         </div>
-        <div style="display:flex;gap:0.5rem;">
+        <div style="display:flex;gap:0.5rem;align-items:center;">
             <a href="{{ route('admin.ebooks.index') }}" class="button button--small button--ghost">&larr; Back</a>
+            <button type="button" class="button button--small"
+                style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;display:inline-flex;align-items:center;gap:0.25rem;cursor:pointer;"
+                data-ebook="{{ json_encode([
+                    'id' => $ebook->id,
+                    'title' => $ebook->title,
+                    'file_name' => $ebook->file_name ?? $ebook->title . '.pdf',
+                    'file_size' => $ebook->file_size,
+                    'page_count' => $ebook->page_count,
+                    'language' => $ebook->language,
+                    'download_count' => $ebook->download_count,
+                    'author' => $ebook->author,
+                    'category' => $ebook->category?->name,
+                    'description' => $ebook->description,
+                    'uploaded_by' => '—',
+                    'created_at' => $ebook->created_at?->toIso8601String(),
+                    'updated_at' => $ebook->updated_at?->toIso8601String(),
+                    'preview_url' => route('admin.ebooks.preview', $ebook),
+                ]) }}"
+                onclick="openPdfViewer(this)">
+                @include('admin.partials.icon', ['name' => 'eye', 'size' => 14])
+                <span>View PDF</span>
+            </button>
             <a href="{{ route('admin.ebooks.edit', $ebook) }}" class="button button--small" style="background:#dbeafe;color:#0c4a6e;text-decoration:none;">Edit</a>
         </div>
     </section>

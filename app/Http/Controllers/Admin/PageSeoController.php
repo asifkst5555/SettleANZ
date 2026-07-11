@@ -13,7 +13,7 @@ class PageSeoController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $pages = PageSeo::pages();
         $stored = Schema::hasTable('page_seo')
@@ -45,7 +45,7 @@ class PageSeoController extends Controller
 
     public function edit(Request $request, string $pageKey): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $pages = PageSeo::pages();
         abort_unless(isset($pages[$pageKey]), 404);
@@ -63,7 +63,7 @@ class PageSeoController extends Controller
 
     public function update(Request $request, string $pageKey): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $pages = PageSeo::pages();
         abort_unless(isset($pages[$pageKey]), 404);

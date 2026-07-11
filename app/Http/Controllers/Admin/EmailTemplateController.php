@@ -15,7 +15,7 @@ class EmailTemplateController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $query = EmailTemplate::with('creator')->latest();
 
@@ -32,7 +32,7 @@ class EmailTemplateController extends Controller
 
     public function create(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         return view('admin.email-templates.create', [
             'metaTitle' => 'Create Email Template | Admin',
@@ -166,7 +166,7 @@ HTML;
 
     public function edit(Request $request, EmailTemplate $template): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         // Auto-update template if it contains the old checklist HTML structure
         if ($template->type === 'download' && str_contains($template->body_html, 'Roadmap is Ready!')) {
@@ -218,7 +218,7 @@ HTML;
 
     public function destroy(Request $request, EmailTemplate $template): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $template->delete();
 
@@ -228,7 +228,7 @@ HTML;
 
     public function renderPreview(Request $request): \Illuminate\Http\JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $request->validate([
             'builder_json' => ['required', 'string'],
@@ -247,7 +247,7 @@ HTML;
 
     public function sendTestEmail(Request $request, EmailTemplate $template): \Illuminate\Http\JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $request->validate([
             'email' => ['required', 'email'],
@@ -304,7 +304,7 @@ HTML;
 
     public function duplicate(Request $request, EmailTemplate $template): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $newTemplate = EmailTemplate::create([
             'name' => $template->name . ' Copy',
@@ -324,7 +324,7 @@ HTML;
 
     public function restoreRevision(Request $request, EmailTemplate $template, \App\Models\EmailTemplateRevision $revision): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('marketing_mail.view'), 403);
 
         $template->update([
             'name' => $revision->name,

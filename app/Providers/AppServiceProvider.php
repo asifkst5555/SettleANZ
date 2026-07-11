@@ -2,15 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Campaign;
-use App\Models\DownloadToken;
-use App\Models\Ebook;
-use App\Models\EmailTemplate;
 use App\Models\SiteSetting;
-use App\Policies\CampaignPolicy;
-use App\Policies\DownloadTokenPolicy;
-use App\Policies\EbookPolicy;
-use App\Policies\EmailTemplatePolicy;
 use App\Services\AiAdminAssistantService;
 use App\Services\AiEmailService;
 use App\Services\AnalyticsService;
@@ -19,7 +11,6 @@ use App\Services\EbookService;
 use App\Services\EmailService;
 use App\Services\LeadCaptureService;
 use App\Support\SiteDefaults;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -58,9 +49,6 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        Gate::policy(Ebook::class, EbookPolicy::class);
-        Gate::policy(DownloadToken::class, DownloadTokenPolicy::class);
-        Gate::policy(EmailTemplate::class, EmailTemplatePolicy::class);
-        Gate::policy(Campaign::class, CampaignPolicy::class);
+
     }
 }

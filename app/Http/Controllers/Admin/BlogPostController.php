@@ -18,7 +18,7 @@ class BlogPostController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $status = (string) $request->query('status', 'all');
         $baseQuery = BlogPost::query();
@@ -52,7 +52,7 @@ class BlogPostController extends Controller
 
     public function create(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         return view('admin.blog-posts.create', [
             'metaTitle' => 'New Blog Post | SettleANZ Admin',
@@ -69,7 +69,7 @@ class BlogPostController extends Controller
 
     public function store(Request $request): RedirectResponse|JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $this->validatePost($request);
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
@@ -93,7 +93,7 @@ class BlogPostController extends Controller
 
     public function edit(Request $request, BlogPost $blogPost): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         return view('admin.blog-posts.edit', [
             'metaTitle' => 'Edit Blog Post | SettleANZ Admin',
@@ -103,7 +103,7 @@ class BlogPostController extends Controller
 
     public function update(Request $request, BlogPost $blogPost): RedirectResponse|JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $this->validatePost($request, $blogPost->id);
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
@@ -127,7 +127,7 @@ class BlogPostController extends Controller
 
     public function destroy(Request $request, BlogPost $blogPost): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $blogPost->delete();
 
@@ -136,7 +136,7 @@ class BlogPostController extends Controller
 
     public function updateStatus(Request $request, BlogPost $blogPost): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $request->validate([
             'action' => ['required', 'in:publish,unpublish,feature,unfeature'],
@@ -182,7 +182,7 @@ class BlogPostController extends Controller
 
     public function importFile(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $request->validate([
             'document' => ['required', 'file', 'mimes:pdf,docx,doc', 'max:10240'],
@@ -458,7 +458,7 @@ class BlogPostController extends Controller
 
     public function uploadImage(Request $request): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $request->validate([
             'image' => ['required', 'file', 'image', 'mimes:jpeg,jpg,png,webp,gif,avif', 'max:5120'],

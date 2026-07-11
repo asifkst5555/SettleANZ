@@ -13,7 +13,7 @@ class EbookLeadController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('lead_center.view'), 403);
 
         $query = Lead::with('ebook')->whereNotNull('ebook_id')->latest();
 
@@ -42,7 +42,7 @@ class EbookLeadController extends Controller
 
     public function show(Request $request, Lead $lead): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('lead_center.view'), 403);
 
         return view('admin.leads.show', [
             'metaTitle' => "Lead: {$lead->full_name} | Admin",
@@ -57,7 +57,7 @@ class EbookLeadController extends Controller
 
     public function update(Request $request, Lead $lead): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('lead_center.view'), 403);
 
         $validated = $request->validate([
             'status' => ['required', 'string', 'max:30'],
@@ -72,7 +72,7 @@ class EbookLeadController extends Controller
 
     public function destroy(Request $request, Lead $lead): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('lead_center.view'), 403);
 
         $lead->delete();
 

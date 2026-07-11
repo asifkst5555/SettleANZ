@@ -12,7 +12,7 @@ class AiContentController extends Controller
 {
     public function blogDraft(Request $request, AdminAiContentService $service): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
@@ -43,7 +43,7 @@ class AiContentController extends Controller
 
     public function blogSeo(Request $request, AdminAiContentService $service): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
@@ -73,7 +73,7 @@ class AiContentController extends Controller
 
     public function pageSeo(Request $request, AdminAiContentService $service): JsonResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('content_core.view'), 403);
 
         $validated = $request->validate([
             'page_label' => ['required', 'string', 'max:120'],

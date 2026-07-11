@@ -33,7 +33,8 @@
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ $downloadUrl }}" style="background: #e8773a; color: #ffffff; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: bold; display: inline-block; box-shadow: 0 4px 12px rgba(232, 119, 58, 0.3);">Download Your Ebook</a>
+                                        <a href="{{ $viewUrl ?? '#' }}" style="background: #0f766e; color: #ffffff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: bold; display: inline-block; margin: 0 8px 10px 0; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);">View Online</a>
+                                        <a href="{{ $downloadUrl }}" style="background: #e8773a; color: #ffffff; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: bold; display: inline-block; box-shadow: 0 4px 12px rgba(232, 119, 58, 0.3);">Download PDF</a>
                                     </td>
                                 </tr>
                             </table>

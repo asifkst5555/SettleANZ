@@ -14,16 +14,51 @@
     <link rel="stylesheet" href="{{ asset('site.css') }}">
     <link rel="stylesheet" href="{{ asset('admin.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-notifications.css') }}">
+    <style>
+        .admin-impersonation-banner { display:flex; align-items:center; justify-content:center; gap:1rem; padding:0.6rem 1rem; background:#e8773a; color:white; font-size:0.88rem; font-weight:500; position:relative; z-index:1000 }
+        .admin-alert { padding:0.75rem 1rem; border-radius:10px; margin-bottom:1rem; font-size:0.88rem }
+        .admin-alert--success { background:#d4edda; color:#155724; border:1px solid #c3e6cb }
+        .admin-alert--error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb }
+        .admin-form-group { margin-bottom:1rem }
+        .admin-label { display:block; font-weight:600; font-size:0.85rem; margin-bottom:0.35rem; color:#2c3a47 }
+        .admin-input { width:100%; padding:0.65rem 0.85rem; border:1px solid rgba(16,88,98,0.16); border-radius:8px; font-size:0.9rem; background:white; color:#2c3a47; box-sizing:border-box; transition:border-color 0.2s }
+        .admin-input:focus { border-color:#14a394; outline:none; box-shadow:0 0 0 3px rgba(20,163,148,0.1) }
+        .admin-badge--super { background:linear-gradient(135deg,#f18a42,#d86424); color:white }
+        .admin-badge--default { background:#14a394; color:white }
+        .admin-badge--success { background:#d4edda; color:#155724 }
+        .admin-badge--error { background:#f8d7da; color:#721c24 }
+        .admin-badge--muted { background:#e2e8f0; color:#64748b }
+        .text-link--danger { color:#dc3545 !important }
+        .button--danger { background:#dc3545; border-color:#dc3545; color:white }
+        .button--danger:hover { background:#c82333; border-color:#bd2130 }
+        .admin-pagination .pagination { display:flex; gap:0.35rem; list-style:none; padding:0; margin:0 }
+        .admin-pagination .page-item.active .page-link { background:#14a394; color:white; border-color:#14a394 }
+        .admin-pagination .page-link { padding:0.4rem 0.65rem; border:1px solid rgba(16,88,98,0.12); border-radius:6px; color:#2c3a47; text-decoration:none; font-size:0.82rem }
+    </style>
 </head>
 <body class="admin-shell-body" data-route="{{ request()->route()?->getName() ?? '' }}">
+    @auth
+        @php
+            $sidebarMenu = app(\App\Services\MenuBuilderService::class)->getSidebarMenu(auth()->user());
+        @endphp
+    @endauth
+
+    @if (session()->has('impersonated_by'))
+        <div class="admin-impersonation-banner">
+            <span>You are impersonating <strong>{{ auth()->user()?->name }}</strong></span>
+            <form method="POST" action="{{ route('admin.system.impersonate.leave') }}" style="display:inline">
+                @csrf
+                <button type="submit" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:0.35rem 0.75rem;border-radius:6px;cursor:pointer;font-size:0.82rem">Leave Impersonation</button>
+            </form>
+        </div>
+    @endif
+
     <!-- Toast Notification Container -->
     <div id="notificationContainer" class="notification-container"></div>
     
     <!-- Mobile Sidebar Toggle (floating - hidden when topbar visible) -->
     <button type="button" class="admin-sidebar__toggle" aria-label="Toggle menu">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
+        @include('admin.partials.icon', ['name' => 'menu', 'size' => 24])
     </button>
     
     <!-- Mobile Overlay -->
@@ -37,92 +72,64 @@
             </div>
 
             <nav class="admin-sidebar__nav" aria-label="Admin navigation">
-                <a @class(['is-active' => request()->routeIs('admin.dashboard')]) href="{{ route('admin.dashboard') }}">Dashboard</a>
+                @foreach ($sidebarMenu as $item)
+                    @if (isset($item['children']))
+                        <div @class(['admin-sidebar__dropdown', 'is-open' => $item['children'] && collect($item['children'])->contains(fn($c) => request()->routeIs($c['route'] ?? ''))])>
+                            <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')" aria-label="{{ $item['label'] }}" aria-expanded="true">
+                                <span class="admin-sidebar__dropdown-label-wrapper" style="display: flex; align-items: center; gap: 0.75rem;">
+                                    @include('admin.partials.icon', ['name' => $item['icon'] ?? 'file', 'class' => 'admin-sidebar__icon'])
+                                    <span class="admin-sidebar__label">{{ $item['label'] }}</span>
+                                </span>
+                                @include('admin.partials.icon', ['name' => 'chevron-down', 'class' => 'admin-sidebar__chevron', 'size' => 16])
+                            </button>
+                            <div class="admin-sidebar__dropdown-menu">
+                                @foreach ($item['children'] as $child)
+                                    @php
+                                        $isChildActive = request()->routeIs($child['route'] ?? '');
+                                        if ($isChildActive) {
+                                            if (isset($child['params']) && count($child['params']) > 0) {
+                                                foreach ($child['params'] as $k => $v) {
+                                                    if (request()->query($k) != $v) { $isChildActive = false; break; }
+                                                }
+                                            } else {
+                                                $activeSiblingParams = collect($item['children'])->filter(fn($sib) =>
+                                                    isset($sib['params']) && collect($sib['params'])->every(fn($v, $k) => request()->query($k) == $v)
+                                                );
+                                                if ($activeSiblingParams->isNotEmpty()) { $isChildActive = false; }
+                                            }
+                                        }
+                                    @endphp
+                                    <a @class(['is-active' => $isChildActive])
+                                       href="{{ isset($child['params']) ? route($child['route'], $child['params']) : route($child['route'] ?? '/') }}"
+                                       aria-label="{{ $child['label'] }}"
+                                       title="{{ $child['label'] }}">
+                                        @include('admin.partials.icon', ['name' => $child['icon'] ?? 'file', 'class' => 'admin-sidebar__child-icon', 'size' => 18])
+                                        <span class="admin-sidebar__child-label">{{ $child['label'] }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <a @class(['is-active' => request()->routeIs($item['route'] ?? '')])
+                           href="{{ route($item['route'] ?? '/') }}"
+                           aria-label="{{ $item['label'] }}"
+                           title="{{ $item['label'] }}">
+                            @include('admin.partials.icon', ['name' => $item['icon'] ?? 'file', 'class' => 'admin-sidebar__icon'])
+                            <span class="admin-sidebar__label">{{ $item['label'] }}</span>
+                        </a>
+                    @endif
+                @endforeach
 
-                {{-- Lead Center (Unified Inbox) Dropdown --}}
-                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.leads.*') || request()->routeIs('admin.ebook-leads.*')])>
-                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>Lead Center</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                    </button>
-                    <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.leads.index') && !request('type')]) href="{{ route('admin.leads.index') }}">All Inquiries</a>
-                        <a @class(['is-active' => request()->routeIs('admin.leads.index') && request('type') === 'contact-page']) href="{{ route('admin.leads.index', ['type' => 'contact-page']) }}">Contact Form</a>
-                        <a @class(['is-active' => request()->routeIs('admin.leads.index') && in_array(request('type'), ['consultation-booking', 'package_booking'])]) href="{{ route('admin.leads.index', ['type' => 'consultation-booking']) }}">Bookings & Packages</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-leads.index')]) href="{{ route('admin.ebook-leads.index') }}">Ebook Downloads</a>
-                    </div>
-                </div>
-
-                {{-- Content & Core Dropdown --}}
-                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.blog-posts.*') || request()->routeIs('admin.directory-listings.*') || request()->routeIs('admin.reviews.*')])>
-                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>Content & Core</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                    </button>
-                    <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.blog-posts.*')]) href="{{ route('admin.blog-posts.index') }}">Blog Posts</a>
-                        <a @class(['is-active' => request()->routeIs('admin.directory-listings.*')]) href="{{ route('admin.directory-listings.index') }}">Directory Listings</a>
-                        <a @class(['is-active' => request()->routeIs('admin.reviews.*')]) href="{{ route('admin.reviews.index') }}">Moderator Reviews</a>
-                    </div>
-                </div>
-
-                {{-- AI Operations Dropdown --}}
-                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.ai-knowledge.*') || request()->routeIs('admin.ai-assistant.*')])>
-                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>AI Operations</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                    </button>
-                    <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.ai-knowledge.*')]) href="{{ route('admin.ai-knowledge.index') }}">AI Knowledge Base</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-assistant.*')]) href="{{ route('admin.ai-assistant.index') }}">Admin AI Assistant</a>
-                    </div>
-                </div>
-
-                {{-- Ebook Library (standalone) --}}
-                <a @class(['is-active' => request()->routeIs('admin.ebooks.*')]) href="{{ route('admin.ebooks.index') }}">Ebook Library</a>
-
-                {{-- Marketing & Mail Dropdown --}}
-                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.email-templates.*') || request()->routeIs('admin.campaigns.*')])>
-                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>Marketing & Mail</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                    </button>
-                    <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.email-templates.*')]) href="{{ route('admin.email-templates.index') }}">Email Templates</a>
-                        <a @class(['is-active' => request()->routeIs('admin.campaigns.*')]) href="{{ route('admin.campaigns.index') }}">Campaigns</a>
-                    </div>
-                </div>
-
-                {{-- Reports & Logs Dropdown --}}
-                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.downloads.*') || request()->routeIs('admin.ebook-analytics.*')])>
-                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>Reports & Logs</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                    </button>
-                    <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.downloads.index')]) href="{{ route('admin.downloads.index') }}">Download Logs</a>
-                        <a @class(['is-active' => request()->routeIs('admin.downloads.tokens')]) href="{{ route('admin.downloads.tokens') }}">Download Tokens</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-analytics.index')]) href="{{ route('admin.ebook-analytics.index') }}">Ebook Analytics</a>
-                    </div>
-                </div>
-
-                {{-- System Settings Dropdown --}}
-                <div @class(['admin-sidebar__dropdown', 'is-open' => request()->routeIs('admin.settings.*') || request()->routeIs('admin.ai-settings.*') || request()->routeIs('admin.email-settings.*') || request()->routeIs('admin.ebook-settings.*') || request()->routeIs('admin.seo.*')])>
-                    <button type="button" class="admin-sidebar__dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
-                        <span>System Settings</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                    </button>
-                    <div class="admin-sidebar__dropdown-menu">
-                        <a @class(['is-active' => request()->routeIs('admin.settings.edit')]) href="{{ route('admin.settings.edit') }}">General Settings</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ai-settings.*')]) href="{{ route('admin.ai-settings.api-connection') }}">AI Configuration</a>
-                        <a @class(['is-active' => request()->routeIs('admin.email-settings.*')]) href="{{ route('admin.email-settings.index') }}">SMTP & Mail Themes</a>
-                        <a @class(['is-active' => request()->routeIs('admin.ebook-settings.*')]) href="{{ route('admin.ebook-settings.index') }}">Ebook Defaults</a>
-                        <a @class(['is-active' => request()->routeIs('admin.seo.*')]) href="{{ route('admin.seo.index') }}">SEO Manager</a>
-                    </div>
-                </div>
-
-                <a href="/" target="_blank" rel="noreferrer">View Website</a>
+                <a href="/" target="_blank" rel="noreferrer" aria-label="View Website" title="View Website">
+                    @include('admin.partials.icon', ['name' => 'external-link', 'class' => 'admin-sidebar__icon'])
+                    <span class="admin-sidebar__label">View Website</span>
+                </a>
             </nav>
+            <div class="admin-sidebar__footer" style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: center; width: 100%;">
+                <button type="button" class="admin-sidebar__collapse-btn" id="sidebarCollapseBtn" aria-label="Collapse sidebar" title="Collapse sidebar" style="background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; transition: color 0.2s;">
+                    @include('admin.partials.icon', ['name' => 'chevron-left', 'class' => 'admin-sidebar__collapse-icon'])
+                </button>
+            </div>
         </aside>
 
         <div class="admin-main">
@@ -130,9 +137,7 @@
             <header class="admin-topbar-saas">
                 <div class="admin-topbar-saas__left">
                     <button class="admin-topbar-saas__menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 12h18M3 6h18M3 18h18"/>
-                        </svg>
+                        @include('admin.partials.icon', ['name' => 'menu', 'size' => 24])
                     </button>
                     <div class="admin-topbar-saas__breadcrumb">
                         <span class="admin-topbar-saas__page-title">@yield('page-title', 'Dashboard')</span>
@@ -143,10 +148,7 @@
                     <!-- Notifications -->
                     <div class="admin-notifications" id="notificationsDropdown">
                         <button class="admin-notifications__toggle" id="notificationsToggle" aria-label="Notifications">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-                                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-                            </svg>
+                            @include('admin.partials.icon', ['name' => 'bell', 'size' => 20])
                             <span class="admin-notifications__badge" id="notificationBadge" style="display: none;">0</span>
                         </button>
                         <div class="admin-notifications__dropdown" id="notificationsPanel">
@@ -173,9 +175,7 @@
                                 <span class="admin-profile__name">{{ auth()->user()?->name ?? 'Admin' }}</span>
                                 <span class="admin-profile__email">{{ auth()->user()?->email ?? '' }}</span>
                             </div>
-                            <svg class="admin-profile__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
+                            @include('admin.partials.icon', ['name' => 'chevron-down', 'class' => 'admin-profile__chevron', 'size' => 16])
                         </button>
                         <div class="admin-profile__dropdown" id="profilePanel">
                             <div class="admin-profile__header">
@@ -189,21 +189,13 @@
                             </div>
                             <div class="admin-profile__menu">
                                 <a href="/" target="_blank" class="admin-profile__menu-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                        <path d="M15 3h6v6"/>
-                                        <path d="M10 14 21 3"/>
-                                    </svg>
+                                    @include('admin.partials.icon', ['name' => 'external-link', 'size' => 16])
                                     View Website
                                 </a>
                                 <form method="POST" action="{{ route('admin.logout') }}" class="admin-profile__logout-form">
                                     @csrf
                                     <button type="submit" class="admin-profile__menu-item admin-profile__logout">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                                            <path d="M16 17l5-5-5-5"/>
-                                            <path d="M21 12H9"/>
-                                        </svg>
+                                        @include('admin.partials.icon', ['name' => 'log-out', 'size' => 16])
                                         Sign out
                                     </button>
                                 </form>
@@ -228,6 +220,33 @@
     <!-- Top Bar Dropdowns & Notifications Script -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar Collapse Logic
+        const sidebar = document.getElementById('adminSidebar');
+        const mainContent = document.querySelector('.admin-main');
+        const collapseBtn = document.getElementById('sidebarCollapseBtn');
+        
+        // Check localStorage on page load
+        if (localStorage.getItem('admin_sidebar_collapsed') === 'true') {
+            sidebar?.classList.add('collapsed');
+            mainContent?.classList.add('sidebar-collapsed');
+        }
+        
+        if (collapseBtn && sidebar) {
+            collapseBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                localStorage.setItem('admin_sidebar_collapsed', isCollapsed);
+                
+                if (mainContent) {
+                    if (isCollapsed) {
+                        mainContent.classList.add('sidebar-collapsed');
+                    } else {
+                        mainContent.classList.remove('sidebar-collapsed');
+                    }
+                }
+            });
+        }
+
         // Profile Dropdown
         const profileDropdown = document.getElementById('profileDropdown');
         const profileToggle = document.getElementById('profileToggle');
@@ -335,9 +354,9 @@
             }
 
             const icons = {
-                lead: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 21-3-3"/></svg>',
-                review: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-                system: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+                lead: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+                review: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 12a2 2 0 0 0 2-2V8H8v2h2"/><path d="M14 12a2 2 0 0 0 2-2V8h-2v2h2"/></svg>',
+                system: '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>'
             };
 
             notificationsList.innerHTML = notifications.map(notification => {
@@ -472,7 +491,7 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding: 0.95rem 1rem;
+        padding: 0.85rem 1.15rem;
         background: none;
         border: none;
         color: rgba(255, 255, 255, 0.88);
@@ -489,10 +508,13 @@
         display: none;
         flex-direction: column;
         gap: 0.25rem;
-        padding: 0.25rem 0 0.25rem 1rem;
+        padding: 0.25rem 0 0.25rem 1.25rem;
     }
     .admin-sidebar__dropdown.is-open .admin-sidebar__dropdown-menu { display: flex; }
     .admin-sidebar__dropdown-menu a {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
         padding: 0.5rem 0.75rem;
         color: rgba(255, 255, 255, 0.75);
         text-decoration: none;

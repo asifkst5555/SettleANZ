@@ -259,6 +259,60 @@ Return a JSON with keys: "subject", "body_html", "body_text"
 PROMPT;
     }
 
+    public function generateAutoReplyEmail(array $data, string $tone = 'warm', string $language = 'en'): array
+    {
+        $prompt = $this->buildAutoReplyPrompt($data, $tone, $language);
+        return $this->callAI($prompt);
+    }
+
+    private function buildAutoReplyPrompt(array $data, string $tone, string $language): string
+    {
+        $formType = $data['form_type'] ?? 'general';
+        $formLabel = match ($formType) {
+            'contact-page' => 'Contact Form enquiry',
+            'package_booking' => 'Settlement Package booking request',
+            'homepage_roadmap' => 'Roadmap download request',
+            'ebook_download' => 'Ebook download request',
+            'ai_chat' => 'AI Chat consultation',
+            default => 'enquiry',
+        };
+
+        $name = $data['lead_name'] ?? 'there';
+        $company = $data['company_name'] ?? config('app.name');
+
+        return <<<PROMPT
+Generate a warm, professional auto-reply email in {$language} language with a {$tone} tone.
+
+Context:
+- This is an automated acknowledgment for a {$formLabel} submitted on {$company}.
+- Lead name: {$name}
+- Form type: {$formType}
+
+The email must:
+1. Greet the lead by name warmly
+2. Acknowledge receipt of their {$formLabel}
+3. Reassure them that our team has received their request
+4. State clearly that a team member will respond within 24 hours
+5. If it's a contact enquiry, mention that we'll review their message carefully
+6. If it's a package booking, mention that we'll confirm their session details
+7. Close with a professional signature: "Warm regards, The {$company} Team"
+8. Include a brief P.S. that they can reply to this email if they have urgent questions
+
+Important:
+- Keep the tone warm and human, not robotic
+- Do NOT include download links or promotional content
+- Do NOT mention AI or automation
+- Use the lead's name naturally in the greeting
+
+Return ONLY valid JSON with exactly these keys:
+- "subject": a concise, friendly subject line (max 80 chars)
+- "body_html": the full HTML email body with inline styling (professional, responsive)
+- "body_text": plain text version of the email
+
+JSON:
+PROMPT;
+    }
+
     private function buildCampaignPrompt(array $data, string $tone, string $language): string
     {
         return <<<PROMPT

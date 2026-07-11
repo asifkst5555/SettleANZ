@@ -12,7 +12,7 @@ class EbookCategoryController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         return view('admin.ebooks.categories', [
             'metaTitle' => 'Ebook Categories | Admin',
@@ -22,7 +22,7 @@ class EbookCategoryController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:ebook_categories,name'],
@@ -39,7 +39,7 @@ class EbookCategoryController extends Controller
 
     public function update(Request $request, EbookCategory $category): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:ebook_categories,name,' . $category->id],
@@ -56,7 +56,7 @@ class EbookCategoryController extends Controller
 
     public function destroy(Request $request, EbookCategory $category): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         if ($category->ebooks()->count() > 0) {
             return back()->withErrors(['Cannot delete category with associated ebooks.']);

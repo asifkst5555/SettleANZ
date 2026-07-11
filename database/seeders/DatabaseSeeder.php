@@ -39,6 +39,29 @@ class DatabaseSeeder extends Seeder
             SiteSetting::query()->updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
+        $this->call([
+            PermissionGroupSeeder::class,
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            FeatureFlagSeeder::class,
+        ]);
+
+        $superAdminUser = User::updateOrCreate(
+            ['email' => 'superadmin@settleanz.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('superadmin@1234'),
+                'is_admin' => true,
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ],
+        );
+
+        $superAdminRole = \App\Models\Role::where('is_super', true)->first();
+        if ($superAdminRole && !$superAdminUser->roles()->where('role_id', $superAdminRole->id)->exists()) {
+            $superAdminUser->roles()->attach($superAdminRole->id);
+        }
+
         if (\App\Models\EmailTemplate::count() === 0) {
             \App\Models\EmailTemplate::create([
                 'name' => 'Download Email - New Arrival Checklist',

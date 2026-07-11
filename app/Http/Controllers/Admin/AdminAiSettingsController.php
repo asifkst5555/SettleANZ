@@ -36,7 +36,7 @@ class AdminAiSettingsController extends Controller
 
     public function apiConnection(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
         return view('admin.ai-settings.api-connection', [
             'metaTitle' => 'AI API Connection | SettleANZ Admin',
             'settings' => $this->getSettings(),
@@ -46,7 +46,7 @@ class AdminAiSettingsController extends Controller
 
     public function updateApiConnection(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'ai_openai_base_url' => ['required', 'string', 'max:255'],
@@ -82,7 +82,7 @@ class AdminAiSettingsController extends Controller
 
     public function chatAppearance(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
         return view('admin.ai-settings.chat-appearance', [
             'metaTitle' => 'Chat Appearance | SettleANZ Admin',
             'settings' => $this->getSettings(),
@@ -91,7 +91,7 @@ class AdminAiSettingsController extends Controller
 
     public function updateChatAppearance(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'ai_assistant_enabled' => ['nullable', 'in:0,1'],
@@ -114,7 +114,7 @@ class AdminAiSettingsController extends Controller
 
     public function responseBehavior(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
         return view('admin.ai-settings.response-behavior', [
             'metaTitle' => 'Response Behavior | SettleANZ Admin',
             'settings' => $this->getSettings(),
@@ -123,7 +123,7 @@ class AdminAiSettingsController extends Controller
 
     public function updateResponseBehavior(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'ai_max_bullets' => ['nullable', 'integer', 'min:1', 'max:10'],
@@ -152,7 +152,7 @@ class AdminAiSettingsController extends Controller
 
     public function contentRules(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
         return view('admin.ai-settings.content-rules', [
             'metaTitle' => 'Content Rules | SettleANZ Admin',
             'settings' => $this->getSettings(),
@@ -161,7 +161,7 @@ class AdminAiSettingsController extends Controller
 
     public function updateContentRules(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'ai_include_page_links' => ['nullable', 'in:0,1'],
@@ -196,7 +196,7 @@ class AdminAiSettingsController extends Controller
 
     public function customPrompts(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
         return view('admin.ai-settings.custom-prompts', [
             'metaTitle' => 'Custom Prompts | SettleANZ Admin',
             'settings' => $this->getSettings(),
@@ -205,7 +205,7 @@ class AdminAiSettingsController extends Controller
 
     public function updateCustomPrompts(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $validated = $request->validate([
             'ai_follow_up_phrase' => ['nullable', 'string', 'max:255'],
@@ -224,7 +224,7 @@ class AdminAiSettingsController extends Controller
 
     public function knowledgeBase(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('settings.view'), 403);
 
         $customKnowledgeCount = Schema::hasTable('ai_knowledge_entries')
             ? AiKnowledgeEntry::query()->where('is_active', true)->count()

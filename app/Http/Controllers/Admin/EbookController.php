@@ -12,6 +12,8 @@ use App\Models\EbookTag;
 use App\Services\EbookService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class EbookController extends Controller
@@ -22,7 +24,7 @@ class EbookController extends Controller
 
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $query = Ebook::with(['category', 'tags'])->latest();
 
@@ -48,7 +50,7 @@ class EbookController extends Controller
 
     public function create(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         return view('admin.ebooks.create', [
             'metaTitle' => 'Create Ebook | Admin',
@@ -68,7 +70,7 @@ class EbookController extends Controller
 
     public function show(Request $request, Ebook $ebook): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         return view('admin.ebooks.show', [
             'metaTitle' => "{$ebook->title} | Admin",
@@ -81,7 +83,7 @@ class EbookController extends Controller
 
     public function edit(Request $request, Ebook $ebook): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         return view('admin.ebooks.edit', [
             'metaTitle' => "Edit {$ebook->title} | Admin",
@@ -102,7 +104,7 @@ class EbookController extends Controller
 
     public function destroy(Request $request, Ebook $ebook): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $this->ebookService->delete($ebook);
 
@@ -112,7 +114,7 @@ class EbookController extends Controller
 
     public function publish(Request $request, Ebook $ebook): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $this->ebookService->publish($ebook);
 
@@ -122,11 +124,74 @@ class EbookController extends Controller
 
     public function archive(Request $request, Ebook $ebook): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
 
         $this->ebookService->archive($ebook);
 
         return redirect()->route('admin.ebooks.edit', $ebook)
             ->with('status', 'Ebook archived successfully.');
+    }
+
+    public function preview(Request $request, Ebook $ebook): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+    {
+        if (!$request->user()?->hasPermission('ebook_library.view')) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        $pdfPath = $ebook->pdf_path ?? $ebook->file_path;
+        $disk = $ebook->storage_disk ?? config('ebook.storage.disk', 'local');
+
+        if (empty($pdfPath)) {
+            return response()->json(['message' => 'PDF file not found.'], 404);
+        }
+
+        try {
+            $content = Storage::disk($disk)->get($pdfPath);
+
+            if ($content === null || $content === '') {
+                throw new \RuntimeException('Storage::get returned empty.');
+            }
+        } catch (\Exception $e) {
+            Log::warning('Storage::get failed, trying direct filesystem', [
+                'ebook_id' => $ebook->id, 'path' => $pdfPath, 'disk' => $disk, 'error' => $e->getMessage(),
+            ]);
+            try {
+                $fullPath = storage_path('app/private/' . $pdfPath);
+                $realPath = realpath($fullPath);
+                if ($realPath === false || !str_starts_with($realPath, realpath(storage_path('app/private')))) {
+                    throw new \RuntimeException('Invalid or non-existent path');
+                }
+                $content = file_get_contents($realPath);
+                if ($content === false || $content === '') {
+                    throw new \RuntimeException('file_get_contents returned empty');
+                }
+            } catch (\Exception $e2) {
+                Log::error('Ebook preview failed', [
+                    'ebook_id' => $ebook->id, 'path' => $pdfPath, 'disk' => $disk,
+                    'storage_error' => $e->getMessage(), 'direct_error' => $e2->getMessage(),
+                ]);
+                return response()->json(['message' => 'Failed to load PDF file.'], 500);
+            }
+        }
+
+        $fileName = $ebook->file_name ?? $ebook->title . '.pdf';
+
+        return response()->make($content, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $fileName . '"',
+            'Content-Length' => strlen($content),
+            'Cache-Control' => 'private, max-age=3600, must-revalidate',
+            'Accept-Ranges' => 'bytes',
+        ]);
+    }
+
+    public function viewer(Request $request, Ebook $ebook): View
+    {
+        abort_unless($request->user()?->hasPermission('ebook_library.view'), 403);
+
+        return view('admin.ebooks.viewer', [
+            'metaTitle' => "View PDF: {$ebook->title} | Admin",
+            'ebook' => $ebook,
+        ]);
     }
 }

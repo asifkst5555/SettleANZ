@@ -13,7 +13,7 @@ class AiKnowledgeController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $query = AiKnowledgeEntry::query();
 
@@ -52,7 +52,7 @@ class AiKnowledgeController extends Controller
 
     public function create(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         return view('admin.ai-knowledge.create', [
             'metaTitle' => 'Add AI Knowledge | SettleANZ Admin',
@@ -61,7 +61,7 @@ class AiKnowledgeController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -83,7 +83,7 @@ class AiKnowledgeController extends Controller
 
     public function edit(Request $request, AiKnowledgeEntry $aiKnowledge): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         return view('admin.ai-knowledge.edit', [
             'metaTitle' => 'Edit AI Knowledge | SettleANZ Admin',
@@ -93,7 +93,7 @@ class AiKnowledgeController extends Controller
 
     public function update(Request $request, AiKnowledgeEntry $aiKnowledge): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -115,7 +115,7 @@ class AiKnowledgeController extends Controller
 
     public function destroy(Request $request, AiKnowledgeEntry $aiKnowledge): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $aiKnowledge->delete();
 
@@ -125,7 +125,7 @@ class AiKnowledgeController extends Controller
 
     public function toggleActive(Request $request, AiKnowledgeEntry $aiKnowledge): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $aiKnowledge->update(['is_active' => !$aiKnowledge->is_active]);
 
@@ -135,7 +135,7 @@ class AiKnowledgeController extends Controller
 
     public function generateForm(Request $request): View
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         return view('admin.ai-knowledge.generate', [
             'metaTitle' => 'Bulk Generate AI Knowledge | SettleANZ Admin',
@@ -144,7 +144,7 @@ class AiKnowledgeController extends Controller
 
     public function generate(Request $request, AiKnowledgeGenerateService $generateService): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->hasPermission('ai_operations.view'), 403);
 
         $validated = $request->validate([
             'prompt' => ['required', 'string', 'min:10', 'max:2000'],
