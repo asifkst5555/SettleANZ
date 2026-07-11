@@ -83,7 +83,7 @@
         this.isLoading = false;
         this.pageTextContent = {};
         this.textLayers = {};
-        this.isContinuous = false;
+        this.isContinuous = true;
         this.pageGap = 8;
 
         this._els = {};
@@ -293,6 +293,9 @@
         this._els.rotateRight.addEventListener('click', function () { self.rotate(90); });
         var scrollToggle = self.modal.querySelector('[data-action="toggle-scroll"]');
         scrollToggle.addEventListener('click', function () { self.toggleScrollMode(); });
+        scrollToggle.querySelector('.pv-scroll-icon').textContent = '\u2261';
+        scrollToggle.title = 'Switch to Single Page';
+        scrollToggle.classList.add('is-active');
         this._els.searchBtn.addEventListener('click', function () { self.toggleSearch(); });
         this._els.printBtn.addEventListener('click', function () { self.print(); });
         this._els.downloadBtn.addEventListener('click', function () { self.download(); });
@@ -732,8 +735,8 @@
 
     PdfViewer.prototype.zoomIn = function () {
         var levels = [0.5, 0.75, 1, 1.25, 1.5, 2, 3];
-        var next = levels.find(function (l) { return l > self.zoom; });
         var self = this;
+        var next = levels.find(function (l) { return l > self.zoom; });
         if (next) this.setZoom(next);
     };
 
