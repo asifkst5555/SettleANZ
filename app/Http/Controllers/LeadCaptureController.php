@@ -114,11 +114,28 @@ class LeadCaptureController extends Controller
                 'lead_id' => $lead->id,
             ]);
 
-            SendLeadAutoReply::dispatch($lead)->onQueue('emails');
-
-            Log::debug('[TRACE] SendLeadAutoReply completed', [
-                'lead_id' => $lead->id,
-            ]);
+            try {
+                SendLeadAutoReply::dispatch($lead)->onQueue('emails');
+                Log::debug('[TRACE] SendLeadAutoReply completed', [
+                    'lead_id' => $lead->id,
+                ]);
+            } catch (\Throwable $e) {
+                $context = [
+                    'lead_id' => $lead->id,
+                    'exception_class' => get_class($e),
+                    'exception_message' => $e->getMessage(),
+                    'exception_code' => $e->getCode(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ];
+                if ($e instanceof \Illuminate\Http\Client\HttpException && method_exists($e, 'response')) {
+                    $response = $e->response;
+                    $context['http_status'] = $response->status();
+                    $context['http_body'] = $response->body();
+                }
+                Log::error('[TRACE] SendLeadAutoReply EXCEPTION CAUGHT', $context);
+                Log::error('[TRACE] SendLeadAutoReply stack trace: ' . $e->getTraceAsString());
+            }
         }
 
         $formType = $validated['form_type'] ?? 'general';
