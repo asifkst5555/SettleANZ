@@ -1,6 +1,6 @@
 @props([
     'name',
-    'class' => 'w-6 h-6',
+    'class' => '',
     'size' => 24,
     'strokeWidth' => 2
 ])

@@ -11,6 +11,11 @@
     --admin-shadow: 0 18px 40px rgba(22, 45, 62, 0.08);
 }
 
+.lucide-icon {
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
 body.admin-shell-body {
     margin: 0;
     background: var(--admin-bg);
