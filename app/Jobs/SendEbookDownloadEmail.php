@@ -2,9 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Enums\EmailStatus;
 use App\Mail\EbookDownloadMail;
 use App\Models\DownloadToken;
+use App\Models\EmailLog;
 use App\Models\Lead;
+use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -23,19 +26,31 @@ class SendEbookDownloadEmail implements ShouldQueue
         private readonly ?int $templateId = null,
     ) {}
 
-    public function handle(): void
+    public function handle(EmailService $emailService): void
     {
-        try {
-            $ebook = $this->token->ebook;
-            $subject = $this->templateId
-                ? null
-                : "Your Download: {$ebook->title}";
+        $ebook = $this->token->ebook;
+        $subject = $this->templateId
+            ? null
+            : "Your Download: {$ebook->title}";
 
+        $emailService->applyMailConfig();
+
+        $log = EmailLog::create([
+            'lead_id' => $this->lead->id,
+            'to_email' => $this->lead->email,
+            'to_name' => $this->lead->full_name,
+            'subject' => $subject ?? "Your Download: {$ebook->title}",
+            'status' => EmailStatus::Pending->value,
+        ]);
+
+        try {
             Mail::send(new EbookDownloadMail(
                 lead: $this->lead,
                 token: $this->token,
                 customSubject: $subject,
             ));
+
+            $log->markSent();
 
             Log::info('Download email sent', [
                 'lead_id' => $this->lead->id,
@@ -43,31 +58,12 @@ class SendEbookDownloadEmail implements ShouldQueue
                 'email' => $this->lead->email,
             ]);
         } catch (\Throwable $e) {
+            $log->markFailed($e->getMessage());
+
             Log::error('Failed to send download email', [
                 'lead_id' => $this->lead->id,
                 'token_id' => $this->token->id,
                 'error' => $e->getMessage(),
-            ]);
-
-            $this->logFailure($e);
-        }
-    }
-
-    private function logFailure(\Throwable $e): void
-    {
-        $exists = \App\Models\EmailLog::where('lead_id', $this->lead->id)
-            ->where('status', \App\Enums\EmailStatus::Failed->value)
-            ->where('created_at', '>=', now()->subMinutes(5))
-            ->exists();
-
-        if (!$exists) {
-            \App\Models\EmailLog::create([
-                'lead_id' => $this->lead->id,
-                'to_email' => $this->lead->email,
-                'to_name' => $this->lead->full_name,
-                'subject' => "Your Download: {$this->token->ebook?->title}",
-                'status' => \App\Enums\EmailStatus::Failed->value,
-                'error_message' => $e->getMessage(),
             ]);
         }
     }
