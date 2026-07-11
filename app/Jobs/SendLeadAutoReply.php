@@ -9,6 +9,7 @@ use App\Services\AiEmailService;
 use App\Services\EmailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class SendLeadAutoReply implements ShouldQueue
 {
@@ -23,25 +24,56 @@ class SendLeadAutoReply implements ShouldQueue
 
     public function handle(AiEmailService $aiEmail, EmailService $emailService): void
     {
+        $leadId = $this->lead->id;
+        $email = $this->lead->email;
+        $formType = $this->lead->form_type ?? 'general';
+
+        Log::debug('[TRACE] SendLeadAutoReply::handle started', [
+            'lead_id' => $leadId,
+            'email' => $email,
+            'form_type' => $formType,
+        ]);
+
         $data = [
             'lead_name' => $this->lead->full_name ?? $this->lead->first_name ?? 'there',
             'company_name' => config('app.name'),
-            'form_type' => $this->lead->form_type ?? 'general',
+            'form_type' => $formType,
         ];
 
+        Log::debug('[TRACE] Calling AiEmailService::generateAutoReplyEmail', [
+            'lead_id' => $leadId,
+            'data' => $data,
+        ]);
+
         $response = $aiEmail->generateAutoReplyEmail($data);
+
+        Log::debug('[TRACE] AiEmailService returned', [
+            'lead_id' => $leadId,
+            'has_subject' => isset($response['subject']),
+            'has_body_html' => isset($response['body_html']),
+        ]);
 
         $subject = $response['subject'] ?? 'Thank you for reaching out';
         $bodyHtml = $response['body_html'] ?? $this->fallbackHtml();
         $bodyText = $response['body_text'] ?? null;
 
+        Log::debug('[TRACE] Calling EmailService::sendCustomEmail', [
+            'lead_id' => $leadId,
+            'to' => $email,
+            'subject' => $subject,
+        ]);
+
         $emailService->sendCustomEmail(
-            to: $this->lead->email,
+            to: $email,
             subject: $subject,
             bodyHtml: $bodyHtml,
             bodyText: $bodyText,
-            leadId: $this->lead->id,
+            leadId: $leadId,
         );
+
+        Log::debug('[TRACE] SendLeadAutoReply::handle completed successfully', [
+            'lead_id' => $leadId,
+        ]);
     }
 
     public function failed(\Throwable $e): void

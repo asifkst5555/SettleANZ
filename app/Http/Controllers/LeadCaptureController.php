@@ -8,6 +8,7 @@ use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class LeadCaptureController extends Controller
@@ -96,8 +97,28 @@ class LeadCaptureController extends Controller
 
         // Dispatch auto-reply email for contact and booking leads
         $autoReplyTypes = ['contact-page', 'package_booking', 'consultation-booking', 'migration-consultation'];
-        if (in_array($validated['form_type'] ?? 'general', $autoReplyTypes, true)) {
+        $formType = $validated['form_type'] ?? 'general';
+        $shouldAutoReply = in_array($formType, $autoReplyTypes, true);
+
+        Log::debug('[TRACE] LeadCaptureController::store auto-reply check', [
+            'lead_id' => $lead->id,
+            'email' => $lead->email,
+            'form_type' => $formType,
+            'should_auto_reply' => $shouldAutoReply,
+            'valid_form_types' => $autoReplyTypes,
+            'queue_connection' => config('queue.default'),
+        ]);
+
+        if ($shouldAutoReply) {
+            Log::debug('[TRACE] Dispatching SendLeadAutoReply (sync)', [
+                'lead_id' => $lead->id,
+            ]);
+
             SendLeadAutoReply::dispatch($lead)->onQueue('emails');
+
+            Log::debug('[TRACE] SendLeadAutoReply completed', [
+                'lead_id' => $lead->id,
+            ]);
         }
 
         $formType = $validated['form_type'] ?? 'general';

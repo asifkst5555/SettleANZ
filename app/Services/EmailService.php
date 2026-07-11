@@ -72,7 +72,18 @@ class EmailService
         ?int $campaignId = null,
         ?string $attachmentPath = null,
     ): EmailLog {
+        Log::debug('[TRACE] EmailService::sendCustomEmail started', [
+            'lead_id' => $leadId,
+            'to' => $to,
+            'subject' => $subject,
+        ]);
+
         $this->applyMailConfig();
+
+        Log::debug('[TRACE] EmailService::applyMailConfig completed', [
+            'lead_id' => $leadId,
+            'mail_default' => config('mail.default'),
+        ]);
 
         $log = EmailLog::create([
             'email_template_id' => $templateId,
@@ -83,15 +94,37 @@ class EmailService
             'status' => EmailStatus::Pending->value,
         ]);
 
+        Log::debug('[TRACE] EmailLog created', [
+            'log_id' => $log->id,
+            'lead_id' => $leadId,
+        ]);
+
         try {
             $mail = new \App\Mail\CustomHtmlMail($subject, $bodyHtml);
             if ($attachmentPath) {
                 $mail->attach($attachmentPath);
             }
+
+            Log::debug('[TRACE] Calling Mail::send', [
+                'lead_id' => $leadId,
+                'log_id' => $log->id,
+            ]);
+
             Mail::to($to)->send($mail);
 
             $log->markSent();
+
+            Log::debug('[TRACE] Email sent successfully', [
+                'log_id' => $log->id,
+                'lead_id' => $leadId,
+            ]);
         } catch (\Exception $e) {
+            Log::debug('[TRACE] Email send FAILED', [
+                'lead_id' => $leadId,
+                'log_id' => $log->id,
+                'error' => $e->getMessage(),
+            ]);
+
             $log->markFailed($e->getMessage());
             throw $e;
         }

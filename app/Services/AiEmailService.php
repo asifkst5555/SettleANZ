@@ -261,8 +261,46 @@ PROMPT;
 
     public function generateAutoReplyEmail(array $data, string $tone = 'warm', string $language = 'en'): array
     {
+        $leadEmail = $data['lead_email'] ?? 'unknown';
+        $formType = $data['form_type'] ?? 'unknown';
+
+        Log::debug('[TRACE] AiEmailService::generateAutoReplyEmail', [
+            'form_type' => $formType,
+            'lead_email' => $leadEmail,
+            'provider' => $this->provider,
+            'model' => $this->model,
+            'api_key_set' => !empty($this->apiKey),
+            'api_key_length' => strlen($this->apiKey),
+        ]);
+
         $prompt = $this->buildAutoReplyPrompt($data, $tone, $language);
-        return $this->callAI($prompt);
+
+        Log::debug('[TRACE] Calling AiEmailService::callAI', [
+            'form_type' => $formType,
+            'prompt_length' => strlen($prompt),
+        ]);
+
+        $start = microtime(true);
+        try {
+            $result = $this->callAI($prompt);
+            $duration = round((microtime(true) - $start) * 1000);
+            Log::debug('[TRACE] AiEmailService::callAI succeeded', [
+                'form_type' => $formType,
+                'duration_ms' => $duration,
+                'has_subject' => isset($result['subject']),
+                'has_body_html' => isset($result['body_html']),
+            ]);
+            return $result;
+        } catch (\Throwable $e) {
+            $duration = round((microtime(true) - $start) * 1000);
+            Log::debug('[TRACE] AiEmailService::callAI FAILED', [
+                'form_type' => $formType,
+                'duration_ms' => $duration,
+                'error' => $e->getMessage(),
+                'error_class' => get_class($e),
+            ]);
+            throw $e;
+        }
     }
 
     private function buildAutoReplyPrompt(array $data, string $tone, string $language): string
