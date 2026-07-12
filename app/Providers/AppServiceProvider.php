@@ -39,6 +39,15 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Override app.name from database so emails/views never show "Laravel"
+        // even if the production .env still has the default APP_NAME=Laravel.
+        if (Schema::hasTable('site_settings')) {
+            $companyName = SiteSetting::getValue('mail_from_name');
+            if ($companyName) {
+                config(['app.name' => $companyName]);
+            }
+        }
+
         View::composer('layouts.app', function ($view): void {
             $settings = Schema::hasTable('site_settings') ? SiteSetting::keyValueMap() : SiteDefaults::siteSettings();
 
