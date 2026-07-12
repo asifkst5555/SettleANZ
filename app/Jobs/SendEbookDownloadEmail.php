@@ -44,7 +44,7 @@ class SendEbookDownloadEmail implements ShouldQueue
         ]);
 
         try {
-            Mail::send(new EbookDownloadMail(
+            Mail::to($this->lead->email)->send(new EbookDownloadMail(
                 lead: $this->lead,
                 token: $this->token,
                 customSubject: $subject,
