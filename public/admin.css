@@ -800,6 +800,25 @@ body.admin-shell-body .lead-modal {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
 
+.modal-input {
+    display: block;
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.92rem;
+    font-family: inherit;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+}
+
+.modal-input:focus {
+    border-color: #14a394;
+    box-shadow: 0 0 0 3px rgba(20, 163, 148, 0.15);
+}
+
 @media (max-width: 720px) {
     .modal-content {
         padding: 2rem 1.5rem;

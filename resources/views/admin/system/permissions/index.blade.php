@@ -40,7 +40,7 @@
                         </div>
                         <div style="display:flex;gap:0.35rem">
                             <a class="text-link" href="{{ route('admin.system.permissions.edit', $perm) }}">Edit</a>
-                            <form method="POST" action="{{ route('admin.system.permissions.destroy', $perm) }}" style="display:inline" onsubmit="return confirm('Delete this permission?')">
+                            <form method="POST" action="{{ route('admin.system.permissions.destroy', $perm) }}" style="display:inline" onsubmit="return confirmDelete(this, 'permission')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-link text-link--danger" style="background:none;border:none;cursor:pointer;padding:0;font:inherit;color:var(--admin-danger)">Delete</button>
                             </form>

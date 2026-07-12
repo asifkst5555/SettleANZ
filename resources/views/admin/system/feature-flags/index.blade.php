@@ -60,7 +60,7 @@
                             <td>
                                 <div style="display:flex;gap:0.35rem">
                                     <a class="text-link" href="{{ route('admin.system.feature-flags.edit', $flag) }}">Edit</a>
-                                    <form method="POST" action="{{ route('admin.system.feature-flags.destroy', $flag) }}" style="display:inline" onsubmit="return confirm('Delete this flag?')">
+                                    <form method="POST" action="{{ route('admin.system.feature-flags.destroy', $flag) }}" style="display:inline" onsubmit="return confirmDelete(this, 'flag')">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="text-link text-link--danger" style="background:none;border:none;cursor:pointer;padding:0;font:inherit;color:var(--admin-danger)">Delete</button>
                                     </form>

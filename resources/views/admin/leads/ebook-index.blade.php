@@ -95,7 +95,7 @@
                                         View details
                                     </a>
                                     
-                                    <form method="POST" action="{{ route('admin.ebook-leads.destroy', $lead) }}" onsubmit="return confirm('Are you sure you want to delete this lead?');" style="display:inline;">
+                                    <form method="POST" action="{{ route('admin.ebook-leads.destroy', $lead) }}" onsubmit="return confirmDelete(this, 'lead')" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="button button--small" style="background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;">

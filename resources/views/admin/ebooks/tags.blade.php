@@ -60,7 +60,7 @@
                             <td data-label="Actions">
                                 <div style="display:inline-flex;gap:0.375rem;">
                                     <button onclick="editTag({{ $tag->id }}, '{{ addslashes($tag->name) }}')" class="ebook-action-btn" style="background:#dbeafe;color:#0c4a6e;">Edit</button>
-                                    <form action="{{ route('admin.ebook-tags.destroy', $tag) }}" method="POST" onsubmit="return confirm('Delete this tag?')" style="margin:0;display:inline-flex;">
+                                    <form action="{{ route('admin.ebook-tags.destroy', $tag) }}" method="POST" onsubmit="return confirmDelete(this, 'tag')" style="margin:0;display:inline-flex;">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="ebook-action-btn" style="background:#fee2e2;color:#7f1d1d;">Delete</button>
                                     </form>

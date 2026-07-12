@@ -124,7 +124,7 @@ class LeadService
     {
         $query = Lead::notArchived()
             ->with(['assignedStaff:id,name', 'tags:id,name,color'])
-            ->withCount(['activities', 'notes', 'tasks']);
+            ->withCount(['activities', 'leadNotes', 'tasks']);
 
         $query->filter($filters);
 
@@ -216,7 +216,7 @@ class LeadService
         if ($lead->notes) $score += 5;
         if ($lead->visa_type) $score += 5;
         $score += min($lead->activities()->count() * 2, 15);
-        $score += min($lead->notes()->count() * 2, 10);
+        $score += min($lead->leadNotes()->count() * 2, 10);
         $score += $lead->tags()->exists() ? 5 : 0;
         $sourceBonuses = ['homepage_roadmap' => 5, 'contact-page' => 10, 'package_booking' => 15];
         if ($lead->form_type && isset($sourceBonuses[$lead->form_type])) $score += $sourceBonuses[$lead->form_type];

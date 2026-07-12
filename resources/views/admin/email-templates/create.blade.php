@@ -613,7 +613,13 @@
     function loadStarterTemplate(key) {
         const starter = starterTemplates[key];
         if (starter) {
-            if (confirm(`Load "${starter.name}"? This will overwrite your current draft on the canvas.`)) {
+            adminModal.confirm({
+                title: 'Load starter template?',
+                message: `Load "${starter.name}"? This will overwrite your current draft on the canvas.`,
+                confirmText: 'Load',
+                isDangerous: false
+            }).then(function(confirmed) {
+                if (!confirmed) return;
                 // Populate blocks, subject, and type if matching
                 document.getElementById('template_subject').value = starter.subject;
                 
@@ -1341,7 +1347,7 @@
         const text = document.getElementById('compiled-html-area');
         text.select();
         document.execCommand('copy');
-        alert('Compiled HTML code copied to clipboard!');
+        notificationSystem.success('Copied!', 'Compiled HTML code copied to clipboard!');
     }
 
     function downloadHTML() {

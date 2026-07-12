@@ -1340,7 +1340,7 @@
         const text = document.getElementById('compiled-html-area');
         text.select();
         document.execCommand('copy');
-        alert('Compiled HTML code copied to clipboard!');
+        notificationSystem.success('Copied!', 'Compiled HTML code copied to clipboard!');
     }
 
     function downloadHTML() {
@@ -1355,7 +1355,7 @@
     function dispatchTestEmail() {
         const email = document.getElementById('test_recipient_email').value;
         if (!email) {
-            alert('Please enter a valid email address.');
+            notificationSystem.warning('Validation', 'Please enter a valid email address.');
             return;
         }
 
@@ -1373,27 +1373,33 @@
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                alert('Test email successfully sent to ' + email + '!');
+                notificationSystem.success('Sent!', 'Test email successfully sent to ' + email + '!');
                 closeTestModal();
             } else {
-                alert('Failed: ' + data.message);
+                notificationSystem.error('Failed', data.message);
             }
         })
         .catch(err => {
-            alert('Error sending test email. Check your SMTP configurations.');
+            notificationSystem.error('Error', 'Error sending test email. Check your SMTP configurations.');
             console.error(err);
         });
     }
 
     function confirmRestore(url) {
-        if (confirm('Are you sure you want to restore this revision? Your current draft will be backed up.')) {
+        adminModal.confirm({
+            title: 'Restore revision?',
+            message: 'Are you sure you want to restore this revision? Your current draft will be backed up.',
+            confirmText: 'Restore',
+            isDangerous: false
+        }).then(function(confirmed) {
+            if (!confirmed) return;
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = url;
             form.innerHTML = `@csrf`;
             document.body.appendChild(form);
             form.submit();
-        }
+        });
     }
 
     // Submit complete visual template fields

@@ -107,7 +107,7 @@
                                                 {{ $entry->is_active ? 'Deactivate' : 'Activate' }}
                                             </button>
                                         </form>
-                                        <form method="POST" action="{{ route('admin.ai-knowledge.destroy', $entry) }}" style="display:inline;" onsubmit="return confirm('Delete this knowledge entry?');">
+                                        <form method="POST" action="{{ route('admin.ai-knowledge.destroy', $entry) }}" style="display:inline;" onsubmit="return confirmDelete(this, 'knowledge')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="admin-action-btn admin-action-btn--delete">Delete</button>

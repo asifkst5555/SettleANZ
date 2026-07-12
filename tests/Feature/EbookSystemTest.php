@@ -153,6 +153,7 @@ class EbookSystemTest extends TestCase
     {
         $category = EbookCategory::factory()->create();
         $file = UploadedFile::fake()->create('ebook.pdf', 1000);
+        file_put_contents($file->getPathname(), str_repeat('0', 1000 * 1024));
 
         $dto = new EbookDTO(
             title: 'Test Ebook',
@@ -177,6 +178,7 @@ class EbookSystemTest extends TestCase
     {
         $category = EbookCategory::factory()->create();
         $file = UploadedFile::fake()->create('ebook.pdf', 1000);
+        file_put_contents($file->getPathname(), str_repeat('0', 1000 * 1024));
 
         $dto = new EbookDTO(
             title: 'Test Ebook',

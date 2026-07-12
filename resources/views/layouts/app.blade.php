@@ -1295,6 +1295,10 @@
                     </div>
                     <h3>Guide Sent!</h3>
                     <p id="roadmapFormModalSuccessMessage">Check your email — we’ve sent the download link for your free roadmap!</p>
+                    <div id="roadmapFormModalActions" style="display:none; gap:12px; justify-content:center; margin:1.5rem 0; flex-wrap:wrap;">
+                        <a id="roadmapViewBtn" href="#" class="button button--secondary" target="_blank" style="text-decoration:none; display:inline-block; padding:10px 20px; font-weight:700; border-radius:24px;">View Online &rarr;</a>
+                        <a id="roadmapDownloadBtn" href="#" class="button button--primary" target="_blank" style="text-decoration:none; display:inline-block; padding:10px 24px; font-weight:700; border-radius:24px; color:#fff; background:#e8773a;">Download PDF</a>
+                    </div>
                     <button class="button button--large" type="button" data-close-roadmap-form-modal>Got it</button>
                 </div>
                 <div class="form-modal__error" id="roadmapFormModalError" hidden>

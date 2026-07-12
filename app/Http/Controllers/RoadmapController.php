@@ -88,14 +88,23 @@ class RoadmapController extends Controller
 
             $this->emailService->sendDownloadEmail($lead, $token);
 
+            $downloadUrl = route('ebook.download', ['token' => $token->token]);
+            $viewUrl = route('ebook.view', ['token' => $token->token]);
+
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Check your email — we\'ve sent the download link for your free roadmap!',
+                    'download_url' => $downloadUrl,
+                    'view_url' => $viewUrl,
                 ]);
             }
 
-            return redirect()->route('home')->with('success', 'Check your email — we\'ve sent the download link for your free roadmap!');
+            return redirect()->route('home')->with([
+                'success' => 'Check your email — we\'ve sent the download link for your free roadmap!',
+                'download_url' => $downloadUrl,
+                'view_url' => $viewUrl,
+            ]);
         } catch (\Throwable $e) {
             logger()->error('Roadmap claim failed', [
                 'error' => $e->getMessage(),

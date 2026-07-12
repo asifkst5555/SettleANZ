@@ -88,7 +88,7 @@
             <a class="button button--small" href="{{ route('admin.leads.edit', $lead) }}">Edit lead</a>
             @endcan
             @can('lead_center.delete')
-            <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirm('Delete this lead permanently?');">
+            <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirmDelete(this, 'lead')">
                 @csrf @method('DELETE')
                 <button class="button button--small button--danger" type="submit">Delete</button>
             </form>
@@ -197,10 +197,10 @@
             {{-- Notes --}}
             <div class="sz-card">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.65rem;">
-                    <h3 style="margin:0;">Notes ({{ $lead->notes->count() }})</h3>
+                    <h3 style="margin:0;">Notes ({{ $lead->leadNotes->count() }})</h3>
                 </div>
                 <div id="notes-list">
-                    @forelse($lead->notes->sortByDesc('is_pinned')->sortByDesc('created_at') as $note)
+                    @forelse($lead->leadNotes->sortByDesc('is_pinned')->sortByDesc('created_at') as $note)
                         <div class="sz-note {{ $note->is_pinned ? 'is-pinned' : '' }}">
                             <div class="sz-note-header">
                                 <span class="sz-note-author">{{ $note->user?->name ?? 'Unknown' }}</span>
@@ -414,14 +414,14 @@ async function addNote(id) {
     const r = await api('/admin/leads/' + id + '/notes', { method: 'POST', body: JSON.stringify({ content: e.value }) });
     e.disabled = false; if (r.success) { e.value = ''; location.reload(); }
 }
-async function deleteNote(lid, nid) { if (!confirm('Delete?')) return; const r = await api('/admin/leads/' + lid + '/notes/' + nid, { method: 'DELETE' }); if (r.success) location.reload(); }
+async function deleteNote(lid, nid) { const c = await adminModal.confirm({ title: 'Delete note?', message: 'Are you sure you want to delete this note?', confirmText: 'Delete', isDangerous: true }); if (!c) return; const r = await api('/admin/leads/' + lid + '/notes/' + nid, { method: 'DELETE' }); if (r.success) location.reload(); }
 async function addTask(id) {
     const t = document.getElementById('task-title'); if (!t.value.trim()) return; t.disabled = true;
     const r = await api('/admin/leads/' + id + '/tasks', { method: 'POST', body: JSON.stringify({ title: t.value, type: document.getElementById('task-type').value, priority: document.getElementById('task-priority').value, due_at: document.getElementById('task-due').value || null }) });
     t.disabled = false; if (r.success) { t.value = ''; location.reload(); }
 }
 async function toggleTask(lid, tid, cb) { await api('/admin/leads/' + lid + '/tasks/' + tid, { method: 'PATCH', body: JSON.stringify({ status: cb.checked ? 'completed' : 'pending' }) }); }
-async function deleteTask(lid, tid) { if (!confirm('Delete task?')) return; const r = await api('/admin/leads/' + lid + '/tasks/' + tid, { method: 'DELETE' }); if (r.success) location.reload(); }
+async function deleteTask(lid, tid) { const c = await adminModal.confirm({ title: 'Delete task?', message: 'Are you sure you want to delete this task?', confirmText: 'Delete', isDangerous: true }); if (!c) return; const r = await api('/admin/leads/' + lid + '/tasks/' + tid, { method: 'DELETE' }); if (r.success) location.reload(); }
 async function attachTag(id) { const s = document.getElementById('tag-select'); if (!s.value) return; const r = await api('/admin/leads/' + id + '/tags/attach', { method: 'POST', body: JSON.stringify({ tag_id: s.value }) }); if (r.success) location.reload(); }
 async function detachTag(lid, tid) { const r = await api('/admin/leads/' + lid + '/tags/' + tid, { method: 'DELETE' }); if (r.success) location.reload(); }
 async function assignStaff(id) {
@@ -435,7 +435,7 @@ async function updateStatus(id) {
     location.reload();
 }
 async function recalcScore(id) { const r = await api('/admin/leads/' + id + '/recalculate-score', { method: 'POST' }); if (r.success) location.reload(); }
-async function deleteFile(lid, fid) { if (!confirm('Delete file?')) return; const r = await api('/admin/leads/' + lid + '/files/' + fid, { method: 'DELETE' }); if (r.success) location.reload(); }
+async function deleteFile(lid, fid) { const c = await adminModal.confirm({ title: 'Delete file?', message: 'Are you sure you want to delete this file?', confirmText: 'Delete', isDangerous: true }); if (!c) return; const r = await api('/admin/leads/' + lid + '/files/' + fid, { method: 'DELETE' }); if (r.success) location.reload(); }
 </script>
 @endif
 @endsection

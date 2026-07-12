@@ -459,7 +459,7 @@
         <div id="bulk-value-wrap" style="display:none;">
             <select name="value" class="sz-select" id="bulk-value"></select>
         </div>
-        <button type="submit" class="button button--small" style="background:var(--sz-primary);color:#fff;border:none;" onclick="return confirm('Apply bulk action?')">Apply</button>
+        <button type="submit" class="button button--small" style="background:var(--sz-primary);color:#fff;border:none;" onclick="return confirmAction(this.form, { title: 'Bulk action?', message: 'Apply bulk action to selected leads?', confirmText: 'Apply' })">Apply</button>
         <button type="button" class="button button--small" onclick="clearSelection()" style="background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;">Cancel</button>
     </form>
 </div>

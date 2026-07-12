@@ -1046,7 +1046,9 @@
             viewerInstance.open(data);
         } catch (e) {
             console.error('PDF Viewer error:', e);
-            alert('Failed to open PDF viewer. Please try again.');
+            if (typeof adminModal !== 'undefined' && adminModal) {
+                adminModal.alert({ title: 'Error', message: 'Failed to open PDF viewer. Please try again.' });
+            }
         }
     };
 })();

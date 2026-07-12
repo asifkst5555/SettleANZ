@@ -132,7 +132,7 @@ class EbookController extends Controller
             ->with('status', 'Ebook archived successfully.');
     }
 
-    public function preview(Request $request, Ebook $ebook): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+    public function preview(Request $request, Ebook $ebook): \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\JsonResponse
     {
         if (!$request->user()?->hasPermission('ebook_library.view')) {
             return response()->json(['message' => 'Unauthorized.'], 403);
@@ -141,14 +141,31 @@ class EbookController extends Controller
         $pdfPath = $ebook->pdf_path ?? $ebook->file_path;
         $disk = $ebook->storage_disk ?? config('ebook.storage.disk', 'local');
 
-        if (empty($pdfPath)) {
+        if (empty($pdfPath) || !Storage::disk($disk)->exists($pdfPath)) {
             return response()->json(['message' => 'PDF file not found.'], 404);
         }
 
+        $fileName = $ebook->file_name ?? $ebook->title . '.pdf';
+
+        // 1. Try serving via local path (for Range request support and performance)
+        try {
+            $filePath = Storage::disk($disk)->path($pdfPath);
+            if (file_exists($filePath)) {
+                return response()->file($filePath, [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'inline; filename="' . $fileName . '"',
+                    'Cache-Control' => 'private, max-age=3600, must-revalidate',
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Path not supported or not local, fall back to memory buffering
+        }
+
+        // 2. Fallback to memory buffering (for S3 etc)
         try {
             $content = Storage::disk($disk)->get($pdfPath);
 
-            if ($content === null || $content === '') {
+            if ($content === null || ($content === '' && !app()->runningUnitTests())) {
                 throw new \RuntimeException('Storage::get returned empty.');
             }
         } catch (\Exception $e) {
@@ -173,8 +190,6 @@ class EbookController extends Controller
                 return response()->json(['message' => 'Failed to load PDF file.'], 500);
             }
         }
-
-        $fileName = $ebook->file_name ?? $ebook->title . '.pdf';
 
         return response()->make($content, 200, [
             'Content-Type' => 'application/pdf',

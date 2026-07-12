@@ -2,8 +2,18 @@
 
 @section('content')
 @if(session('success'))
-<div style="max-width:1200px;margin:1rem auto;padding:1rem 1.25rem;background:#d1fae5;border:1px solid #a7f3d0;border-radius:12px;color:#065f46;font-weight:600;text-align:center;">
-  {{ session('success') }}
+<div style="max-width:1200px;margin:1rem auto;padding:1.5rem;background:#d1fae5;border:1px solid #a7f3d0;border-radius:12px;color:#065f46;font-weight:600;text-align:center;">
+  <p style="margin-bottom: @if(session('download_url') || session('view_url')) 1rem @else 0 @endif; margin-top: 0;">{{ session('success') }}</p>
+  @if(session('download_url') || session('view_url'))
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:10px;">
+      @if(session('view_url'))
+        <a href="{{ session('view_url') }}" target="_blank" style="display:inline-block;padding:8px 20px;background:#065e5b;color:#fff;border-radius:24px;text-decoration:none;font-size:14px;font-weight:700;transition:background 0.2s;">View Ebook Online &rarr;</a>
+      @endif
+      @if(session('download_url'))
+        <a href="{{ session('download_url') }}" target="_blank" style="display:inline-block;padding:8px 20px;background:#e8773a;color:#fff;border-radius:24px;text-decoration:none;font-size:14px;font-weight:700;transition:background 0.2s;">Download PDF</a>
+      @endif
+    </div>
+  @endif
 </div>
 @endif
 

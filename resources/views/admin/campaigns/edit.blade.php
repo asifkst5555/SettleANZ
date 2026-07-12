@@ -23,7 +23,7 @@
                 @csrf
                 <button type="submit" class="button button--small" style="background:#f3f4f6;color:#374151;border:1px solid #d7e1ea;">Duplicate</button>
             </form>
-            <form action="{{ route('admin.campaigns.send', $campaign) }}" method="POST" style="display:inline;" onsubmit="return confirm('Send this campaign now?')">
+            <form action="{{ route('admin.campaigns.send', $campaign) }}" method="POST" style="display:inline;" onsubmit="return confirmAction(this, { title: 'Send campaign?', message: 'Send this campaign now?', confirmText: 'Send' })">
                 @csrf
                 <button type="submit" class="button button--small" style="background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:white;">Send Now</button>
             </form>

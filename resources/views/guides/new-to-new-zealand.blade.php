@@ -1,30 +1,359 @@
 @extends('layouts.app')
 
 @section('page_styles')
+
     <style>
-        .arrival-guide {
+        /* ======= HERO — ARRIVE STYLE ======= */
+        .guide-hero {
             position: relative;
             overflow: hidden;
+            padding: 90px 0 50px;
             background:
-                radial-gradient(circle at top left, rgba(232, 119, 58, 0.12), transparent 24%),
-                linear-gradient(180deg, #f4eee6 0%, #fcf8f2 16%, #f8fbfb 52%, #ffffff 100%);
+                radial-gradient(circle at 80% 18%, rgba(159, 225, 203, 0.14), transparent 30%),
+                linear-gradient(135deg, #0a4a45 0%, #0f6c6b 55%, #0a4a45 100%);
+            color: #ffffff;
         }
 
-        .arrival-guide::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 10% 14%, rgba(10, 106, 103, 0.07) 0 1px, transparent 1px),
-                radial-gradient(circle at 86% 18%, rgba(232, 119, 58, 0.08) 0 1px, transparent 1px);
-            background-size: 18px 18px, 26px 26px;
-            opacity: 0.45;
-            pointer-events: none;
-        }
-
-        .arrival-guide > * {
+        .guide-hero__grid {
             position: relative;
             z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+            gap: clamp(2rem, 5vw, 4rem);
+            align-items: center;
+        }
+
+        .guide-hero__meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 24px;
+            color: #9FE1CB;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        .guide-hero__number {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 999px;
+            background: #e8773a;
+            color: #ffffff;
+            letter-spacing: 0;
+        }
+
+        .guide-hero h1 {
+            max-width: 14ch;
+            margin: 0 0 24px;
+            color: #ffffff;
+            font-size: clamp(2.55rem, 5vw, 4.35rem);
+            font-weight: 800;
+            line-height: 1.04;
+            letter-spacing: -1.2px;
+        }
+
+        .guide-hero__accent {
+            color: #e8773a;
+        }
+
+        .guide-hero__copy {
+            max-width: 58ch;
+            margin: 0 0 24px;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: clamp(1rem, 1.4vw, 1.18rem);
+            line-height: 1.75;
+        }
+
+        .guide-hero__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .guide-hero__chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            min-height: 50px;
+            padding: 0 24px;
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.09);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.9rem;
+            line-height: 1.2;
+            text-decoration: none;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .guide-hero__chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+        }
+
+        .guide-hero__chip--primary {
+            background: #e8773a;
+            border-color: #e8773a;
+        }
+
+        .guide-hero__chip--primary:hover {
+            background: #d86424;
+            border-color: #d86424;
+        }
+
+        .guide-hero__chip svg {
+            width: 17px;
+            height: 17px;
+            flex: 0 0 auto;
+        }
+
+        .guide-hero__image {
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 16px;
+            aspect-ratio: 4 / 3;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.26);
+        }
+
+        .guide-hero__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        @media (max-width: 991px) {
+            .guide-hero {
+                padding: 70px 0 40px;
+            }
+
+            .guide-hero__grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .guide-hero__content {
+                text-align: center;
+            }
+
+            .guide-hero h1,
+            .guide-hero__copy {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .guide-hero h1 {
+                max-width: 100%;
+            }
+
+            .guide-hero__meta,
+            .guide-hero__chips {
+                justify-content: center;
+            }
+
+            .guide-hero__image {
+                max-width: 560px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .guide-hero {
+                padding: 60px 0 32px;
+
+            .guide-hero__meta {
+                flex-direction: column;
+                gap: 0.75rem;
+                letter-spacing: 0.16em;
+                text-align: center;
+            }
+
+            .guide-hero h1 {
+                font-size: clamp(1.8rem, 8vw, 2.55rem);
+                max-width: 100%;
+            }
+
+            .guide-hero__copy {
+                font-size: 0.95rem;
+            }
+
+            .guide-hero__chip {
+                width: 100%;
+                justify-content: center;
+            }
+            }
+        }
+
+        /* ======= CTA SECTION ======= */
+        .guide-cta {
+            padding: 80px 0;
+            background: #f8f7f4;
+        }
+
+        .guide-cta__heading {
+            max-width: 700px;
+            margin: 0 auto 48px;
+            color: #0f172a;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            line-height: 1.15;
+            text-align: center;
+        }
+
+        .guide-cta__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .guide-cta__card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .guide-cta__card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .guide-cta__card--checklist {
+            border-top: 4px solid #0F766E;
+        }
+
+        .guide-cta__card--services {
+            border-top: 4px solid #e8773a;
+        }
+
+        .guide-cta__icon {
+            display: inline-grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+        }
+
+        .guide-cta__icon--checklist {
+            background: rgba(15, 118, 110, 0.1);
+            color: #0F766E;
+        }
+
+        .guide-cta__icon--services {
+            background: rgba(232, 119, 58, 0.1);
+            color: #e8773a;
+        }
+
+        .guide-cta__icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .guide-cta__card h3 {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 8px;
+            line-height: 1.3;
+        }
+
+        .guide-cta__card p {
+            font-size: 0.95rem;
+            color: #64748b;
+            line-height: 1.65;
+            margin: 0 0 auto;
+        }
+
+        .guide-cta__action {
+            margin-top: 24px;
+        }
+
+        .guide-cta__action .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            min-height: 50px;
+            padding: 0 1.35rem;
+            border-radius: 8px;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            border: none;
+        }
+
+        .guide-cta__action .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .guide-cta__action .button--primary {
+            background: #e8773a;
+            color: #ffffff;
+            box-shadow: 0 12px 24px rgba(232, 119, 58, 0.22);
+        }
+
+        .guide-cta__action .button--primary:hover {
+            background: #d86424;
+        }
+
+        .guide-cta__action .button--secondary {
+            background: #0F766E;
+            color: #ffffff;
+            box-shadow: 0 12px 24px rgba(15, 118, 110, 0.2);
+        }
+
+        .guide-cta__action .button--secondary:hover {
+            background: #0b5e57;
+        }
+
+        @media (max-width: 900px) {
+            .guide-cta__grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 0 24px;
+            }
+
+            .guide-cta__heading {
+                margin-bottom: 32px;
+                padding: 0 24px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .guide-cta {
+                padding: 64px 0;
+            }
+
+            .guide-cta__card {
+                padding: 24px;
+            }
+        }
+
+        .arrival-guide {
+            background: #ffffff;
         }
 
          .arrival-hero {
@@ -38,107 +367,80 @@
             color: #ffffff;
         }
 
-        .arrival-hero > .container {
-            width: 100%;
+        /* ======= SECTION & CARD STYLING (HOME PAGE MATCH) ======= */
+        .guide-section {
+            padding: 80px 0;
+            border-bottom: 1px solid #f2f2f2;
         }
 
-        .arrival-hero::before {
-            content: '';
-            position: absolute;
-            top: -10%;
-            bottom: -10%;
-            left: -8%;
-            width: 78%;
-            background: linear-gradient(155deg, #0a4f51 0%, #0e6e70 60%, #117675 100%);
-            border-radius: 0 65% 60% 0 / 0 50% 55% 0;
-            pointer-events: none;
-            z-index: 0;
+        @media (max-width: 1024px) {
+            .guide-section { padding: 64px 0; }
+            .guide-section--hero-adjacent { padding: 64px 0; }
         }
 
-        .arrival-hero::after {
-            content: '';
-            position: absolute;
-            bottom: 6%;
-            left: -120px;
-            width: 360px;
-            height: 360px;
-            border-radius: 999px;
-            background: radial-gradient(circle, rgba(242, 125, 45, 0.22) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
+        @media (max-width: 767px) {
+            .guide-section { padding: 48px 0; }
+            .guide-section--hero-adjacent { padding: 48px 0; }
         }
 
-        .arrival-hero .container,
-        .arrival-shell .container {
-            /* Inherited from site.css */
+        .guide-section--white {
+            background: #ffffff;
         }
 
-        .arrival-hero__grid {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 3rem;
-            align-items: center;
+        .guide-section--sand {
+            background: #F5F0E8;
         }
 
-        .arrival-hero__content {
-            max-width: 640px;
-            padding: 0;
-            border: 0;
-            background: transparent;
-            box-shadow: none;
-            backdrop-filter: none;
+        .guide-section--cream {
+            background: #F8F4EC;
         }
 
-        .arrival-hero__accent {
-            display: inline-block;
-            color: #f27d2d;
-            font-size: 2em;
-            line-height: 0.9;
-            letter-spacing: -0.04em;
-        }
-
-        .arrival-hero .eyebrow,
-        .arrival-hero h1,
-        .arrival-hero p {
+        .guide-section--teal {
+            background: #065E5B;
             color: #ffffff;
         }
 
-        .arrival-hero .eyebrow {
-            color: rgba(255, 255, 255, 0.76);
-            font-size: 1.2rem;
-            letter-spacing: 0.18em;
+        .guide-section--hero-adjacent {
+            background: #F8F4EC;
+            padding: 80px 0;
+            border-bottom: 1px solid #f2f2f2;
         }
 
-        .arrival-hero h1 {
-            margin-top: 0.75rem;
-            font-size: clamp(2.8rem, 6vw, 5.4rem);
-            line-height: 1.02;
-            letter-spacing: -0.01em;
-            max-width: 15ch;
-            text-wrap: balance;
+        .guide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding-left: 48px;
+            padding-right: 48px;
         }
 
-        .arrival-hero__subhead {
-            max-width: 46ch;
-            margin-top: 1.1rem;
-            color: rgba(255, 255, 255, 0.88);
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.65;
-            letter-spacing: 0;
+        @media (max-width: 767px) {
+            .guide-container {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+        }
+
+        .guide-card {
+            border: 1px solid rgba(16, 88, 98, 0.08);
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
         }
 
         .arrival-intro {
-            background: var(--page-background, #ffffff);
             padding: 3.5rem 0 1.5rem;
         }
 
         .arrival-intro__inner {
             display: grid;
-            gap: 1.4rem;
+            gap: 24px;
             max-width: 820px;
             margin-inline: auto;
             text-align: center;
@@ -230,7 +532,7 @@
         }
 
         .arrival-shell {
-            padding: 1.2rem 0 4rem;
+            padding: 0;
         }
 
         .arrival-layout {
@@ -238,16 +540,16 @@
         }
 
         .arrival-content {
-            display: grid;
-            gap: 1.35rem;
+            display: flex;
+            flex-direction: column;
         }
 
         .arrival-section {
-            padding: 3rem;
-            border: 1px solid rgba(10, 100, 97, 0.11);
-            border-radius: 32px;
-            background: rgba(255, 255, 255, 0.94);
-            box-shadow: 0 24px 60px rgba(12, 55, 66, 0.08);
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
         }
 
         .arrival-section .eyebrow {
@@ -275,14 +577,6 @@
             text-align: center;
         }
 
-        #before-you-land, #faq {
-            padding: 0;
-            border: 0;
-            border-radius: 0;
-            background: transparent;
-            box-shadow: none;
-        }
-
         .arrival-grid-2 {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -291,18 +585,18 @@
 
         .arrival-card {
             background: #ffffff;
-            border-radius: var(--radius-card, 18px);
+            border-radius: 18px;
             padding: 32px;
-            border: var(--border-card, 1px solid rgba(16, 88, 98, 0.08));
-            box-shadow: var(--shadow-card, 0 10px 30px rgba(10, 35, 45, 0.04));
+            border: 1px solid #eef0f2;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
         .arrival-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(10, 35, 45, 0.08);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
         }
 
         .arrival-card__media {
@@ -411,14 +705,7 @@
             line-height: 1.6;
         }
 
-        .arrival-photo-card {
-            width: 100%;
-            height: 380px;
-            border-radius: 24px;
-            overflow: hidden;
-            margin-top: 2rem;
-            background: #f1f5f9;
-        }
+
 
         .arrival-photo-placeholder {
             width: 100%;
@@ -634,64 +921,7 @@
             text-align: left;
         }
 
-        .arrival-faq-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
-            gap: 1.5rem;
-            align-items: start;
-            margin-top: 1.4rem;
-        }
 
-        .arrival-faqs {
-            display: grid;
-            gap: 0.85rem;
-        }
-
-        .arrival-faq {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 1.1rem 1.25rem;
-            transition: all 0.2s ease;
-        }
-
-        .arrival-faq[open] {
-            border-color: #0a7a75;
-            box-shadow: 0 20px 46px rgba(12, 55, 66, 0.1);
-        }
-
-        .arrival-faq summary {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #0a4f51;
-            cursor: pointer;
-            outline: none;
-            list-style: none;
-            display: flex;
-            align-items: center;
-            text-align: left;
-        }
-
-        .arrival-faq summary::-webkit-details-marker { display: none; }
-        
-        .arrival-faq summary::before {
-            content: '+';
-            display: inline-grid;
-            place-items: center;
-            width: 30px;
-            height: 30px;
-            border-radius: 999px;
-            background: #eff8f7;
-            color: #0a7a75;
-            font-size: 1.4rem;
-            line-height: 1;
-            margin-right: 0.85rem;
-            flex-shrink: 0;
-        }
-
-        .arrival-faq[open] summary::before { content: '−'; }
-        .arrival-faq summary::after { content: none; }
-        .arrival-faq p { margin-top: 0.85rem; padding-left: 2.75rem; font-size: 0.95rem; line-height: 1.65; color: #475569; text-align: left; }
 
         .arrival-grid-cta {
             display: grid;
@@ -916,7 +1146,6 @@
 
         @media (max-width: 1024px) {
             .arrival-hero__grid,
-            .arrival-faq-grid,
             .arrival-grid-2,
             .arrival-grid-3,
             .arrival-grid-cta,
@@ -1001,7 +1230,6 @@
             .arrival-card,
             .arrival-step,
             .arrival-day-card,
-            .arrival-faq,
             .arrival-cta,
             .arrival-note {
                 border-radius: 24px;
@@ -1011,7 +1239,6 @@
             .arrival-card,
             .arrival-step,
             .arrival-day-card,
-            .arrival-faq,
             .arrival-cta {
                 padding: 1.15rem;
             }
@@ -1084,9 +1311,1228 @@
             .arrival-pro-tip p {
                 font-size: 1.105rem;
             }
+        }
 
-            .arrival-faq p {
-                padding-left: 0;
+        /* ======= BEFORE YOU LAND — REDESIGN ======= */
+        #before-you-land {
+            padding: 100px 0 !important;
+            background: #FAFBFC !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .byl-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 0 24px;
+        }
+
+        .byl-title {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: clamp(1.875rem, 3.6vw, 3rem);
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 4px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .byl-subtitle {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: clamp(1.875rem, 3.6vw, 3rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 16px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .byl-description {
+            max-width: 660px;
+            margin: 0 auto;
+            font-size: 1.0625rem;
+            color: #64748b;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .byl-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .byl-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .byl-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .byl-card--green { border-left: 4px solid #0F766E; }
+        .byl-card--orange { border-left: 4px solid #EA580C; }
+        .byl-card--blue { border-left: 4px solid #2563EB; }
+        .byl-card--red { border-left: 4px solid #DC2626; }
+
+        .byl-card--green:hover { border-left-color: #0F766E; box-shadow: 0 16px 40px rgba(15, 118, 110, 0.1); }
+        .byl-card--orange:hover { border-left-color: #EA580C; box-shadow: 0 16px 40px rgba(234, 88, 12, 0.1); }
+        .byl-card--blue:hover { border-left-color: #2563EB; box-shadow: 0 16px 40px rgba(37, 99, 235, 0.1); }
+        .byl-card--red:hover { border-left-color: #DC2626; box-shadow: 0 16px 40px rgba(220, 38, 38, 0.1); }
+
+        .byl-card__top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .byl-card__badge {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 999px;
+            line-height: 1.4;
+        }
+
+        .byl-card__badge--green { background: rgba(15, 118, 110, 0.08); color: #0F766E; }
+        .byl-card__badge--orange { background: rgba(234, 88, 12, 0.08); color: #EA580C; }
+        .byl-card__badge--blue { background: rgba(37, 99, 235, 0.08); color: #2563EB; }
+        .byl-card__badge--red { background: rgba(220, 38, 38, 0.08); color: #DC2626; }
+
+        .byl-card__iconwrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .byl-card:hover .byl-card__iconwrap {
+            transform: scale(1.08);
+        }
+
+        .byl-card__iconwrap--green { background: rgba(15, 118, 110, 0.1); color: #0F766E; }
+        .byl-card__iconwrap--orange { background: rgba(234, 88, 12, 0.1); color: #EA580C; }
+        .byl-card__iconwrap--blue { background: rgba(37, 99, 235, 0.1); color: #2563EB; }
+        .byl-card__iconwrap--red { background: rgba(220, 38, 38, 0.1); color: #DC2626; }
+
+        .byl-card__iconwrap svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .byl-card__title {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 4px;
+            line-height: 1.3;
+        }
+
+        .byl-card__subtitle {
+            font-size: 0.9375rem;
+            color: #64748b;
+            margin: 0 0 16px;
+            line-height: 1.5;
+        }
+
+        .byl-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .byl-card--green .byl-checklist {
+            gap: 8px;
+        }
+
+        .byl-check-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .byl-check-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .byl-check-icon svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .byl-check-icon--green { background: rgba(15, 118, 110, 0.1); color: #0F766E; }
+        .byl-check-icon--orange { background: rgba(234, 88, 12, 0.1); color: #EA580C; }
+        .byl-check-icon--blue { background: rgba(37, 99, 235, 0.1); color: #2563EB; }
+        .byl-check-icon--red { background: rgba(220, 38, 38, 0.1); color: #DC2626; }
+
+        .byl-check-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .byl-check-title {
+            display: block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 2px;
+            line-height: 1.4;
+        }
+
+        .byl-check-desc {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.55;
+        }
+
+        .byl-card__text {
+            font-size: 0.9375rem;
+            color: #475569;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .byl-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+                padding: 0 20px;
+            }
+
+            .byl-title,
+            .byl-subtitle {
+                font-size: clamp(1.7rem, 3.2vw, 2.375rem);
+            }
+        }
+
+        @media (max-width: 767px) {
+            #before-you-land {
+                padding: 64px 0 !important;
+            }
+
+            .byl-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 0 16px;
+            }
+
+            .byl-header {
+                margin-bottom: 40px;
+                padding: 0 16px;
+            }
+
+            .byl-card {
+                padding: 24px;
+            }
+
+            .byl-title,
+            .byl-subtitle {
+                font-size: 1.875rem;
+            }
+
+            .byl-checklist {
+                gap: 14px;
+            }
+        }
+
+        /* ======= ARRIVAL SEQUENCE — PRO CORPORATE ======= */
+        .at-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .at-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .at-header .eyebrow {
+            color: var(--primary-brand, #0a7a75);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .at-heading {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 auto 16px;
+            max-width: 700px;
+            line-height: 1.15;
+        }
+
+        .at-heading-desc {
+            max-width: 660px;
+            margin: 0 auto;
+            font-size: 1.125rem;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        /* Timeline Track */
+        .at-timeline {
+            position: relative;
+            padding: 0 0 0 64px;
+            margin-top: 0;
+        }
+
+        .at-timeline::before {
+            content: '';
+            position: absolute;
+            left: 31px;
+            top: 28px;
+            bottom: 28px;
+            width: 2px;
+            background: linear-gradient(180deg, #0F766E 0%, rgba(15, 118, 110, 0.15) 100%);
+            border-radius: 999px;
+        }
+
+        /* Step */
+        .at-step {
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .at-step:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Number Circle */
+        .at-step__marker {
+            position: absolute;
+            left: -72px;
+            top: 28px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #0F766E;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            box-shadow: 0 6px 16px rgba(15, 118, 110, 0.25);
+            z-index: 2;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            border: 3px solid #ffffff;
+        }
+
+        .at-step:hover .at-step__marker {
+            transform: scale(1.08);
+            box-shadow: 0 10px 28px rgba(15, 118, 110, 0.35);
+        }
+
+        /* Card */
+        .at-step__card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .at-step:hover .at-step__card {
+            transform: translateX(4px);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Card Top: Icon + Title */
+        .at-step__top {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .at-step__iconwrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #F0FDF9;
+            color: #0F766E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+        }
+
+        .at-step:hover .at-step__iconwrap {
+            transform: scale(1.08);
+        }
+
+        .at-step__iconwrap svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .at-step__title {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 8px 0 0;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        /* Card Body */
+        .at-step__body {
+            font-size: 0.9375rem;
+            color: #64748b;
+            line-height: 1.65;
+            margin: 0 0 0 64px;
+        }
+
+        /* Why It Matters Callout */
+        .at-step__reason {
+            margin-top: 14px;
+            padding: 14px 18px;
+            background: #F0FDF9;
+            border-radius: 12px;
+            border-left: 3px solid #0F766E;
+            margin-left: 64px;
+        }
+
+        .at-step__reason-label {
+            display: block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #0F766E;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 3px;
+        }
+
+        .at-step__reason p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #334155;
+            line-height: 1.55;
+        }
+
+        /* Pro Tip Box */
+        .at-pro-tip {
+            margin-top: 60px;
+            max-width: 820px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 24px 28px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #0F766E;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .at-pro-tip svg {
+            width: 24px;
+            height: 24px;
+            color: #0F766E;
+            flex-shrink: 0;
+            margin-top: 2px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .at-pro-tip-content {
+            flex: 1;
+        }
+
+        .at-pro-tip-label {
+            display: block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #0F766E;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 4px;
+        }
+
+        .at-pro-tip-content p {
+            margin: 0;
+            font-size: 0.9375rem;
+            color: #334155;
+            line-height: 1.65;
+        }
+
+        /* Tablet */
+        @media (max-width: 900px) {
+            .at-timeline {
+                padding-left: 60px;
+            }
+
+            .at-step__marker {
+                left: -60px;
+                width: 52px;
+                height: 52px;
+                font-size: 1.15rem;
+            }
+
+            .at-timeline::before {
+                left: 26px;
+            }
+
+            .at-step__body,
+            .at-step__reason {
+                margin-left: 0;
+            }
+
+            .at-step__card {
+                padding: 24px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 767px) {
+            #first-7-days.arrival-section {
+                padding: 64px 0 !important;
+            }
+
+            .at-container {
+                padding: 0 20px;
+            }
+
+            .at-header {
+                margin-bottom: 40px;
+            }
+
+            .at-heading {
+                font-size: clamp(1.8rem, 6vw, 2.2rem);
+            }
+
+            .at-timeline {
+                padding: 0 0 0 48px;
+            }
+
+            .at-timeline::before {
+                left: 20px;
+            }
+
+            .at-step {
+                margin-bottom: 24px;
+            }
+
+            .at-step__marker {
+                left: -48px;
+                top: 20px;
+                width: 42px;
+                height: 42px;
+                font-size: 0.95rem;
+                border-width: 2px;
+            }
+
+            .at-step__card {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .at-step__top {
+                gap: 12px;
+            }
+
+            .at-step__iconwrap {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+
+            .at-step__iconwrap svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .at-step__title {
+                font-size: 1rem;
+                margin-top: 6px;
+            }
+
+            .at-step__body {
+                font-size: 0.875rem;
+            }
+
+            .at-step__reason {
+                padding: 12px 14px;
+            }
+
+            .at-pro-tip {
+                margin-top: 40px;
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* ======= DOS AND DONTS — REDESIGN ======= */
+        #dos-and-donts.arrival-section {
+            padding: 100px 0 !important;
+            background: #FAFBFC !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            margin-top: 0 !important;
+        }
+
+        .dd-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .dd-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 0 24px;
+        }
+
+        .dd-header .eyebrow {
+            color: var(--primary-brand, #0a7a75);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .dd-heading {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: clamp(2rem, 3.8vw, 3.2rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 auto 6px;
+            line-height: 1.15;
+        }
+
+        .dd-subtitle {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: clamp(1.4rem, 2.6vw, 2rem);
+            font-weight: 700;
+            color: #334155;
+            margin: 0 auto 16px;
+            line-height: 1.2;
+        }
+
+        .dd-description {
+            max-width: 660px;
+            margin: 0 auto;
+            font-size: 1.0625rem;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .dd-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        /* Column headers */
+        .dd-column__header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .dd-column__header--do {
+            background: #F0FDF4;
+            border-left: 4px solid #16A34A;
+        }
+
+        .dd-column__header--dont {
+            background: #FEF2F2;
+            border-left: 4px solid #DC2626;
+        }
+
+        .dd-column__icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .dd-column__icon--do {
+            background: #16A34A;
+            color: #ffffff;
+        }
+
+        .dd-column__icon--dont {
+            background: #DC2626;
+            color: #ffffff;
+        }
+
+        .dd-column__icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .dd-column__header-text h3 {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 2px;
+        }
+
+        .dd-column__header-text p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* Cards */
+        .dd-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .dd-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .dd-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .dd-card--do {
+            border-left: 4px solid #16A34A;
+        }
+
+        .dd-card--dont {
+            border-left: 4px solid #DC2626;
+        }
+
+        .dd-card--do:hover {
+            border-left-color: #15803d;
+            box-shadow: 0 12px 32px rgba(22, 163, 74, 0.08);
+        }
+
+        .dd-card--dont:hover {
+            border-left-color: #b91c1c;
+            box-shadow: 0 12px 32px rgba(220, 38, 38, 0.08);
+        }
+
+        .dd-card__badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+            line-height: 1.4;
+        }
+
+        .dd-card__badge--do {
+            background: #F0FDF4;
+            color: #16A34A;
+            border: 1px solid rgba(22, 163, 74, 0.2);
+        }
+
+        .dd-card__badge--dont {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .dd-card__top {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 12px;
+            padding-right: 80px;
+        }
+
+        .dd-card__iconwrap {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+        }
+
+        .dd-card:hover .dd-card__iconwrap {
+            transform: scale(1.1);
+        }
+
+        .dd-card__iconwrap--do {
+            background: #F0FDF4;
+            color: #16A34A;
+        }
+
+        .dd-card__iconwrap--dont {
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+        .dd-card__iconwrap svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .dd-card__title {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+            line-height: 1.35;
+            flex: 1;
+        }
+
+        .dd-card__desc {
+            font-size: 0.9375rem;
+            color: #64748b;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .dd-card__index {
+            display: inline-block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .dd-card--do .dd-card__index { color: #16A34A; }
+        .dd-card--dont .dd-card__index { color: #DC2626; }
+
+        @media (max-width: 900px) {
+            .dd-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .dd-card__top {
+                padding-right: 0;
+            }
+
+            .dd-card__badge {
+                position: static;
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            #dos-and-donts.arrival-section {
+                padding: 64px 0 !important;
+            }
+
+            .dd-container {
+                padding: 0 20px;
+            }
+
+            .dd-header {
+                margin-bottom: 36px;
+            }
+
+            .dd-grid {
+                gap: 32px;
+            }
+
+            .dd-card {
+                padding: 22px;
+            }
+
+            .dd-card__title {
+                font-size: 1rem;
+            }
+
+            .dd-card__desc {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ======= FIRST WEEK — NEW SECTION ======= */
+        #first-week {
+            padding: 100px 0;
+            background: #FAFBFC;
+        }
+
+        .fw-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .fw-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .fw-header .eyebrow {
+            color: var(--primary-brand, #0a7a75);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .fw-heading {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: clamp(2rem, 3.8vw, 3.2rem);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 auto 12px;
+            line-height: 1.15;
+        }
+
+        .fw-subtitle {
+            max-width: 680px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #64748b;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .fw-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        .fw-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fw-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .fw-card--left {
+            background: #ECFEF9;
+        }
+
+        .fw-card--right {
+            background: #FFF7ED;
+        }
+
+        .fw-card__title {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 24px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .fw-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 0 0 auto;
+        }
+
+        .fw-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 14px 8px;
+            margin: 0 -8px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            transition: background 0.2s ease;
+            border-radius: 8px;
+            cursor: default;
+        }
+
+        .fw-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .fw-item:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .fw-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #0F766E;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(15, 118, 110, 0.2);
+        }
+
+        .fw-check {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(15, 118, 110, 0.1);
+            color: #0F766E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+        }
+
+        .fw-item:hover .fw-check {
+            transform: scale(1.1);
+        }
+
+        .fw-check svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .fw-item__content {
+            flex: 1;
+            min-width: 0;
+            padding-top: 2px;
+        }
+
+        .fw-item__title {
+            display: block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 2px;
+            line-height: 1.4;
+        }
+
+        .fw-item__desc {
+            margin: 0;
+            font-size: 0.9375rem;
+            color: #64748b;
+            line-height: 1.55;
+        }
+
+        .fw-tip {
+            margin-top: 28px;
+            padding: 18px 20px;
+            border-radius: 14px;
+            background: rgba(15, 118, 110, 0.08);
+            border: 1px solid rgba(15, 118, 110, 0.12);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .fw-tip svg {
+            width: 22px;
+            height: 22px;
+            color: #0F766E;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .fw-tip__content {
+            flex: 1;
+        }
+
+        .fw-tip__label {
+            display: block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #0F766E;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 2px;
+        }
+
+        .fw-tip__text {
+            margin: 0;
+            font-size: 0.9375rem;
+            color: #334155;
+            line-height: 1.55;
+        }
+
+        .fw-info {
+            margin-top: 28px;
+            padding: 18px 20px;
+            border-radius: 14px;
+            background: rgba(234, 88, 12, 0.08);
+            border: 1px solid rgba(234, 88, 12, 0.12);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .fw-info svg {
+            width: 22px;
+            height: 22px;
+            color: #EA580C;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .fw-info__content {
+            flex: 1;
+        }
+
+        .fw-info__label {
+            display: block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #EA580C;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 2px;
+        }
+
+        .fw-info__text {
+            margin: 0;
+            font-size: 0.9375rem;
+            color: #334155;
+            line-height: 1.55;
+        }
+
+        @media (max-width: 900px) {
+            .fw-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            #first-week {
+                padding: 64px 0;
+            }
+
+            .fw-container {
+                padding: 0 20px;
+            }
+
+            .fw-header {
+                margin-bottom: 40px;
+            }
+
+            .fw-card {
+                padding: 24px;
+            }
+
+            .fw-card__title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .fw-item {
+                padding: 12px 8px;
+                gap: 14px;
+            }
+
+            .fw-number,
+            .fw-check {
+                width: 38px;
+                height: 38px;
+                font-size: 0.9rem;
+            }
+
+            .fw-check svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .fw-item__title {
+                font-size: 1rem;
+            }
+
+            .fw-item__desc {
+                font-size: 0.875rem;
+            }
+
+            .fw-tip,
+            .fw-info {
+                padding: 16px;
+                margin-top: 24px;
             }
         }
     </style>
@@ -1094,25 +2540,39 @@
 
 @section('content')
     <div class="arrival-guide">
-        <!-- HERO SECTION -->
-        <section id="top" class="arrival-hero">
-            <div class="container arrival-hero__grid">
-                <div class="arrival-hero__content">
-                    <p class="eyebrow">New to New Zealand guide 2026</p>
-                    <h1><span class="arrival-hero__accent">Just</span><br>Arrived in New Zealand?</h1>
-                    <p class="arrival-hero__subhead">Here's Exactly What to Do First and in the Right Order.</p>
-                </div>
-
-                <div class="arrival-hero__visual">
-                    <!-- HERO IMAGE -->
-                    <img src="{{ asset('media/New Zealand/New Zealand Hero.webp') }}" alt="New Zealand Hero" class="arrival-hero__image" style="display: block;">
+        <!-- HERO SECTION — ARRIVE STYLE -->
+        <section id="top" class="guide-hero">
+            <div class="container">
+                <div class="guide-hero__grid">
+                    <div class="guide-hero__content">
+                        <div class="guide-hero__meta">
+                            <span class="guide-hero__number">G</span>
+                            <span>New to New Zealand guide 2026</span>
+                        </div>
+                        <h1><span class="guide-hero__accent">Just</span> Arrived in New Zealand?</h1>
+                        <p class="guide-hero__copy">Here's Exactly What to Do First and in the Right Order — a practical step-by-step guide to settling in with confidence.</p>
+                        <div class="guide-hero__chips">
+                            <a class="guide-hero__chip guide-hero__chip--primary" href="#before-you-land">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                Start the guide
+                            </a>
+                            <a class="guide-hero__chip" href="/settlement-services">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                Settlement services
+                            </a>
+                        </div>
+                    </div>
+                    <div class="guide-hero__image">
+                        <img src="{{ asset('media/New Zealand/New Zealand Hero.webp') }}" alt="New Zealand Hero" loading="eager">
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- INTRO SECTION -->
-        <section class="arrival-intro">
-            <div class="container arrival-intro__inner">
+        <section class="guide-section guide-section--hero-adjacent">
+            <div class="guide-container">
+                <div class="arrival-intro__inner">
                 <p class="arrival-intro__lead">New Zealand rewards the people who arrive prepared. Yes, the cost of living is high. The rental market in Auckland and Wellington is competitive. The healthcare system has its pressures. These are real — not reasons to reconsider, but things to plan for. Every country has its challenges alongside its advantages. New Zealand's advantages are significant: a safe, multicultural society, strong employment in the right sectors, a world-class natural environment, and a clear pathway to permanent residency and citizenship.</p>
                 <p class="arrival-intro__lead" style="margin-top: 1rem;">The difference between people who settle well and people who struggle is almost never ability or effort. It is preparation and sequence. Knowing what to do, when to do it, and in what order. This guide gives you that — clearly, honestly, and in the right order.</p>
 
@@ -1121,397 +2581,874 @@
                     <span>SettleANZ Aotearoa Team</span>
                 </div>
             </div>
-        </section>
-
-        <!-- MAIN CONTENT SHELL -->
-        <section class="arrival-shell">
-            <div class="container arrival-layout">
-                <div class="arrival-content">
-                    
-                    <!-- SECTION 1: BEFORE YOU LAND -->
-                    <section id="before-you-land" class="arrival-section">
-                        <p class="eyebrow">Before You Land</p>
-                        <h2>Moving to New Zealand in 2026? Sort These Before Your Flight Lands</h2>
-                        <p class="arrival-section__intro">Use this section as your reference before you leave — not after. The most expensive mistakes happen when people arrive with the wrong paperwork, no short-term plan, or no idea what to do in the first 48 hours.</p>
-
-                        <div class="arrival-grid-2" style="margin-top: 1.5rem;">
-                            <!-- CARD 1 -->
-                            <article class="arrival-card arrival-card--cool">
-                                <div class="arrival-card__media">
-                                    <img src="{{ asset('media/New Zealand/Documents to carry physically.webp') }}" alt="Documents to carry physically" class="arrival-card__image" loading="lazy">
-                                </div>
-
-                                <div class="arrival-card__head">
-                                    <span class="arrival-icon arrival-icon--teal" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v13.5A1.5 1.5 0 0 1 18.5 22h-11A1.5 1.5 0 0 1 6 20.5V2Zm8 1.8V8h4.2L14 3.8ZM9 11h6v1.8H9V11Zm0 3.6h6v1.8H9v-1.8Zm0-7.2h2.8v1.8H9V7.4Z"/></svg>
-                                    </span>
-                                    <div>
-                                        <h3>Documents to carry physically</h3>
-                                        <p>Print these — don't rely on your phone.</p>
-                                    </div>
-                                </div>
-
-                                <ul class="arrival-list">
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Valid passport:</strong> Must be valid for at least 3 months beyond your planned departure date from New Zealand. Check this before booking your flight.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>NZeTA (New Zealand Electronic Travel Authority):</strong> Required before travel for most visa-waiver country passport holders. Apply via the Immigration NZ app ($17 NZD) or online ($23 NZD). Allow up to 72 hours for processing.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Visa grant letter:</strong> Your visa approval document. Print your eVisa letter. Banks, employers, and landlords will ask for it.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>New Zealand Traveller Declaration (NZTD):</strong> Completed before arrival — mandatory for biosecurity and customs. Free. Complete online or via the NZTD app up to 24 hours before departure.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Proof of funds:</strong> Bank statements showing sufficient funds for your stay, as required by your visa conditions.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Health insurance documents:</strong> Critical for covering medical costs before you are eligible for public healthcare. Carry your policy number and emergency contact.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Qualification documents and NZQA assessment:</strong> Original certificates and your New Zealand Qualifications Authority (NZQA) assessment if your profession requires it. Get this done before you leave — it takes weeks.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Police clearance certificate:</strong> Required for character assessment on certain visa types. Check your visa conditions.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Passport photos (6 copies):</strong> Needed for driver licence application, some bank accounts, and other applications. Bring printed copies.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Medical records:</strong> Especially important for chronic conditions, ongoing medications, or if you have children.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Birth and marriage certificates:</strong> Original or certified copies for family members or relationship proof. Get certified translations if not in English — translation in New Zealand costs 3–5x more than at home.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Employment contract:</strong> If you have a job offer before arrival, carry the signed offer letter. You will need it for your IRD number application and bank account.</span></li>
-                                </ul>
-                            </article>
-
-                            <!-- CARD 2 -->
-                            <article class="arrival-card arrival-card--warm">
-                                <div class="arrival-card__media">
-                                    <img src="{{ asset('media/New Zealand/Book before you land.webp') }}" alt="Book before you land" class="arrival-card__image" loading="lazy">
-                                </div>
-
-                                <div class="arrival-card__head">
-                                    <span class="arrival-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24"><path d="M20 7h-3.2a2.8 2.8 0 0 0-5.6 0H8a3 3 0 0 0-3 3v6.5A2.5 2.5 0 0 0 7.5 19h9a2.5 2.5 0 0 0 2.5-2.5V10a3 3 0 0 0-3-3ZM14 6a1.2 1.2 0 1 1-2.4 0A1.2 1.2 0 0 1 14 6Zm-4.6 5.5 2.4 2.4 4.8-4.8 1.4 1.4-6.2 6.2-3.8-3.8 1.4-1.4Z"/></svg>
-                                    </span>
-                                    <div>
-                                        <h3>Book before you land</h3>
-                                        <p>These reduce pressure in your first week.</p>
-                                    </div>
-                                </div>
-
-                                <ul class="arrival-list">
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Short-term accommodation (minimum 4–6 weeks):</strong> New Zealand's rental market is competitive, especially in Auckland and Wellington. Booking temporary accommodation gives you time to explore suburbs without pressure. Do not sign a 12-month lease before you have spent time in the area.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Airport transfer:</strong> Pre-book a transfer. Do not rely on finding an Uber or taxi easily at the airport with heavy luggage, jet lag, and no working local SIM card.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Travel insurance starting from your arrival date:</strong> This covers any gap before you are eligible for New Zealand's public health services. Sort this before you leave home — it is significantly cheaper.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>NZeTA if required:</strong> Apply at least 72 hours before departure via the Immigration NZ app or website. Do not leave this to the airport.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>New Zealand Dollars:</strong> Have NZD in cash for your first 24 hours. ATMs are widely available but you want funds accessible immediately on arrival.</span></li>
-                                    <li><span class="arrival-list__mark"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span><span><strong>Rental car if needed:</strong> If you plan to drive immediately, book in advance. You can drive on your valid overseas licence for up to 12 months in New Zealand.</span></li>
-                                </ul>
-                            </article>
-                        </div>
-
-                        <div class="arrival-pro-tip">
-                            <p><strong>PRO TIP:</strong> New Zealand homes — especially older builds — are often poorly insulated and cold inside even in summer. When inspecting rentals, check insulation, heating, and whether the property has a Healthy Homes compliance certificate. Landlords are legally required to meet Healthy Homes standards.</p>
-                        </div>
-
-                        <div class="arrival-pro-tip">
-                            <p><strong>PRO TIP:</strong> Pre-open a New Zealand bank account before you land. ANZ, ASB, and Westpac all offer pre-arrival account opening for migrants with eligible visas. ASB's process via their app is the most straightforward. Note: you'll receive a limited account — you can deposit money but cannot withdraw until you verify your identity in person at a branch on arrival.</p>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 2: DOS AND DONTS -->
-                    <section id="dos-and-donts" class="arrival-section arrival-section--dark" style="margin-top: 2rem;">
-                        <p class="eyebrow">Dos &amp; Don'ts</p>
-                        <h2>New Zealand Immigration Dos and Don'ts</h2>
-                        <p class="arrival-section__intro" style="color: rgba(255, 255, 255, 0.85);">Things Most New Arrivals Get Wrong — These are not opinions. They are the patterns that come up consistently among new arrivals.</p>
-
-                        <div class="arrival-guidance">
-                            <div class="arrival-guidance__panel">
-                                <article class="arrival-guidance__column arrival-guidance__column--do">
-                                    <header class="arrival-guidance__head">
-                                        <div class="arrival-guidance__label-row">
-                                            <span class="arrival-guidance__mark" aria-hidden="true">
-                                                <svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-9"/></svg>
-                                            </span>
-                                            <h3>DOs</h3>
-                                        </div>
-                                        <p class="arrival-guidance__tagline">Habits that help you settle faster</p>
-                                    </header>
-
-                                    <ol class="arrival-guidance__items">
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">01</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Apply for your IRD number as a new arrival — immediately</h4>
-                                                <p>Your IRD number is your tax identification number — you need it to work legally, receive salary, and access government services. As a new arrival you can give Immigration New Zealand permission to share your identity documents with Inland Revenue, saving you from sending them twice. Apply online the day you arrive. Processing takes approximately 10 working days. Without it, your employer must deduct tax at the higher non-declaration rate.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">02</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Open your bank account on arrival day — or before you land</h4>
-                                                <p>Your bank account is the foundation everything else is built on. You need it before you can receive salary, pay rent, or complete your IRD application. ANZ, ASB, and Westpac all allow you to start the process before arrival. Kiwibank requires an in-branch visit. If you did not pre-open, go to a branch on day one or two with your passport and visa grant letter.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">03</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Start building your New Zealand credit history from week one</h4>
-                                                <p>Your overseas credit history does not transfer to New Zealand. Landlords and lenders check your local credit score. Get a New Zealand bank account and apply for a secured credit card as soon as possible. Use it for small regular purchases and pay it off each month. Starting early means you have a usable credit file within 3–6 months.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">04</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Register with a GP within your first two weeks</h4>
-                                                <p>The New Zealand healthcare system can be strained and GP appointment wait times can be significant. Register with a local general practitioner before you need one — not on the day you get sick. Use the HealthPoint website to find a GP in your area that is accepting new patients.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">05</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Use Trade Me Property and Seek.co.nz — these are New Zealand's dominant platforms</h4>
-                                                <p>Trade Me Property is where the majority of New Zealand rentals are listed. Seek.co.nz is the dominant job search platform — not LinkedIn. Familiarise yourself with both in the weeks before arrival so you understand market prices and realistic timelines.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">06</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Join KiwiSaver and understand your contributions from day one</h4>
-                                                <p>KiwiSaver is New Zealand's retirement savings scheme. If you are employed, you are automatically enrolled. As of April 2026, the minimum contribution rate is 3.5% from both you and your employer, on top of your salary. You can opt to contribute more. If you leave New Zealand permanently after 12 months, you can withdraw your savings under the KiwiSaver withdrawal scheme. Do not ignore this from day one — it compounds significantly over time.</p>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </article>
-
-                                <article class="arrival-guidance__column arrival-guidance__column--dont">
-                                    <header class="arrival-guidance__head">
-                                        <div class="arrival-guidance__label-row">
-                                            <span class="arrival-guidance__mark" aria-hidden="true">
-                                                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 14h-2v-2h2Zm0-4h-2V7h2Z"/></svg>
-                                            </span>
-                                            <h3>DON'Ts</h3>
-                                        </div>
-                                        <p class="arrival-guidance__tagline">Mistakes most new arrivals regret</p>
-                                    </header>
-
-                                    <ol class="arrival-guidance__items">
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">01</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Don't sign a long-term lease before you've spent time in the suburb</h4>
-                                                <p>New Zealand's rental market moves fast, especially in Auckland and Wellington, and the temptation is to lock something in quickly. Resist it. Spend your first 4–6 weeks in short-term accommodation while you explore. The wrong long-term rental in the wrong suburb is an expensive and stressful mistake.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">02</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Don't sign a long-term phone plan immediately</h4>
-                                                <p>Start with a prepaid SIM. Coverage and pricing vary across providers, and you will not know which suits you until you have been in your area for a few weeks. Prepaid gives you flexibility. Lock into a 24-month plan later, once you know where you live and which network has the best coverage there.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">03</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Don't ignore the cold inside New Zealand homes</h4>
-                                                <p>Many older New Zealand properties are poorly insulated. A home can feel warmer outside than inside in winter. When inspecting rentals, check for insulation, heating systems, and Healthy Homes compliance. Landlords are legally required to meet Healthy Homes standards — ask for the compliance certificate before signing.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">04</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Don't assume your overseas qualifications are automatically recognised</h4>
-                                                <p>Many professions in New Zealand — healthcare, engineering, teaching, law — require formal recognition of overseas qualifications through the New Zealand Qualifications Authority (NZQA) or a relevant professional body. This process takes weeks or months. Start it before you leave home, not after you arrive.</p>
-                                            </div>
-                                        </li>
-                                        <li class="arrival-guidance__row">
-                                            <span class="arrival-guidance__index" aria-hidden="true">05</span>
-                                            <div class="arrival-guidance__content">
-                                                <h4>Don't use unlicensed immigration advisers</h4>
-                                                <p>Only licensed immigration advisers or New Zealand lawyers can legally provide personalised immigration advice. Verify credentials through the Immigration Advisers Authority (IAA) website before paying anyone for advice. Unlicensed advisers operate illegally and leave you with no legal protection if things go wrong.</p>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </article>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 3: ARRIVAL SEQUENCE -->
-                    <section id="first-7-days" class="arrival-section" style="margin-top: 2rem;">
-                        <p class="eyebrow">Arrival Sequence</p>
-                        <h2>What to Do When You Arrive in New Zealand — The Order That Actually Matters</h2>
-                        <p class="arrival-section__intro">Here is what no government website tells you: these steps depend on each other. Get the sequence wrong and you will find yourself trying to apply for an IRD number without a verified address, or a rental application without a bank account. This is the order that works.</p>
-
-                        <div class="arrival-timeline" data-arrival-timeline>
-                            <article class="arrival-step">
-                                <div class="arrival-step__head">
-                                    <span class="arrival-step__number">1</span>
-                                    <div class="arrival-step__copy">
-                                        <span class="arrival-step__label"><svg viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16l-4-2.2L12 20l-3-2.2L5 20V4a2 2 0 0 1 2-2Zm1 4v10.6l1-.8 3 2.2 3-2.2 1 .8V6H8Z"/></svg>Step 1</span>
-                                        <h3>Get a prepaid SIM card at the airport, before you leave the terminal</h3>
-                                    </div>
-                                </div>
-                                <div class="arrival-step__body">
-                                    <strong>Why the order matters</strong>
-                                    <p>Landlords, employers, and banks all need a local contact number. Every application you fill in from day one requires it. Get this done before anything else.</p>
-                                </div>
-                            </article>
-
-                            <article class="arrival-step">
-                                <div class="arrival-step__head">
-                                    <span class="arrival-step__number">2</span>
-                                    <div class="arrival-step__copy">
-                                        <span class="arrival-step__label"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v13.5A1.5 1.5 0 0 1 18.5 22h-11A1.5 1.5 0 0 1 6 20.5V2Zm8 1.8V8h4.2L14 3.8ZM9 11h6v1.8H9V11Zm0 3.6h6v1.8H9v-1.8Zm0-7.2h2.8v1.8H9V7.4Z"/></svg>Step 2</span>
-                                        <h3>Apply for your IRD number — Day 1 or 2</h3>
-                                    </div>
-                                </div>
-                                <div class="arrival-step__body">
-                                    <strong>Why the order matters</strong>
-                                    <p>As a new arrival you can give IRD permission to verify your identity through Immigration NZ — saving you from providing the same documents twice. Apply online immediately. Processing takes approximately 10 working days. Without it, your employer deducts tax at the higher non-declaration rate.</p>
-                                </div>
-                            </article>
-
-                            <article class="arrival-step">
-                                <div class="arrival-step__head">
-                                    <span class="arrival-step__number">3</span>
-                                    <div class="arrival-step__copy">
-                                        <span class="arrival-step__label"><svg viewBox="0 0 24 24"><path d="M3 7.5 12 3l9 4.5V9H3V7.5Zm2 3h2v7H5v-7Zm6 0h2v7h-2v-7Zm6 0h2v7h-2v-7ZM3 19h18v2H3v-2Z"/></svg>Step 3</span>
-                                        <h3>Open or activate your bank account — Day 1 or 2</h3>
-                                    </div>
-                                </div>
-                                <div class="arrival-step__body">
-                                    <strong>Why the order matters</strong>
-                                    <p>Everything flows from this. You need a bank account to receive your salary, pay rent, and start building your credit history. If you pre-opened from overseas, visit a branch to activate with your passport and visa grant. If not, open one immediately.</p>
-                                </div>
-                            </article>
-
-                            <article class="arrival-step">
-                                <div class="arrival-step__head">
-                                    <span class="arrival-step__number">4</span>
-                                    <div class="arrival-step__copy">
-                                        <span class="arrival-step__label"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.5 8 10.8C16.6 20.5 20 16 20 11V5l-8-3Zm-1.1 13.6-3.3-3.3 1.4-1.4 1.9 1.9 4.2-4.2 1.4 1.4-5.6 5.6Z"/></svg>Step 4</span>
-                                        <h3>Enrol in ACC and register health — Week 1</h3>
-                                    </div>
-                                </div>
-                                <div class="arrival-step__body">
-                                    <strong>Why the order matters</strong>
-                                    <p>New Zealand's Accident Compensation Corporation (ACC) covers accident injuries for everyone in New Zealand regardless of visa status. Register with a GP as soon as possible — appointment wait times can be long and you need a registered doctor before an emergency arises.</p>
-                                </div>
-                            </article>
-
-                            <article class="arrival-step">
-                                <div class="arrival-step__head">
-                                    <span class="arrival-step__number">5</span>
-                                    <div class="arrival-step__copy">
-                                        <span class="arrival-step__label"><svg viewBox="0 0 24 24"><path d="M12 3 3 9v11h6v-6h6v6h6V9l-9-6Zm0 2.4 6.5 4.3V18h-2.5v-6h-8v6H5.5V9.7L12 5.4Z"/></svg>Step 5</span>
-                                        <h3>Start your Trade Me Property search — Day 1</h3>
-                                    </div>
-                                </div>
-                                <div class="arrival-step__body">
-                                    <strong>Why the order matters</strong>
-                                    <p>Your temporary accommodation has a fixed end date. The permanent rental market is competitive. Start researching suburbs and properties immediately — not when your short-term stay is about to expire.</p>
-                                </div>
-                            </article>
-
-                            <article class="arrival-step">
-                                <div class="arrival-step__head">
-                                    <span class="arrival-step__number">6</span>
-                                    <div class="arrival-step__copy">
-                                        <span class="arrival-step__label"><svg viewBox="0 0 24 24"><path d="M12 2.5a7 7 0 0 0-7 7c0 5.2 7 12 7 12s7-6.8 7-12a7 7 0 0 0-7-7Zm0 9.3a2.3 2.3 0 1 1 0-4.6 2.3 2.3 0 0 1 0 4.6Z"/></svg>Step 6</span>
-                                        <h3>Apply for a credit card — Week 1 to 2</h3>
-                                    </div>
-                                </div>
-                                <div class="arrival-step__body">
-                                    <strong>Why the order matters</strong>
-                                    <p>Your New Zealand credit history starts at zero on arrival. Apply for a secured credit card through your bank as early as possible. Use it regularly and pay it off monthly. This credit file is what landlords and lenders will check in months 3, 6, and 12.</p>
-                                </div>
-                            </article>
-
-                            <article class="arrival-step">
-                                <div class="arrival-step__head">
-                                    <span class="arrival-step__number">7</span>
-                                    <div class="arrival-step__copy">
-                                        <span class="arrival-step__label"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2ZM10 4h4v2h-4V4Z"/></svg>Step 7</span>
-                                        <h3>Begin work — Week 2</h3>
-                                    </div>
-                                </div>
-                                <div class="arrival-step__body">
-                                    <strong>Why the order matters</strong>
-                                    <p>You are now set up legally (IRD), financially (bank account), and communicatively (SIM). You can receive salary, pay tax correctly, and sign a rental agreement. This is the sequence that makes everything else possible.</p>
-                                </div>
-                            </article>
-                        </div>
-
-                        <div class="arrival-pro-tip" style="margin-top: 1.5rem;">
-                            <p><strong>PRO TIP:</strong> Apply for your IRD number as a new arrival — not as 'living in New Zealand.' The new arrival pathway lets Immigration NZ share your identity verification with Inland Revenue, so you only provide documents once. This pathway is only available within a few weeks of arrival or before your visa arrival date expires.</p>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 4: FAQ & CONTENT MEDIA -->
-                    <section id="faq" class="arrival-section" style="margin-top: 2rem;">
-                        <p class="eyebrow">Common Questions</p>
-                        <h2>New to New Zealand — Common Questions Answered</h2>
-                        
-                        <div class="arrival-faq-grid">
-                            <div class="arrival-faqs">
-                                <details class="arrival-faq" open>
-                                    <summary>Do I need an IRD number before I start working in New Zealand?</summary>
-                                    <p>Yes. Your IRD number is essential for legal employment in New Zealand. Apply immediately on arrival using the new arrival pathway on the Inland Revenue website. It takes around 10 minutes and processing takes approximately 10 working days. Without it, your employer must deduct tax at the non-declaration rate, which is higher than your actual rate. You do not need a bank account open first to apply as a new arrival.</p>
-                                </details>
-
-                                <details class="arrival-faq">
-                                    <summary>Can I open a New Zealand bank account before I arrive?</summary>
-                                    <p>Yes, and you should. ANZ, ASB, and Westpac all offer pre-arrival account opening for migrants with eligible visas. ASB's process via their app is the most straightforward. You will receive a limited-access account, where you can deposit funds but cannot withdraw until you verify your identity in person at a New Zealand branch on arrival. Kiwibank requires an in-branch visit to open. Do this as early as possible, because having an account number on arrival accelerates your IRD application and your first salary payment.</p>
-                                </details>
-
-                                <details class="arrival-faq">
-                                    <summary>Does New Zealand's public health system cover dental care?</summary>
-                                    <p>For children under 18, dental care through the Community Oral Health Service is free. For adults, the public health system does not cover routine or emergency dental care. Adults pay for private dental services. Budget for this as dental costs in New Zealand can be significant. Consider including dental coverage in your private health insurance before arrival.</p>
-                                </details>
-
-                                <details class="arrival-faq">
-                                    <summary>Do I need travel insurance before I arrive in New Zealand?</summary>
-                                    <p>Yes, this is one of the most important steps to take before you leave home. New Zealand's Accident Compensation Corporation (ACC) covers accident injuries for everyone in the country regardless of visa status. However, ACC does not cover illness, pre-existing conditions, or medical costs from non-accident causes. You need private health insurance to cover these gaps, especially while you are waiting to understand your eligibility for public health services. Sort insurance before you depart, it is significantly cheaper to buy at home.</p>
-                                </details>
-
-                                <details class="arrival-faq">
-                                    <summary>How long does it take to get permanent residency in New Zealand?</summary>
-                                    <p>Processing times vary significantly depending on your visa category and individual circumstances. Skilled migrant and employer-sponsored pathways can range from several months to over a year. The Accredited Employer Work Visa (AEWV) is currently the most common skilled worker pathway. Check the Immigration New Zealand website for current processing time estimates; these change regularly.</p>
-                                </details>
-
-                                <details class="arrival-faq">
-                                    <summary>Can I rent a property in New Zealand without a local rental history?</summary>
-                                    <p>It is challenging but not impossible. Landlords prefer applicants with a proven local track record. To strengthen your application: provide strong references from previous landlords (if applicable), show proof of employment or income, and offer 2–3 weeks' additional rent in advance. Being transparent about your situation and presenting a complete application pack including your visa grant, bank statements, and employment contract, significantly improves your chances.</p>
-                                </details>
-
-                                <details class="arrival-faq">
-                                    <summary>Can I drive on my overseas licence in New Zealand?</summary>
-                                    <p>Yes. You can drive on a valid overseas licence for up to 12 months from the date you arrive in New Zealand. After 12 months, you must convert to a New Zealand driver's licence. If your overseas licence is not in English, you will need a certified translation or an international driving permit. Book your licence conversion test early; the wait times in major cities can be 4–8 weeks.</p>
-                                </details>
-
-                                <details class="arrival-faq">
-                                    <summary>What happens to my KiwiSaver if I leave New Zealand permanently?</summary>
-                                    <p>If you leave New Zealand permanently, you may be able to withdraw your KiwiSaver savings. You generally need to have been living outside New Zealand for at least 12 months and meet other criteria. As of April 2026, the minimum employer and employee contribution rate is 3.5% each, rising to 4% from April 2028. Keep your KiwiSaver fund details and member number on file from day one. You will need them if you ever make a withdrawal claim.</p>
-                                </details>
-                            </div>
-
-                            <div class="arrival-photo-card" style="height: 100%; min-height: 520px; margin-top: 0;">
-                                <img src="{{ asset('media/New Zealand/New Zealand FAQ.webp') }}" alt="New Zealand FAQ" class="arrival-photo-image" loading="lazy">
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- FINAL CTA -->
-                    <section class="arrival-cta-section" style="margin-top: 3rem;" aria-label="Next steps">
-                        <h2 style="font-size: 2.2rem; font-weight: 800; color: #0a4f51; text-align: center; margin-bottom: 2rem;">Ready to Settle in New Zealand With Confidence?</h2>
-                        
-                        <div class="arrival-grid-cta">
-                            <div class="arrival-cta-card arrival-cta-card--mint">
-                                <h3>Get the Free 90-Day Arrival Checklist</h3>
-                                <p>The same steps from this guide in a format you can keep open during your first week in New Zealand. Download it free — no strings attached.</p>
-                                <div class="arrival-cta-card__action">
-                                    <button class="button button--small" type="button" data-open-lead-modal style="background: #e8773a; border-color: #e8773a; color: #ffffff;">Send me the checklist</button>
-                                </div>
-                            </div>
-
-                            <div class="arrival-cta-card arrival-cta-card--cream">
-                                <h3>Need help beyond the guide?</h3>
-                                <p>The guide gives you the roadmap. If you want someone to walk it with you, SettleANZ agents are always ready to help you</p>
-                                <div class="arrival-cta-card__action">
-                                    <a class="button button--small" href="/settlement-services" style="background: #0a7a75; border-color: #0a7a75; color: #ffffff;">View settlement services</a>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                </div>
             </div>
         </section>
+
+        <!-- SECTION 1: BEFORE YOU LAND -->
+        <section id="before-you-land" class="guide-section guide-section--white">
+            <div class="guide-container">
+                <div class="byl-header">
+                    <h2 class="byl-title">Moving to New Zealand in 2026?</h2>
+                    <p class="byl-subtitle">Sort These Before Your Flight Lands</p>
+                    <p class="byl-description">Completing these tasks before you arrive helps you avoid the most common settlement mistakes and start your new life with confidence.</p>
+                </div>
+
+                <div class="byl-grid">
+                            <!-- CARD 1: Documents -->
+                            <article class="byl-card byl-card--green">
+                                <div class="byl-card__top">
+                                    <span class="byl-card__badge byl-card__badge--green">Documents</span>
+                                    <span class="byl-card__iconwrap byl-card__iconwrap--green" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                            <polyline points="14 2 14 8 20 8"/>
+                                            <line x1="16" y1="13" x2="8" y2="13"/>
+                                            <line x1="16" y1="17" x2="8" y2="17"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <h3 class="byl-card__title">Documents to carry physically</h3>
+                                <p class="byl-card__subtitle">Print these — don't rely on your phone.</p>
+
+                                <div class="byl-checklist">
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Valid passport</strong>
+                                            <p class="byl-check-desc">Must be valid for at least 3 months beyond your planned departure date.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">NZeTA</strong>
+                                            <p class="byl-check-desc">Required before travel. Apply via the Immigration NZ app ($17) or online ($23). Allow up to 72 hours.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Visa grant letter</strong>
+                                            <p class="byl-check-desc">Print your eVisa letter. Banks, employers, and landlords will ask for it.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">NZ Traveller Declaration (NZTD)</strong>
+                                            <p class="byl-check-desc">Mandatory for biosecurity and customs. Complete online or via the NZTD app up to 24 hours before departure.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Proof of funds</strong>
+                                            <p class="byl-check-desc">Bank statements showing sufficient funds for your stay, as required by your visa.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Health insurance documents</strong>
+                                            <p class="byl-check-desc">Covers medical costs before you're eligible for public healthcare. Carry your policy number.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">NZQA assessment</strong>
+                                            <p class="byl-check-desc">Original certificates and NZQA assessment if your profession requires it. Start before you leave — it takes weeks.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Police clearance certificate</strong>
+                                            <p class="byl-check-desc">Required for character assessment on certain visa types.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Passport photos (6 copies)</strong>
+                                            <p class="byl-check-desc">Needed for driver licence, bank accounts, and other applications.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Medical records</strong>
+                                            <p class="byl-check-desc">Especially important for chronic conditions, ongoing medications, or children.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Birth and marriage certificates</strong>
+                                            <p class="byl-check-desc">Original or certified copies. Get translations if not in English — NZ costs 3–5x more.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Employment contract</strong>
+                                            <p class="byl-check-desc">Carry the signed offer letter. Needed for your IRD number and bank account.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- CARD 2: Book Before -->
+                            <article class="byl-card byl-card--orange">
+                                <div class="byl-card__top">
+                                    <span class="byl-card__badge byl-card__badge--orange">Bookings</span>
+                                    <span class="byl-card__iconwrap byl-card__iconwrap--orange" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                            <line x1="16" y1="2" x2="16" y2="6"/>
+                                            <line x1="8" y1="2" x2="8" y2="6"/>
+                                            <line x1="3" y1="10" x2="21" y2="10"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <h3 class="byl-card__title">Book before you land</h3>
+                                <p class="byl-card__subtitle">These reduce pressure in your first week.</p>
+
+                                <div class="byl-checklist">
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Short-term accommodation</strong>
+                                            <p class="byl-check-desc">Book 4–6 weeks — gives you time to explore suburbs before signing a lease.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Airport transfer</strong>
+                                            <p class="byl-check-desc">Pre-book — don't rely on Uber with heavy luggage and no local SIM.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Travel insurance</strong>
+                                            <p class="byl-check-desc">Covers the gap before you're eligible for NZ public health. Cheaper if bought before you leave.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">NZeTA if required</strong>
+                                            <p class="byl-check-desc">Apply at least 72 hours before departure. Don't leave it to the airport.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">New Zealand Dollars</strong>
+                                            <p class="byl-check-desc">Have NZD cash for your first 24 hours until you can access ATMs.</p>
+                                        </div>
+                                    </div>
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Rental car if needed</strong>
+                                            <p class="byl-check-desc">Book in advance. Drive on your overseas licence for up to 12 months.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- CARD 3: Financial -->
+                            <article class="byl-card byl-card--blue">
+                                <div class="byl-card__top">
+                                    <span class="byl-card__badge byl-card__badge--blue">Finance</span>
+                                    <span class="byl-card__iconwrap byl-card__iconwrap--blue" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+                                            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+                                            <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <h3 class="byl-card__title">Financial Preparation</h3>
+                                <p class="byl-card__subtitle">Sort your money before you arrive.</p>
+
+                                <div class="byl-checklist">
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">Pre-open a New Zealand bank account before you land</strong>
+                                            <p class="byl-check-desc">ANZ, ASB, and Westpac all offer pre-arrival account opening for migrants with eligible visas. ASB's process via their app is the most straightforward. Note: you'll receive a limited account — you can deposit money but cannot withdraw until you verify your identity in person at a branch on arrival.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- CARD 4: Health -->
+                            <article class="byl-card byl-card--red">
+                                <div class="byl-card__top">
+                                    <span class="byl-card__badge byl-card__badge--red">Health</span>
+                                    <span class="byl-card__iconwrap byl-card__iconwrap--red" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                            <line x1="12" y1="9" x2="12" y2="15"/>
+                                            <line x1="9" y1="12" x2="15" y2="12"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <h3 class="byl-card__title">Health &amp; Insurance</h3>
+                                <p class="byl-card__subtitle">Protect your health from day one.</p>
+
+                                <div class="byl-checklist">
+                                    <div class="byl-check-row">
+                                        <span class="byl-check-icon byl-check-icon--red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9"/></svg></span>
+                                        <div class="byl-check-content">
+                                            <strong class="byl-check-title">New Zealand homes — especially older builds — are often poorly insulated and cold inside even in summer</strong>
+                                            <p class="byl-check-desc">When inspecting rentals, check insulation, heating, and whether the property has a Healthy Homes compliance certificate. Landlords are legally required to meet Healthy Homes standards.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        </div>
+                    </section>
+
+        <!-- SECTION 2: FIRST WEEK -->
+        <section id="first-week" class="guide-section guide-section--sand">
+            <div class="guide-container">
+                <div class="fw-header">
+                    <p class="eyebrow">First Week</p>
+                    <h2 class="fw-heading">You've Landed. Here's Your First Week</h2>
+                    <p class="fw-subtitle">The first seven days are the most important for settling into New Zealand. Follow these essential steps to get organised, avoid common mistakes, and start your new life with confidence.</p>
+                </div>
+
+                <div class="fw-grid">
+                    <!-- LEFT CARD: Day 1-2 Essentials -->
+                    <article class="fw-card fw-card--left">
+                                    <h3 class="fw-card__title">Day 1–2 Essentials</h3>
+
+                                    <div class="fw-list">
+                                        <!-- Item 1 -->
+                                        <div class="fw-item">
+                                            <span class="fw-number" aria-hidden="true">1</span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Buy a Local SIM Card</strong>
+                                                <p class="fw-item__desc">Get a prepaid SIM from Spark, One NZ, or 2degrees at the airport or a local store. You'll need a New Zealand number for every form, bank verification, and employer contact.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="fw-item">
+                                            <span class="fw-number" aria-hidden="true">2</span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Activate Your NZ Bank Account</strong>
+                                                <p class="fw-item__desc">Visit your chosen bank's branch with your passport, visa grant letter, and proof of address. ANZ, ASB, and Westpac have streamlined processes for new arrivals.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 3 -->
+                                        <div class="fw-item">
+                                            <span class="fw-number" aria-hidden="true">3</span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Apply for Your IRD Number</strong>
+                                                <p class="fw-item__desc">Your tax number is essential for legal employment. Apply online through Inland Revenue. Processing takes approximately 10 working days but your employer can accept proof of application.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 4 -->
+                                        <div class="fw-item">
+                                            <span class="fw-number" aria-hidden="true">4</span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Register Your Address</strong>
+                                                <p class="fw-item__desc">Update your address with Inland Revenue, your bank, and Immigration New Zealand. This ensures official correspondence and tax documents reach you without delay.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 5 -->
+                                        <div class="fw-item">
+                                            <span class="fw-number" aria-hidden="true">5</span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Set Up Utilities</strong>
+                                                <p class="fw-item__desc">Arrange electricity, internet, and water connections for your rental. Compare providers on Powerswitch or Broadband Compare to find the best rates for your suburb.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pro Tip -->
+                                    <div class="fw-tip">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M9 18h6"/>
+                                            <path d="M10 22h4"/>
+                                            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+                                        </svg>
+                                        <div class="fw-tip__content">
+                                            <span class="fw-tip__label">Pro Tip</span>
+                                            <p class="fw-tip__text">Completing these first five tasks within 48 hours of landing will save you days of administrative stress later. Do them in this order for the smoothest experience.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- RIGHT CARD: Week 1 Setup -->
+                                <article class="fw-card fw-card--right">
+                                    <h3 class="fw-card__title">Week 1 Setup</h3>
+
+                                    <div class="fw-list">
+                                        <!-- Item 1 -->
+                                        <div class="fw-item">
+                                            <span class="fw-check" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M5.5 12.5 10 17l8.5-9"/>
+                                                </svg>
+                                            </span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Enrol in Healthcare</strong>
+                                                <p class="fw-item__desc">Check your eligibility for publicly funded healthcare. If you hold a work visa valid for two years or more, you're eligible for most services. Enrol with the Ministry of Health.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="fw-item">
+                                            <span class="fw-check" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M5.5 12.5 10 17l8.5-9"/>
+                                                </svg>
+                                            </span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Register with a GP</strong>
+                                                <p class="fw-item__desc">Find a general practice accepting new patients near your home using HealthPoint. Register before you need one — not on the day you get sick.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 3 -->
+                                        <div class="fw-item">
+                                            <span class="fw-check" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M5.5 12.5 10 17l8.5-9"/>
+                                                </svg>
+                                            </span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Explore Your Neighbourhood</strong>
+                                                <p class="fw-item__desc">Walk your local area to find supermarkets, pharmacies, ATMs, and public transport stops. Knowing your immediate surroundings reduces anxiety and helps you feel at home faster.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 4 -->
+                                        <div class="fw-item">
+                                            <span class="fw-check" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M5.5 12.5 10 17l8.5-9"/>
+                                                </svg>
+                                            </span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Join Community Groups</strong>
+                                                <p class="fw-item__desc">Connect with local expat and migrant communities on Facebook, Meetup, or Neighbourly. These groups share practical advice and help you build a support network.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 5 -->
+                                        <div class="fw-item">
+                                            <span class="fw-check" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M5.5 12.5 10 17l8.5-9"/>
+                                                </svg>
+                                            </span>
+                                            <div class="fw-item__content">
+                                                <strong class="fw-item__title">Learn Public Transport</strong>
+                                                <p class="fw-item__desc">Download the AT Mobile app (Auckland) or your regional equivalent. Get an AT HOP card or Bee Card. Plan your commute routes before your first day of work or study.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Estimated Time -->
+                                    <div class="fw-info">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12 6 12 12 16 14"/>
+                                        </svg>
+                                        <div class="fw-info__content">
+                                            <span class="fw-info__label">Estimated Time</span>
+                                            <p class="fw-info__text">Approximately 6–8 hours spread across your first week. Tackle two items per day to make steady progress without feeling overwhelmed.</p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+
+        <!-- SECTION 3: DOS AND DONTS -->
+        <section id="dos-and-donts" class="guide-section guide-section--white">
+            <div class="guide-container">
+                <div class="dd-header">
+                    <p class="eyebrow">Dos &amp; Don'ts</p>
+                    <h2 class="dd-heading">Learn from Others' Mistakes</h2>
+                    <p class="dd-description">Following these best practices helps you avoid common settlement mistakes and settle into New Zealand life with confidence.</p>
+                </div>
+
+                <div class="dd-grid">
+                    <!-- DO'S COLUMN -->
+                    <div class="dd-column">
+                        <div class="dd-column__header dd-column__header--do">
+                            <span class="dd-column__icon dd-column__icon--do" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M5.5 12.5 10 17l8.5-9"/>
+                                            </svg>
+                                        </span>
+                                        <div class="dd-column__header-text">
+                                            <h3>Do's — Best Practices</h3>
+                                            <p>Habits that help you settle faster</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="dd-cards">
+                                        <!-- Do Card 1 -->
+                                        <article class="dd-card dd-card--do">
+                                            <span class="dd-card__badge dd-card__badge--do">Recommended</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--do" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                        <polyline points="14 2 14 8 20 8"/>
+                                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Apply for your IRD number as a new arrival — immediately</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Your IRD number is your tax identification number — you need it to work legally, receive salary, and access government services. As a new arrival you can give Immigration New Zealand permission to share your identity documents with Inland Revenue, saving you from sending them twice. Apply online the day you arrive. Processing takes approximately 10 working days. Without it, your employer must deduct tax at the higher non-declaration rate.</p>
+                                        </article>
+
+                                        <!-- Do Card 2 -->
+                                        <article class="dd-card dd-card--do">
+                                            <span class="dd-card__badge dd-card__badge--do">Recommended</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--do" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Open your bank account on arrival day — or before you land</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Your bank account is the foundation everything else is built on. You need it before you can receive salary, pay rent, or complete your IRD application. ANZ, ASB, and Westpac all allow you to start the process before arrival. Kiwibank requires an in-branch visit. If you did not pre-open, go to a branch on day one or two with your passport and visa grant letter.</p>
+                                        </article>
+
+                                        <!-- Do Card 3 -->
+                                        <article class="dd-card dd-card--do">
+                                            <span class="dd-card__badge dd-card__badge--do">Recommended</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--do" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                                        <line x1="1" y1="10" x2="23" y2="10"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Start building your New Zealand credit history from week one</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Your overseas credit history does not transfer to New Zealand. Landlords and lenders check your local credit score. Get a New Zealand bank account and apply for a secured credit card as soon as possible. Use it for small regular purchases and pay it off each month. Starting early means you have a usable credit file within 3–6 months.</p>
+                                        </article>
+
+                                        <!-- Do Card 4 -->
+                                        <article class="dd-card dd-card--do">
+                                            <span class="dd-card__badge dd-card__badge--do">Recommended</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--do" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                                        <line x1="12" y1="9" x2="12" y2="15"/>
+                                                        <line x1="9" y1="12" x2="15" y2="12"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Register with a GP within your first two weeks</h4>
+                                            </div>
+                                            <p class="dd-card__desc">The New Zealand healthcare system can be strained and GP appointment wait times can be significant. Register with a local general practitioner before you need one — not on the day you get sick. Use the HealthPoint website to find a GP in your area that is accepting new patients.</p>
+                                        </article>
+
+                                        <!-- Do Card 5 -->
+                                        <article class="dd-card dd-card--do">
+                                            <span class="dd-card__badge dd-card__badge--do">Recommended</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--do" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="11" cy="11" r="8"/>
+                                                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                                        <line x1="11" y1="8" x2="11" y2="14"/>
+                                                        <line x1="8" y1="11" x2="14" y2="11"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Use Trade Me Property and Seek.co.nz — these are New Zealand's dominant platforms</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Trade Me Property is where the majority of New Zealand rentals are listed. Seek.co.nz is the dominant job search platform — not LinkedIn. Familiarise yourself with both in the weeks before arrival so you understand market prices and realistic timelines.</p>
+                                        </article>
+
+                                        <!-- Do Card 6 -->
+                                        <article class="dd-card dd-card--do">
+                                            <span class="dd-card__badge dd-card__badge--do">Recommended</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--do" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/>
+                                                        <path d="M7 12h3l1-4 2 8 1-4h3"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Join KiwiSaver and understand your contributions from day one</h4>
+                                            </div>
+                                            <p class="dd-card__desc">KiwiSaver is New Zealand's retirement savings scheme. If you are employed, you are automatically enrolled. As of April 2026, the minimum contribution rate is 3.5% from both you and your employer, on top of your salary. You can opt to contribute more. If you leave New Zealand permanently after 12 months, you can withdraw your savings under the KiwiSaver withdrawal scheme. Do not ignore this from day one — it compounds significantly over time.</p>
+                                        </article>
+                                    </div>
+                                </div>
+
+                                <!-- DON'TS COLUMN -->
+                                <div class="dd-column">
+                                    <div class="dd-column__header dd-column__header--dont">
+                                        <span class="dd-column__icon dd-column__icon--dont" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                                <line x1="9" y1="9" x2="15" y2="15"/>
+                                            </svg>
+                                        </span>
+                                        <div class="dd-column__header-text">
+                                            <h3>Don'ts — Common Mistakes</h3>
+                                            <p>Mistakes most new arrivals regret</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="dd-cards">
+                                        <!-- Don't Card 1 -->
+                                        <article class="dd-card dd-card--dont">
+                                            <span class="dd-card__badge dd-card__badge--dont">Avoid</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--dont" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
+                                                        <line x1="9" y1="12" x2="15" y2="12"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Don't sign a long-term lease before you've spent time in the suburb</h4>
+                                            </div>
+                                            <p class="dd-card__desc">New Zealand's rental market moves fast, especially in Auckland and Wellington, and the temptation is to lock something in quickly. Resist it. Spend your first 4–6 weeks in short-term accommodation while you explore. The wrong long-term rental in the wrong suburb is an expensive and stressful mistake.</p>
+                                        </article>
+
+                                        <!-- Don't Card 2 -->
+                                        <article class="dd-card dd-card--dont">
+                                            <span class="dd-card__badge dd-card__badge--dont">Avoid</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--dont" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <rect x="5" y="2" width="14" height="20" rx="2"/>
+                                                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Don't sign a long-term phone plan immediately</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Start with a prepaid SIM. Coverage and pricing vary across providers, and you will not know which suits you until you have been in your area for a few weeks. Prepaid gives you flexibility. Lock into a 24-month plan later, once you know where you live and which network has the best coverage there.</p>
+                                        </article>
+
+                                        <!-- Don't Card 3 -->
+                                        <article class="dd-card dd-card--dont">
+                                            <span class="dd-card__badge dd-card__badge--dont">Avoid</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--dont" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/>
+                                                        <path d="M12 6v6l4 2"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Don't ignore the cold inside New Zealand homes</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Many older New Zealand properties are poorly insulated. A home can feel warmer outside than inside in winter. When inspecting rentals, check for insulation, heating systems, and Healthy Homes compliance. Landlords are legally required to meet Healthy Homes standards — ask for the compliance certificate before signing.</p>
+                                        </article>
+
+                                        <!-- Don't Card 4 -->
+                                        <article class="dd-card dd-card--dont">
+                                            <span class="dd-card__badge dd-card__badge--dont">Avoid</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--dont" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                        <polyline points="14 2 14 8 20 8"/>
+                                                        <line x1="9" y1="15" x2="15" y2="15"/>
+                                                        <line x1="12" y1="12" x2="12" y2="18"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Don't assume your overseas qualifications are automatically recognised</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Many professions in New Zealand — healthcare, engineering, teaching, law — require formal recognition of overseas qualifications through the New Zealand Qualifications Authority (NZQA) or a relevant professional body. This process takes weeks or months. Start it before you leave home, not after you arrive.</p>
+                                        </article>
+
+                                        <!-- Don't Card 5 -->
+                                        <article class="dd-card dd-card--dont">
+                                            <span class="dd-card__badge dd-card__badge--dont">Avoid</span>
+                                            <div class="dd-card__top">
+                                                <span class="dd-card__iconwrap dd-card__iconwrap--dont" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                                        <circle cx="12" cy="12" r="1"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="dd-card__title">Don't use unlicensed immigration advisers</h4>
+                                            </div>
+                                            <p class="dd-card__desc">Only licensed immigration advisers or New Zealand lawyers can legally provide personalised immigration advice. Verify credentials through the Immigration Advisers Authority (IAA) website before paying anyone for advice. Unlicensed advisers operate illegally and leave you with no legal protection if things go wrong.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+        <!-- SECTION 4: ARRIVAL SEQUENCE -->
+        <section id="first-7-days" class="guide-section guide-section--sand">
+            <div class="guide-container">
+                <div class="at-header">
+                    <p class="eyebrow">Arrival Sequence</p>
+                    <h2 class="at-heading">The Order That Actually Matters</h2>
+                    <p class="at-heading-desc">Complete these important tasks in order after arriving in New Zealand.</p>
+                </div>
+
+                <div class="at-timeline">
+                                <!-- Step 1 -->
+                                <article class="at-step">
+                                    <span class="at-step__marker" aria-hidden="true">1</span>
+                                    <div class="at-step__card">
+                                        <div class="at-step__top">
+                                            <span class="at-step__iconwrap" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M7 2h10a2 2 0 0 1 2 2v16l-4-2.2L12 20l-3-2.2L5 20V4a2 2 0 0 1 2-2Zm1 4v10.6l1-.8 3 2.2 3-2.2 1 .8V6H8Z"/>
+                                                </svg>
+                                            </span>
+                                            <h3 class="at-step__title">Get a prepaid SIM card at the airport, before you leave the terminal</h3>
+                                        </div>
+                                        <div class="at-step__body">Landlords, employers, and banks all need a local contact number. Every application you fill in from day one requires it. Get this done before anything else.</div>
+                                        <div class="at-step__reason">
+                                            <span class="at-step__reason-label">Why the order matters</span>
+                                            <p>Without a local number you cannot complete bank verification, receive employer callbacks, or fill in rental applications. This single step unlocks everything else.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Step 2 -->
+                                <article class="at-step">
+                                    <span class="at-step__marker" aria-hidden="true">2</span>
+                                    <div class="at-step__card">
+                                        <div class="at-step__top">
+                                            <span class="at-step__iconwrap" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M6 2h9l5 5v13.5A1.5 1.5 0 0 1 18.5 22h-11A1.5 1.5 0 0 1 6 20.5V2Zm8 1.8V8h4.2L14 3.8ZM9 11h6v1.8H9V11Zm0 3.6h6v1.8H9v-1.8Zm0-7.2h2.8v1.8H9V7.4Z"/>
+                                                </svg>
+                                            </span>
+                                            <h3 class="at-step__title">Apply for your IRD number — Day 1 or 2</h3>
+                                        </div>
+                                        <div class="at-step__body">As a new arrival you can give IRD permission to verify your identity through Immigration NZ — saving you from providing documents twice. Apply online immediately.</div>
+                                        <div class="at-step__reason">
+                                            <span class="at-step__reason-label">Why the order matters</span>
+                                            <p>Processing takes approximately 10 working days. Without an IRD number your employer must deduct tax at the higher non-declaration rate. Apply on day one even if you haven't started work yet.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Step 3 -->
+                                <article class="at-step">
+                                    <span class="at-step__marker" aria-hidden="true">3</span>
+                                    <div class="at-step__card">
+                                        <div class="at-step__top">
+                                            <span class="at-step__iconwrap" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M3 7.5 12 3l9 4.5V9H3V7.5Zm2 3h2v7H5v-7Zm6 0h2v7h-2v-7Zm6 0h2v7h-2v-7ZM3 19h18v2H3v-2Z"/>
+                                                </svg>
+                                            </span>
+                                            <h3 class="at-step__title">Open or activate your bank account — Day 1 or 2</h3>
+                                        </div>
+                                        <div class="at-step__body">If you pre-opened from overseas, visit a branch to activate with your passport and visa grant letter. If not, open one immediately at ANZ, ASB, Westpac, or Kiwibank.</div>
+                                        <div class="at-step__reason">
+                                            <span class="at-step__reason-label">Why the order matters</span>
+                                            <p>You need a bank account to receive salary, pay rent, and start building credit history. Everything else depends on this being active. Do not delay this step.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Step 4 -->
+                                <article class="at-step">
+                                    <span class="at-step__marker" aria-hidden="true">4</span>
+                                    <div class="at-step__card">
+                                        <div class="at-step__top">
+                                            <span class="at-step__iconwrap" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                                    <line x1="12" y1="9" x2="12" y2="15"/>
+                                                    <line x1="9" y1="12" x2="15" y2="12"/>
+                                                </svg>
+                                            </span>
+                                            <h3 class="at-step__title">Enrol in ACC and register with a GP — Week 1</h3>
+                                        </div>
+                                        <div class="at-step__body">ACC covers accident injuries for everyone in New Zealand regardless of visa status. Register with a local GP before you need one — not on the day you get sick.</div>
+                                        <div class="at-step__reason">
+                                            <span class="at-step__reason-label">Why the order matters</span>
+                                            <p>GP appointment wait times in major centres can be significant. Finding a practice accepting new patients takes time. Register early so care is available when you need it.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Step 5 -->
+                                <article class="at-step">
+                                    <span class="at-step__marker" aria-hidden="true">5</span>
+                                    <div class="at-step__card">
+                                        <div class="at-step__top">
+                                            <span class="at-step__iconwrap" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
+                                                    <polyline points="9 22 9 12 15 12 15 22"/>
+                                                </svg>
+                                            </span>
+                                            <h3 class="at-step__title">Start your Trade Me Property search — Day 1</h3>
+                                        </div>
+                                        <div class="at-step__body">Your temporary accommodation has a fixed end date. The permanent rental market is competitive. Start researching suburbs and properties immediately.</div>
+                                        <div class="at-step__reason">
+                                            <span class="at-step__reason-label">Why the order matters</span>
+                                            <p>Good rentals in Auckland and Wellington go fast. By starting your search on day one you give yourself weeks of market awareness before you need to make a decision.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Step 6 -->
+                                <article class="at-step">
+                                    <span class="at-step__marker" aria-hidden="true">6</span>
+                                    <div class="at-step__card">
+                                        <div class="at-step__top">
+                                            <span class="at-step__iconwrap" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="10" r="3"/>
+                                                    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"/>
+                                                </svg>
+                                            </span>
+                                            <h3 class="at-step__title">Apply for a secured credit card — Week 1 to 2</h3>
+                                        </div>
+                                        <div class="at-step__body">Your New Zealand credit history starts at zero. Apply for a secured credit card through your bank as early as possible to start building your local credit file.</div>
+                                        <div class="at-step__reason">
+                                            <span class="at-step__reason-label">Why the order matters</span>
+                                            <p>Landlords and lenders check your local credit score. A usable credit file takes 3–6 months to build. Starting in week one means you have a score when you need it most.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <!-- Step 7 -->
+                                <article class="at-step">
+                                    <span class="at-step__marker" aria-hidden="true">7</span>
+                                    <div class="at-step__card">
+                                        <div class="at-step__top">
+                                            <span class="at-step__iconwrap" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                                </svg>
+                                            </span>
+                                            <h3 class="at-step__title">Begin work — Week 2</h3>
+                                        </div>
+                                        <div class="at-step__body">You are now set up legally (IRD), financially (bank account), and communicatively (SIM). You can receive salary, pay tax correctly, and sign a rental agreement.</div>
+                                        <div class="at-step__reason">
+                                            <span class="at-step__reason-label">Why the order matters</span>
+                                            <p>Starting work before securing the steps above creates administrative chaos. This sequence ensures your employer can pay you, IRD can tax you correctly, and you can rent a home without stress.</p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+
+                            <div class="at-pro-tip">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 18h6"/>
+                                    <path d="M10 22h4"/>
+                                    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+                                </svg>
+                                <div class="at-pro-tip-content">
+                                    <span class="at-pro-tip-label">Pro Tip</span>
+                                    <p>Apply for your IRD number as a <strong>new arrival</strong> — not as 'living in New Zealand.' The new arrival pathway lets Immigration NZ share your identity verification with Inland Revenue, so you only provide documents once. This pathway is only available within a few weeks of arrival.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+        <!-- SECTION 5: FAQ -->
+        <x-faq-section
+            heading="New to New Zealand — Common Questions Answered"
+            image="{{ asset('media/New Zealand/new_zealand_faq.webp') }}"
+            alt="Frequently asked questions for new arrivals in New Zealand"
+        >
+            <details class="arrival-faq" open>
+                <summary>Do I need an IRD number before I start working in New Zealand?</summary>
+                <p>Yes. Your IRD number is essential for legal employment in New Zealand. Apply immediately on arrival using the new arrival pathway on the Inland Revenue website. It takes around 10 minutes and processing takes approximately 10 working days. Without it, your employer must deduct tax at the non-declaration rate, which is higher than your actual rate. You do not need a bank account open first to apply as a new arrival.</p>
+            </details>
+            <details class="arrival-faq">
+                <summary>Can I open a New Zealand bank account before I arrive?</summary>
+                <p>Yes, and you should. ANZ, ASB, and Westpac all offer pre-arrival account opening for migrants with eligible visas. ASB's process via their app is the most straightforward. You will receive a limited-access account, where you can deposit funds but cannot withdraw until you verify your identity in person at a New Zealand branch on arrival. Kiwibank requires an in-branch visit to open. Do this as early as possible, because having an account number on arrival accelerates your IRD application and your first salary payment.</p>
+            </details>
+            <details class="arrival-faq">
+                <summary>Does New Zealand's public health system cover dental care?</summary>
+                <p>For children under 18, dental care through the Community Oral Health Service is free. For adults, the public health system does not cover routine or emergency dental care. Adults pay for private dental services. Budget for this as dental costs in New Zealand can be significant. Consider including dental coverage in your private health insurance before arrival.</p>
+            </details>
+            <details class="arrival-faq">
+                <summary>Do I need travel insurance before I arrive in New Zealand?</summary>
+                <p>Yes, this is one of the most important steps to take before you leave home. New Zealand's Accident Compensation Corporation (ACC) covers accident injuries for everyone in the country regardless of visa status. However, ACC does not cover illness, pre-existing conditions, or medical costs from non-accident causes. You need private health insurance to cover these gaps, especially while you are waiting to understand your eligibility for public health services. Sort insurance before you depart, it is significantly cheaper to buy at home.</p>
+            </details>
+            <details class="arrival-faq">
+                <summary>How long does it take to get permanent residency in New Zealand?</summary>
+                <p>Processing times vary significantly depending on your visa category and individual circumstances. Skilled migrant and employer-sponsored pathways can range from several months to over a year. The Accredited Employer Work Visa (AEWV) is currently the most common skilled worker pathway. Check the Immigration New Zealand website for current processing time estimates; these change regularly.</p>
+            </details>
+            <details class="arrival-faq">
+                <summary>Can I rent a property in New Zealand without a local rental history?</summary>
+                <p>It is challenging but not impossible. Landlords prefer applicants with a proven local track record. To strengthen your application: provide strong references from previous landlords (if applicable), show proof of employment or income, and offer 2–3 weeks' additional rent in advance. Being transparent about your situation and presenting a complete application pack including your visa grant, bank statements, and employment contract, significantly improves your chances.</p>
+            </details>
+            <details class="arrival-faq">
+                <summary>Can I drive on my overseas licence in New Zealand?</summary>
+                <p>Yes. You can drive on a valid overseas licence for up to 12 months from the date you arrive in New Zealand. After 12 months, you must convert to a New Zealand driver's licence. If your overseas licence is not in English, you will need a certified translation or an international driving permit. Book your licence conversion test early; the wait times in major cities can be 4–8 weeks.</p>
+            </details>
+            <details class="arrival-faq">
+                <summary>What happens to my KiwiSaver if I leave New Zealand permanently?</summary>
+                <p>If you leave New Zealand permanently, you may be able to withdraw your KiwiSaver savings. You generally need to have been living outside New Zealand for at least 12 months and meet other criteria. As of April 2026, the minimum employer and employee contribution rate is 3.5% each, rising to 4% from April 2028. Keep your KiwiSaver fund details and member number on file from day one. You will need them if you ever make a withdrawal claim.</p>
+            </details>
+        </x-faq-section>
+
+                    <!-- CTA SECTION -->
+                    <section class="guide-cta" aria-label="Next steps">
+                        <h2 class="guide-cta__heading">Ready to Settle in New Zealand With Confidence?</h2>
+                        <div class="guide-cta__grid">
+                            <div class="guide-cta__card guide-cta__card--checklist">
+                                <span class="guide-cta__icon guide-cta__icon--checklist" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                        <path d="m9 14 2 2 4-4"/>
+                                    </svg>
+                                </span>
+                                <h3>Get the Free 90-Day Checklist</h3>
+                                <p>The same steps from this guide in a downloadable format you can keep open during your first week. No strings attached.</p>
+                                <div class="guide-cta__action">
+                                    <button class="button button--primary" type="button" data-open-lead-modal>
+                                        Send me the checklist
+                                        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="guide-cta__card guide-cta__card--services">
+                                <span class="guide-cta__icon guide-cta__icon--services" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 16v-4"/>
+                                        <path d="M12 8h.01"/>
+                                    </svg>
+                                </span>
+                                <h3>Need Personal Settlement Support?</h3>
+                                <p>The guide gives you the roadmap. If you want someone to walk it with you, our SettleANZ agents provide one-on-one support tailored to your situation.</p>
+                                <div class="guide-cta__action">
+                                    <a class="button button--secondary" href="/settlement-services">
+                                        View settlement services
+                                        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const timeline = document.querySelector('[data-arrival-timeline]');

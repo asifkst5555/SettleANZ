@@ -151,6 +151,53 @@ class AdminModal {
     }
 
     /**
+     * Show prompt dialog (replaces window.prompt)
+     */
+    prompt({ title = 'Input', message = '', value = '', placeholder = '', confirmText = 'OK', cancelText = 'Cancel' } = {}) {
+        return new Promise((resolve) => {
+            const inputId = 'modalPromptInput';
+            const buttons = [
+                {
+                    label: cancelText,
+                    variant: 'secondary',
+                    callback: () => resolve(null)
+                },
+                {
+                    label: confirmText,
+                    variant: 'primary',
+                    callback: () => {
+                        const input = document.getElementById(inputId);
+                        resolve(input ? input.value : null);
+                    }
+                }
+            ];
+
+            this.show({
+                title,
+                message: '',
+                buttons,
+                onClose: () => resolve(null)
+            });
+
+            const msgEl = document.getElementById('modalMessage');
+            msgEl.innerHTML = '';
+            if (message) {
+                const label = document.createElement('p');
+                label.textContent = message;
+                msgEl.appendChild(label);
+            }
+            const input = document.createElement('input');
+            input.id = inputId;
+            input.type = 'text';
+            input.className = 'modal-input';
+            input.value = value;
+            input.placeholder = placeholder;
+            msgEl.appendChild(input);
+            setTimeout(() => input.focus(), 150);
+        });
+    }
+
+    /**
      * Show success message
      */
     success({ title = 'Success!', message = '' } = {}) {
@@ -172,7 +219,21 @@ class AdminModal {
             'blog': 'Are you sure you want to delete this blog post?',
             'lead': 'Are you sure you want to delete this lead?',
             'listing': 'Are you sure you want to delete this directory listing?',
-            'item': 'Are you sure you want to delete this item?'
+            'item': 'Are you sure you want to delete this item?',
+            'campaign': 'Are you sure you want to delete this campaign?',
+            'token': 'Are you sure you want to revoke this token?',
+            'category': 'Are you sure you want to delete this category?',
+            'tag': 'Are you sure you want to delete this tag?',
+            'template': 'Are you sure you want to delete this template?',
+            'flag': 'Are you sure you want to delete this feature flag?',
+            'permission': 'Are you sure you want to delete this permission?',
+            'role': 'Are you sure you want to delete this role?',
+            'user': 'Are you sure you want to delete this user permanently?',
+            'knowledge': 'Are you sure you want to delete this knowledge entry?',
+            'review': 'Are you sure you want to delete this review?',
+            'note': 'Are you sure you want to delete this note?',
+            'task': 'Are you sure you want to delete this task?',
+            'file': 'Are you sure you want to delete this file?',
         };
 
         const finalMessage = message || typeMessages[actionType] || typeMessages['item'];
@@ -180,7 +241,21 @@ class AdminModal {
             'blog': 'Delete blog post?',
             'lead': 'Delete lead?',
             'listing': 'Delete directory listing?',
-            'item': 'Delete item?'
+            'item': 'Delete item?',
+            'campaign': 'Delete campaign?',
+            'token': 'Revoke token?',
+            'category': 'Delete category?',
+            'tag': 'Delete tag?',
+            'template': 'Delete template?',
+            'flag': 'Delete feature flag?',
+            'permission': 'Delete permission?',
+            'role': 'Delete role?',
+            'user': 'Delete user?',
+            'knowledge': 'Delete knowledge entry?',
+            'review': 'Delete review?',
+            'note': 'Delete note?',
+            'task': 'Delete task?',
+            'file': 'Delete file?',
         };
 
         this.confirm({
@@ -191,7 +266,6 @@ class AdminModal {
             isDangerous: true
         }).then((confirmed) => {
             if (confirmed && form) {
-                // Bypass the form submission check by directly submitting
                 this.pendingForm = null;
                 form.submit();
             }
@@ -232,6 +306,25 @@ window.showAlert = function(message, type = 'info') {
  */
 window.confirmDelete = function(form, actionType = 'item', message = '') {
     adminModal.confirmDelete({ form, message, actionType });
+    return false;
+};
+
+/**
+ * Generic form confirmation (for send, revoke, etc.)
+ * Usage: onsubmit="return confirmAction(this, { title: 'Send?', message: 'Proceed?', confirmText: 'Send' })"
+ */
+window.confirmAction = function(form, options = {}) {
+    adminModal.confirm({
+        title: options.title || 'Are you sure?',
+        message: options.message || 'Proceed with this action?',
+        confirmText: options.confirmText || 'Confirm',
+        cancelText: options.cancelText || 'Cancel',
+        isDangerous: options.isDangerous ?? false
+    }).then((confirmed) => {
+        if (confirmed && form) {
+            form.submit();
+        }
+    });
     return false;
 };
 

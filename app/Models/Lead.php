@@ -92,7 +92,7 @@ class Lead extends Model
         return $this->hasMany(LeadActivity::class)->latest();
     }
 
-    public function notes(): HasMany
+    public function leadNotes(): HasMany
     {
         return $this->hasMany(LeadNote::class);
     }

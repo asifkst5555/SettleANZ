@@ -64,7 +64,7 @@
                         <td data-label="Expires" style="color:#6b7280;">{{ $token->expires_at ? $token->expires_at->diffForHumans() : 'Never' }}</td>
                         <td data-label="Actions" style="text-align:right;">
                             @if($token->status === 'active')
-                            <form action="{{ route('admin.downloads.tokens.revoke', $token) }}" method="POST" onsubmit="return confirm('Revoke this token?')" style="margin:0;display:inline-flex;">
+                            <form action="{{ route('admin.downloads.tokens.revoke', $token) }}" method="POST" onsubmit="return confirmAction(this, { title: 'Revoke token?', message: 'Revoke this token?', confirmText: 'Revoke', isDangerous: true })" style="margin:0;display:inline-flex;">
                                 @csrf
                                 <button type="submit" class="admin-action-btn admin-action-btn--revoke">
                                     <svg class="admin-action-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4l6 6m0 0l6-6M7 10V2"/></svg>

@@ -72,7 +72,7 @@
                                             @csrf
                                             <button type="submit" class="text-link" style="background:none;border:none;cursor:pointer;padding:0;font:inherit;color:var(--admin-link)">Clone</button>
                                         </form>
-                                        <form method="POST" action="{{ route('admin.system.roles.destroy', $role) }}" style="display:inline" onsubmit="return confirm('Delete this role?')">
+                                        <form method="POST" action="{{ route('admin.system.roles.destroy', $role) }}" style="display:inline" onsubmit="return confirmDelete(this, 'role')">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="text-link text-link--danger" style="background:none;border:none;cursor:pointer;padding:0;font:inherit">Delete</button>
                                         </form>

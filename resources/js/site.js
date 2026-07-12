@@ -839,6 +839,30 @@
                     if (roadmapFormModalSuccessMessage) {
                         roadmapFormModalSuccessMessage.textContent = payload.message || 'Check your email — we\'ve sent the download link for your free roadmap!';
                     }
+
+                    // Dynamically set download and view links if present in response
+                    const downloadBtn = document.getElementById('roadmapDownloadBtn');
+                    const viewBtn = document.getElementById('roadmapViewBtn');
+                    const actionsDiv = document.getElementById('roadmapFormModalActions');
+
+                    if (payload.download_url && downloadBtn) {
+                        downloadBtn.href = payload.download_url;
+                        downloadBtn.style.display = 'inline-block';
+                    } else if (downloadBtn) {
+                        downloadBtn.style.display = 'none';
+                    }
+
+                    if (payload.view_url && viewBtn) {
+                        viewBtn.href = payload.view_url;
+                        viewBtn.style.display = 'inline-block';
+                    } else if (viewBtn) {
+                        viewBtn.style.display = 'none';
+                    }
+
+                    if (actionsDiv) {
+                        actionsDiv.style.display = (payload.download_url || payload.view_url) ? 'flex' : 'none';
+                    }
+
                     showRoadmapFormModal('success');
                 } else if (statusEl) {
                     statusEl.textContent = payload.message || 'Thanks - we will be in touch within 24 hours.';

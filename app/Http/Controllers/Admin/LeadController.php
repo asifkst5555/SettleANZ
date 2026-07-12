@@ -65,7 +65,7 @@ class LeadController extends Controller
             'assignedStaff:id,name',
             'tags:id,name,color',
             'activities.user:id,name',
-            'notes.user:id,name',
+            'leadNotes.user:id,name',
             'tasks.user:id,name', 'tasks.assignee:id,name',
             'files.user:id,name',
             'ebook:id,title',
@@ -220,7 +220,7 @@ class LeadController extends Controller
             'is_pinned' => 'boolean',
         ]);
 
-        $note = $lead->notes()->create([
+        $note = $lead->leadNotes()->create([
             'user_id' => $request->user()->id,
             'content' => $validated['content'],
             'is_private' => $validated['is_private'] ?? false,

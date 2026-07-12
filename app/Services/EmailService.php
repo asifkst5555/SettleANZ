@@ -11,6 +11,7 @@ use App\Models\Lead;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class EmailService
 {

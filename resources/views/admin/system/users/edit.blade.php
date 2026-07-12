@@ -17,7 +17,7 @@
                     <button class="button button--small" type="submit">Activate</button>
                 </form>
             @elseif (!$user->isSuperAdmin())
-                <form method="POST" action="{{ route('admin.system.users.suspend', $user) }}" style="display:inline" onsubmit="return prompt('Suspension reason:')">
+                <form method="POST" action="{{ route('admin.system.users.suspend', $user) }}" style="display:inline" id="suspendForm">
                     @csrf @method('PUT')
                     <input type="hidden" name="reason" id="suspendReason">
                     <button class="button button--small button--secondary" type="submit" id="suspendBtn">Suspend</button>
@@ -97,7 +97,7 @@
             </section>
 
             @if (!$user->isSuperAdmin() && $user->id !== auth()->id())
-                <form method="POST" action="{{ route('admin.system.users.destroy', $user) }}" style="margin-top:1.5rem" onsubmit="return confirm('Delete this user permanently?')">
+                <form method="POST" action="{{ route('admin.system.users.destroy', $user) }}" style="margin-top:1.5rem" onsubmit="return confirmDelete(this, 'user')">
                     @csrf @method('DELETE')
                     <button class="button button--small button--danger" type="submit" style="background:#dc3545;color:white;border-color:#dc3545">Delete User</button>
                 </form>
@@ -161,12 +161,18 @@
 document.addEventListener('DOMContentLoaded', function() {
     var suspendBtn = document.getElementById('suspendBtn');
     if (suspendBtn) {
-        suspendBtn.addEventListener('click', function(e) {
-            var reason = prompt('Suspension reason:');
+        suspendBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            var reason = await adminModal.prompt({
+                title: 'Suspend user?',
+                message: 'Please provide a reason for suspending this user:',
+                placeholder: 'Enter suspension reason...',
+                confirmText: 'Suspend',
+                cancelText: 'Cancel'
+            });
             if (reason) {
                 document.getElementById('suspendReason').value = reason;
-            } else {
-                e.preventDefault();
+                document.getElementById('suspendForm').submit();
             }
         });
     }

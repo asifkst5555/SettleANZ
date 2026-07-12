@@ -24,7 +24,7 @@
             <a class="button button--small button--ghost" href="{{ route('admin.leads.index') }}">Back to list</a>
             <a class="button button--small" href="{{ route('admin.leads.show', $lead) }}">View profile</a>
             @can('lead_center.delete')
-            <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirm('Delete permanently?');">
+            <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirmDelete(this, 'lead')">
                 @csrf @method('DELETE')
                 <button class="button button--small button--danger" type="submit">Delete</button>
             </form>

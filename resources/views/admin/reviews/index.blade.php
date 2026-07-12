@@ -237,10 +237,18 @@
             }
         }
 
-        function submitBulk(action) {
+        async function submitBulk(action) {
             const checkboxes = document.querySelectorAll('.review-checkbox:checked');
             if (checkboxes.length === 0) return;
-            if (action === 'delete' && !confirm('Are you sure you want to delete ' + checkboxes.length + ' review(s)?')) return;
+            if (action === 'delete') {
+                const c = await adminModal.confirm({
+                    title: 'Delete reviews?',
+                    message: 'Are you sure you want to delete ' + checkboxes.length + ' review(s)?',
+                    confirmText: 'Delete',
+                    isDangerous: true
+                });
+                if (!c) return;
+            }
             
             const form = document.getElementById('bulkActionForm');
             document.getElementById('bulkActionValue').value = action;
