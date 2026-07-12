@@ -34,29 +34,25 @@ class AiEmailService
     public function generateDownloadEmail(array $data, string $tone = 'professional', string $language = 'en'): array
     {
         $prompt = $this->buildDownloadEmailPrompt($data, $tone, $language);
-
-        return $this->callAI($prompt);
+        return $this->callAI($prompt, $this->getSystemPrompt());
     }
 
     public function rewriteEmail(string $content, string $tone, string $language = 'en'): array
     {
-        $prompt = "Rewrite the following email content in a {$tone} tone and in {$language} language.\n\nOriginal:\n{$content}\n\nRewritten version:";
-
-        return $this->callAI($prompt);
+        $prompt = "Rewrite the following email content in a {$tone} tone and in {$language} language.\n\nOriginal:\n{$content}\n\nRewritten version:\n\nReturn ONLY valid JSON with exactly these keys:\n- \"subject\": max 80 chars\n- \"body_html\": full responsive HTML email (DOCTYPE, inline CSS, table-based, 600px max width)\n- \"body_text\": plain text version\n\nDo NOT include markdown, code fences, explanations, or any text outside the JSON. Output ONLY the JSON object.";
+        return $this->callAI($prompt, $this->getSystemPrompt());
     }
 
     public function generateFollowUpEmail(array $context, string $tone = 'professional', string $language = 'en'): array
     {
         $prompt = $this->buildFollowUpPrompt($context, $tone, $language);
-
-        return $this->callAI($prompt);
+        return $this->callAI($prompt, $this->getSystemPrompt());
     }
 
     public function generateCampaignEmail(array $campaignData, string $tone = 'marketing', string $language = 'en'): array
     {
         $prompt = $this->buildCampaignPrompt($campaignData, $tone, $language);
-
-        return $this->callAI($prompt);
+        return $this->callAI($prompt, $this->getSystemPrompt());
     }
 
     public function copilotChat(string $message, string $systemPrompt, string $conversationHistory = ''): array
@@ -240,7 +236,12 @@ Please include:
 6. Professional signature with company details
 7. Unsubscribe link at the bottom
 
-Return a JSON with keys: "subject", "body_html", "body_text"
+Return ONLY valid JSON with exactly these keys:
+- "subject": max 80 chars, friendly and professional
+- "body_html": complete responsive HTML email with DOCTYPE, inline CSS, table-based layout, max width 600px, white background
+- "body_text": plain text version
+
+Do NOT include markdown, code fences, explanations, or any text outside the JSON. Output ONLY the JSON object.
 PROMPT;
     }
 
@@ -255,7 +256,12 @@ Context:
 - Days since download: {$context['days_since_download']}
 - Download Count: {$context['download_count']}
 
-Return a JSON with keys: "subject", "body_html", "body_text"
+Return ONLY valid JSON with exactly these keys:
+- "subject": max 80 chars, friendly and professional
+- "body_html": complete responsive HTML email with DOCTYPE, inline CSS, table-based layout, max width 600px, white background
+- "body_text": plain text version
+
+Do NOT include markdown, code fences, explanations, or any text outside the JSON. Output ONLY the JSON object.
 PROMPT;
     }
 
@@ -344,10 +350,10 @@ Important:
 
 Return ONLY valid JSON with exactly these keys:
 - "subject": a concise, friendly subject line (max 80 chars)
-- "body_html": the full HTML email body with inline styling (professional, responsive)
-- "body_text": plain text version of the email
+- "body_html": complete responsive HTML email with DOCTYPE, inline CSS, table-based layout, max width 600px, white card background (#FFFFFF), body background #F8F4EC, professional typography (Arial/Helvetica/sans-serif), heading 28px, body 16px, primary color #0F766E
+- "body_text": plain text version
 
-JSON:
+Do NOT include markdown, code fences, explanations, or any text outside the JSON. Output ONLY the JSON object.
 PROMPT;
     }
 
@@ -360,7 +366,12 @@ Campaign: {$data['campaign_name']}
 Ebook: {$data['ebook_title']}
 Description: {$data['campaign_description']}
 
-Return a JSON with keys: "subject", "body_html", "body_text"
+Return ONLY valid JSON with exactly these keys:
+- "subject": max 80 chars
+- "body_html": complete responsive HTML email with DOCTYPE, inline CSS, table-based layout, max width 600px, white card
+- "body_text": plain text version
+
+Do NOT include markdown, code fences, explanations, or any text outside the JSON. Output ONLY the JSON object.
 PROMPT;
     }
 
@@ -394,6 +405,7 @@ PROMPT;
             'messages' => $messages,
             'max_tokens' => $this->maxTokens,
             'temperature' => $this->temperature,
+            'response_format' => ['type' => 'json_object'],
         ]);
 
         return $this->parseResponse($response->json(), 'openai');
@@ -471,17 +483,138 @@ PROMPT;
             default => throw new Exception("Unsupported provider for response parsing: {$provider}"),
         };
 
-        $json = json_decode($content, true);
+        $content = $this->stripReasoningText($content);
+        $content = preg_replace('/^```(?:json)?\s*\n?(.*?)\n?```$/s', '$1', trim($content));
 
-        if ($json && isset($json['subject'], $json['body_html'])) {
+        $json = $this->decodeEmailJson($content);
+        if ($json) {
             return $json;
         }
 
+        foreach ($this->extractJsonCandidates($content) as $candidate) {
+            $json = $this->decodeEmailJson($candidate);
+            if ($json) {
+                return $json;
+            }
+        }
+
+        Log::warning('AI email response did not contain valid email JSON; using safe fallback.', [
+            'provider' => $provider,
+            'content_preview' => mb_substr($content, 0, 500),
+        ]);
+
         return [
-            'subject' => 'Your Download from ' . config('app.name'),
-            'body_html' => $content,
-            'body_text' => strip_tags($content),
+            'subject' => 'Thank you from SettleANZ',
+            'body_html' => $this->safeFallbackEmailHtml(),
+            'body_text' => "Hi there,\n\nThank you for your interest in SettleANZ. We received your request and our team will follow up shortly.\n\nWarm regards,\nThe SettleANZ Team",
         ];
+    }
+
+    private function stripReasoningText(string $content): string
+    {
+        $content = trim($content);
+        $content = preg_replace('/<think>.*?<\/think>/is', '', $content) ?? $content;
+        return trim($content);
+    }
+
+    private function decodeEmailJson(string $content): ?array
+    {
+        $json = json_decode(trim($content), true);
+        if (!is_array($json) || !isset($json['subject'], $json['body_html'])) {
+            return null;
+        }
+
+        $subject = trim((string) $json['subject']);
+        $bodyHtml = $this->normalizeEmailBody((string) $json['body_html']);
+        $bodyText = isset($json['body_text']) && trim((string) $json['body_text']) !== ''
+            ? $this->normalizePlainText((string) $json['body_text'])
+            : $this->normalizePlainText(strip_tags($bodyHtml));
+
+        if ($subject === '' || $bodyHtml === '') {
+            return null;
+        }
+
+        if (!str_contains($bodyHtml, '<!DOCTYPE') && !str_contains($bodyHtml, '<html')) {
+            $bodyHtml = $this->wrapInEmailHtml($bodyHtml);
+        }
+
+        return [
+            'subject' => mb_substr($subject, 0, 80),
+            'body_html' => $bodyHtml,
+            'body_text' => $bodyText,
+        ];
+    }
+
+    private function extractJsonCandidates(string $content): array
+    {
+        $candidates = [];
+        $start = strpos($content, '{');
+        $end = strrpos($content, '}');
+
+        if ($start !== false && $end !== false && $end > $start) {
+            $candidates[] = substr($content, $start, $end - $start + 1);
+        }
+
+        if (preg_match_all('/\{(?:(?:[^{}]|(?R))*)\}/s', $content, $matches)) {
+            $candidates = array_merge($candidates, $matches[0]);
+        }
+
+        return array_values(array_unique($candidates));
+    }
+
+    private function normalizeEmailBody(string $body): string
+    {
+        $body = trim($body);
+        $body = str_replace(["\\r\\n", "\\n", "\\r", "\\t"], ["\n", "\n", "\n", "\t"], $body);
+        return $body;
+    }
+
+    private function normalizePlainText(string $text): string
+    {
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = str_replace(["\\r\\n", "\\n", "\\r", "\\t"], ["\n", "\n", "\n", "\t"], $text);
+        return trim(preg_replace("/\n{3,}/", "\n\n", $text) ?? $text);
+    }
+
+    private function ensureValidEmailHtml(string $html): string
+    {
+        if (str_contains($html, '<!DOCTYPE') || str_contains($html, '<html')) {
+            return $html;
+        }
+        return $this->wrapInEmailHtml($html);
+    }
+
+    private function wrapInEmailHtml(string $bodyContent): string
+    {
+        return '<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#F8F4EC;font-family:Arial,Helvetica,sans-serif;">
+<center style="width:100%;background-color:#F8F4EC;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F4EC;">
+<tr>
+<td align="center" style="padding:32px 16px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:12px;border:1px solid #E5E7EB;">
+<tr>
+<td style="padding:40px;font-size:16px;line-height:1.6;color:#1F2937;">
+' . $bodyContent . '
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</center>
+</body>
+</html>';
+    }
+
+    private function safeFallbackEmailHtml(): string
+    {
+        return $this->wrapInEmailHtml('<p style="margin:0 0 16px;">Hi there,</p><p style="margin:0 0 16px;">Thank you for your interest in SettleANZ. We received your request and our team will follow up shortly.</p><p style="margin:0;">Warm regards,<br>The SettleANZ Team</p>');
     }
 
     private function httpClient(): PendingRequest
@@ -511,5 +644,10 @@ PROMPT;
             'claude' => ['claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307'],
             'deepseek' => ['deepseek-chat', 'deepseek-reasoner'],
         ];
+    }
+
+    private function getSystemPrompt(): string
+    {
+        return 'You are a professional email template generator. You output ONLY valid JSON. Never include markdown, code fences (```json), explanations, reasoning, or any text outside the JSON object. Your response must be parseable by json_decode() with no modification. The JSON must have exactly three keys: "subject" (string, max 80 chars), "body_html" (string, complete responsive HTML email document), "body_text" (string, plain text version).';
     }
 }

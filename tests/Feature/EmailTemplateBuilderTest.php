@@ -270,4 +270,32 @@ class EmailTemplateBuilderTest extends TestCase
             ->get(route('admin.email-templates.edit', $template));
         $responseEdit->assertOk();
     }
+
+    public function test_admin_template_list_shows_system_auto_reply_types(): void
+    {
+        EmailTemplate::create([
+            'name' => 'Contact Auto Reply',
+            'type' => EmailTemplate::TYPE_CONTACT_AUTO_REPLY,
+            'subject' => 'Thanks for contacting us',
+            'body_html' => '<p>Contact auto reply</p>',
+            'is_active' => true,
+            'created_by' => $this->admin->id,
+        ]);
+
+        EmailTemplate::create([
+            'name' => 'Booking Auto Reply',
+            'type' => EmailTemplate::TYPE_BOOKING_AUTO_REPLY,
+            'subject' => 'Booking received',
+            'body_html' => '<p>Booking auto reply</p>',
+            'is_active' => true,
+            'created_by' => $this->admin->id,
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->get(route('admin.email-templates.index'));
+
+        $response->assertOk();
+        $response->assertSee('Contact Auto Reply');
+        $response->assertSee('Booking Auto Reply');
+    }
 }

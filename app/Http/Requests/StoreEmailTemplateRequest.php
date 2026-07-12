@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\EmailTemplate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -21,7 +22,7 @@ class StoreEmailTemplateRequest extends FormRequest
             'body_text' => ['nullable', 'string'],
             'variables' => ['nullable', 'array'],
             'builder_json' => ['nullable', 'string'],
-            'type' => ['required', Rule::in(['download', 'campaign', 'follow_up', 'verification'])],
+            'type' => ['required', Rule::in(EmailTemplate::types())],
             'is_active' => ['boolean'],
         ];
     }

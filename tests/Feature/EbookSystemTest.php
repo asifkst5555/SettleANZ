@@ -6,15 +6,22 @@ use App\DTOs\EbookDTO;
 use App\DTOs\LeadDTO;
 use App\DTOs\DownloadTokenDTO;
 use App\Enums\EbookStatus;
+use App\Jobs\SendEbookDownloadEmail;
+use App\Mail\CustomHtmlMail;
+use App\Models\DownloadToken;
 use App\Models\Ebook;
 use App\Models\EbookCategory;
 use App\Models\EbookTag;
+use App\Models\EmailTemplate;
+use App\Models\Lead;
+use App\Services\EmailService;
 use App\Models\User;
 use App\Services\DownloadService;
 use App\Services\EbookService;
 use App\Services\LeadCaptureService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -214,5 +221,51 @@ class EbookSystemTest extends TestCase
 
         $response->assertStatus(404);
         $response->assertJson(['message' => 'PDF file not found.']);
+    }
+
+    public function test_download_email_uses_active_admin_template(): void
+    {
+        Mail::fake();
+
+        $ebook = Ebook::factory()->published()->create([
+            'title' => 'Arrival Guide',
+        ]);
+
+        $lead = Lead::factory()->create([
+            'full_name' => 'Md Ashifur Rahman',
+            'email' => 'ashif@example.com',
+            'ebook_id' => $ebook->id,
+        ]);
+
+        $token = DownloadToken::create([
+            'ebook_id' => $ebook->id,
+            'lead_id' => $lead->id,
+            'status' => 'active',
+            'max_downloads' => 5,
+            'download_count' => 0,
+            'expires_at' => now()->addDays(3),
+        ]);
+
+        $template = EmailTemplate::create([
+            'name' => 'Download Delivery Template',
+            'type' => EmailTemplate::TYPE_DOWNLOAD,
+            'subject' => 'Template download for {{ lead_name }}',
+            'body_html' => '<p>Download template body for {{ ebook_title }}: {{ download_url }}</p>',
+            'is_active' => true,
+        ]);
+
+        (new SendEbookDownloadEmail($lead, $token))->handle(app(EmailService::class));
+
+        Mail::assertSent(CustomHtmlMail::class, function (CustomHtmlMail $mail) use ($token) {
+            return $mail->subject === 'Template download for Md Ashifur Rahman'
+                && str_contains($mail->bodyHtml, 'Download template body for Arrival Guide')
+                && str_contains($mail->bodyHtml, $token->token);
+        });
+
+        $this->assertDatabaseHas('email_logs', [
+            'lead_id' => $lead->id,
+            'email_template_id' => $template->id,
+            'subject' => 'Template download for Md Ashifur Rahman',
+        ]);
     }
 }

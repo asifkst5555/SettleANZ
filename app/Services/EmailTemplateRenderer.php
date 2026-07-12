@@ -111,8 +111,9 @@ class EmailTemplateRenderer
                 $paddingTop = $props['paddingTop'] ?? '10';
                 $paddingBottom = $props['paddingBottom'] ?? '10';
                 
-                // Format text newlines into paragraphs or linebreaks
-                $formattedText = nl2br($text);
+                // Format simple builder markdown and newlines for email output.
+                $formattedText = preg_replace('/\*\*(.*?)\*\*/s', '<strong>$1</strong>', $text);
+                $formattedText = nl2br($formattedText ?? $text);
 
                 return "
                 <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">
@@ -215,6 +216,35 @@ class EmailTemplateRenderer
                 <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">
                     <tr>
                         <td height=\"{$height}\" style=\"font-size: 1px; line-height: 1px;\">&nbsp;</td>
+                    </tr>
+                </table>";
+
+            case 'notice':
+                $title = $props['title'] ?? '';
+                $text = $props['text'] ?? '';
+                $bg = $props['background'] ?? '#E6F4F3';
+                $titleColor = $props['titleColor'] ?? $theme['primaryColor'];
+                $textColor = $props['textColor'] ?? $theme['textColor'];
+                $padding = $props['padding'] ?? '16';
+                $radius = $props['radius'] ?? '7';
+
+                if (is_numeric($radius)) {
+                    $radius = $radius . 'px';
+                }
+
+                return "
+                <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">
+                    <tr>
+                        <td style=\"padding: 10px 20px 14px 20px;\">
+                            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color: {$bg}; border-radius: {$radius};\">
+                                <tr>
+                                    <td style=\"padding: {$padding}px 20px; font-family: {$theme['defaultFont']}; font-size: 13px; line-height: 1.55; color: {$textColor};\">
+                                        <p style=\"margin: 0 0 4px 0; font-weight: 700; color: {$titleColor};\">{$title}</p>
+                                        <p style=\"margin: 0; color: {$textColor};\">{$text}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>";
 
@@ -357,7 +387,7 @@ class EmailTemplateRenderer
                             <p style=\"margin: 0 0 10px 0;\">{$theme['footer']}</p>
                             <p style=\"margin: 0 0 10px 0;\">{$theme['address']}</p>
                             <p style=\"margin: 0;\">You received this email because you interact with {$theme['website']}.</p>
-                            <p style=\"margin: 10px 0 0 0;\"><a href=\"{{unsubscribe}}\" style=\"color: {$theme['primaryColor']}; text-decoration: underline;\">Unsubscribe</a> &middot; <a href=\"mailto:{$theme['supportEmail']}\" style=\"color: {$theme['primaryColor']}; text-decoration: underline;\">Contact Support</a></p>
+                            <p style=\"margin: 10px 0 0 0;\"><a href=\"{{unsubscribe_url}}\" style=\"color: {$theme['primaryColor']}; text-decoration: underline;\">Unsubscribe</a> &middot; <a href=\"mailto:{$theme['supportEmail']}\" style=\"color: {$theme['primaryColor']}; text-decoration: underline;\">Contact Support</a></p>
                         </td>
                     </tr>
                 </table>";

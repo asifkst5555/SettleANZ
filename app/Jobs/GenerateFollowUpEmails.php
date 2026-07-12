@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Ebook;
+use App\Models\EmailTemplate;
 use App\Models\Lead;
 use App\Services\AiEmailService;
 use App\Services\EmailService;
@@ -33,6 +34,11 @@ class GenerateFollowUpEmails implements ShouldQueue
         }
 
         $leads = $query->get();
+        $template = EmailTemplate::active()
+            ->byType(EmailTemplate::TYPE_FOLLOW_UP)
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->first();
 
         foreach ($leads as $lead) {
             $ebook = Ebook::find($lead->ebook_id);
@@ -41,11 +47,28 @@ class GenerateFollowUpEmails implements ShouldQueue
             }
 
             $lastDownload = $lead->downloadLogs()->latest()->first();
+            $daysSinceDownload = $lastDownload ? now()->diffInDays($lastDownload->created_at) : $this->daysSinceDownload;
+
+            if ($template) {
+                $emailService->sendTemplatedEmail(
+                    lead: $lead,
+                    template: $template,
+                    variables: [
+                        'ebook_title' => $ebook->title,
+                        'ebook_description' => $ebook->description,
+                        'days_since_download' => $daysSinceDownload,
+                        'download_count' => $ebook->download_count,
+                        'company_name' => 'SettleANZ',
+                    ],
+                );
+
+                continue;
+            }
 
             $aiResult = $aiEmailService->generateFollowUpEmail([
                 'lead_name' => $lead->full_name,
                 'ebook_title' => $ebook->title,
-                'days_since_download' => $lastDownload ? now()->diffInDays($lastDownload->created_at) : $this->daysSinceDownload,
+                'days_since_download' => $daysSinceDownload,
                 'download_count' => $ebook->download_count,
             ]);
 

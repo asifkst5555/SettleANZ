@@ -101,7 +101,7 @@ class EmailService
         ]);
 
         try {
-            $mail = new \App\Mail\CustomHtmlMail($subject, $bodyHtml);
+            $mail = new \App\Mail\CustomHtmlMail($subject, $this->ensureValidEmailHtml($bodyHtml));
             if ($attachmentPath) {
                 $mail->attach($attachmentPath);
             }
@@ -166,7 +166,7 @@ class EmailService
         $this->applyMailConfig();
 
         try {
-            Mail::html($bodyHtml, function ($message) use ($to, $toName, $subject) {
+            Mail::html($this->ensureValidEmailHtml($bodyHtml), function ($message) use ($to, $toName, $subject) {
                 $message->to($to, $toName)
                     ->subject($subject);
             });
@@ -227,5 +227,36 @@ class EmailService
         $bounced = EmailLog::byStatus(EmailStatus::Bounced->value)->count();
 
         return round(($bounced / $total) * 100, 2);
+    }
+
+    public function ensureValidEmailHtml(string $html): string
+    {
+        if (str_contains($html, '<!DOCTYPE') || str_contains($html, '<html')) {
+            return $html;
+        }
+        return '<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#F8F4EC;font-family:Arial,Helvetica,sans-serif;">
+<center style="width:100%;background-color:#F8F4EC;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F4EC;">
+<tr>
+<td align="center" style="padding:32px 16px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:12px;border:1px solid #E5E7EB;">
+<tr>
+<td style="padding:40px;font-size:16px;line-height:1.6;color:#1F2937;">
+' . $html . '
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</center>
+</body>
+</html>';
     }
 }

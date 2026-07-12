@@ -66,6 +66,20 @@ class DatabaseSeeder extends Seeder
             \App\Models\EmailTemplate::create([
                 'name' => 'Download Email - New Arrival Checklist',
                 'type' => 'download',
+                'subject' => \App\Support\SystemEmailTemplates::downloadSubject(),
+                'body_text' => \App\Support\SystemEmailTemplates::downloadText(),
+                'builder_json' => \App\Support\SystemEmailTemplates::downloadBuilderJson(),
+                'body_html' => \App\Support\SystemEmailTemplates::downloadHtml(),
+                'is_active' => true,
+            ]);
+        }
+
+        return;
+
+        if (false) {
+            \App\Models\EmailTemplate::create([
+                'name' => 'Legacy Download Email - New Arrival Checklist',
+                'type' => 'download',
                 'subject' => 'Your 90-Day Roadmap: {{ ebook_title }}',
                 'body_html' => <<<'HTML'
 <!DOCTYPE html>

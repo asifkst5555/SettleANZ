@@ -112,6 +112,11 @@ class Lead extends Model
         return $this->hasMany(LeadFile::class);
     }
 
+    public function downloadLogs(): HasMany
+    {
+        return $this->hasMany(DownloadLog::class);
+    }
+
     public function getInitialsAttribute(): string
     {
         $name = $this->full_name ?? $this->first_name ?? $this->email ?? '?';

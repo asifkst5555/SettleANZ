@@ -9,25 +9,9 @@ class EmailStarterTemplates
         return [
             'professional_download' => [
                 'name' => 'Professional Download',
-                'subject' => 'Your download is ready: {{ebook_name}}',
-                'description' => 'A structured download template for eBooks or guide handouts.',
-                'blocks' => [
-                    ['type' => 'logo', 'properties' => ['alignment' => 'center', 'width' => 150, 'paddingTop' => 20, 'paddingBottom' => 15]],
-                    ['type' => 'heading', 'properties' => ['text' => 'Your Ebook is Ready!', 'fontSize' => '26px', 'alignment' => 'center', 'fontWeight' => 'bold']],
-                    ['type' => 'spacer', 'properties' => ['height' => 15]],
-                    ['type' => 'text', 'properties' => ['text' => 'Hi {{name}},
-
-Thank you for downloading **{{ebook_name}}**.
-
-This guide is designed to give you a clear, practical roadmap for settling in quickly. We hope it helps you avoid the usual first-week speedbumps.', 'fontSize' => '16px', 'alignment' => 'left']],
-                    ['type' => 'button', 'properties' => ['text' => 'Download eBook Now', 'url' => '{{download_url}}', 'alignment' => 'center', 'fontSize' => '16px']],
-                    ['type' => 'text', 'properties' => ['text' => 'This link expires on **{{expires_at}}**. You can access the document up to {{expires_in_hours}} times.
-
-If the button above does not work, copy and paste this URL into your browser:
-{{download_url}}', 'fontSize' => '14px', 'color' => '#607080', 'alignment' => 'left']],
-                    ['type' => 'divider', 'properties' => ['height' => 1, 'color' => '#e6f4f3', 'margin' => 20]],
-                    ['type' => 'footer', 'properties' => []],
-                ]
+                'subject' => SystemEmailTemplates::downloadSubject(),
+                'description' => 'The final SettleANZ download delivery layout with online view and PDF buttons.',
+                'blocks' => SystemEmailTemplates::downloadBuilderJson()['blocks'],
             ],
             'welcome' => [
                 'name' => 'Welcome Email',
@@ -52,9 +36,67 @@ We built SettleANZ to make sure you have the exact resources, checklists, and gu
                     ['type' => 'footer', 'properties' => []],
                 ]
             ],
+            'contact_auto_reply' => [
+                'name' => 'Contact Auto Reply',
+                'subject' => 'Thanks for contacting SettleANZ',
+                'description' => 'A warm acknowledgement for contact form submissions.',
+                'blocks' => [
+                    ['type' => 'logo', 'properties' => ['alignment' => 'center', 'width' => 150, 'paddingTop' => 20, 'paddingBottom' => 15]],
+                    ['type' => 'heading', 'properties' => ['text' => 'Thanks, {{lead_name}}', 'fontSize' => '26px', 'alignment' => 'left', 'fontWeight' => 'bold']],
+                    ['type' => 'text', 'properties' => ['text' => 'Hi {{lead_name}},
+
+Thank you for reaching out to SettleANZ. We have received your message and will review it carefully.
+
+A member of our team will get back to you within **{{response_time}}**.', 'fontSize' => '16px', 'alignment' => 'left']],
+                    ['type' => 'divider', 'properties' => ['height' => 1, 'color' => '#e6f4f3', 'margin' => 20]],
+                    ['type' => 'text', 'properties' => ['text' => 'Warm regards,
+The SettleANZ Team
+
+P.S. If your question is urgent, you can reply directly to this email and we will do our best to help.', 'fontSize' => '15px', 'color' => '#607080', 'alignment' => 'left']],
+                    ['type' => 'footer', 'properties' => []],
+                ]
+            ],
+            'booking_auto_reply' => [
+                'name' => 'Booking Auto Reply',
+                'subject' => 'We received your booking request',
+                'description' => 'A professional acknowledgement for package and consultation requests.',
+                'blocks' => [
+                    ['type' => 'logo', 'properties' => ['alignment' => 'center', 'width' => 150, 'paddingTop' => 20, 'paddingBottom' => 15]],
+                    ['type' => 'heading', 'properties' => ['text' => 'Booking request received', 'fontSize' => '26px', 'alignment' => 'left', 'fontWeight' => 'bold']],
+                    ['type' => 'text', 'properties' => ['text' => 'Hi {{lead_name}},
+
+Thank you for reaching out to SettleANZ. We have received your {{enquiry_type}} and will confirm the session details shortly.
+
+A member of our team will get back to you within **{{response_time}}**.', 'fontSize' => '16px', 'alignment' => 'left']],
+                    ['type' => 'divider', 'properties' => ['height' => 1, 'color' => '#e6f4f3', 'margin' => 20]],
+                    ['type' => 'text', 'properties' => ['text' => 'Warm regards,
+The SettleANZ Team
+
+P.S. If your question is urgent, you can reply directly to this email and we will do our best to help.', 'fontSize' => '15px', 'color' => '#607080', 'alignment' => 'left']],
+                    ['type' => 'footer', 'properties' => []],
+                ]
+            ],
+            'ebook_follow_up' => [
+                'name' => 'Ebook Follow Up',
+                'subject' => 'How was {{ebook_title}}, {{lead_name}}?',
+                'description' => 'A gentle follow-up after a lead downloads a guide or checklist.',
+                'blocks' => [
+                    ['type' => 'logo', 'properties' => ['alignment' => 'center', 'width' => 150, 'paddingTop' => 20, 'paddingBottom' => 15]],
+                    ['type' => 'heading', 'properties' => ['text' => 'How was {{ebook_title}}?', 'fontSize' => '26px', 'alignment' => 'left', 'fontWeight' => 'bold']],
+                    ['type' => 'text', 'properties' => ['text' => 'Hi {{lead_name}},
+
+I hope **{{ebook_title}}** has been helpful as you plan your next steps.
+
+If you have questions after reading it, simply reply to this email. Our team can point you toward the right settlement resources and practical next steps.', 'fontSize' => '16px', 'alignment' => 'left']],
+                    ['type' => 'divider', 'properties' => ['height' => 1, 'color' => '#e6f4f3', 'margin' => 20]],
+                    ['type' => 'text', 'properties' => ['text' => 'Warm regards,
+The SettleANZ Team', 'fontSize' => '15px', 'color' => '#607080', 'alignment' => 'left']],
+                    ['type' => 'footer', 'properties' => []],
+                ]
+            ],
             'newsletter' => [
                 'name' => 'Newsletter Template',
-                'subject' => 'The Settler Monthly: Tips, visum news, and stories',
+                'subject' => 'The Settler Monthly: Tips, visa news, and stories',
                 'description' => 'A clean layout for monthly newsletters and updates.',
                 'blocks' => [
                     ['type' => 'logo', 'properties' => ['alignment' => 'center', 'width' => 150, 'paddingTop' => 20, 'paddingBottom' => 15]],

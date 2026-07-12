@@ -12,6 +12,13 @@ class EmailTemplate extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const TYPE_DOWNLOAD = 'download';
+    public const TYPE_CAMPAIGN = 'campaign';
+    public const TYPE_FOLLOW_UP = 'follow_up';
+    public const TYPE_VERIFICATION = 'verification';
+    public const TYPE_CONTACT_AUTO_REPLY = 'contact_auto_reply';
+    public const TYPE_BOOKING_AUTO_REPLY = 'booking_auto_reply';
+
     protected $fillable = [
         'name',
         'subject',
@@ -73,6 +80,35 @@ class EmailTemplate extends Model
         return $query->where('type', $type);
     }
 
+    public static function types(): array
+    {
+        return [
+            self::TYPE_DOWNLOAD,
+            self::TYPE_CONTACT_AUTO_REPLY,
+            self::TYPE_BOOKING_AUTO_REPLY,
+            self::TYPE_CAMPAIGN,
+            self::TYPE_FOLLOW_UP,
+            self::TYPE_VERIFICATION,
+        ];
+    }
+
+    public static function typeLabels(): array
+    {
+        return [
+            self::TYPE_DOWNLOAD => 'Download Delivery',
+            self::TYPE_CONTACT_AUTO_REPLY => 'Contact Auto Reply',
+            self::TYPE_BOOKING_AUTO_REPLY => 'Booking Auto Reply',
+            self::TYPE_CAMPAIGN => 'Campaign',
+            self::TYPE_FOLLOW_UP => 'Follow Up',
+            self::TYPE_VERIFICATION => 'Verification',
+        ];
+    }
+
+    public function getTypeLabelAttribute(): string
+    {
+        return self::typeLabels()[$this->type] ?? ucfirst(str_replace('_', ' ', $this->type));
+    }
+
     public function createRevision(?int $userId = null): EmailTemplateRevision
     {
         return $this->revisions()->create([
@@ -104,7 +140,7 @@ class EmailTemplate extends Model
         $data['current_year'] = $data['current_year'] ?? date('Y');
         $data['website'] = $data['website'] ?? SiteSetting::getValue('email_theme_website', url('/'));
         $data['support_email'] = $data['support_email'] ?? SiteSetting::getValue('email_theme_support_email', 'hello@settleanz.com');
-        $data['unsubscribe'] = $data['unsubscribe'] ?? '#';
+        $data['unsubscribe_url'] = $data['unsubscribe_url'] ?? $data['unsubscribe'] ?? '#';
 
         // Check if any variable contains webp and replace with png
         foreach ($data as $key => $value) {
@@ -118,6 +154,14 @@ class EmailTemplate extends Model
 
         // Force convert any raw HTML references of logo.webp to email_logo.png inside the template
         $body = str_replace('logo.webp', 'email_logo.png', $body);
+
+        // Alias mappings for backward compatibility
+        $aliases = ['unsubscribe' => 'unsubscribe_url'];
+        foreach ($aliases as $old => $new) {
+            if (isset($data[$new]) && empty($data[$old])) {
+                $data[$old] = $data[$new];
+            }
+        }
 
         $search = [];
         $replace = [];

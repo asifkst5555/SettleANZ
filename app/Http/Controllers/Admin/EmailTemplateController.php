@@ -26,7 +26,8 @@ class EmailTemplateController extends Controller
         return view('admin.email-templates.index', [
             'metaTitle' => 'Email Templates | Admin',
             'templates' => $query->paginate(config('ebook.admin.pagination.per_page', 20))->withQueryString(),
-            'types' => ['download', 'campaign', 'follow_up', 'verification'],
+            'types' => EmailTemplate::types(),
+            'typeLabels' => EmailTemplate::typeLabels(),
         ]);
     }
 
@@ -36,11 +37,14 @@ class EmailTemplateController extends Controller
 
         return view('admin.email-templates.create', [
             'metaTitle' => 'Create Email Template | Admin',
-            'types' => ['download', 'campaign', 'follow_up', 'verification'],
+            'types' => EmailTemplate::types(),
+            'typeLabels' => EmailTemplate::typeLabels(),
             'availableVariables' => [
                 'name', 'email', 'download_link', 'download_url', 'ebook_name',
                 'company_name', 'company_logo', 'website', 'support_email',
                 'current_year', 'unsubscribe', 'expires_at', 'expires_in_hours',
+                'view_url', 'form_type', 'enquiry_type', 'response_time',
+                'ebook_description', 'days_since_download', 'download_count',
             ],
             'starterTemplates' => EmailStarterTemplates::list(),
             'defaultBodyHtml' => $this->getDefaultTemplateHtml(),
@@ -49,6 +53,8 @@ class EmailTemplateController extends Controller
 
     private function getDefaultTemplateHtml(): string
     {
+        return \App\Support\SystemEmailTemplates::downloadHtml();
+
         return <<<'HTML'
 <!DOCTYPE html>
 <html lang="en">
@@ -192,11 +198,14 @@ HTML;
             'builderJson' => $builderJson,
             'revisions' => $revisions,
             'starterTemplates' => EmailStarterTemplates::list(),
-            'types' => ['download', 'campaign', 'follow_up', 'verification'],
+            'types' => EmailTemplate::types(),
+            'typeLabels' => EmailTemplate::typeLabels(),
             'availableVariables' => [
                 'name', 'email', 'download_link', 'download_url', 'ebook_name',
                 'company_name', 'company_logo', 'website', 'support_email',
                 'current_year', 'unsubscribe', 'expires_at', 'expires_in_hours',
+                'view_url', 'form_type', 'enquiry_type', 'response_time',
+                'ebook_description', 'days_since_download', 'download_count',
             ],
         ]);
     }
@@ -264,21 +273,29 @@ HTML;
             '{{name}}', '{{lead_name}}', '{{email}}', '{{lead_email}}',
             '{{download_url}}', '{{download_link}}', '{{expires_at}}', '{{expires_in_hours}}',
             '{{ebook_name}}', '{{ebook_title}}', '{{company_name}}', '{{website}}',
-            '{{support_email}}', '{{current_year}}', '{{unsubscribe}}',
+            '{{support_email}}', '{{current_year}}', '{{unsubscribe}}', '{{unsubscribe_url}}',
+            '{{view_url}}', '{{form_type}}', '{{enquiry_type}}', '{{response_time}}',
+            '{{ebook_description}}', '{{days_since_download}}', '{{download_count}}',
             '{{ name }}', '{{ lead_name }}', '{{ email }}', '{{ lead_email }}',
             '{{ download_url }}', '{{ download_link }}', '{{ expires_at }}', '{{ expires_in_hours }}',
             '{{ ebook_name }}', '{{ ebook_title }}', '{{ company_name }}', '{{ website }}',
-            '{{ support_email }}', '{{ current_year }}', '{{ unsubscribe }}'
+            '{{ support_email }}', '{{ current_year }}', '{{ unsubscribe }}', '{{ unsubscribe_url }}',
+            '{{ view_url }}', '{{ form_type }}', '{{ enquiry_type }}', '{{ response_time }}',
+            '{{ ebook_description }}', '{{ days_since_download }}', '{{ download_count }}'
         ];
         $replace = [
             'Test Recipient', 'Test Recipient', $email, $email,
             url('/ebook/download-test'), '<a href="'.url('/ebook/download-test').'">Click here to download</a>', now()->addDays(3)->format('F j, Y \a\t g:i A'), '72',
             'Relocation Masterclass Guide', 'Relocation Masterclass Guide', config('app.name'), url('/'),
-            'support@settleanz.com', date('Y'), url('/unsubscribe-test'),
+            'support@settleanz.com', date('Y'), url('/unsubscribe-test'), url('/unsubscribe-test'),
+            url('/ebook/view-test'), 'contact-page', 'Contact enquiry', '24 hours',
+            'A practical guide for your first steps after arrival.', '3', '1',
             'Test Recipient', 'Test Recipient', $email, $email,
             url('/ebook/download-test'), '<a href="'.url('/ebook/download-test').'">Click here to download</a>', now()->addDays(3)->format('F j, Y \a\t g:i A'), '72',
             'Relocation Masterclass Guide', 'Relocation Masterclass Guide', config('app.name'), url('/'),
-            'support@settleanz.com', date('Y'), url('/unsubscribe-test')
+            'support@settleanz.com', date('Y'), url('/unsubscribe-test'), url('/unsubscribe-test'),
+            url('/ebook/view-test'), 'contact-page', 'Contact enquiry', '24 hours',
+            'A practical guide for your first steps after arrival.', '3', '1',
         ];
 
         $subject = str_replace($search, $replace, $subject);

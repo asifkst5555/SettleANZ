@@ -294,7 +294,7 @@
                         <label>Type *</label>
                         <select name="type" id="template_type" required>
                             @foreach($types as $t)
-                            <option value="{{ $t }}" @selected(old('type', $template->type) === $t)>{{ ucfirst(str_replace('_', ' ', $t)) }}</option>
+                            <option value="{{ $t }}" @selected(old('type', $template->type) === $t)>{{ $typeLabels[$t] ?? ucfirst(str_replace('_', ' ', $t)) }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -525,7 +525,15 @@
         'unsubscribe': "#",
         'name': "John Doe",
         'ebook_name': "New Arrival Checklist",
-        'website': "{{ url('/') }}"
+        'website': "{{ url('/') }}",
+        'view_url': "#",
+        'form_type': "contact-page",
+        'enquiry_type': "Contact enquiry",
+        'response_time': "24 hours",
+        'ebook_description': "A practical guide for your first steps after arrival.",
+        'days_since_download': "3",
+        'download_count': "1",
+        'email': "john@example.com"
     };
 
     // Initial configuration state
@@ -1190,6 +1198,23 @@
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr>
                         <td height="${props.height || 20}" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+                    </tr>
+                </table>`;
+
+            case 'notice':
+                return `
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td style="padding: 10px 20px 14px 20px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${props.background || '#E6F4F3'}; border-radius: ${props.radius || 7}px;">
+                                <tr>
+                                    <td style="padding: ${props.padding || 16}px 20px; font-family: ${theme.defaultFont}; font-size: 13px; line-height: 1.55; color: ${props.textColor || theme.textColor};">
+                                        <p style="margin: 0 0 4px 0; font-weight: 700; color: ${props.titleColor || theme.primaryColor};">${props.title || ''}</p>
+                                        <p style="margin: 0; color: ${props.textColor || theme.textColor};">${props.text || ''}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>`;
 

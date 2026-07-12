@@ -8,7 +8,7 @@
         <div>
             <p class="eyebrow">Ebook System</p>
             <h2>Email Templates</h2>
-            <p>Create and manage email templates for download notifications and campaigns</p>
+            <p>Create and manage templates for automatic replies, download delivery, follow-ups, and campaigns</p>
         </div>
         <a href="{{ route('admin.email-templates.create') }}" class="admin-primary-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
@@ -24,7 +24,7 @@
                     <select name="type" class="admin-form-select">
                         <option value="">All</option>
                         @foreach($types as $t)
-                        <option value="{{ $t }}" @selected(request('type') === $t)>{{ ucfirst(str_replace('_', ' ', $t)) }}</option>
+                        <option value="{{ $t }}" @selected(request('type') === $t)>{{ $typeLabels[$t] ?? ucfirst(str_replace('_', ' ', $t)) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -50,7 +50,7 @@
                     <tr>
                         <td data-label="Name" style="font-weight:500;">{{ $template->name }}</td>
                         <td data-label="Type">
-                            <span class="admin-badge admin-badge--indigo">{{ ucfirst(str_replace('_', ' ', $template->type)) }}</span>
+                            <span class="admin-badge admin-badge--indigo">{{ $template->type_label }}</span>
                         </td>
                         <td data-label="Subject" style="color:#6b7280;">{{ $template->subject }}</td>
                         <td data-label="Active">
