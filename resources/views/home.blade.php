@@ -1074,6 +1074,147 @@
     line-height: 1.4;
   }
 
+  /* ═══════════════════════════════════════════════════════════════
+     SECTION 6B — CONSULTATION CARD
+     ═══════════════════════════════════════════════════════════════ */
+  .consult-card-sec {
+    padding: 0 24px 96px;
+    background: #FAF9F6;
+  }
+  .consult-card {
+    background: #ffffff;
+    border: 1px solid #E2E8F0;
+    border-radius: 24px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 56px 64px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .consult-card-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0A4A45;
+    text-transform: uppercase;
+    letter-spacing: 2.4px;
+    margin-bottom: 16px;
+  }
+  .consult-card-h {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0A4A45;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.4px;
+  }
+  .consult-card-desc {
+    font-size: 17px;
+    color: #475569;
+    line-height: 1.75;
+    max-width: 680px;
+    margin: 0 auto 32px;
+  }
+  .consult-card-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 32px;
+    margin-bottom: 36px;
+    list-style: none;
+    padding: 0;
+  }
+  .consult-card-benefits li {
+    font-size: 15px;
+    font-weight: 500;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .consult-card-benefits li::before {
+    content: '✓';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(232, 119, 58, 0.12);
+    color: #E8773A;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .consult-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #E8773A;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 16px 40px;
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(232, 119, 58, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .consult-card-btn:hover {
+    background: #d6682d;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(232, 119, 58, 0.3);
+  }
+  .consult-card-btn:focus-visible {
+    outline: 2px solid #E8773A;
+    outline-offset: 2px;
+  }
+  .consult-card-btn span {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .consult-card-trust {
+    font-size: 13px;
+    color: #94A3B8;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    .consult-card {
+      padding: 48px 40px;
+    }
+    .consult-card-h { font-size: 28px; }
+    .consult-card-desc { font-size: 16px; max-width: 560px; }
+    .consult-card-btn { font-size: 16px; padding: 15px 36px; }
+  }
+  @media (max-width: 767px) {
+    .consult-card-sec { padding: 0 20px 72px; }
+    .consult-card {
+      padding: 40px 28px;
+    }
+    .consult-card-h { font-size: 24px; }
+    .consult-card-desc { font-size: 15px; margin-bottom: 24px; }
+    .consult-card-benefits {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .consult-card-benefits li { font-size: 14px; white-space: normal; }
+    .consult-card-btn { width: 100%; max-width: 380px; padding: 15px 24px; font-size: 15px; }
+  }
+  @media (max-width: 480px) {
+    .consult-card-sec { padding: 0 16px 56px; }
+    .consult-card { padding: 32px 20px; }
+    .consult-card-h { font-size: 22px; }
+    .consult-card-label { font-size: 12px; letter-spacing: 2px; }
+  }
 
   @media (max-width: 991px) {
     .rm-box-container {
@@ -2019,7 +2160,30 @@
         </div>
       </div>
 
+    </div>
+  </div>
 
+  <!-- CONSULTATION CARD -->
+  <div class="consult-card-sec">
+    <div class="sec-container" style="max-width: 1240px;">
+      <div class="consult-card">
+        <div class="consult-card-label">BOOK A FREE CONSULTATION</div>
+        <h2 class="consult-card-h">Still Have Questions?</h2>
+        <p class="consult-card-desc">
+          Every journey is different.<br>
+          Book a free 30-minute consultation and get personalised guidance for your move to Australia or New Zealand.
+        </p>
+        <ul class="consult-card-benefits">
+          <li>One-on-one expert guidance</li>
+          <li>Ask your settlement questions</li>
+          <li>Personalised action plan</li>
+          <li>No obligation</li>
+        </ul>
+        <a class="consult-card-btn" href="https://calendly.com/dajsmailientel/joseph" target="_blank" rel="noopener noreferrer" aria-label="Book your free consultation on Calendly">
+          <span aria-hidden="true">📅</span> Book Your Free Consultation
+        </a>
+        <p class="consult-card-trust">Choose a time that works for you.</p>
+      </div>
     </div>
   </div>
 
