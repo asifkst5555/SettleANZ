@@ -226,7 +226,7 @@
                         verifyBox.style.background = 'rgba(0, 0, 0, 0.04)';
                         verifyBox.innerHTML = `
                             <p style="margin: 0 0 8px; font-weight: 600;">Verification Challenge</p>
-                            <p style="margin: 0 0 8px;">What is <strong data-chat-math-question>${data.question}</strong>? = ?</p>
+                            <p style="margin: 0 0 8px;">What is: <strong data-chat-math-question>${data.question}</strong> = ?</p>
                             <input type="hidden" id="chat-math-token" value="${data.token}">
                             <div style="display: flex; gap: 8px;">
                                 <input type="text" id="chat-math-answer" placeholder="Answer" style="width: 90px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; color: #333;">
