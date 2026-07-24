@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    @php
+        try {
+            $site_css_ver = file_exists(public_path('site.css')) ? filemtime(public_path('site.css')) : '1.0';
+        } catch (\Throwable $e) {
+            $site_css_ver = '1.0';
+        }
+        try {
+            $admin_css_ver = file_exists(public_path('admin.css')) ? filemtime(public_path('admin.css')) : '1.0';
+        } catch (\Throwable $e) {
+            $admin_css_ver = '1.0';
+        }
+        try {
+            $admin_notif_css_ver = file_exists(public_path('admin-notifications.css')) ? filemtime(public_path('admin-notifications.css')) : '1.0';
+        } catch (\Throwable $e) {
+            $admin_notif_css_ver = '1.0';
+        }
+        try {
+            $modal_js_ver = file_exists(public_path('js/modal.js')) ? filemtime(public_path('js/modal.js')) : '1.0';
+        } catch (\Throwable $e) {
+            $modal_js_ver = '1.0';
+        }
+        try {
+            $notif_js_ver = file_exists(public_path('js/notifications.js')) ? filemtime(public_path('js/notifications.js')) : '1.0';
+        } catch (\Throwable $e) {
+            $notif_js_ver = '1.0';
+        }
+        try {
+            $form_handler_js_ver = file_exists(public_path('js/admin-form-handler.js')) ? filemtime(public_path('js/admin-form-handler.js')) : '1.0';
+        } catch (\Throwable $e) {
+            $form_handler_js_ver = '1.0';
+        }
+    @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -11,9 +43,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('site.css') }}?v={{ filemtime(public_path('site.css')) }}">
-    <link rel="stylesheet" href="{{ asset('admin.css') }}?v={{ filemtime(public_path('admin.css')) }}">
-    <link rel="stylesheet" href="{{ asset('admin-notifications.css') }}?v={{ filemtime(public_path('admin-notifications.css')) }}">
+    <link rel="stylesheet" href="{{ asset('site.css') }}?v={{ $site_css_ver }}">
+    <link rel="stylesheet" href="{{ asset('admin.css') }}?v={{ $admin_css_ver }}">
+    <link rel="stylesheet" href="{{ asset('admin-notifications.css') }}?v={{ $admin_notif_css_ver }}">
     <style>
         .admin-impersonation-banner { display:flex; align-items:center; justify-content:center; gap:1rem; padding:0.6rem 1rem; background:#e8773a; color:white; font-size:0.88rem; font-weight:500; position:relative; z-index:1000 }
         .admin-alert { padding:0.75rem 1rem; border-radius:10px; margin-bottom:1rem; font-size:0.88rem }
@@ -210,11 +242,11 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/modal.js') }}?v={{ filemtime(public_path('js/modal.js')) }}"></script>
+    <script src="{{ asset('js/modal.js') }}?v={{ $modal_js_ver }}"></script>
     
     <!-- Notification System Script -->
-    <script src="{{ asset('js/notifications.js') }}?v={{ filemtime(public_path('js/notifications.js')) }}"></script>
-    <script src="{{ asset('js/admin-form-handler.js') }}?v={{ filemtime(public_path('js/admin-form-handler.js')) }}"></script>
+    <script src="{{ asset('js/notifications.js') }}?v={{ $notif_js_ver }}"></script>
+    <script src="{{ asset('js/admin-form-handler.js') }}?v={{ $form_handler_js_ver }}"></script>
 
     <!-- Top Bar Dropdowns & Notifications Script -->
     <script>
