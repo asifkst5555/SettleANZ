@@ -57,9 +57,9 @@ class AdminCopilotController extends Controller
         ]);
     }
 
-    public function history(AiConversation $conversation): JsonResponse
+    public function history(Request $request, AiConversation $conversation): JsonResponse
     {
-        $this->authorize('view', $conversation);
+        abort_unless($request->user()?->id === $conversation->user_id, 403);
 
         $conversation->load('messages:id,ai_conversation_id,role,content,created_at');
 
