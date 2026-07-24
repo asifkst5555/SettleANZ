@@ -119,9 +119,12 @@
                                 <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off">
                             </div>
 
+                            <x-honeypot />
+                            <x-math-verification />
+
                             <button type="submit"
-                                class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-                                Download Free Guide
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                Download Ebook
                             </button>
                         </form>
 

@@ -138,7 +138,12 @@ class LeadService
     public function exportData(array $filters, string $format = 'csv'): string
     {
         $query = Lead::notArchived()->with(['assignedStaff:id,name', 'ebook:id,title']);
-        $query->filter($filters);
+        
+        if (!empty($filters['ids'])) {
+            $query->whereIn('id', $filters['ids']);
+        } else {
+            $query->filter($filters);
+        }
 
         $leads = $query->orderBy('created_at', 'desc')->limit(5000)->get();
 
@@ -184,13 +189,29 @@ class LeadService
             return $content;
         }
 
+        if ($format === 'xls') {
+            $output = "";
+            $output .= implode("\t", $headers) . "\n";
+            foreach ($rows as $row) {
+                $cleanRow = array_map(fn($val) => str_replace(["\t", "\n", "\r"], " ", $val), $row);
+                $output .= implode("\t", $cleanRow) . "\n";
+            }
+            return $output;
+        }
+
         return '';
     }
 
     public function exportPdf(array $filters)
     {
         $query = Lead::notArchived()->with(['assignedStaff:id,name', 'ebook:id,title']);
-        $query->filter($filters);
+        
+        if (!empty($filters['ids'])) {
+            $query->whereIn('id', $filters['ids']);
+        } else {
+            $query->filter($filters);
+        }
+        
         $leads = $query->orderBy('created_at', 'desc')->limit(500)->get();
 
         $data = [
@@ -234,26 +255,37 @@ class LeadService
         $lead->update(['assigned_to' => $userId]);
     }
 
-    public function bulkAssign(Collection $leads, int $userId): int
+    public function bulkAssign(\Illuminate\Support\Collection $leads, int $userId): int
     {
-        $count = 0;
-        foreach ($leads as $lead) { $this->assignLead($lead, $userId); $count++; }
-        return $count;
+        return \Illuminate\Support\Facades\DB::transaction(function() use ($leads, $userId) {
+            $count = 0;
+            foreach ($leads as $lead) {
+                $this->assignLead($lead, $userId);
+                $count++;
+            }
+            return $count;
+        });
     }
 
-    public function bulkStatus(Collection $leads, string $status): int
+    public function bulkStatus(\Illuminate\Support\Collection $leads, string $status): int
     {
-        return $leads->each(fn($l) => $l->update(['status' => $status]))->count();
+        return \Illuminate\Support\Facades\DB::transaction(function() use ($leads, $status) {
+            return $leads->each(fn($l) => $l->update(['status' => $status]))->count();
+        });
     }
 
-    public function bulkDelete(Collection $leads): int
+    public function bulkDelete(\Illuminate\Support\Collection $leads): int
     {
-        return $leads->each(fn($l) => $l->delete())->count();
+        return \Illuminate\Support\Facades\DB::transaction(function() use ($leads) {
+            return $leads->each(fn($l) => $l->delete())->count();
+        });
     }
 
-    public function bulkArchive(Collection $leads): int
+    public function bulkArchive(\Illuminate\Support\Collection $leads): int
     {
-        return $leads->each(fn($l) => $l->update(['is_archived' => true]))->count();
+        return \Illuminate\Support\Facades\DB::transaction(function() use ($leads) {
+            return $leads->each(fn($l) => $l->update(['is_archived' => true]))->count();
+        });
     }
 
     public function calendarData(string $start, string $end): Collection

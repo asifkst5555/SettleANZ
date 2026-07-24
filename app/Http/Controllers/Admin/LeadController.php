@@ -9,6 +9,7 @@ use App\Models\LeadNote;
 use App\Models\LeadTask;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\ActivityLog;
 use App\Services\LeadService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -151,6 +152,23 @@ class LeadController extends Controller
     {
         abort_unless($request->user()?->hasPermission('lead_center.edit'), 403);
 
+        if ($request->boolean('select_all_matching')) {
+            $filters = $request->only([
+                'search', 'form_type', 'source_page', 'status', 'priority',
+                'visa_type', 'package_name', 'country', 'assigned_to',
+                'from_date', 'to_date',
+            ]);
+            $matchingIds = Lead::notArchived()->filter($filters)->pluck('id')->toArray();
+            $request->merge(['lead_ids' => $matchingIds]);
+        }
+
+        if ($request->has('lead_ids') && is_string($request->input('lead_ids'))) {
+            $decoded = json_decode($request->input('lead_ids'), true);
+            if (is_array($decoded)) {
+                $request->merge(['lead_ids' => $decoded]);
+            }
+        }
+
         $validated = $request->validate([
             'lead_ids' => 'required|array',
             'lead_ids.*' => 'exists:leads,id',
@@ -175,24 +193,86 @@ class LeadController extends Controller
     {
         $userId = (int) ($validated['value'] ?? 0);
         if (!$userId) return 'No staff selected.';
-        return "Assigned {$this->leadService->bulkAssign($leads, $userId)} lead(s).";
+        
+        $count = $this->leadService->bulkAssign($leads, $userId);
+        
+        if ($count > 0) {
+            $staff = User::find($userId);
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'bulk_assign',
+                'entity_type' => 'Lead',
+                'description' => "Bulk assigned {$count} leads to staff member: " . ($staff?->name ?? 'Unknown') . ".",
+                'new_values' => ['lead_ids' => $leads->pluck('id')->toArray(), 'assigned_to' => $userId],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+
+        return "Assigned {$count} lead(s).";
     }
 
     protected function handleBulkStatus($leads, $validated): string
     {
         if (empty($validated['value'])) return 'No status selected.';
-        return "Updated {$this->leadService->bulkStatus($leads, $validated['value'])} lead(s).";
+        $status = $validated['value'];
+        
+        $count = $this->leadService->bulkStatus($leads, $status);
+
+        if ($count > 0) {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'bulk_status',
+                'entity_type' => 'Lead',
+                'description' => "Bulk updated status of {$count} leads to: " . ucfirst(str_replace('_',' ',$status)) . ".",
+                'new_values' => ['lead_ids' => $leads->pluck('id')->toArray(), 'status' => $status],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+
+        return "Updated {$count} lead(s).";
     }
 
     protected function handleBulkDelete($leads): string
     {
         abort_unless(request()->user()?->hasPermission('lead_center.delete'), 403);
-        return "Deleted {$this->leadService->bulkDelete($leads)} lead(s).";
+        $leadIds = $leads->pluck('id')->toArray();
+        
+        $count = $this->leadService->bulkDelete($leads);
+
+        if ($count > 0) {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'bulk_delete',
+                'entity_type' => 'Lead',
+                'description' => "Bulk deleted {$count} leads.",
+                'old_values' => ['lead_ids' => $leadIds],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+
+        return "Deleted {$count} lead(s).";
     }
 
     protected function handleBulkArchive($leads): string
     {
-        return "Archived {$this->leadService->bulkArchive($leads)} lead(s).";
+        $count = $this->leadService->bulkArchive($leads);
+
+        if ($count > 0) {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'bulk_archive',
+                'entity_type' => 'Lead',
+                'description' => "Bulk archived {$count} leads.",
+                'new_values' => ['lead_ids' => $leads->pluck('id')->toArray(), 'is_archived' => true],
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+
+        return "Archived {$count} lead(s).";
     }
 
     public function updateStatus(Request $request, Lead $lead): JsonResponse
@@ -428,17 +508,31 @@ class LeadController extends Controller
         abort_unless($request->user()?->hasPermission('lead_center.export'), 403);
 
         $format = $request->query('format', 'csv');
-        $filters = $request->only(['form_type', 'source_page', 'status', 'from_date', 'to_date']);
+        $filters = $request->only([
+            'form_type', 'source_page', 'status', 'from_date', 'to_date',
+            'search', 'visa_type', 'assigned_to', 'priority', 'package_name',
+        ]);
+
+        if ($request->has('lead_ids')) {
+            $ids = $request->input('lead_ids');
+            if (is_string($ids)) {
+                $ids = json_decode($ids, true);
+            }
+            if (is_array($ids)) {
+                $filters['ids'] = $ids;
+            }
+        }
 
         if ($format === 'pdf') {
             return $this->leadService->exportPdf($filters);
         }
 
         $data = $this->leadService->exportData($filters, $format);
-        $filename = 'leads-' . now()->format('Y-m-d') . '.csv';
+        $filename = 'leads-' . now()->format('Y-m-d') . '.' . ($format === 'xls' ? 'xls' : 'csv');
+        $contentType = $format === 'xls' ? 'application/vnd.ms-excel' : 'text/csv';
 
         return response($data, 200, [
-            'Content-Type' => 'text/csv',
+            'Content-Type' => $contentType,
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ]);
     }

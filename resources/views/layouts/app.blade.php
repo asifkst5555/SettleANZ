@@ -1182,14 +1182,21 @@
             </div>
         </footer>
 
-        <div class="lead-modal" data-lead-modal hidden>
+        <div class="lead-modal lead-modal--roadmap" data-lead-modal hidden>
             <div class="lead-modal__backdrop" data-close-lead-modal></div>
             <div class="lead-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
                 <button class="lead-modal__close" type="button" aria-label="Close popup" data-close-lead-modal>&times;</button>
                 <div class="lead-modal__header">
-                    <span class="lead-modal__badge">Free Starter Guide</span>
-                    <h2 id="lead-modal-title">Moving to Australia or New Zealand?</h2>
-                    <p class="lead-modal__subtitle">Get the free SettleANZ Starter Guide, everything you need for your first 90 days.</p>
+                    <span class="lead-modal__badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="badge-icon"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                        FREE STARTER GUIDE
+                    </span>
+                    <div class="lead-modal__title-row">
+                        <div class="title-text-group">
+                            <h2 id="lead-modal-title">Get Your Free <br><span class="highlight-text">90-Day Roadmap</span></h2>
+                            <p class="lead-modal__subtitle">Everything you need for your first 90 days <br>in Australia or New Zealand.</p>
+                        </div>
+                    </div>
                 </div>
                 <form class="lead-form lead-form--modal" method="POST" action="{{ route('roadmap.claim') }}" data-async-form data-success-target="roadmap-form-message">
                     @csrf
@@ -1197,17 +1204,35 @@
                         <input type="text" name="website_url" tabindex="-1" autocomplete="off">
                     </div>
                     <div class="lead-form__field">
-                        <label for="lead-name">Your Name</label>
-                        <input type="text" id="lead-name" name="name" value="{{ old('name') }}" placeholder="Enter your name" required>
+                        <div class="field-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <div class="field-content-wrapper">
+                            <label for="lead-name">Your Name</label>
+                            <input type="text" id="lead-name" name="name" value="{{ old('name') }}" placeholder="Enter your name" required>
+                        </div>
                         @error('name')<small class="lead-form__error">{{ $message }}</small>@enderror
                     </div>
                     <div class="lead-form__field">
-                        <label for="lead-email">Email Address</label>
-                        <input type="email" id="lead-email" name="email" value="{{ old('email') }}" placeholder="Enter your email address" required>
+                        <div class="field-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </div>
+                        <div class="field-content-wrapper">
+                            <label for="lead-email">Email Address</label>
+                            <input type="email" id="lead-email" name="email" value="{{ old('email') }}" placeholder="Enter your email address" required>
+                        </div>
                         @error('email')<small class="lead-form__error">{{ $message }}</small>@enderror
                     </div>
-                    <button class="button button--large button--full lead-form__submit" type="submit">Send Me the Guide</button>
-                    <p class="lead-form__hint">No spam. Unsubscribe anytime.</p>
+                    <x-honeypot />
+                    <x-math-verification />
+                    <button class="button button--large button--full lead-form__submit" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Send Me the Guide
+                    </button>
+                    <p class="lead-form__hint">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="hint-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        No spam. Unsubscribe anytime.
+                    </p>
                     <p id="roadmap-form-message" class="package-form-message async-form-status" hidden></p>
                 </form>
             </div>
@@ -1239,6 +1264,8 @@
                         <label for="package-lead-phone">Phone Number (optional)</label>
                         <input type="tel" id="package-lead-phone" name="phone" placeholder="Your phone number">
                     </div>
+                    <x-honeypot />
+                    <x-math-verification />
                     <button class="button button--large button--full lead-form__submit" type="submit">Submit Booking Request</button>
                     <p class="lead-form__hint">We'll contact you within 24 hours to confirm your session.</p>
                     <p id="package-form-message" class="package-form-message async-form-status" hidden></p>

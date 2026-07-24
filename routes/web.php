@@ -43,6 +43,7 @@ use App\Http\Controllers\SeoAssetController;
 use App\Http\Controllers\EbookLandingController;
 use App\Http\Controllers\EbookDownloadController;
 use App\Http\Controllers\RoadmapController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', [SeoAssetController::class, 'sitemap'])->name('sitemap');
@@ -103,7 +104,7 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/directory', [DirectoryController::class, 'index'])->name('directory.index');
 Route::get('/directory/{slug}', [DirectoryController::class, 'show'])->name('directory.show');
-Route::post('/directory/{slug}/review', [DirectoryController::class, 'storeReview'])->name('directory.review.store');
+Route::post('/directory/{slug}/review', [DirectoryController::class, 'storeReview'])->name('directory.review.store')->middleware(['throttle:public_forms', 'verify.honeypot', 'verify.human']);
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
@@ -413,15 +414,18 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/impersonate/leave', [ImpersonationController::class, 'leave'])->name('admin.system.impersonate.leave');
 });
 
-Route::post('/lead-capture', [LeadCaptureController::class, 'store'])->name('lead-capture.store');
+Route::post('/lead-capture', [LeadCaptureController::class, 'store'])->name('lead-capture.store')->middleware(['throttle:public_forms', 'verify.honeypot', 'verify.human']);
 
 // Homepage Roadmap Lead Magnet
-Route::post('/get-roadmap', [RoadmapController::class, 'claim'])->name('roadmap.claim');
+Route::post('/get-roadmap', [RoadmapController::class, 'claim'])->name('roadmap.claim')->middleware(['throttle:public_forms', 'verify.honeypot', 'verify.human']);
 Route::get('/roadmap/thank-you/{token}', [RoadmapController::class, 'thankYou'])->name('roadmap.thank-you');
 
 // Ebook Lead Magnet Public Routes
 Route::get('/ebook/{slug}', [EbookLandingController::class, 'show'])->name('ebook.landing');
-Route::post('/ebook/capture', [EbookLandingController::class, 'capture'])->name('ebook.capture');
+Route::post('/ebook/capture', [EbookLandingController::class, 'capture'])->name('ebook.capture')->middleware(['throttle:public_forms', 'verify.honeypot', 'verify.human']);
+
+// Verification Refresh Route
+Route::get('/verification/refresh', [VerificationController::class, 'refresh'])->name('verification.refresh')->middleware('throttle:verification_refresh');
 Route::get('/ebook/{slug}/thank-you/{token?}', [EbookLandingController::class, 'thankYou'])->name('ebook.thank-you');
 
 // Secure Download Routes

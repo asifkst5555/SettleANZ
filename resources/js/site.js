@@ -197,11 +197,144 @@
         return chatConversationId;
     };
 
+    const showChatVerificationPrompt = async () => {
+        if (!chatLog) return;
+        
+        chatLog.innerHTML = '';
+        
+        const welcomeMsg = document.createElement('div');
+        welcomeMsg.className = 'site-chat-msg bot';
+        welcomeMsg.textContent = 'Welcome to SettleANZ AI. Please verify you are a human to start chatting.';
+        chatLog.appendChild(welcomeMsg);
+        
+        try {
+            const response = await fetch('/verification/refresh', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.enabled) {
+                    if (data.driver === 'math') {
+                        const verifyBox = document.createElement('div');
+                        verifyBox.className = 'site-chat-msg bot chat-verification-box';
+                        verifyBox.style.padding = '12px';
+                        verifyBox.style.margin = '8px 0';
+                        verifyBox.style.borderRadius = '8px';
+                        verifyBox.style.background = 'rgba(0, 0, 0, 0.04)';
+                        verifyBox.innerHTML = `
+                            <p style="margin: 0 0 8px; font-weight: 600;">Verification Challenge</p>
+                            <p style="margin: 0 0 8px;">What is <strong data-chat-math-question>${data.question}</strong>? = ?</p>
+                            <input type="hidden" id="chat-math-token" value="${data.token}">
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="chat-math-answer" placeholder="Answer" style="width: 90px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; color: #333;">
+                                <button type="button" id="chat-math-submit" class="button button--small" style="padding: 6px 12px; background: #0b7a75; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Verify</button>
+                            </div>
+                            <p id="chat-verify-error" style="color: #dc2626; margin: 6px 0 0; font-size: 0.85rem; display: none;"></p>
+                        `;
+                        chatLog.appendChild(verifyBox);
+                        
+                        if (chatInput) chatInput.disabled = true;
+                        if (chatSendButton) chatSendButton.disabled = true;
+                        
+                        const submitBtn = verifyBox.querySelector('#chat-math-submit');
+                        const answerInput = verifyBox.querySelector('#chat-math-answer');
+                        const errorMsg = verifyBox.querySelector('#chat-verify-error');
+                        
+                        const performVerify = async () => {
+                            const val = answerInput.value.trim();
+                            const tok = verifyBox.querySelector('#chat-math-token').value;
+                            if (!val) return;
+                            
+                            submitBtn.disabled = true;
+                            submitBtn.textContent = 'Verifying...';
+                            errorMsg.style.display = 'none';
+                            
+                            try {
+                                const sessionRes = await fetch('/api/chat/session', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    },
+                                    body: JSON.stringify({
+                                        channel: 'website_widget',
+                                        visitor_id: getChatVisitorId(),
+                                        language: 'en',
+                                        math_answer: val,
+                                        verification_token: tok
+                                    })
+                                });
+                                
+                                const payload = await sessionRes.json();
+                                if (!sessionRes.ok) {
+                                    throw new Error(payload.message || 'Verification failed. Please try again.');
+                                }
+                                
+                                chatConversationId = payload.conversation_id || '';
+                                if (chatConversationId) {
+                                    window.localStorage.setItem(chatConversationKey, chatConversationId);
+                                }
+                                
+                                verifyBox.remove();
+                                renderChatGreeting();
+                                if (chatInput) chatInput.disabled = false;
+                                if (chatSendButton) chatSendButton.disabled = false;
+                                if (chatInput) chatInput.focus();
+                            } catch (err) {
+                                errorMsg.textContent = err.message || 'Incorrect. Try again.';
+                                errorMsg.style.display = 'block';
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = 'Verify';
+                                
+                                const refreshRes = await fetch('/verification/refresh', {
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    }
+                                });
+                                if (refreshRes.ok) {
+                                    const refreshData = await refreshRes.json();
+                                    verifyBox.querySelector('[data-chat-math-question]').textContent = refreshData.question;
+                                    verifyBox.querySelector('#chat-math-token').value = refreshData.token;
+                                    answerInput.value = '';
+                                }
+                            }
+                        };
+                        
+                        submitBtn.addEventListener('click', performVerify);
+                        answerInput.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                performVerify();
+                            }
+                        });
+                    } else {
+                        renderChatGreeting();
+                        if (chatInput) chatInput.disabled = false;
+                        if (chatSendButton) chatSendButton.disabled = false;
+                    }
+                } else {
+                    renderChatGreeting();
+                    if (chatInput) chatInput.disabled = false;
+                    if (chatSendButton) chatSendButton.disabled = false;
+                }
+            }
+        } catch (e) {
+            console.error('Failed to initialize chatbot verification:', e);
+            renderChatGreeting();
+        }
+        scrollChatToBottom();
+    };
+
     const loadChatHistory = async () => {
         if (!chatLog) return;
 
         if (!chatConversationId) {
-            renderChatGreeting();
+            await showChatVerificationPrompt();
             chatHasLoaded = true;
             return;
         }
@@ -223,7 +356,7 @@
             chatConversationId = '';
             chatLog.innerHTML = '';
             removeThinkingMessage();
-            renderChatGreeting();
+            await showChatVerificationPrompt();
             chatHasLoaded = true;
         }
     };
@@ -239,15 +372,11 @@
         chatLog.innerHTML = '';
         removeThinkingMessage();
 
-        try {
-            await createChatSession(true);
-        } catch (error) {
-            window.localStorage.removeItem(chatConversationKey);
-            chatConversationId = '';
-        }
+        window.localStorage.removeItem(chatConversationKey);
+        chatConversationId = '';
 
         chatHasLoaded = true;
-        renderChatGreeting();
+        await showChatVerificationPrompt();
     };
 
     const submitChatMessage = async () => {
@@ -256,16 +385,17 @@
         const content = chatInput.value.trim();
         if (!content) return;
 
+        if (!chatConversationId) {
+            appendChatMessage('system', 'Please verify your humanity first.');
+            return;
+        }
+
         appendChatMessage('user', content);
         chatInput.value = '';
         appendThinkingMessage();
         setChatBusy(true);
 
         try {
-            if (!chatConversationId) {
-                await createChatSession();
-            }
-
             const payload = await requestJson(`/api/chat/message/${chatConversationId}`, {
                 method: 'POST',
                 body: JSON.stringify({ content }),
@@ -783,6 +913,48 @@
         });
     });
 
+    const refreshMathVerification = async () => {
+        try {
+            const response = await fetch('/verification/refresh', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.enabled) {
+                    if (data.driver === 'math') {
+                        document.querySelectorAll('[data-math-question]').forEach(el => {
+                            el.textContent = data.question;
+                        });
+                        document.querySelectorAll('.math-answer-input').forEach(el => {
+                            el.value = '';
+                        });
+                        document.querySelectorAll('.math-verification-token').forEach(el => {
+                            el.value = data.token || '';
+                        });
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('Failed to refresh math verification:', e);
+        }
+    };
+
+    document.addEventListener('click', (e) => {
+        if (e.target && (e.target.closest('[data-math-refresh]') || e.target.matches('[data-math-refresh]'))) {
+            e.preventDefault();
+            refreshMathVerification();
+        }
+    });
+
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            refreshMathVerification();
+        }
+    });
+
     asyncForms.forEach((form) => {
         const statusId = form.dataset.successTarget;
         const statusEl = statusId ? document.getElementById(statusId) : null;
@@ -871,6 +1043,7 @@
                 if (form.closest('[data-booking-modal]')) {
                     window.setTimeout(() => closeBookingModal(), 1200);
                 }
+                refreshMathVerification();
             } catch (error) {
                 if (isPackageForm) {
                     closePackageModal();
@@ -883,6 +1056,7 @@
                     statusEl.hidden = false;
                     statusEl.classList.add('is-error');
                 }
+                refreshMathVerification();
             } finally {
                 if (submitButton) submitButton.disabled = false;
             }

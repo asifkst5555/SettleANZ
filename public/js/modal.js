@@ -330,3 +330,54 @@ window.confirmAction = function(form, options = {}) {
 
 // Make adminModal globally available
 window.adminModal = adminModal;
+
+// Design System Modal/Drawer helpers
+window.openModal = function(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.removeAttribute('hidden');
+        el.classList.add('is-open');
+    }
+};
+
+window.closeModal = function(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.setAttribute('hidden', 'true');
+        el.classList.remove('is-open');
+    }
+};
+
+window.openDrawer = function(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.removeAttribute('hidden');
+        el.classList.add('is-open');
+    }
+};
+
+window.closeDrawer = function(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.setAttribute('hidden', 'true');
+        el.classList.remove('is-open');
+    }
+};
+
+// Global Lead Details Drawer loading logic - Redirects directly to redesigned workspace
+window.openLeadDrawer = function(event, leadId) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    window.location.href = '/admin/leads/' + leadId;
+};
+
+window.closeLeadDrawer = function() {
+    const overlay = document.getElementById('lead-drawer');
+    if (overlay) {
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('hidden', 'true');
+    }
+};
+

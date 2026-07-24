@@ -155,6 +155,9 @@
                                     <span class="error">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <x-honeypot />
+                            <x-math-verification />
+                            
                             <button type="submit" class="btn btn--primary btn--large">
                                 Submit Review
                             </button>

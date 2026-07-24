@@ -22,6 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'feature' => FeatureMiddleware::class,
+            'verify.human' => \App\Http\Middleware\VerifyHumanSubmission::class,
+            'verify.honeypot' => \App\Http\Middleware\VerifyHoneypot::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

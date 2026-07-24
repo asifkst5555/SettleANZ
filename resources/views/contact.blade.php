@@ -400,6 +400,9 @@
                             <textarea name="message" rows="6" placeholder="Tell us how we can help." required></textarea>
                         </label>
 
+                        <x-honeypot />
+                        <x-math-verification />
+
                         <button class="button button--large button--full contact-page-final__button" type="submit" data-submit-btn>Send Message</button>
                         <p id="contact-form-success" class="async-form-status" hidden></p>
                     </form>
@@ -570,6 +573,47 @@ document.addEventListener('DOMContentLoaded', function() {
     var form = document.querySelector('.lead-form.contact-page-final__form');
     if (!form) return;
 
+    function refreshMathVerification() {
+        fetch('/verification/refresh', {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.enabled) {
+                if (data.driver === 'math') {
+                    document.querySelectorAll('[data-math-question]').forEach(function(el) {
+                        el.textContent = data.question;
+                    });
+                    document.querySelectorAll('.math-answer-input').forEach(function(el) {
+                        el.value = '';
+                    });
+                    document.querySelectorAll('.math-verification-token').forEach(function(el) {
+                        el.value = data.token || '';
+                    });
+                }
+            }
+        })
+        .catch(function(err) {
+            console.error('Failed to refresh math verification:', err);
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        if (e.target && (e.target.closest('[data-math-refresh]') || e.target.matches('[data-math-refresh]'))) {
+            e.preventDefault();
+            refreshMathVerification();
+        }
+    });
+
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            refreshMathVerification();
+        }
+    });
+
     var submitBtn = form.querySelector('[data-submit-btn]');
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -600,9 +644,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(data) {
             form.reset();
             showFormModal('success');
+            refreshMathVerification();
         })
         .catch(function(error) {
             showFormModal('error', error.message || 'Something went wrong. Please try again.');
+            refreshMathVerification();
         })
         .finally(function() {
             submitBtn.disabled = false;

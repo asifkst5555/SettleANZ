@@ -3,161 +3,106 @@
 @section('content')
 <div class="admin-main__inner">
     <!-- Welcome Header -->
-    <section class="db-header">
-        <div class="db-header__title">
-            <p class="eyebrow" style="margin: 0; color: #14a394; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem;">Enterprise Operations Control</p>
-            <h2>Welcome back, {{ auth()->user()->name }}</h2>
-            <p>Here is your business performance snapshot for {{ now()->format('l, jS F Y') }}.</p>
-        </div>
-        <div class="db-header__actions">
-            <a class="button button--small button--ghost" href="/" target="_blank" rel="noreferrer" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+    <x-admin-page-header title="Welcome back, {{ auth()->user()->name }}" eyebrow="Enterprise Operations Control" desc="Here is your business performance snapshot for {{ now()->format('l, jS F Y') }}.">
+        <x-slot:actions>
+            <x-admin-button variant="ghost" size="sm" onclick="window.open('/', '_blank')">
                 @include('admin.partials.icon', ['name' => 'external-link', 'size' => 14])
                 <span>Open Site</span>
-            </a>
-            <a href="{{ route('admin.leads.export') }}" class="button button--small" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; display: inline-flex; align-items: center; gap: 0.35rem;" title="Export Leads to CSV">
+            </x-admin-button>
+            <x-admin-button variant="primary" size="sm" onclick="window.location='{{ route('admin.leads.export') }}'">
                 @include('admin.partials.icon', ['name' => 'file-down', 'size' => 14])
                 <span>Export Report</span>
-            </a>
-        </div>
-    </section>
+            </x-admin-button>
+        </x-slot:actions>
+    </x-admin-page-header>
 
     <!-- Top KPI Cards Grid -->
     <section class="kpi-grid">
         <!-- KPI 1: Total Leads -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Total Leads</span>
-                <span class="kpi-card__icon" style="background: rgba(20, 163, 148, 0.08); color: #14a394;">
-                    @include('admin.partials.icon', ['name' => 'users', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ number_format($leadServiceStats['total'] ?? 0) }}</div>
-                <div class="kpi-card__trend {{ ($leadServiceStats['this_month'] ?? 0) >= ($leadServiceStats['last_month'] ?? 0) ? 'up' : 'down' }}">
-                    @include('admin.partials.icon', ['name' => ($leadServiceStats['this_month'] ?? 0) >= ($leadServiceStats['last_month'] ?? 0) ? 'trending-up' : 'trending-down', 'size' => 14])
-                    <span>{{ $leadServiceStats['this_month'] ?? 0 }} this month</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Total Leads" 
+            value="{{ number_format($leadServiceStats['total'] ?? 0) }}" 
+            icon="users"
+            trend="{{ $leadServiceStats['this_month'] ?? 0 }} this month"
+            trendDir="{{ ($leadServiceStats['this_month'] ?? 0) >= ($leadServiceStats['last_month'] ?? 0) ? 'up' : 'down' }}"
+        />
 
         <!-- KPI 2: Today's Leads -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Today's Leads</span>
-                <span class="kpi-card__icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">
-                    @include('admin.partials.icon', ['name' => 'user-plus', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ $leadServiceStats['today'] ?? 0 }}</div>
-                <div class="kpi-card__trend up">
-                    @include('admin.partials.icon', ['name' => 'clock', 'size' => 14])
-                    <span>New today</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Today's Leads" 
+            value="{{ $leadServiceStats['today'] ?? 0 }}" 
+            icon="user-plus"
+            iconBg="rgba(16, 185, 129, 0.08)"
+            iconColor="#10b981"
+            trend="New today"
+            trendDir="up"
+        />
 
         <!-- KPI 3: Consultation Requests -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Consultations</span>
-                <span class="kpi-card__icon" style="background: rgba(99, 102, 241, 0.08); color: #6366f1;">
-                    @include('admin.partials.icon', ['name' => 'calendar', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ $consultationBookingCount ?? 0 }}</div>
-                <div class="kpi-card__trend neutral">
-                    @include('admin.partials.icon', ['name' => 'info', 'size' => 14])
-                    <span>Bookings logged</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Consultations" 
+            value="{{ $consultationBookingCount ?? 0 }}" 
+            icon="calendar"
+            iconBg="rgba(99, 102, 241, 0.08)"
+            iconColor="#6366f1"
+            trend="Bookings logged"
+            trendDir="neutral"
+        />
 
         <!-- KPI 4: Package Requests -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Package Bookings</span>
-                <span class="kpi-card__icon" style="background: rgba(245, 158, 11, 0.08); color: #f59e0b;">
-                    @include('admin.partials.icon', ['name' => 'package', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ $packageBookingCount ?? 0 }}</div>
-                <div class="kpi-card__trend up">
-                    @include('admin.partials.icon', ['name' => 'package', 'size' => 14])
-                    <span>Settlement packs</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Package Bookings" 
+            value="{{ $packageBookingCount ?? 0 }}" 
+            icon="package"
+            iconBg="rgba(245, 158, 11, 0.08)"
+            iconColor="#f59e0b"
+            trend="Settlement packs"
+            trendDir="up"
+        />
 
         <!-- KPI 5: Ebook Downloads -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Ebook Downloads</span>
-                <span class="kpi-card__icon" style="background: rgba(139, 92, 246, 0.08); color: #8b5cf6;">
-                    @include('admin.partials.icon', ['name' => 'download', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ $ebookStats['overview']['total_downloads'] ?? 0 }}</div>
-                <div class="kpi-card__trend up">
-                    @include('admin.partials.icon', ['name' => 'book-open', 'size' => 14])
-                    <span>Magnet conversions</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Ebook Downloads" 
+            value="{{ $ebookStats['overview']['total_downloads'] ?? 0 }}" 
+            icon="download"
+            iconBg="rgba(139, 92, 246, 0.08)"
+            iconColor="#8b5cf6"
+            trend="Magnet conversions"
+            trendDir="up"
+        />
 
         <!-- KPI 6: Contact Messages -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Contact Messages</span>
-                <span class="kpi-card__icon" style="background: rgba(236, 72, 153, 0.08); color: #ec4899;">
-                    @include('admin.partials.icon', ['name' => 'mail', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ $contactLeadCount ?? 0 }}</div>
-                <div class="kpi-card__trend neutral">
-                    @include('admin.partials.icon', ['name' => 'inbox', 'size' => 14])
-                    <span>Direct messages</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Contact Messages" 
+            value="{{ $contactLeadCount ?? 0 }}" 
+            icon="mail"
+            iconBg="rgba(236, 72, 153, 0.08)"
+            iconColor="#ec4899"
+            trend="Direct messages"
+            trendDir="neutral"
+        />
 
         <!-- KPI 7: Newsletter Subscribers -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Newsletter Signups</span>
-                <span class="kpi-card__icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">
-                    @include('admin.partials.icon', ['name' => 'megaphone', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ $leadServiceStats['newsletter_subscribers'] ?? 0 }}</div>
-                <div class="kpi-card__trend up">
-                    @include('admin.partials.icon', ['name' => 'users', 'size' => 14])
-                    <span>Subscribed</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Newsletter Signups" 
+            value="{{ $leadServiceStats['newsletter_subscribers'] ?? 0 }}" 
+            icon="megaphone"
+            iconBg="rgba(16, 185, 129, 0.08)"
+            iconColor="#10b981"
+            trend="Subscribed"
+            trendDir="up"
+        />
 
         <!-- KPI 8: Open Cases -->
-        <div class="kpi-card">
-            <div class="kpi-card__header">
-                <span class="kpi-card__label">Open/New Cases</span>
-                <span class="kpi-card__icon" style="background: rgba(239, 68, 68, 0.08); color: #ef4444;">
-                    @include('admin.partials.icon', ['name' => 'clipboard-list', 'size' => 18])
-                </span>
-            </div>
-            <div class="kpi-card__body">
-                <div class="kpi-card__value">{{ $leadServiceStats['new_leads'] ?? 0 }}</div>
-                <div class="kpi-card__trend down">
-                    @include('admin.partials.icon', ['name' => 'alert-circle', 'size' => 14])
-                    <span>Awaiting action</span>
-                </div>
-            </div>
-        </div>
+        <x-admin-stat-card 
+            label="Open/New Cases" 
+            value="{{ $leadServiceStats['new_leads'] ?? 0 }}" 
+            icon="clipboard-list"
+            iconBg="rgba(239, 68, 68, 0.08)"
+            iconColor="#ef4444"
+            trend="Awaiting action"
+            trendDir="down"
+        />
     </section>
 
     <!-- Charts Row Grid -->
@@ -233,7 +178,7 @@
                             </div>
                         </div>
                         <div style="display: flex; align-items: center;">
-                            <a href="{{ route('admin.leads.show', $consult) }}" class="button button--small" style="padding: 0.25rem 0.5rem; text-decoration: none; display: flex; align-items: center; gap: 0.25rem;" onclick="openDrawer(event, {{ $consult->id }})">
+                            <a href="{{ route('admin.leads.show', $consult) }}" class="button button--small" style="padding: 0.25rem 0.5rem; text-decoration: none; display: flex; align-items: center; gap: 0.25rem;" onclick="openLeadDrawer(event, {{ $consult->id }})">
                                 @include('admin.partials.icon', ['name' => 'eye', 'size' => 12])
                                 <span>Open</span>
                             </a>
@@ -386,7 +331,7 @@
                                     <small style="text-transform: uppercase; font-weight: 700; font-size: 0.7rem; color: {{ $lead->status === 'new' ? '#ef4444' : '#64748b' }}">{{ $lead->status }}</small>
                                 </td>
                                 <td style="padding: 0.65rem 0.75rem; text-align: right;">
-                                    <a href="{{ route('admin.leads.show', $lead) }}" class="button button--small" style="padding: 0.2rem 0.45rem; font-size: 0.67rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; text-decoration: none;" onclick="openDrawer(event, {{ $lead->id }})">View</a>
+                                    <a href="{{ route('admin.leads.show', $lead) }}" class="button button--small" style="padding: 0.2rem 0.45rem; font-size: 0.67rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; text-decoration: none;" onclick="openLeadDrawer(event, {{ $lead->id }})">View</a>
                                 </td>
                             </tr>
                         @empty
@@ -475,7 +420,7 @@
                                         <span style="font-weight: 500;">{{ data_get($pkg->metadata, 'subject') ?: 'Settlement Package' }}</span>
                                     </td>
                                     <td style="padding: 0.65rem 0.75rem; text-align: right;">
-                                        <a href="{{ route('admin.leads.show', $pkg) }}" class="button button--small" style="padding: 0.2rem 0.45rem; font-size: 0.67rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; text-decoration: none;" onclick="openDrawer(event, {{ $pkg->id }})">Open</a>
+                                        <a href="{{ route('admin.leads.show', $pkg) }}" class="button button--small" style="padding: 0.2rem 0.45rem; font-size: 0.67rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; text-decoration: none;" onclick="openLeadDrawer(event, {{ $pkg->id }})">Open</a>
                                     </td>
                                 </tr>
                             @empty
@@ -670,9 +615,21 @@ document.addEventListener("DOMContentLoaded", function () {
     /* KPI Grid */
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 1.25rem;
         margin-bottom: 2rem;
+    }
+
+    @media (max-width: 1200px) {
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .kpi-grid {
+            grid-template-columns: 1fr;
+        }
     }
     .kpi-card {
         background: #ffffff;

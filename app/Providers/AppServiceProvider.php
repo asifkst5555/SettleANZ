@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Models\SiteSetting;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use App\Services\AiAdminAssistantService;
 use App\Services\AiEmailService;
 use App\Services\AnalyticsService;
@@ -56,6 +59,37 @@ class AppServiceProvider extends ServiceProvider
                 'guides' => SiteDefaults::featuredGuides(),
                 'sharedSettings' => $settings,
             ]);
+        });
+
+        // Register Security Rate Limiters
+        RateLimiter::for('public_forms', function (Request $request) {
+            return Limit::perMinute(10)->by($request->ip())->response(function (Request $request, array $headers) {
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json([
+                        'message' => 'Too many submission attempts. Please try again in a minute.',
+                    ], 429, $headers);
+                }
+
+                return redirect()->back()
+                    ->withHeaders($headers)
+                    ->withErrors(['math_answer' => 'Too many submission attempts. Please try again in a minute.']);
+            });
+        });
+
+        RateLimiter::for('verification_refresh', function (Request $request) {
+            return Limit::perMinute(30)->by($request->ip())->response(function (Request $request, array $headers) {
+                return response()->json([
+                    'message' => 'Too many refresh requests. Please slow down.',
+                ], 429, $headers);
+            });
+        });
+
+        RateLimiter::for('api_chat', function (Request $request) {
+            return Limit::perMinute(20)->by($request->ip())->response(function (Request $request, array $headers) {
+                return response()->json([
+                    'message' => 'Too many messages sent. Please slow down.',
+                ], 429, $headers);
+            });
         });
 
 

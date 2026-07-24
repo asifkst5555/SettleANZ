@@ -2153,6 +2153,8 @@
                 <input class="rm-input" type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required>
                 @error('email')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
               </label>
+              <x-honeypot />
+              <x-math-verification />
               <button class="rm-btn" type="submit">Send Me the Roadmap</button>
             </form>
             <div class="rm-note">Takes under 5 minutes to read. Saves weeks of confusion.</div>
@@ -2418,6 +2420,8 @@
             <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required>
             @error('email')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
           </label>
+          <x-honeypot />
+          <x-math-verification />
           <button type="submit">Get the Free Roadmap</button>
         </form>
         <div class="fc-micro">No spam. Just practical updates when needed.</div>

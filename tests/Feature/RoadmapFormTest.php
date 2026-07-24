@@ -18,10 +18,21 @@ class RoadmapFormTest extends TestCase
             'slug' => 'settleanZ-new-arrival-checklist',
         ]);
 
-        $response = $this->post(route('roadmap.claim'), [
-            'name' => 'John Smith',
-            'email' => 'john@example.com',
-        ]);
+        $token = 'test-token';
+        $challenges = [
+            $token => [
+                'answer' => 8,
+                'expires_at' => now()->addMinutes(15)->timestamp,
+            ],
+        ];
+
+        $response = $this->withSession(['verification_challenges' => $challenges])
+            ->post(route('roadmap.claim'), [
+                'name' => 'John Smith',
+                'email' => 'john@example.com',
+                'math_answer' => 8,
+                'verification_token' => $token,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
