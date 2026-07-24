@@ -57,12 +57,14 @@ class AiEmailService
 
     public function copilotChat(string $message, string $systemPrompt, string $conversationHistory = ''): array
     {
-        return $this->callAI($message, $systemPrompt . "\n\n" . $conversationHistory);
+        $text = $this->callAIRaw($message, $systemPrompt);
+        return ['body_text' => $text];
     }
 
     public function copilotChatStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature = 0.2): array
     {
-        return $this->callAIStructured($message, $systemPrompt, $historyMessages, $temperature);
+        $text = $this->callAIRaw($message, $systemPrompt, $historyMessages);
+        return ['body_text' => $text];
     }
 
     private function callAIStructured(string $message, string $systemPrompt, array $historyMessages, float $temperature): array
@@ -203,7 +205,8 @@ IMPORTANT RULES:
 Current context: Admin managing ebook downloads and leads.
 PROMPT;
 
-        return $this->callAI($message, $systemPrompt . "\n\n" . $conversationHistory);
+        $text = $this->callAIRaw($message, $systemPrompt . "\n\n" . $conversationHistory);
+        return ['body_text' => $text];
     }
 
     private function buildDownloadEmailPrompt(array $data, string $tone, string $language): string
@@ -649,5 +652,126 @@ PROMPT;
     private function getSystemPrompt(): string
     {
         return 'You are a professional email template generator. You output ONLY valid JSON. Never include markdown, code fences (```json), explanations, reasoning, or any text outside the JSON object. Your response must be parseable by json_decode() with no modification. The JSON must have exactly three keys: "subject" (string, max 80 chars), "body_html" (string, complete responsive HTML email document), "body_text" (string, plain text version).';
+    }
+
+    private function callAIRaw(string $prompt, ?string $systemPrompt = null, array $history = []): string
+    {
+        return match ($this->provider) {
+            'openai' => $this->callOpenAIRaw($prompt, $systemPrompt, $history),
+            'gemini' => $this->callGeminiRaw($prompt, $systemPrompt, $history),
+            'claude' => $this->callClaudeRaw($prompt, $systemPrompt, $history),
+            'deepseek' => $this->callDeepSeekRaw($prompt, $systemPrompt, $history),
+            default => throw new Exception("Unsupported AI provider: {$this->provider}"),
+        };
+    }
+
+    private function callOpenAIRaw(string $prompt, ?string $systemPrompt = null, array $history = []): string
+    {
+        $messages = [];
+        if ($systemPrompt) {
+            $messages[] = ['role' => 'system', 'content' => $systemPrompt];
+        }
+        foreach ($history as $msg) {
+            $messages[] = [
+                'role' => $msg['role'] === 'assistant' ? 'assistant' : 'user',
+                'content' => $msg['content'],
+            ];
+        }
+        $messages[] = ['role' => 'user', 'content' => $prompt];
+
+        $url = str_ends_with($this->baseUrl, '/chat/completions')
+            ? $this->baseUrl
+            : $this->baseUrl . '/chat/completions';
+
+        $response = $this->httpClient()->post($url, [
+            'model' => $this->model,
+            'messages' => $messages,
+            'max_tokens' => $this->maxTokens,
+            'temperature' => $this->temperature,
+        ]);
+
+        $json = $response->json();
+        return $json['choices'][0]['message']['content'] ?? '';
+    }
+
+    private function callGeminiRaw(string $prompt, ?string $systemPrompt = null, array $history = []): string
+    {
+        $contents = [];
+        if ($systemPrompt) {
+            $contents[] = ['role' => 'user', 'parts' => [['text' => $systemPrompt]]];
+        }
+        foreach ($history as $msg) {
+            $parts = [['text' => $msg['content']]];
+            $contents[] = [
+                'role' => $msg['role'] === 'assistant' ? 'model' : 'user',
+                'parts' => $parts,
+            ];
+        }
+        $contents[] = ['role' => 'user', 'parts' => [['text' => $prompt]]];
+
+        $url = config('ebook.ai.providers.gemini.url') . "?key={$this->apiKey}";
+        $response = $this->httpClient()->post($url, [
+            'contents' => $contents,
+            'generationConfig' => [
+                'maxOutputTokens' => $this->maxTokens,
+                'temperature' => $this->temperature,
+            ],
+        ]);
+
+        $json = $response->json();
+        return $json['candidates'][0]['content']['parts'][0]['text'] ?? '';
+    }
+
+    private function callClaudeRaw(string $prompt, ?string $systemPrompt = null, array $history = []): string
+    {
+        $messages = [];
+        foreach ($history as $msg) {
+            $messages[] = [
+                'role' => $msg['role'] === 'assistant' ? 'assistant' : 'user',
+                'content' => $msg['content'],
+            ];
+        }
+        $messages[] = ['role' => 'user', 'content' => $prompt];
+
+        $response = $this->httpClient()
+            ->withHeaders([
+                'x-api-key' => $this->apiKey,
+                'anthropic-version' => '2023-06-01',
+            ])
+            ->post(config('ebook.ai.providers.claude.url', 'https://api.anthropic.com/v1/messages'), [
+                'model' => $this->model,
+                'system' => $systemPrompt ?? 'You are a helpful assistant.',
+                'messages' => $messages,
+                'max_tokens' => $this->maxTokens,
+                'temperature' => $this->temperature,
+            ]);
+
+        $json = $response->json();
+        return $json['content'][0]['text'] ?? '';
+    }
+
+    private function callDeepSeekRaw(string $prompt, ?string $systemPrompt = null, array $history = []): string
+    {
+        $messages = [];
+        if ($systemPrompt) {
+            $messages[] = ['role' => 'system', 'content' => $systemPrompt];
+        }
+        foreach ($history as $msg) {
+            $messages[] = [
+                'role' => $msg['role'] === 'assistant' ? 'assistant' : 'user',
+                'content' => $msg['content'],
+            ];
+        }
+        $messages[] = ['role' => 'user', 'content' => $prompt];
+
+        $response = $this->httpClient()->post(config('ebook.ai.providers.deepseek.url', 'https://api.deepseek.com/v1/chat/completions'), [
+            'model' => $this->model,
+            'messages' => $messages,
+            'max_tokens' => $this->maxTokens,
+            'temperature' => $this->temperature,
+        ]);
+
+        $json = $response->json();
+        return $json['choices'][0]['message']['content'] ?? '';
     }
 }
