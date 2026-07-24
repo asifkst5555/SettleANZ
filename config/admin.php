@@ -39,7 +39,6 @@ return [
             'permission' => 'ai_operations.view',
             'children' => [
                 ['label' => 'AI Knowledge Base', 'route' => 'admin.ai-knowledge.index', 'icon' => 'brain', 'permission' => 'ai_operations.view'],
-                ['label' => 'Admin AI Assistant', 'route' => 'admin.ai-assistant.index', 'icon' => 'bot', 'permission' => 'ai_operations.view'],
             ],
         ],
         [
