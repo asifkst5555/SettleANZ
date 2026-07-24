@@ -334,7 +334,13 @@
         if (!chatLog) return;
 
         if (!chatConversationId) {
-            await showChatVerificationPrompt();
+            chatLog.innerHTML = '';
+            try {
+                await createChatSession(false);
+                renderChatGreeting();
+            } catch (error) {
+                console.error('Failed to create chat session:', error);
+            }
             chatHasLoaded = true;
             return;
         }
@@ -356,7 +362,12 @@
             chatConversationId = '';
             chatLog.innerHTML = '';
             removeThinkingMessage();
-            await showChatVerificationPrompt();
+            try {
+                await createChatSession(false);
+                renderChatGreeting();
+            } catch (err) {
+                console.error('Failed to create chat session:', err);
+            }
             chatHasLoaded = true;
         }
     };
@@ -376,7 +387,12 @@
         chatConversationId = '';
 
         chatHasLoaded = true;
-        await showChatVerificationPrompt();
+        try {
+            await createChatSession(true);
+            renderChatGreeting();
+        } catch (error) {
+            console.error('Failed to reset chat session:', error);
+        }
     };
 
     const submitChatMessage = async () => {
