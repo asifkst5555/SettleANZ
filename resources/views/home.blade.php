@@ -1675,73 +1675,142 @@
      ═══════════════════════════════════════════════════════════════ */
   .fc-inner {
     text-align: center;
-    max-width: 760px;
+    max-width: 720px;
     margin: 0 auto;
   }
   .fc-h {
     font-size: 42px;
     font-weight: 800;
     color: #fff;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     letter-spacing: -0.6px;
     line-height: 1.25;
   }
   .fc-sub {
     font-size: 18px;
-    color: #9dd5d2;
-    margin-bottom: 48px;
-    line-height: 1.85;
+    color: #a4e5e1;
+    margin-bottom: 36px;
+    line-height: 1.6;
     font-weight: 400;
   }
   .fc-form {
     display: flex;
+    flex-direction: column;
     gap: 16px;
-    max-width: 680px;
-    margin: 0 auto 22px;
+    max-width: 640px;
+    margin: 0 auto 24px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 32px 28px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   }
-  .fc-form label {
-    flex: 1;
+  .fc-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
   }
-  .fc-form input {
+  .fc-field {
+    width: 100%;
+    text-align: left;
+  }
+  .fc-field input {
     width: 100%;
     border-radius: 12px;
-    padding: 19px 22px;
+    padding: 16px 20px;
     font-size: 16px;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     outline: none;
-    color: #2C3A47;
+    color: #1E293B;
+    background: #ffffff;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .fc-form button {
-    background: #E8773A;
-    color: #fff;
+  .fc-field input:focus {
+    border-color: #E8773A;
+    box-shadow: 0 0 0 3px rgba(232, 119, 58, 0.3);
+  }
+  .fc-error {
+    color: #fca5a5;
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+  }
+  .fc-verification {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 12px;
-    padding: 19px 36px;
-    font-size: 16px;
+    padding: 16px 20px;
+    color: #ffffff;
+    text-align: left;
+    box-sizing: border-box;
+  }
+  .fc-verification .math-verification-wrapper {
+    margin-bottom: 0;
+  }
+  .fc-verification .math-verification-label {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .fc-verification .math-verification-lock {
+    color: #a4e5e1;
+  }
+  .fc-verification .math-verification-prompt {
+    color: #e2f1f0;
+  }
+  .fc-verification .math-refresh-btn {
+    color: #a4e5e1;
+  }
+  .fc-verification .math-answer-input {
+    background: #ffffff;
+    color: #1e293b;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+  }
+  .fc-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #E8773A 0%, #d86324 100%);
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 16px 32px;
+    font-size: 18px;
     font-weight: 700;
     white-space: nowrap;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 6px 18px rgba(232, 119, 58, 0.35);
   }
-  .fc-form button:hover {
-    background-color: #d3662d;
+  .fc-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232, 119, 58, 0.45);
+  }
+  .fc-btn:active {
+    transform: translateY(0);
   }
   .fc-micro {
     font-size: 14px;
-    color: #7abfbb;
+    color: #a4e5e1;
     font-weight: 400;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 640px) {
     .fc-h {
       font-size: 30px;
     }
     .fc-form {
-      flex-direction: column;
+      padding: 24px 18px;
+    }
+    .fc-form-grid {
+      grid-template-columns: 1fr;
       gap: 12px;
     }
-    .fc-form button {
-      width: 100%;
+    .fc-btn {
+      font-size: 16px;
+      padding: 15px 24px;
     }
   }
 
@@ -2412,17 +2481,27 @@
           <div style="display:none">
             <input type="text" name="website_url" tabindex="-1" autocomplete="off">
           </div>
-          <label><span class="sr-only">Your name</span>
-            <input type="text" name="name" value="{{ old('name') }}" placeholder="Your name" required>
-            @error('name')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
-          </label>
-          <label><span class="sr-only">Your email</span>
-            <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required>
-            @error('email')<small style="color:#dc2626;display:block;margin-top:4px;">{{ $message }}</small>@enderror
-          </label>
-          <x-honeypot />
-          <x-math-verification />
-          <button type="submit">Get the Free Roadmap</button>
+          
+          <div class="fc-form-grid">
+            <div class="fc-field">
+              <label for="fc-name" class="sr-only">Your name</label>
+              <input id="fc-name" type="text" name="name" value="{{ old('name') }}" placeholder="Your name" required>
+              @error('name')<small class="fc-error">{{ $message }}</small>@enderror
+            </div>
+
+            <div class="fc-field">
+              <label for="fc-email" class="sr-only">Your email</label>
+              <input id="fc-email" type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required>
+              @error('email')<small class="fc-error">{{ $message }}</small>@enderror
+            </div>
+          </div>
+
+          <div class="fc-verification">
+            <x-honeypot />
+            <x-math-verification />
+          </div>
+
+          <button type="submit" class="fc-btn">Get the Free Roadmap</button>
         </form>
         <div class="fc-micro">No spam. Just practical updates when needed.</div>
       </div>
