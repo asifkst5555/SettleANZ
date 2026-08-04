@@ -17,29 +17,30 @@
             <!-- Hidden token input for multi-tab challenge validation -->
             <input type="hidden" name="verification_token" class="math-verification-token" value="{{ $token }}">
             
-            <label for="{{ $uniqueId }}" class="math-verification-label">
-                <span class="label-title-wrapper">Human Verification <span class="math-required">*</span></span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="math-verification-lock"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </label>
-            
-            <div class="math-verification-prompt">
-                <span>What is: <strong class="math-question-text" data-math-question>{{ $question }}</strong> = ?</span>
-                <button type="button" class="math-refresh-btn" data-math-refresh aria-label="Get new math question" title="Get a new question">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-                </button>
-            </div>
-            
-            <div class="math-input-container">
-                <input 
-                    type="text" 
-                    id="{{ $uniqueId }}" 
-                    name="math_answer" 
-                    required 
-                    class="math-answer-input"
-                    placeholder="Enter answer"
-                    autocomplete="off"
-                    aria-required="true"
-                >
+            <div class="math-verification-row">
+                <label for="{{ $uniqueId }}" class="math-verification-prompt">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="math-verification-lock" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <span class="math-label-title">Verify:</span>
+                    <strong class="math-question-text" data-math-question>{{ $question }}</strong>
+                    <span class="math-equals">=</span>
+                </label>
+                
+                <div class="math-input-group">
+                    <input 
+                        type="text" 
+                        id="{{ $uniqueId }}" 
+                        name="math_answer" 
+                        required 
+                        class="math-answer-input"
+                        placeholder="Answer"
+                        autocomplete="off"
+                        aria-required="true"
+                        aria-label="Math verification answer"
+                    >
+                    <button type="button" class="math-refresh-btn" data-math-refresh aria-label="Get new math question" title="Get a new question">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                    </button>
+                </div>
             </div>
             
             @error('math_answer')
@@ -84,64 +85,89 @@
     @once
     <style>
         .math-verification-wrapper {
-            margin-bottom: 1.25rem;
-            text-align: left;
+            width: 100%;
             font-family: inherit;
+            box-sizing: border-box;
         }
-        .math-verification-label {
+        .math-verification-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-weight: 600;
-            margin-bottom: 0.35rem;
-            font-size: 0.95rem;
-            color: inherit;
-        }
-        .math-verification-lock {
-            color: #64748b;
-        }
-        .math-required {
-            color: #e53e3e;
-            margin-left: 0.15rem;
+            gap: 12px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .math-verification-prompt {
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.5rem;
-            color: inherit;
-        }
-        .math-refresh-btn {
-            background: none;
-            border: none;
-            padding: 2px;
-            cursor: pointer;
-            color: #0b7a75;
-            font-size: 0.95rem;
             display: inline-flex;
             align-items: center;
-            transition: transform 0.2s;
+            gap: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: inherit;
+            white-space: nowrap;
+            margin: 0;
+            cursor: pointer;
+            user-select: none;
         }
-        .math-refresh-btn:hover {
-            transform: rotate(30deg);
+        .math-verification-lock {
+            color: currentColor;
+            opacity: 0.85;
+            flex-shrink: 0;
+        }
+        .math-label-title {
+            font-weight: 600;
+        }
+        .math-question-text {
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+        .math-equals {
+            opacity: 0.9;
+        }
+        .math-input-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            max-width: 220px;
         }
         .math-answer-input {
+            flex: 1;
             width: 100%;
-            max-width: 140px;
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            height: 48px;
+            padding: 0 14px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
             font-size: 0.95rem;
-            color: #333;
-            background-color: #fff;
-            transition: border-color 0.15s ease-in-out;
+            color: #1e293b;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
         }
         .math-answer-input:focus {
             border-color: #0b7a75;
-            outline: 0;
-            box-shadow: 0 0 0 2px rgba(11, 122, 117, 0.25);
+            box-shadow: 0 0 0 3px rgba(11, 122, 117, 0.18);
+        }
+        .math-refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: rgba(11, 122, 117, 0.08);
+            border: 1px solid rgba(11, 122, 117, 0.15);
+            color: #0b7a75;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+            flex-shrink: 0;
+            padding: 0;
+        }
+        .math-refresh-btn:hover {
+            transform: rotate(180deg);
+            background: rgba(11, 122, 117, 0.18);
+            color: #085854;
         }
         .math-error-msg {
             color: #e53e3e;
@@ -149,6 +175,19 @@
             margin-top: 0.35rem;
             font-size: 0.825rem;
             font-weight: 500;
+            text-align: left;
+        }
+
+        @media (max-width: 640px) {
+            .math-verification-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .math-input-group {
+                max-width: 100%;
+                width: 100%;
+            }
         }
     </style>
     @endonce

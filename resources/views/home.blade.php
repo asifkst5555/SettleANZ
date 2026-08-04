@@ -1740,35 +1740,54 @@
   }
   .fc-verification {
     width: 100%;
-    background: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 12px;
-    padding: 16px 20px;
+    border-radius: 14px;
+    padding: 12px 18px;
     color: #ffffff;
     text-align: left;
     box-sizing: border-box;
   }
   .fc-verification .math-verification-wrapper {
-    margin-bottom: 0;
+    margin: 0;
   }
-  .fc-verification .math-verification-label {
-    color: #ffffff;
-    font-weight: 600;
+  .fc-verification .math-verification-prompt {
+    color: #e2f1f0;
+    font-size: 15px;
   }
   .fc-verification .math-verification-lock {
     color: #a4e5e1;
   }
-  .fc-verification .math-verification-prompt {
-    color: #e2f1f0;
+  .fc-verification .math-label-title {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .fc-verification .math-question-text {
+    color: #ffffff;
+    font-weight: 700;
   }
   .fc-verification .math-refresh-btn {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: #a4e5e1;
   }
+  .fc-verification .math-refresh-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    transform: rotate(180deg);
+  }
   .fc-verification .math-answer-input {
+    height: 46px;
     background: #ffffff;
     color: #1e293b;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 15px;
+    padding: 0 16px;
+  }
+  .fc-verification .math-answer-input:focus {
+    border-color: #E8773A;
+    box-shadow: 0 0 0 3px rgba(232, 119, 58, 0.3);
   }
   .fc-btn {
     width: 100%;
