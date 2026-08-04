@@ -1,6 +1,6 @@
 @php
     $categoryOptions = ['Housing', 'Banking', 'Migration', 'Settlement', 'Visa', 'Employment', 'Healthcare', 'Moving', 'Working', 'Lifestyle'];
-    $currentCategory = old('category', $post->category);
+    $currentCategory = old('category', $post->category ?? null);
     $initialFaqItems = old('faq_items');
     if (is_string($initialFaqItems) && $initialFaqItems !== '') {
         $initialFaqItems = json_decode($initialFaqItems, true);
@@ -8,6 +8,10 @@
     if (!is_array($initialFaqItems)) {
         $initialFaqItems = is_array($post->faq_items ?? null) ? $post->faq_items : [];
     }
+
+    $currentImage = \App\Support\BlogMedia::normalizeFilename(old('image', $post->image ?? ''));
+    $currentImageUrl = !empty($currentImage) ? \App\Support\BlogMedia::url($currentImage) : '';
+    $hasImage = !empty($currentImage) && !empty($currentImageUrl);
 @endphp
 
 <style>
@@ -1660,12 +1664,12 @@
                 <input type="hidden" name="image" id="imageInput" value="{{ $currentImage ?? '' }}">
 
                 <div class="img-dropzone" id="imageDropzone" tabindex="0" role="button" aria-label="Upload featured image">
-                    <div class="img-dropzone__preview" id="imagePreviewWrap" @style(['display: none' => !$hasImage])>
+                    <div class="img-dropzone__preview" id="imagePreviewWrap" @style(['display: none' => empty($currentImageUrl)])>
                         <img id="imagePreviewImg"
-                             src="{{ $hasImage ? $currentImageUrl : '' }}"
+                             src="{{ !empty($currentImageUrl) ? $currentImageUrl : '' }}"
                              alt="Featured image preview">
                     </div>
-                    <div class="img-dropzone__placeholder" id="imagePlaceholder" @style(['display: none' => $hasImage])>
+                    <div class="img-dropzone__placeholder" id="imagePlaceholder" @style(['display: none' => !empty($currentImageUrl)])>
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:#0b7a75;">
                             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
                             <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -1677,7 +1681,7 @@
                     <input type="file" id="imageFileInput" accept="image/*" hidden>
                 </div>
 
-                <div class="img-actions" @style(['display: none' => !$hasImage]) id="imageActions">
+                <div class="img-actions" @style(['display: none' => empty($currentImageUrl)]) id="imageActions">
                     <span class="img-filename" id="imageFilenameLabel">{{ $currentImage ?? '' }}</span>
                     <div>
                         <button type="button" class="img-btn" id="imageReplaceBtn">Replace</button>
