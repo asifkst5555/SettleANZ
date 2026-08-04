@@ -779,9 +779,7 @@
     closePackageModalTriggers.forEach((trigger) => trigger.addEventListener('click', closePackageModal));
     closeRoadmapFormModalTriggers.forEach((trigger) => trigger.addEventListener('click', closeRoadmapFormModal));
     openPackageModalTriggers.forEach((trigger) => {
-        console.log('Binding click to:', trigger);
         trigger.addEventListener('click', () => {
-            console.log('Package button clicked!');
             openPackageModal(trigger);
         });
     });
