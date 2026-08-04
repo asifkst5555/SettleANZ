@@ -1307,27 +1307,75 @@
         </div>
 
         <div class="form-modal-overlay" id="roadmapFormModalOverlay" hidden>
-            <div class="form-modal">
+            <div class="form-modal lead-success-modal-dialog">
+                <button class="lead-success-close-btn" type="button" aria-label="Close modal" data-close-roadmap-form-modal>&times;</button>
+                
                 <div class="form-modal__loading" id="roadmapFormModalLoading" hidden>
                     <div class="form-modal__spinner"></div>
                     <h3>Sending your guide...</h3>
                     <p>Please wait while we send the download link.</p>
                 </div>
+
                 <div class="form-modal__success" id="roadmapFormModalSuccess" hidden>
-                    <div class="form-modal__icon form-modal__icon--success">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
+                    <!-- Success Badge & Sparkles Illustration -->
+                    <div class="lead-success-badge-wrapper">
+                        <div class="lead-success-sparkles" aria-hidden="true">
+                            <svg class="sparkle sparkle--1" width="14" height="14" viewBox="0 0 24 24" fill="#0b7a75"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                            <svg class="sparkle sparkle--2" width="12" height="12" viewBox="0 0 24 24" fill="#e8773a"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                            <svg class="sparkle sparkle--3" width="9" height="9" viewBox="0 0 24 24" fill="#0b7a75"><circle cx="12" cy="12" r="10"/></svg>
+                            <svg class="sparkle sparkle--4" width="14" height="14" viewBox="0 0 24 24" fill="#e8773a"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                            <svg class="sparkle sparkle--5" width="8" height="8" viewBox="0 0 24 24" fill="#a4e5e1"><circle cx="12" cy="12" r="10"/></svg>
+                        </div>
+                        <div class="lead-success-icon-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
                     </div>
-                    <h3>Guide Sent!</h3>
-                    <p id="roadmapFormModalSuccessMessage">Check your email — we’ve sent the download link for your free roadmap!</p>
-                    <div id="roadmapFormModalActions" style="display:none; gap:12px; justify-content:center; margin:1.5rem 0; flex-wrap:wrap;">
-                        <a id="roadmapViewBtn" href="#" class="button button--secondary" target="_blank" style="text-decoration:none; display:inline-block; padding:10px 20px; font-weight:700; border-radius:24px;">View Online &rarr;</a>
-                        <a id="roadmapDownloadBtn" href="#" class="button button--primary" target="_blank" style="text-decoration:none; display:inline-block; padding:10px 24px; font-weight:700; border-radius:24px; color:#fff; background:#e8773a;">Download PDF</a>
+
+                    <!-- Headline -->
+                    <h2 class="lead-success-title">Guide <span class="lead-success-highlight">Sent!</span></h2>
+
+                    <!-- Subtitle -->
+                    <p id="roadmapFormModalSuccessMessage" class="lead-success-subtitle">Check your email — we’ve sent the download link for your free roadmap.</p>
+
+                    <!-- Helper Card -->
+                    <div class="lead-success-helper-card">
+                        <div class="helper-card-icon-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </div>
+                        <div class="helper-card-text">
+                            <h4>Can’t find it?</h4>
+                            <p>Check your spam or promotions folder.</p>
+                        </div>
                     </div>
-                    <button class="button button--large" type="button" data-close-roadmap-form-modal>Got it</button>
+
+                    <!-- Action Buttons -->
+                    <div id="roadmapFormModalActions" class="lead-success-actions-group">
+                        <a id="roadmapViewBtn" href="#" class="lead-success-btn lead-success-btn--primary" target="_blank" rel="noopener">
+                            <span class="btn-inner-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                <span>View Online</span>
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                        <a id="roadmapDownloadBtn" href="#" class="lead-success-btn lead-success-btn--secondary" target="_blank" rel="noopener">
+                            <span class="btn-inner-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><polyline points="9 15 12 18 15 15"/></svg>
+                                <span>Download PDF</span>
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                    </div>
+
+                    <!-- Tertiary Button -->
+                    <button class="lead-success-btn lead-success-btn--outline" type="button" data-close-roadmap-form-modal>Got it</button>
+
+                    <!-- Trust Footer -->
+                    <div class="lead-success-trust-footer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                        <span>No spam. Unsubscribe anytime.</span>
+                    </div>
                 </div>
+
                 <div class="form-modal__error" id="roadmapFormModalError" hidden>
                     <div class="form-modal__icon form-modal__icon--error">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

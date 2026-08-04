@@ -8801,3 +8801,254 @@ main {
     border-bottom-color: var(--sz-primary) !important;
 }
 
+/* ==========================================================================
+   Lead Magnet Success Modal — Premium SaaS Design
+   ========================================================================== */
+#roadmapFormModalOverlay .form-modal {
+    max-width: 500px !important;
+    width: min(92%, 500px) !important;
+    border-radius: 28px !important;
+    padding: 2.5rem 2.25rem 2rem !important;
+    background: #ffffff !important;
+    position: relative !important;
+    box-shadow: 
+        0 30px 60px -15px rgba(0, 35, 45, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.9) inset !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+.lead-success-close-btn {
+    position: absolute !important;
+    top: 1.25rem !important;
+    right: 1.25rem !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: #f1f5f9 !important;
+    border: none !important;
+    color: #64748b !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    padding: 0 !important;
+    z-index: 10 !important;
+}
+
+.lead-success-close-btn:hover {
+    background: #e2e8f0 !important;
+    color: #1e293b !important;
+    transform: scale(1.05) !important;
+}
+
+.lead-success-badge-wrapper {
+    position: relative !important;
+    width: 100px !important;
+    height: 100px !important;
+    margin: 0 auto 1.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.lead-success-icon-badge {
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 50% !important;
+    background: #e6f4f1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #0b7a75 !important;
+    position: relative !important;
+    z-index: 2 !important;
+    box-shadow: 0 8px 20px rgba(11, 122, 117, 0.15) !important;
+    animation: successBadgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+
+@keyframes successBadgePop {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.lead-success-sparkles {
+    position: absolute !important;
+    inset: -10px !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+.sparkle {
+    position: absolute !important;
+    animation: sparkleFloat 3s ease-in-out infinite alternate !important;
+}
+
+.sparkle--1 { top: 4px; left: 12px; animation-delay: 0s; }
+.sparkle--2 { top: 0px; right: 16px; animation-delay: 0.4s; }
+.sparkle--3 { bottom: 12px; left: 4px; animation-delay: 0.8s; }
+.sparkle--4 { bottom: 8px; right: 8px; animation-delay: 1.2s; }
+.sparkle--5 { top: 45%; left: -6px; animation-delay: 1.6s; }
+
+@keyframes sparkleFloat {
+    0% { transform: translateY(0) scale(0.9); opacity: 0.7; }
+    100% { transform: translateY(-4px) scale(1.1); opacity: 1; }
+}
+
+.lead-success-title {
+    font-size: 2.25rem !important;
+    font-weight: 800 !important;
+    color: #0A4A45 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.5px !important;
+    margin: 0 0 0.75rem !important;
+}
+
+.lead-success-highlight {
+    color: #e8773a !important;
+}
+
+.lead-success-subtitle {
+    font-size: 0.95rem !important;
+    color: #475569 !important;
+    line-height: 1.5 !important;
+    max-width: 420px !important;
+    margin: 0 auto 1.5rem !important;
+}
+
+.lead-success-helper-card {
+    background: #f4fbf9 !important;
+    border: 1px solid #d0ebe5 !important;
+    border-radius: 16px !important;
+    padding: 1rem 1.25rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.85rem !important;
+    margin-bottom: 1.5rem !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+}
+
+.helper-card-icon-badge {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    border: 1px solid #c2e5de !important;
+    color: #0b7a75 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 2px 6px rgba(11, 122, 117, 0.08) !important;
+}
+
+.helper-card-text h4 {
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    color: #0b7a75 !important;
+    margin: 0 0 0.15rem !important;
+}
+
+.helper-card-text p {
+    font-size: 0.825rem !important;
+    color: #64748b !important;
+    margin: 0 !important;
+    line-height: 1.35 !important;
+}
+
+.lead-success-actions-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.lead-success-btn {
+    width: 100% !important;
+    height: 52px !important;
+    border-radius: 14px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 1.25rem !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.btn-inner-left {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+}
+
+.btn-arrow {
+    transition: transform 0.2s ease !important;
+}
+
+.lead-success-btn:hover .btn-arrow {
+    transform: translateX(4px) !important;
+}
+
+.lead-success-btn--primary {
+    background: #004D40 !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(0, 77, 64, 0.25) !important;
+}
+
+.lead-success-btn--primary:hover {
+    background: #085854 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0, 77, 64, 0.35) !important;
+}
+
+.lead-success-btn--secondary {
+    background: #E8773A !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(232, 119, 58, 0.25) !important;
+}
+
+.lead-success-btn--secondary:hover {
+    background: #d86324 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(232, 119, 58, 0.35) !important;
+}
+
+.lead-success-btn--outline {
+    background: #ffffff !important;
+    color: #0b7a75 !important;
+    border: 1.5px solid #0b7a75 !important;
+    justify-content: center !important;
+    box-shadow: none !important;
+}
+
+.lead-success-btn--outline:hover {
+    background: #f4fbf9 !important;
+    border-color: #085854 !important;
+    color: #085854 !important;
+    transform: translateY(-1px) !important;
+}
+
+.lead-success-trust-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.4rem !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    color: #64748b !important;
+    margin-top: 1.25rem !important;
+}
+
+.lead-success-trust-footer svg {
+    color: #0b7a75 !important;
+}
+
