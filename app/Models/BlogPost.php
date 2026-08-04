@@ -49,9 +49,32 @@ class BlogPost extends Model
         'faq_items' => 'array',
     ];
 
+    protected static function booted(): void
+    {
+        static::deleting(function (BlogPost $post) {
+            if ($post->image) {
+                BlogMedia::delete($post->image);
+            }
+        });
+
+        static::updating(function (BlogPost $post) {
+            if ($post->isDirty('image')) {
+                $oldImage = $post->getOriginal('image');
+                if ($oldImage && $oldImage !== $post->image) {
+                    BlogMedia::delete($oldImage);
+                }
+            }
+        });
+    }
+
     protected function imageUrl(): Attribute
     {
         return Attribute::get(fn (): ?string => BlogMedia::url($this->image));
+    }
+
+    protected function imagePath(): Attribute
+    {
+        return Attribute::get(fn (): ?string => BlogMedia::path($this->image));
     }
 
     protected function hasImageFile(): Attribute

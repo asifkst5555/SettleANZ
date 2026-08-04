@@ -470,21 +470,15 @@ class BlogPostController extends Controller
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $base = Str::slug($originalName) ?: 'image';
 
-        $uploadDir = base_path('media/blog');
-
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0775, true);
-        }
-
         $filename = $base . '.' . $extension;
         $i = 1;
-        while (file_exists($uploadDir . '/' . $filename)) {
+        while (Storage::disk('public')->exists('blog/' . $filename)) {
             $filename = $base . '-' . $i . '.' . $extension;
             $i++;
         }
 
         try {
-            $file->move($uploadDir, $filename);
+            $file->storeAs('blog', $filename, 'public');
         } catch (\Throwable $exception) {
             \Log::error('Blog image upload failed: ' . $exception->getMessage());
             return response()->json([
@@ -492,17 +486,16 @@ class BlogPostController extends Controller
             ], 500);
         }
 
-        $savedPath = $uploadDir . '/' . $filename;
-        if (!file_exists($savedPath)) {
+        if (!Storage::disk('public')->exists('blog/' . $filename)) {
             \Log::error('Blog image upload verification failed for path: ' . $filename);
             return response()->json([
-                'message' => 'File upload failed. Please check media/blog folder permissions.',
+                'message' => 'File upload failed. Please check storage permissions.',
             ], 500);
         }
 
         return response()->json([
             'filename' => $filename,
-            'url'      => asset('media/blog/' . $filename),
+            'url'      => Storage::disk('public')->url('blog/' . $filename),
         ]);
     }
 
