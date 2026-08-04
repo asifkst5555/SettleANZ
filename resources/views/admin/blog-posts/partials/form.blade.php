@@ -1731,6 +1731,33 @@
         window.tinymce.suffix = '.min';
     }
 
+    // ── TOP-LEVEL DOM DECLARATIONS (PREVENTS TEMPORAL DEAD ZONE REFERENCEERRORS) ──
+    const titleInput          = document.querySelector('input[name="title"]');
+    const slugInput           = document.getElementById('slugInput');
+    const excerpt             = document.querySelector('textarea[name="excerpt"]');
+    const dropzone            = document.getElementById('imageDropzone');
+    const fileInput           = document.getElementById('imageFileInput');
+    const imageInput          = document.getElementById('imageInput');
+    const previewWrap         = document.getElementById('imagePreviewWrap');
+    const previewImg          = document.getElementById('imagePreviewImg');
+    const placeholder         = document.getElementById('imagePlaceholder');
+    const actions             = document.getElementById('imageActions');
+    const filenameLabel       = document.getElementById('imageFilenameLabel');
+    const replaceBtn          = document.getElementById('imageReplaceBtn');
+    const removeBtn           = document.getElementById('imageRemoveBtn');
+    const statusBox           = document.getElementById('imageStatus');
+    const csrfToken           = document.querySelector('input[name="_token"]')?.value || '';
+    const uploadUrl           = "{{ route('admin.blog-posts.upload-image') }}";
+    const tabButtons          = Array.from(document.querySelectorAll('[data-tab-target]'));
+    const tabPanels           = Array.from(document.querySelectorAll('[data-tab-panel]'));
+    const activeTabInput      = document.getElementById('activeTabInput');
+    const aiDraftBtn          = document.getElementById('aiDraftBtn');
+    const aiSeoBtn            = document.getElementById('aiSeoBtn');
+    const blogAiStatus        = document.getElementById('blogAiStatus');
+    const faqItemsInput       = document.getElementById('faqItemsInput');
+    const faqList             = document.getElementById('faqList');
+    const faqAddBtn           = document.getElementById('faqAddBtn');
+
     function initBlogEditor() {
         var ta = document.getElementById('editor-tinymce');
         if (!ta) return;
@@ -1795,17 +1822,7 @@
         initBlogEditor();
     }
 
-    // Title -> slug auto-generate
-    const titleInput = document.querySelector('input[name="title"]');
-    const slugInput  = document.getElementById('slugInput');
-    const tabButtons = Array.from(document.querySelectorAll('[data-tab-target]'));
-    const tabPanels = Array.from(document.querySelectorAll('[data-tab-panel]'));
-    const aiDraftBtn = document.getElementById('aiDraftBtn');
-    const aiSeoBtn = document.getElementById('aiSeoBtn');
-    const blogAiStatus = document.getElementById('blogAiStatus');
-    const faqItemsInput = document.getElementById('faqItemsInput');
-    const faqList = document.getElementById('faqList');
-    const faqAddBtn = document.getElementById('faqAddBtn');
+
 
     function safeParseFaqItems() {
         if (!faqItemsInput || !faqItemsInput.value) return [];
@@ -2148,7 +2165,7 @@
         ogPreviewDesc.textContent = truncate(socialDescription, 160);
 
         const fallbackImage = featuredImageInput?.value
-            ? (previewImg?.src || (window.location.origin + '/storage/blog/' + featuredImageInput.value.replace(/^\/+/, '')))
+            ? ((previewImg?.src || document.getElementById('imagePreviewImg')?.src) || (window.location.origin + '/storage/blog/' + featuredImageInput.value.replace(/^\/+/, '')))
             : '';
         const socialImage = absoluteUrl(ogImageInput?.value || '') || fallbackImage;
 
@@ -2379,19 +2396,6 @@
     updateSeoPreview();
 
     // ── Featured image upload ─────────────────────────────────────────
-    const dropzone        = document.getElementById('imageDropzone');
-    const fileInput       = document.getElementById('imageFileInput');
-    const imageInput      = document.getElementById('imageInput');
-    const previewWrap     = document.getElementById('imagePreviewWrap');
-    const previewImg      = document.getElementById('imagePreviewImg');
-    const placeholder     = document.getElementById('imagePlaceholder');
-    const actions         = document.getElementById('imageActions');
-    const filenameLabel   = document.getElementById('imageFilenameLabel');
-    const replaceBtn      = document.getElementById('imageReplaceBtn');
-    const removeBtn       = document.getElementById('imageRemoveBtn');
-    const statusBox       = document.getElementById('imageStatus');
-    const csrfToken       = document.querySelector('input[name="_token"]')?.value || '';
-    const uploadUrl       = "{{ route('admin.blog-posts.upload-image') }}";
 
     function showStatus(message, type){
         if (!statusBox) return;
