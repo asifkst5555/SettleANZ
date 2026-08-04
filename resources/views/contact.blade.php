@@ -239,6 +239,116 @@
             color: #fff;
         }
 
+        /* Contact Form Math Verification Field Styling */
+        .contact-page-final__verification-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .contact-page-final__verification-label {
+            display: block;
+            color: #35535d;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .contact-page-final__form .math-verification-wrapper {
+            margin-bottom: 0;
+            width: 100%;
+        }
+
+        .contact-page-final__form .math-verification-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid rgba(16, 88, 98, 0.16);
+            border-radius: var(--radius-input, 8px);
+            padding: 6px 12px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contact-page-final__form .math-verification-row:focus-within {
+            border-color: #105862;
+            box-shadow: 0 0 0 3px rgba(16, 88, 98, 0.1);
+        }
+
+        .contact-page-final__form .math-verification-prompt {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: #35535d;
+            white-space: nowrap;
+            margin: 0;
+        }
+
+        .contact-page-final__form .math-question-text {
+            font-weight: 700;
+            color: #105862;
+            font-size: 0.92rem;
+        }
+
+        .contact-page-final__form .math-label-title {
+            display: none;
+        }
+
+        .contact-page-final__form .math-input-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .contact-page-final__form .math-answer-input {
+            flex: 1;
+            height: 38px;
+            padding: 0 12px;
+            border: 1px solid rgba(16, 88, 98, 0.16);
+            border-radius: var(--radius-input, 8px);
+            font-size: 0.86rem;
+            color: #1e293b;
+            background-color: #f8fafc;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        .contact-page-final__form .math-answer-input:focus {
+            border-color: #105862;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(16, 88, 98, 0.15);
+        }
+
+        .contact-page-final__form .math-refresh-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-input, 8px);
+            background: rgba(16, 88, 98, 0.06);
+            border: 1px solid rgba(16, 88, 98, 0.16);
+            color: #105862;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            flex-shrink: 0;
+            padding: 0;
+        }
+
+        .contact-page-final__form .math-refresh-btn:hover {
+            transform: rotate(180deg);
+            background: rgba(16, 88, 98, 0.14);
+            border-color: #105862;
+            color: #0d464e;
+        }
+
         @media (max-width: 1024px) {
             .contact-page-final__hero-wrap,
             .contact-page-final__layout {
@@ -401,7 +511,10 @@
                         </label>
 
                         <x-honeypot />
-                        <x-math-verification />
+                        <div class="contact-page-final__verification-wrapper">
+                            <span class="contact-page-final__verification-label">Human Verification</span>
+                            <x-math-verification />
+                        </div>
 
                         <button class="button button--large button--full contact-page-final__button" type="submit" data-submit-btn>Send Message</button>
                         <p id="contact-form-success" class="async-form-status" hidden></p>
