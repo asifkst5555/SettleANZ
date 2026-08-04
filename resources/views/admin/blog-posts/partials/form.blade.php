@@ -1726,36 +1726,46 @@
 <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 (function(){
-    if (window.tinymce) {
-        tinymce.init({
-            selector: '#editor-tinymce',
-            height: 1200,
-            min_height: 400,
-            autoresize_bottom_margin: 24,
-            menubar: 'edit view insert format tools',
-            plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
-            toolbar: 'undo redo | blocks | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | blockquote code | removeformat | code fullscreen',
-            block_formats: 'Paragraph=p; Heading 2=h2; Heading 3=h3; Heading 4=h4; Quote=blockquote; Code=pre',
-            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.7; color: #22313d; padding: 1rem 1.25rem; } h2,h3,h4 { color:#12384f; font-weight:700; } a { color:#0b7a75; } blockquote { border-left:4px solid #0b7a75; padding:0.4rem 0.95rem; background:#f4f7fb; border-radius:0 6px 6px 0; }',
-            branding: false,
-            promotion: false,
-            license_key: 'gpl',
-            relative_urls: false,
-            convert_urls: false,
-            paste_data_images: true,
-            image_caption: true,
-            setup: function(editor) {
-                editor.on('input change keyup setcontent', function() {
+    function initBlogEditor() {
+        var ta = document.getElementById('editor-tinymce');
+        if (!ta) return;
+
+        if (window.tinymce && typeof tinymce.init === 'function') {
+            if (tinymce.get('editor-tinymce')) {
+                return;
+            }
+
+            tinymce.init({
+                selector: '#editor-tinymce',
+                height: 700,
+                min_height: 400,
+                menubar: 'edit view insert format tools',
+                plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+                toolbar: 'undo redo | blocks | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | blockquote code | removeformat | code fullscreen',
+                block_formats: 'Paragraph=p; Heading 2=h2; Heading 3=h3; Heading 4=h4; Quote=blockquote; Code=pre',
+                content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.7; color: #22313d; padding: 1rem 1.25rem; } h2,h3,h4 { color:#12384f; font-weight:700; } a { color:#0b7a75; } blockquote { border-left:4px solid #0b7a75; padding:0.4rem 0.95rem; background:#f4f7fb; border-radius:0 6px 6px 0; }',
+                branding: false,
+                promotion: false,
+                license_key: 'gpl',
+                relative_urls: false,
+                convert_urls: false,
+                paste_data_images: true,
+                image_caption: true,
+                setup: function(editor) {
+                    editor.on('input change keyup setcontent', function() {
+                        if (typeof updateSeoPreview === 'function') {
+                            updateSeoPreview();
+                        }
+                    });
+                },
+                init_instance_callback: function(editor) {
                     if (typeof updateSeoPreview === 'function') {
                         updateSeoPreview();
                     }
-                });
-            }
-        });
-    } else {
-        // TinyMCE failed to load — fall back to a plain styled textarea
-        var ta = document.getElementById('editor-tinymce');
-        if (ta) {
+                }
+            });
+        } else {
+            ta.style.display = 'block';
             ta.style.minHeight = '480px';
             ta.style.width = '100%';
             ta.style.padding = '1.1rem';
@@ -1770,6 +1780,12 @@
                 }
             });
         }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBlogEditor);
+    } else {
+        initBlogEditor();
     }
 
     // Title -> slug auto-generate
@@ -1986,6 +2002,12 @@
                 panel.style.display = '';
             }
         });
+
+        if (targetTab === 'editor' && window.tinymce && tinymce.get('editor-tinymce')) {
+            try {
+                tinymce.get('editor-tinymce').show();
+            } catch (e) {}
+        }
 
         if (activeTabInput) {
             activeTabInput.value = targetTab;
