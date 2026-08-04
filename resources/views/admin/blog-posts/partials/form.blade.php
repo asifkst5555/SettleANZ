@@ -1444,7 +1444,7 @@
                                 @php($schemaType = old('schema_type', $post->schema_type ?: 'Article'))
                                 <select class="pro-select" name="schema_type" id="schemaTypeInput">
                                     @foreach (['Article', 'BlogPosting', 'NewsArticle', 'WebPage'] as $schemaOption)
-                                        <option value="{{ $schemaOption }}" @selected($schemaType === $schemaOption)>{{ $schemaOption }}</option>
+                                        <option value="{{ $schemaOption }}" {{ $schemaType === $schemaOption ? 'selected' : '' }}>{{ $schemaOption }}</option>
                                     @endforeach
                                 </select>
                                 <small>`Article` is the safest default.</small>
@@ -1485,7 +1485,7 @@
                                 <span>Hide this article from search engine indexing when you do not want it to appear in search results.</span>
                             </span>
                             <span class="toggle-control">
-                                <input type="checkbox" name="no_index" id="noIndexInput" value="1" @checked((bool) old('no_index', $post->no_index))>
+                                <input type="checkbox" name="no_index" id="noIndexInput" value="1" {{ old('no_index', $post->no_index) ? 'checked' : '' }}>
                                 <span class="toggle-control__track"></span>
                             </span>
                         </label>
@@ -1618,7 +1618,7 @@
                             <span>Highlight this post in the homepage content area for extra visibility.</span>
                         </span>
                         <span class="toggle-control">
-                            <input type="checkbox" name="is_featured_home" value="1" @checked((bool) old('is_featured_home', $post->is_featured_home))>
+                            <input type="checkbox" name="is_featured_home" value="1" {{ old('is_featured_home', $post->is_featured_home) ? 'checked' : '' }}>
                             <span class="toggle-control__track"></span>
                         </span>
                     </label>
@@ -1652,24 +1652,18 @@
             </div>
 
             {{-- Featured Image --}}
-            @php
-                $currentImage = \App\Support\BlogMedia::normalizeFilename(old('image', $post->image ?? ''));
-                $currentImageUrl = !empty($currentImage) ? \App\Support\BlogMedia::url($currentImage) : '';
-                $hasImage = !empty($currentImage) && !empty($currentImageUrl);
-            @endphp
-
             <div class="post-card">
                 <h4>Featured Image</h4>
 
                 <input type="hidden" name="image" id="imageInput" value="{{ $currentImage ?? '' }}">
 
                 <div class="img-dropzone" id="imageDropzone" tabindex="0" role="button" aria-label="Upload featured image">
-                    <div class="img-dropzone__preview" id="imagePreviewWrap" @style(['display: none' => empty($currentImageUrl)])>
+                    <div class="img-dropzone__preview" id="imagePreviewWrap" style="{{ empty($currentImageUrl) ? 'display: none;' : '' }}">
                         <img id="imagePreviewImg"
                              src="{{ !empty($currentImageUrl) ? $currentImageUrl : '' }}"
                              alt="Featured image preview">
                     </div>
-                    <div class="img-dropzone__placeholder" id="imagePlaceholder" @style(['display: none' => !empty($currentImageUrl)])>
+                    <div class="img-dropzone__placeholder" id="imagePlaceholder" style="{{ !empty($currentImageUrl) ? 'display: none;' : '' }}">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:#0b7a75;">
                             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
                             <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -1681,7 +1675,7 @@
                     <input type="file" id="imageFileInput" accept="image/*" hidden>
                 </div>
 
-                <div class="img-actions" @style(['display: none' => empty($currentImageUrl)]) id="imageActions">
+                <div class="img-actions" style="{{ empty($currentImageUrl) ? 'display: none;' : '' }}" id="imageActions">
                     <span class="img-filename" id="imageFilenameLabel">{{ $currentImage ?? '' }}</span>
                     <div>
                         <button type="button" class="img-btn" id="imageReplaceBtn">Replace</button>
