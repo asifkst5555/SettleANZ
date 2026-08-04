@@ -956,7 +956,7 @@
         <div class="container article-hero-v2__cover">
             <div class="article-hero-v2__cover-inner">
                 @if ($hasHeroImage)
-                    <img src="{{ $post->image_url }}" alt="{{ $post->title }}">
+                    <img src="{{ $post->image_url ?? \App\Support\BlogMedia::url($post->image ?? null) }}" alt="{{ $post->title }}">
                 @else
                     <div class="{{ $post->image_class }}" style="width:100%;height:100%;" aria-hidden="true"></div>
                 @endif

@@ -99,7 +99,14 @@ class BlogController extends Controller
         }
 
         return collect(SiteDefaults::blogPosts())
-            ->map(fn (array $post) => (object) $post)
+            ->map(function (array $post) {
+                $obj = (object) $post;
+                $obj->image_url = \App\Support\BlogMedia::url($obj->image ?? null);
+                if (isset($obj->published_at) && is_string($obj->published_at)) {
+                    $obj->published_at = \Illuminate\Support\Carbon::parse($obj->published_at);
+                }
+                return $obj;
+            })
             ->sortByDesc('published_at')
             ->values();
     }
