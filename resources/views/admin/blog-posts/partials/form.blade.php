@@ -1267,6 +1267,7 @@
 
 <form class="admin-edit-form" method="POST" action="{{ $action }}" id="blogForm">
     @csrf
+    <input type="hidden" name="active_tab" id="activeTabInput" value="{{ old('active_tab', 'editor') }}">
     @if ($method !== 'POST')
         @method($method)
     @endif
@@ -1965,33 +1966,41 @@
         }
     }
 
+    const activeTabInput = document.getElementById('activeTabInput');
+
     function setActiveTab(name) {
+        const targetTab = (name === 'seo' || name === 'editor') ? name : 'editor';
+
         tabButtons.forEach((button) => {
-            const isActive = button.dataset.tabTarget === name;
+            const isActive = button.dataset.tabTarget === targetTab;
             button.classList.toggle('is-active', isActive);
             button.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
 
         tabPanels.forEach((panel) => {
-            panel.hidden = panel.dataset.tabPanel !== name;
+            const isMatch = panel.dataset.tabPanel === targetTab;
+            panel.hidden = !isMatch;
+            if (!isMatch) {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = '';
+            }
         });
+
+        if (activeTabInput) {
+            activeTabInput.value = targetTab;
+        }
     }
 
     tabButtons.forEach((button) => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             setActiveTab(this.dataset.tabTarget);
         });
     });
 
-    const seoFieldIds = ['metaTitleInput', 'metaDescriptionInput', 'focusKeywordInput', 'secondaryKeywordsInput', 'authorUrlInput', 'ogTitleInput', 'ogDescriptionInput', 'canonicalUrlInput', 'ogImageInput', 'schemaTypeInput', 'noIndexInput', 'faqItemsInput'];
-    const shouldOpenSeoTab = seoFieldIds.some((id) => {
-        const field = document.getElementById(id);
-        if (!field) return false;
-        if (field.type === 'checkbox') return field.checked;
-        return String(field.value || '').trim() !== '';
-    });
-
-    setActiveTab(shouldOpenSeoTab ? 'seo' : 'editor');
+    const initialTab = activeTabInput?.value || 'editor';
+    setActiveTab(initialTab === 'seo' ? 'seo' : 'editor');
 
     titleInput.addEventListener('input', function(){
         if (!slugInput.dataset.userEdited) {
