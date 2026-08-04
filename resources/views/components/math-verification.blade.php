@@ -88,6 +88,7 @@
             width: 100%;
             font-family: inherit;
             box-sizing: border-box;
+            margin-bottom: 1.25rem;
         }
         .math-verification-row {
             display: flex;
