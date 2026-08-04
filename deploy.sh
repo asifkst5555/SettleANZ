@@ -99,6 +99,8 @@ check_symlink "$APP_DIR/public/build" "$WEB_ROOT/build"
 check_symlink "$APP_DIR/storage/app/public" "$WEB_ROOT/storage"
 check_symlink "$APP_DIR/public/media" "$WEB_ROOT/media"
 check_symlink "$APP_DIR/public/favicon.ico" "$WEB_ROOT/favicon.ico"
+check_symlink "$APP_DIR/public/apple-touch-icon.png" "$WEB_ROOT/apple-touch-icon.png"
+check_symlink "$APP_DIR/public/site.webmanifest" "$WEB_ROOT/site.webmanifest"
 check_symlink "$APP_DIR/public/robots.txt" "$WEB_ROOT/robots.txt"
 
 if [ "$SYMLINKS_OK" = true ]; then
