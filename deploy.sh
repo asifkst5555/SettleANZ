@@ -71,6 +71,7 @@ echo ""
 
 # ── 6. Permissions ───────────────────────────────────────────────────────────
 echo "[7/8] Setting permissions..."
+mkdir -p "$APP_DIR/storage/framework/sessions" "$APP_DIR/storage/framework/views" "$APP_DIR/storage/framework/cache"
 chmod -R 775 "$APP_DIR/storage"
 chmod -R 775 "$APP_DIR/bootstrap/cache"
 chmod -R 775 "$APP_DIR/public/build"
