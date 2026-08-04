@@ -1648,18 +1648,24 @@
             </div>
 
             {{-- Featured Image --}}
+            @php
+                $currentImage = \App\Support\BlogMedia::normalizeFilename(old('image', $post->image ?? ''));
+                $currentImageUrl = !empty($currentImage) ? \App\Support\BlogMedia::url($currentImage) : '';
+                $hasImage = !empty($currentImage) && !empty($currentImageUrl);
+            @endphp
+
             <div class="post-card">
                 <h4>Featured Image</h4>
 
-                <input type="hidden" name="image" id="imageInput" value="{{ old('image', $post->image) }}">
+                <input type="hidden" name="image" id="imageInput" value="{{ $currentImage ?? '' }}">
 
                 <div class="img-dropzone" id="imageDropzone" tabindex="0" role="button" aria-label="Upload featured image">
-                    <div class="img-dropzone__preview" id="imagePreviewWrap" @style(['display: none' => empty($post->image)])>
+                    <div class="img-dropzone__preview" id="imagePreviewWrap" @style(['display: none' => !$hasImage])>
                         <img id="imagePreviewImg"
-                             src="{{ !empty($post->image) ? \App\Support\BlogMedia::url($post->image) : '' }}"
+                             src="{{ $hasImage ? $currentImageUrl : '' }}"
                              alt="Featured image preview">
                     </div>
-                    <div class="img-dropzone__placeholder" id="imagePlaceholder" @style(['display: none' => !empty($post->image)])>
+                    <div class="img-dropzone__placeholder" id="imagePlaceholder" @style(['display: none' => $hasImage])>
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:#0b7a75;">
                             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
                             <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -1671,8 +1677,8 @@
                     <input type="file" id="imageFileInput" accept="image/*" hidden>
                 </div>
 
-                <div class="img-actions" @style(['display: none' => empty($post->image)]) id="imageActions">
-                    <span class="img-filename" id="imageFilenameLabel">{{ old('image', $post->image) }}</span>
+                <div class="img-actions" @style(['display: none' => !$hasImage]) id="imageActions">
+                    <span class="img-filename" id="imageFilenameLabel">{{ $currentImage ?? '' }}</span>
                     <div>
                         <button type="button" class="img-btn" id="imageReplaceBtn">Replace</button>
                         <button type="button" class="img-btn img-btn--danger" id="imageRemoveBtn">Remove</button>
@@ -2360,22 +2366,31 @@
     }
 
     function setImage(filename, url){
-        imageInput.value = filename;
-        previewImg.src = url + '?t=' + Date.now();
-        previewWrap.style.display = '';
-        placeholder.style.display = 'none';
-        actions.style.display = '';
-        filenameLabel.textContent = filename;
+        const cleanName = (filename || '').replace(/^.*[\\\/]/, '').replace(/^(storage\/blog\/|storage\/|media\/blog\/|public\/media\/blog\/)/, '');
+        if (imageInput) imageInput.value = cleanName;
+        if (previewImg) {
+            previewImg.src = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+            previewImg.style.display = '';
+        }
+        if (previewWrap) previewWrap.style.display = '';
+        if (placeholder) placeholder.style.display = 'none';
+        if (actions) actions.style.display = '';
+        if (filenameLabel) filenameLabel.textContent = cleanName;
+        showStatus('', null);
         updateSeoPreview();
     }
 
     function clearImage(){
-        imageInput.value = '';
-        previewImg.src = '';
-        previewWrap.style.display = 'none';
-        placeholder.style.display = '';
-        actions.style.display = 'none';
-        filenameLabel.textContent = '';
+        if (imageInput) imageInput.value = '';
+        if (previewImg) {
+            previewImg.src = '';
+            previewImg.removeAttribute('src');
+            previewImg.style.display = 'none';
+        }
+        if (previewWrap) previewWrap.style.display = 'none';
+        if (placeholder) placeholder.style.display = '';
+        if (actions) actions.style.display = 'none';
+        if (filenameLabel) filenameLabel.textContent = '';
         showStatus('', null);
         updateSeoPreview();
     }
@@ -2418,16 +2433,30 @@
             showStatus('Upload failed. ' + (e.message || ''), 'error');
         } finally {
             dropzone.classList.remove('is-uploading');
-            fileInput.value = '';
+            if (fileInput) fileInput.value = '';
         }
     }
 
     if (dropzone && fileInput) {
-        dropzone.addEventListener('click', () => fileInput.click());
-        dropzone.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+        dropzone.addEventListener('click', (e) => {
+            if (e.target.closest('#imageActions') || e.target.closest('button')) {
+                return;
+            }
+            fileInput.value = '';
+            fileInput.click();
         });
-        fileInput.addEventListener('change', () => uploadFile(fileInput.files[0]));
+        dropzone.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInput.value = '';
+                fileInput.click();
+            }
+        });
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files && fileInput.files[0]) {
+                uploadFile(fileInput.files[0]);
+            }
+        });
 
         ['dragenter', 'dragover'].forEach(evt =>
             dropzone.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); dropzone.classList.add('is-drag'); })
@@ -2441,8 +2470,24 @@
         });
     }
 
-    if (replaceBtn) replaceBtn.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
-    if (removeBtn)  removeBtn.addEventListener('click', (e) => { e.stopPropagation(); clearImage(); });
+    if (replaceBtn) {
+        replaceBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (fileInput) {
+                fileInput.value = '';
+                fileInput.click();
+            }
+        });
+    }
+
+    if (removeBtn) {
+        removeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            clearImage();
+        });
+    }
 
     // ── Import from PDF / DOCX ─────────────────────────────────────────
     const importCard    = document.getElementById('importCard');

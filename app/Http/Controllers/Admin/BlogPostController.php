@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Support\BlogMedia;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -74,6 +75,7 @@ class BlogPostController extends Controller
         $validated = $this->validatePost($request);
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
         $validated['faq_items'] = $this->normalizeFaqItems($validated['faq_items'] ?? null);
+        $validated['image'] = BlogMedia::normalizeFilename($validated['image'] ?? null);
         $validated = $this->applyPublicationState($validated, $request);
 
         $post = BlogPost::create($validated);
@@ -108,6 +110,7 @@ class BlogPostController extends Controller
         $validated = $this->validatePost($request, $blogPost->id);
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
         $validated['faq_items'] = $this->normalizeFaqItems($validated['faq_items'] ?? null);
+        $validated['image'] = BlogMedia::normalizeFilename($validated['image'] ?? null);
         $validated = $this->applyPublicationState($validated, $request);
 
         $blogPost->update($validated);
