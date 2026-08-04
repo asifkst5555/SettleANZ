@@ -1757,6 +1757,12 @@
     const faqItemsInput       = document.getElementById('faqItemsInput');
     const faqList             = document.getElementById('faqList');
     const faqAddBtn           = document.getElementById('faqAddBtn');
+    const importCard          = document.getElementById('importCard');
+    const importZone          = document.getElementById('importZone');
+    const importInput         = document.getElementById('importFileInput');
+    const importPickBtn       = document.getElementById('importPickBtn');
+    const importStatus        = document.getElementById('importStatus');
+    const importUrl           = "{{ route('admin.blog-posts.import-file') }}";
 
     function initBlogEditor() {
         var ta = document.getElementById('editor-tinymce');
@@ -2006,7 +2012,7 @@
         }
     }
 
-    const activeTabInput = document.getElementById('activeTabInput');
+
 
     function setActiveTab(name) {
         const targetTab = (name === 'seo' || name === 'editor') ? name : 'editor';
@@ -2059,7 +2065,6 @@
     slugInput.addEventListener('input', function(){ slugInput.dataset.userEdited = '1'; });
 
     // Excerpt counter
-    const excerpt = document.querySelector('textarea[name="excerpt"]');
     const counter = document.getElementById('excerptCount');
     if (excerpt && counter) {
         excerpt.addEventListener('input', function(){
@@ -2530,12 +2535,6 @@
     }
 
     // ── Import from PDF / DOCX ─────────────────────────────────────────
-    const importCard    = document.getElementById('importCard');
-    const importZone    = document.getElementById('importZone');
-    const importInput   = document.getElementById('importFileInput');
-    const importPickBtn = document.getElementById('importPickBtn');
-    const importStatus  = document.getElementById('importStatus');
-    const importUrl     = "{{ route('admin.blog-posts.import-file') }}";
 
     function showImportStatus(message, type){
         if (!importStatus) return;
