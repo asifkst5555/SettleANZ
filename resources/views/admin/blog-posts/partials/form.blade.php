@@ -1726,6 +1726,11 @@
 <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 (function(){
+    if (window.tinymce) {
+        window.tinymce.baseURL = 'https://cdn.jsdelivr.net/npm/tinymce@7.6.1';
+        window.tinymce.suffix = '.min';
+    }
+
     function initBlogEditor() {
         var ta = document.getElementById('editor-tinymce');
         if (!ta) return;
@@ -1737,6 +1742,9 @@
 
             tinymce.init({
                 selector: '#editor-tinymce',
+                base_url: 'https://cdn.jsdelivr.net/npm/tinymce@7.6.1',
+                suffix: '.min',
+                license_key: 'gpl',
                 height: 700,
                 min_height: 400,
                 menubar: 'edit view insert format tools',
@@ -1746,7 +1754,6 @@
                 content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.7; color: #22313d; padding: 1rem 1.25rem; } h2,h3,h4 { color:#12384f; font-weight:700; } a { color:#0b7a75; } blockquote { border-left:4px solid #0b7a75; padding:0.4rem 0.95rem; background:#f4f7fb; border-radius:0 6px 6px 0; }',
                 branding: false,
                 promotion: false,
-                license_key: 'gpl',
                 relative_urls: false,
                 convert_urls: false,
                 paste_data_images: true,
