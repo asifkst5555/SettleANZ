@@ -861,13 +861,18 @@ main {
     position: absolute;
     top: 0.85rem;
     right: 0.85rem;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border: 0;
     border-radius: 999px;
     background: rgba(11, 122, 117, 0.08);
     color: var(--primary-dark);
     font-size: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
 }
 
@@ -6720,30 +6725,31 @@ main {
 
 .lead-modal .math-verification-row,
 .lead-modal--roadmap .math-verification-row {
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 12px !important;
-    background: #ffffff !important;
-    padding: 0.4rem 0.85rem !important;
-    height: 52px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 48px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
     gap: 0.75rem !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+    box-shadow: none !important;
     width: 100% !important;
     box-sizing: border-box !important;
 }
 
 .lead-modal .math-verification-row:hover,
 .lead-modal--roadmap .math-verification-row:hover {
-    border-color: #94a3b8 !important;
+    border-color: transparent !important;
 }
 
 .lead-modal .math-verification-row:focus-within,
 .lead-modal--roadmap .math-verification-row:focus-within {
-    border-color: #0b7a75 !important;
-    box-shadow: 0 0 0 4px rgba(11, 122, 117, 0.12) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 .lead-modal .math-verification-prompt,
@@ -6772,48 +6778,52 @@ main {
     align-items: center !important;
     gap: 0.5rem !important;
     flex: 1 !important;
-    max-width: 180px !important;
+    max-width: 220px !important;
+    width: 100% !important;
 }
 
 .lead-modal .math-answer-input,
 .lead-modal--roadmap .math-answer-input {
     width: 100% !important;
-    height: 36px !important;
+    height: 48px !important;
+    min-height: 48px !important;
     padding: 0 0.75rem !important;
-    background: #f8fafc !important;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 8px !important;
-    font-size: 0.875rem !important;
+    background: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
     color: #1e293b !important;
     outline: none !important;
     transition: all 0.2s ease !important;
     box-shadow: none !important;
+    box-sizing: border-box !important;
 }
 
 .lead-modal .math-answer-input:focus,
 .lead-modal--roadmap .math-answer-input:focus {
     background: #ffffff !important;
     border-color: #0b7a75 !important;
-    box-shadow: 0 0 0 2px rgba(11, 122, 117, 0.15) !important;
+    box-shadow: 0 0 0 3px rgba(11, 122, 117, 0.18) !important;
 }
 
 .lead-modal .math-refresh-btn,
 .lead-modal--roadmap .math-refresh-btn {
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    border-radius: 8px !important;
-    border: 1px solid #cbd5e1 !important;
-    background: #ffffff !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(11, 122, 117, 0.15) !important;
+    background: rgba(11, 122, 117, 0.08) !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     cursor: pointer !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
     color: #0b7a75 !important;
     padding: 0 !important;
     flex-shrink: 0 !important;
+    box-sizing: border-box !important;
 }
 
 .lead-modal .math-refresh-btn:hover,
@@ -9051,4 +9061,211 @@ main {
 .lead-success-trust-footer svg {
     color: #0b7a75 !important;
 }
+
+/* ==========================================================================
+   ENTERPRISE MOBILE RESPONSIVENESS AUDIT FIXES (ALL FRONTEND FORMS)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    /* 1. All Frontend Form Buttons: Full width (100%), 52px height, 16px font */
+    .lead-form__submit,
+    .fc-btn,
+    .rm-btn,
+    .contact-page-final__button,
+    .contact-cta-button,
+    .contact-submit-button,
+    .subscribe-form button,
+    .review-form button[type="submit"],
+    .site-chat-form button[type="submit"],
+    .lead-form button[type="submit"] {
+        width: 100% !important;
+        height: 52px !important;
+        min-height: 52px !important;
+        font-size: 16px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* 2. All Mobile Inputs, Selects, Textareas: 52px height, 16px font to prevent iOS zoom */
+    .lead-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .lead-form select,
+    .fc-field input,
+    .rm-input,
+    .contact-page-final__form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .contact-page-final__form select,
+    .subscribe-form input[type="email"],
+    .review-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .review-form select {
+        width: 100% !important;
+        height: 52px !important;
+        min-height: 52px !important;
+        font-size: 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    .contact-page-final__form textarea,
+    .review-form textarea {
+        font-size: 16px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+    }
+
+    /* 3. Math Verification Mobile Layout */
+    .math-verification-wrapper {
+        width: 100% !important;
+        margin-bottom: 1rem !important;
+        box-sizing: border-box !important;
+    }
+
+    .math-verification-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .math-verification-prompt {
+        font-size: 0.9rem !important;
+        width: 100% !important;
+    }
+
+    .math-input-group,
+    .lead-modal .math-input-group,
+    .lead-modal--roadmap .math-input-group {
+        max-width: 100% !important;
+        width: 100% !important;
+        display: flex !important;
+        gap: 0.5rem !important;
+        box-sizing: border-box !important;
+    }
+
+    .math-answer-input,
+    .lead-modal .math-answer-input,
+    .lead-modal--roadmap .math-answer-input {
+        flex: 1 !important;
+        width: 100% !important;
+        height: 52px !important;
+        min-height: 52px !important;
+        font-size: 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    .math-refresh-btn,
+    .lead-modal .math-refresh-btn,
+    .lead-modal--roadmap .math-refresh-btn {
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 52px !important;
+        min-height: 52px !important;
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* 4. Multi-column grids collapse to 1 column */
+    .fc-form-grid,
+    .form-split-grid,
+    .contact-page-final__row,
+    .form-row,
+    .contact-hero__layout,
+    .contact-layout--pro {
+        grid-template-columns: 1fr !important;
+        gap: 0.9rem !important;
+        width: 100% !important;
+    }
+
+    /* 5. Subscribe / Newsletter form stack & Footer Mobile Spacing Fix */
+    .site-footer__grid {
+        padding-bottom: 2.5rem !important;
+        gap: 2.25rem !important;
+    }
+
+    .site-footer .subscribe-form {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .site-footer .subscribe-form button {
+        margin-bottom: 0.75rem !important;
+    }
+
+    .site-footer__bottom {
+        padding: 2rem 1.25rem 2.25rem !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        text-align: center !important;
+    }
+
+    .site-footer__bottom-inner {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.1rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    .site-footer__bottom-inner p {
+        margin: 0 !important;
+        font-size: 0.88rem !important;
+        color: rgba(255, 255, 255, 0.75) !important;
+    }
+
+    .site-footer__bottom-inner > div {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 1.5rem !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .site-footer__bottom-inner a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 44px !important;
+        padding: 0 0.5rem !important;
+        font-size: 0.88rem !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        text-decoration: none !important;
+    }
+
+    .site-footer__bottom-inner a:hover,
+    .site-footer__bottom-inner a:focus-visible {
+        color: #ffffff !important;
+        text-decoration: underline !important;
+    }
+
+    /* 6. Lead Modal Popup Spacing & Padding on Mobile */
+    .lead-modal__dialog {
+        padding: 1.5rem 1.15rem !important;
+        width: min(94vw, 540px) !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        box-sizing: border-box !important;
+    }
+
+    .lead-modal__close {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        top: 0.75rem !important;
+        right: 0.75rem !important;
+    }
+
+    /* 7. Zero Horizontal Overflow */
+    html, body {
+        overflow-x: hidden !important;
+    }
+}
+
+
 

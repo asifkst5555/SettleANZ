@@ -410,6 +410,49 @@
 
             .contact-page-final__row {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .contact-page-final__form input,
+            .contact-page-final__form select:not(.pro-select-native) {
+                height: 52px;
+                font-size: 16px; /* Prevents auto-zoom on mobile */
+            }
+
+            .contact-page-final__form textarea {
+                font-size: 16px;
+            }
+
+            .contact-page-final__button {
+                height: 52px;
+                min-height: 52px;
+                font-size: 16px;
+                width: 100%;
+            }
+
+            .contact-page-final__form .math-verification-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .contact-page-final__form .math-input-group {
+                max-width: 100%;
+                width: 100%;
+                display: flex;
+                gap: 8px;
+            }
+
+            .contact-page-final__form .math-answer-input {
+                height: 52px;
+                font-size: 16px;
+            }
+
+            .contact-page-final__form .math-refresh-btn {
+                width: 52px;
+                height: 52px;
+                min-width: 52px;
+                min-height: 52px;
             }
         }
     </style>

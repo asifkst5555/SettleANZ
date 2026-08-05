@@ -1816,20 +1816,66 @@
     font-weight: 400;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
+    .rm-form-card {
+      padding: 28px 20px;
+    }
+    .rm-input {
+      height: 52px;
+      font-size: 16px;
+    }
+    .rm-btn {
+      height: 52px;
+      min-height: 52px;
+      font-size: 16px;
+      width: 100%;
+    }
     .fc-h {
-      font-size: 30px;
+      font-size: 28px;
     }
     .fc-form {
       padding: 24px 18px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .fc-form-grid {
       grid-template-columns: 1fr;
       gap: 12px;
     }
+    .fc-field input {
+      height: 52px;
+      font-size: 16px;
+    }
+    .fc-verification .math-verification-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .fc-verification .math-input-group {
+      max-width: 100%;
+      width: 100%;
+      display: flex;
+      gap: 8px;
+    }
+    .fc-verification .math-answer-input {
+      height: 52px;
+      font-size: 16px;
+    }
+    .fc-verification .math-refresh-btn {
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
+      min-height: 52px;
+    }
     .fc-btn {
       font-size: 16px;
-      padding: 15px 24px;
+      height: 52px;
+      min-height: 52px;
+      padding: 0 24px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 

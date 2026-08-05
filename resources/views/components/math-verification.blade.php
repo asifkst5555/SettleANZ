@@ -103,12 +103,13 @@
             align-items: center;
             gap: 6px;
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             color: inherit;
             white-space: nowrap;
             margin: 0;
             cursor: pointer;
             user-select: none;
+            flex-shrink: 0;
         }
         .math-verification-lock {
             color: currentColor;
@@ -131,11 +132,14 @@
             gap: 8px;
             flex: 1;
             max-width: 220px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .math-answer-input {
             flex: 1;
             width: 100%;
             height: 48px;
+            min-height: 48px;
             padding: 0 14px;
             border: 1.5px solid #cbd5e1;
             border-radius: 10px;
@@ -154,9 +158,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            min-height: 48px;
+            border-radius: 10px;
             background: rgba(11, 122, 117, 0.08);
             border: 1px solid rgba(11, 122, 117, 0.15);
             color: #0b7a75;
@@ -164,6 +170,12 @@
             transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
             flex-shrink: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        .math-refresh-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
         }
         .math-refresh-btn:hover {
             transform: rotate(180deg);
@@ -179,15 +191,32 @@
             text-align: left;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 767px) {
             .math-verification-row {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
+                width: 100%;
+            }
+            .math-verification-prompt {
+                font-size: 0.9rem;
             }
             .math-input-group {
                 max-width: 100%;
                 width: 100%;
+                display: flex;
+                gap: 8px;
+            }
+            .math-answer-input {
+                height: 52px;
+                min-height: 52px;
+                font-size: 16px; /* Prevents auto-zoom on mobile safari */
+            }
+            .math-refresh-btn {
+                width: 52px;
+                height: 52px;
+                min-width: 52px;
+                min-height: 52px;
             }
         }
     </style>
