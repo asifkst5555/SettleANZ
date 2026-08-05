@@ -1,8 +1,19 @@
+@php
+    $faviconVer = file_exists(public_path('favicon.ico')) ? filemtime(public_path('favicon.ico')) : time();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>SettleANZ Client & User Guide</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v={{ $faviconVer }}">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v={{ $faviconVer }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ $faviconVer }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v={{ $faviconVer }}">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v={{ $faviconVer }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v={{ $faviconVer }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v={{ $faviconVer }}">
+    <link rel="manifest" href="/site.webmanifest?v={{ $faviconVer }}">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'DejaVu Sans', 'Segoe UI', sans-serif; color: #2c3e50; line-height: 1.55; font-size: 11px; }
