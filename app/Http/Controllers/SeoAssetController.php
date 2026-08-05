@@ -68,10 +68,9 @@ class SeoAssetController extends Controller
     {
         $content = implode("\n", [
             'User-agent: *',
-            'Allow: /',
-            'Disallow: /admin',
+            'Disallow:',
             '',
-            'Sitemap: ' . route('sitemap'),
+            'Sitemap: https://settleanz.com/sitemap.xml',
         ]);
 
         return response($content, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
