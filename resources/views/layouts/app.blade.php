@@ -889,55 +889,152 @@
             align-items: center;
         }
 
-        .dropdown-menu {
+        /* Invisible hover bridge to prevent menu closing when moving cursor across gap */
+        .nav-dropdown::after {
+            content: '';
             position: absolute;
             top: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: #ffffff;
-            border: 1px solid var(--nav-border);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(10, 35, 45, 0.12);
-            min-width: 220px;
-            padding: 0.75rem 0;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1020;
-            display: flex;
-            flex-direction: column;
+            left: -10px;
+            right: -10px;
+            height: 16px;
+            pointer-events: auto;
         }
 
-        /* Show dropdown on hover */
+        .nav-dropdown .dropdown-menu {
+            position: absolute !important;
+            top: calc(100% + 8px) !important;
+            left: 50% !important;
+            transform: translateX(-50%) translateY(8px) !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            box-shadow: 0 14px 35px -5px rgba(10, 35, 45, 0.12), 0 8px 15px -6px rgba(10, 35, 45, 0.06) !important;
+            width: 320px !important;
+            min-width: 300px !important;
+            padding: 0.65rem !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s !important;
+            z-index: 1050 !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        /* Show dropdown on hover, focus-within, or open state */
         .nav-dropdown:hover .dropdown-menu,
-        .nav-dropdown:focus-within .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
+        .nav-dropdown:focus-within .dropdown-menu,
+        .nav-dropdown.is-open .dropdown-menu {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            transform: translateX(-50%) translateY(0) !important;
         }
 
-        .dropdown-menu a {
-            display: block !important;
-            padding: 0.6rem 1.2rem !important;
-            color: var(--body-text) !important;
-            font-size: 14px !important;
-            text-align: left !important;
+        .dropdown-menu__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.4rem 0.6rem 0.55rem 0.6rem;
+            margin-bottom: 0.35rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dropdown-menu__title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #64748b;
+        }
+
+        .dropdown-menu__overview {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: #0b7a75;
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .dropdown-menu__overview:hover {
+            color: #f27d2d;
+            text-decoration: underline;
+        }
+
+        .dropdown-item-card {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 0.75rem !important;
+            padding: 0.6rem 0.7rem !important;
+            border-radius: 8px !important;
             text-decoration: none !important;
             background: transparent !important;
+            transition: background-color 0.15s ease, transform 0.15s ease !important;
             border-bottom: 0 !important;
             box-shadow: none !important;
-            font-weight: 500 !important;
         }
 
-        .dropdown-menu a:hover {
-            background-color: var(--light-brand-fill) !important;
-            color: var(--primary-brand) !important;
+        .dropdown-item-card:hover {
+            background-color: rgba(11, 122, 117, 0.06) !important;
         }
 
-        .dropdown-menu a.is-active {
-            color: var(--cta-accent) !important;
-            font-weight: 700 !important;
-            background-color: rgba(232, 119, 58, 0.05) !important;
+        .dropdown-item-card.is-active {
+            background-color: rgba(242, 125, 45, 0.08) !important;
+            border-left: 3px solid #f27d2d !important;
+        }
+
+        .dropdown-item-card__badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        .dropdown-item-card:hover .dropdown-item-card__badge {
+            background: #0b7a75;
+            color: #ffffff;
+        }
+
+        .dropdown-item-card.is-active .dropdown-item-card__badge {
+            background: #f27d2d;
+            color: #ffffff;
+        }
+
+        .dropdown-item-card__body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .dropdown-item-card__title {
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+            color: #1e293b !important;
+            line-height: 1.3 !important;
+        }
+
+        .dropdown-item-card:hover .dropdown-item-card__title {
+            color: #0b7a75 !important;
+        }
+
+        .dropdown-item-card.is-active .dropdown-item-card__title {
+            color: #f27d2d !important;
+        }
+
+        .dropdown-item-card__desc {
+            font-size: 0.76rem !important;
+            font-weight: 400 !important;
+            color: #64748b !important;
+            line-height: 1.3 !important;
         }
 
         .chevron {
@@ -947,7 +1044,8 @@
             display: inline-block;
         }
 
-        .nav-dropdown:hover .chevron {
+        .nav-dropdown:hover .chevron,
+        .nav-dropdown.is-open .chevron {
             transform: rotate(180deg);
         }
 
@@ -1003,9 +1101,32 @@
                 link.addEventListener('click', () => syncMenuState(false));
             });
 
+            // Desktop & Mobile Dropdown click/outside/keyboard handlers
+            const dropdowns = document.querySelectorAll('.nav-dropdown');
+            dropdowns.forEach((dropdown) => {
+                const toggle = dropdown.querySelector('.dropdown-toggle');
+                if (!toggle) return;
+
+                toggle.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 767) {
+                        e.preventDefault();
+                        dropdown.classList.toggle('is-open');
+                    }
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                dropdowns.forEach((dropdown) => {
+                    if (!dropdown.contains(e.target)) {
+                        dropdown.classList.remove('is-open');
+                    }
+                });
+            });
+
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape') {
                     syncMenuState(false);
+                    dropdowns.forEach((dropdown) => dropdown.classList.remove('is-open'));
                 }
             });
 
@@ -1051,17 +1172,29 @@
                         @endphp
                         @if (isset($item['submenu']))
                             <div class="nav-dropdown">
-                                <a href="{{ $item['href'] }}" @class(['is-active' => $isActive, 'dropdown-toggle'])>
+                                <a href="{{ $item['href'] }}" @class(['is-active' => $isActive, 'dropdown-toggle']) aria-expanded="false" aria-haspopup="true">
                                     {{ $item['label'] }} <span class="chevron">▾</span>
                                 </a>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu" role="menu">
+                                    <div class="dropdown-menu__header">
+                                        <span class="dropdown-menu__title">Settlement Stages</span>
+                                        <a href="{{ $item['href'] }}" class="dropdown-menu__overview">Overview &rarr;</a>
+                                    </div>
                                     @foreach ($item['submenu'] as $subItem)
                                         @php
                                             $subItemPath = parse_url($subItem['href'], PHP_URL_PATH) ?: '/';
                                             $subItemPattern = trim($subItemPath, '/');
-                                            $isSubActive = $subItemPattern === '' ? request()->is('/') : (request()->is($subItemPattern) || request()->is($subItemPattern . '/*'));
+                                            $isSubActive = $subItemPattern !== '' && (request()->is($subItemPattern) || request()->is($subItemPattern . '/*'));
                                         @endphp
-                                        <a href="{{ $subItem['href'] }}" @class(['dropdown-item', 'is-active' => $isSubActive])>{{ $subItem['label'] }}</a>
+                                        <a href="{{ $subItem['href'] }}" @class(['dropdown-item-card', 'is-active' => $isSubActive]) role="menuitem">
+                                            <span class="dropdown-item-card__badge">{{ $subItem['number'] ?? sprintf('%02d', $loop->iteration) }}</span>
+                                            <div class="dropdown-item-card__body">
+                                                <span class="dropdown-item-card__title">{{ $subItem['label'] }}</span>
+                                                @if (!empty($subItem['desc']))
+                                                    <span class="dropdown-item-card__desc">{{ $subItem['desc'] }}</span>
+                                                @endif
+                                            </div>
+                                        </a>
                                     @endforeach
                                 </div>
                             </div>
@@ -1104,15 +1237,18 @@
                         @endphp
                         @if (isset($item['submenu']))
                             <div class="mobile-nav-group" style="display: flex; flex-direction: column;">
-                                <a href="{{ $item['href'] }}" @class(['is-active' => $isActive])>{{ $item['label'] }}</a>
-                                <div class="mobile-submenu" style="padding-left: 1.25rem; display: flex; flex-direction: column; border-left: 2px solid rgba(255, 255, 255, 0.15); margin-left: 0.25rem; margin-bottom: 0.5rem;">
+                                <a href="{{ $item['href'] }}" @class(['is-active' => $isActive]) style="font-weight: 600;">{{ $item['label'] }}</a>
+                                <div class="mobile-submenu" style="padding-left: 0.75rem; display: flex; flex-direction: column; border-left: 2px solid rgba(255, 255, 255, 0.2); margin-left: 0.25rem; margin-top: 0.35rem; margin-bottom: 0.75rem; gap: 0.25rem;">
                                     @foreach ($item['submenu'] as $subItem)
                                         @php
                                             $subItemPath = parse_url($subItem['href'], PHP_URL_PATH) ?: '/';
                                             $subItemPattern = trim($subItemPath, '/');
-                                            $isSubActive = $subItemPattern === '' ? request()->is('/') : (request()->is($subItemPattern) || request()->is($subItemPattern . '/*'));
+                                            $isSubActive = $subItemPattern !== '' && (request()->is($subItemPattern) || request()->is($subItemPattern . '/*'));
                                         @endphp
-                                        <a href="{{ $subItem['href'] }}" @class(['is-active' => $isSubActive]) style="font-size: 0.9rem; padding: 0.6rem 0; opacity: 0.85;" data-mobile-menu-close>{{ $subItem['label'] }}</a>
+                                        <a href="{{ $subItem['href'] }}" @class(['is-active' => $isSubActive]) style="font-size: 0.88rem; padding: 0.45rem 0.5rem; opacity: 0.9; display: flex; align-items: center; gap: 0.5rem; border-radius: 6px; text-decoration: none;" data-mobile-menu-close>
+                                            <span style="font-size: 0.72rem; font-weight: 700; opacity: 0.8; background: rgba(255,255,255,0.15); padding: 0.1rem 0.35rem; border-radius: 4px; color: #ffffff;">{{ $subItem['number'] ?? sprintf('%02d', $loop->iteration) }}</span>
+                                            <span>{{ $subItem['label'] }}</span>
+                                        </a>
                                     @endforeach
                                 </div>
                             </div>
