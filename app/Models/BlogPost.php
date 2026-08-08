@@ -81,4 +81,12 @@ class BlogPost extends Model
     {
         return Attribute::get(fn (): bool => BlogMedia::exists($this->image));
     }
+
+    protected function displayAuthor(): Attribute
+    {
+        return Attribute::get(function (): string {
+            $author = $this->author_name ?: 'SettleANZ';
+            return trim(str_replace('Team', '', $author)) ?: 'SettleANZ';
+        });
+    }
 }

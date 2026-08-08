@@ -40,10 +40,17 @@
     const chatSendButton = chatForm ? chatForm.querySelector('button[type="submit"]') : null;
     const asyncForms = document.querySelectorAll('[data-async-form]');
     const body = document.body;
-    const blogFilterButtons = document.querySelectorAll('[data-blog-filter]');
+    const blogSearchInput = document.querySelector('[data-blog-search]');
+    const blogSearchClear = document.querySelector('[data-blog-search-clear]');
+    const blogFilterPopoverWrap = document.querySelector('[data-blog-filter-popover-wrap]');
+    const blogFilterTrigger = document.querySelector('[data-blog-filter-trigger]');
+    const blogFilterMenu = document.querySelector('[data-blog-filter-menu]');
+    const blogFilterSelectedText = document.querySelector('[data-blog-filter-selected-text]');
+    const blogFilterOptions = document.querySelectorAll('[data-blog-filter-option]');
+    const blogEmptyState = document.querySelector('[data-blog-empty-state]');
+    const blogResetFiltersBtn = document.querySelector('[data-blog-reset-filters]');
     const blogPosts = document.querySelectorAll('[data-blog-post]');
     const loadMoreButton = document.querySelector('[data-blog-load-more]');
-    const blogSearch = document.querySelector('[data-blog-search]');
     const directoryFilterButtons = document.querySelectorAll('[data-directory-filter]');
     const directoryListings = document.querySelectorAll('[data-directory-listing]');
     const directorySearch = document.querySelector('[data-directory-search]');
@@ -437,14 +444,21 @@
 
     const applyBlogFilters = () => {
         if (!blogPosts.length) return;
-        const activeCategoryButton = Array.from(blogFilterButtons).find((button) => button.classList.contains('is-active'));
-        const category = activeCategoryButton ? (activeCategoryButton.dataset.blogFilter || 'all') : 'all';
-        const term = blogSearch ? blogSearch.value.trim().toLowerCase() : '';
+
+        let category = 'all';
+        const selectedOption = Array.from(blogFilterOptions).find((opt) => opt.classList.contains('is-selected'));
+        if (selectedOption) {
+            category = (selectedOption.dataset.blogFilterOption || 'all').toLowerCase();
+        }
+
+        const term = blogSearchInput ? blogSearchInput.value.trim().toLowerCase() : '';
         let visibleCounter = 0;
+        let totalMatches = 0;
 
         blogPosts.forEach((post) => {
-            const categoryMatch = category === 'all' || post.dataset.category === category;
-            const searchHaystack = post.dataset.search || '';
+            const postCategory = (post.dataset.category || '').toLowerCase();
+            const categoryMatch = category === 'all' || postCategory === category;
+            const searchHaystack = (post.dataset.search || '').toLowerCase();
             const searchMatch = !term || searchHaystack.includes(term);
             const matches = categoryMatch && searchMatch;
 
@@ -454,9 +468,14 @@
                 return;
             }
 
+            totalMatches += 1;
             visibleCounter += 1;
             post.classList.toggle('is-hidden', visibleCounter > 6);
         });
+
+        if (blogEmptyState) {
+            blogEmptyState.hidden = totalMatches > 0;
+        }
 
         refreshLoadMore();
     };
@@ -834,14 +853,98 @@
     //     }, { once: true });
     // }
 
-    if (blogFilterButtons.length) {
-        blogFilterButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                blogFilterButtons.forEach((item) => item.classList.remove('is-active'));
-                button.classList.add('is-active');
-                applyBlogFilters();
-            });
+    if (blogFilterTrigger && blogFilterMenu) {
+        const toggleMenu = (open) => {
+            const shouldOpen = open !== undefined ? open : blogFilterMenu.hidden;
+            blogFilterMenu.hidden = !shouldOpen;
+            blogFilterTrigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        };
+
+        blogFilterTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
         });
+
+        if (blogFilterOptions.length) {
+            blogFilterOptions.forEach((option) => {
+                option.addEventListener('click', () => {
+                    blogFilterOptions.forEach((item) => {
+                        item.classList.remove('is-selected');
+                        item.setAttribute('aria-selected', 'false');
+                    });
+                    option.classList.add('is-selected');
+                    option.setAttribute('aria-selected', 'true');
+
+                    if (blogFilterSelectedText) {
+                        blogFilterSelectedText.textContent = option.dataset.categoryLabel || option.textContent.trim();
+                    }
+
+                    toggleMenu(false);
+                    applyBlogFilters();
+                });
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (blogFilterPopoverWrap && !blogFilterPopoverWrap.contains(e.target)) {
+                toggleMenu(false);
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !blogFilterMenu.hidden) {
+                toggleMenu(false);
+                blogFilterTrigger.focus();
+            }
+        });
+    }
+
+    if (blogSearchInput) {
+        if (blogSearchClear) {
+            blogSearchClear.hidden = blogSearchInput.value.trim().length === 0;
+        }
+        blogSearchInput.addEventListener('input', () => {
+            if (blogSearchClear) {
+                blogSearchClear.hidden = blogSearchInput.value.trim().length === 0;
+            }
+            applyBlogFilters();
+        });
+    }
+
+    if (blogSearchClear) {
+        blogSearchClear.addEventListener('click', () => {
+            if (blogSearchInput) {
+                blogSearchInput.value = '';
+                blogSearchInput.focus();
+            }
+            blogSearchClear.hidden = true;
+            applyBlogFilters();
+        });
+    }
+
+    if (blogResetFiltersBtn) {
+        blogResetFiltersBtn.addEventListener('click', () => {
+            if (blogSearchInput) {
+                blogSearchInput.value = '';
+            }
+            if (blogSearchClear) {
+                blogSearchClear.hidden = true;
+            }
+            if (blogFilterOptions.length) {
+                blogFilterOptions.forEach((opt) => {
+                    const isAll = (opt.dataset.blogFilterOption || '').toLowerCase() === 'all';
+                    opt.classList.toggle('is-selected', isAll);
+                    opt.setAttribute('aria-selected', isAll ? 'true' : 'false');
+                });
+            }
+            if (blogFilterSelectedText) {
+                blogFilterSelectedText.textContent = 'All';
+            }
+            applyBlogFilters();
+        });
+    }
+
+    if (blogPosts.length) {
         applyBlogFilters();
     }
 
@@ -854,9 +957,7 @@
         refreshLoadMore();
     }
 
-    if (blogSearch) {
-        blogSearch.addEventListener('input', applyBlogFilters);
-    }
+
 
     if (directoryFilterButtons.length) {
         directoryFilterButtons.forEach((button) => {
